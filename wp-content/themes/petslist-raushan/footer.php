@@ -12,8 +12,8 @@ use RadiusTheme\Petslist\Listing_Functions;
 ?>
 </div><!-- #content -->
 <?php
-    // Use footer style 1 (Petslist default) on every page.
-    get_template_part( 'template-parts/footer/footer', '1' ); 
+    // Use footer style 3 on every page.
+    get_template_part( 'template-parts/footer/footer', '3' ); 
     if ( class_exists( 'Rtcl' ) && class_exists( 'RtclPro' ) ) {
         if (Functions::is_enable_favourite()){ 
             Listing_Functions::logout_user_favourite(); 

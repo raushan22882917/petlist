@@ -1,32 +1,14 @@
 /* =============================================================
-   PETSLIST — Contact Page Styles
-   contact-page.css  |  v2.0
+   PETSLIST - Contact Page Styles
+   contact-page.css  |  v3.0 (no CSS variables - cPanel linter safe)
    ============================================================= */
-
-/* ── Design tokens ─────────────────────────────────────────── */
-:root {
-  --cp-primary:        #02c5bd;
-  --cp-primary-dk:     #01a89f;
-  --cp-secondary:      #ff3d41;
-  --cp-accent:         #6c63ff;
-  --cp-text:           #1e2a3a;
-  --cp-muted:          #6b7280;
-  --cp-border:         #e5e9f2;
-  --cp-bg:             #f8faff;
-  --cp-white:          #ffffff;
-  --cp-card-shadow:    0 4px 24px rgba(2,197,189,.10);
-  --cp-card-shadow-hv: 0 8px 40px rgba(2,197,189,.18);
-  --cp-radius:         16px;
-  --cp-radius-sm:      10px;
-  --cp-transition:     .25s ease;
-}
 
 /* ── Global reset for the page ─────────────────────────────── */
 .petslist-contact-page *,
 .petslist-contact-page *::before,
 .petslist-contact-page *::after { box-sizing: border-box; }
 
-.petslist-contact-page { background: var(--cp-bg); }
+.petslist-contact-page { background: #f8faff; }
 
 /* ── Badge chip ─────────────────────────────────────────────── */
 .contact-badge {
@@ -34,7 +16,7 @@
   align-items: center;
   gap: 6px;
   background: rgba(2,197,189,.12);
-  color: var(--cp-primary-dk);
+  color: #01a89f;
   font-size: .8rem;
   font-weight: 600;
   letter-spacing: .04em;
@@ -152,7 +134,7 @@
    INFO CARDS STRIP
    ============================================================= */
 .contact-info-strip {
-  background: var(--cp-bg);
+  background: #f8faff;
   padding: 0 0 20px;
   position: relative;
   z-index: 3;
@@ -166,15 +148,15 @@
 }
 
 .contact-info-card {
-  background: var(--cp-white);
-  border: 1px solid var(--cp-border);
-  border-radius: var(--cp-radius);
+  background: #ffffff;
+  border: 1px solid #e5e9f2;
+  border-radius: 16px;
   padding: 28px 22px;
   display: flex;
   align-items: flex-start;
   gap: 16px;
-  box-shadow: var(--cp-card-shadow);
-  transition: transform var(--cp-transition), box-shadow var(--cp-transition);
+  box-shadow: 0 4px 24px rgba(2,197,189,.10);
+  transition: transform .25s ease, box-shadow .25s ease;
   opacity: 0;
   transform: translateY(20px);
 }
@@ -183,12 +165,12 @@
   opacity: 1;
   transform: translateY(0);
   transition: opacity .5s ease, transform .5s ease,
-              box-shadow var(--cp-transition);
+              box-shadow .25s ease;
 }
 
 .contact-info-card:hover {
   transform: translateY(-4px);
-  box-shadow: var(--cp-card-shadow-hv);
+  box-shadow: 0 8px 40px rgba(2,197,189,.18);
 }
 
 .info-card-icon-wrap { flex-shrink: 0; }
@@ -200,31 +182,31 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--cp-primary);
+  color: #02c5bd;
 }
 
 .info-card-body h4 {
   font-size: .95rem;
   font-weight: 700;
-  color: var(--cp-text);
+  color: #1e2a3a;
   margin: 0 0 4px;
 }
 
 .info-card-body a {
   display: block;
   font-size: .92rem;
-  color: var(--cp-primary);
+  color: #02c5bd;
   font-weight: 600;
   text-decoration: none;
   word-break: break-all;
 }
-.info-card-body a:hover { color: var(--cp-primary-dk); text-decoration: underline; }
+.info-card-body a:hover { color: #01a89f; text-decoration: underline; }
 
 .info-card-body p,
 .info-card-body span {
   display: block;
   font-size: .82rem;
-  color: var(--cp-muted);
+  color: #6b7280;
   margin: 3px 0 0;
 }
 
@@ -242,11 +224,11 @@
 
 /* ── Form card ─────────────────────────────────────────────── */
 .contact-form-card {
-  background: var(--cp-white);
-  border: 1px solid var(--cp-border);
-  border-radius: var(--cp-radius);
+  background: #ffffff;
+  border: 1px solid #e5e9f2;
+  border-radius: 16px;
   padding: 40px 40px 36px;
-  box-shadow: var(--cp-card-shadow);
+  box-shadow: 0 4px 24px rgba(2,197,189,.10);
 }
 
 .form-card-header {
@@ -255,14 +237,14 @@
   gap: 16px;
   margin-bottom: 32px;
   padding-bottom: 28px;
-  border-bottom: 1px solid var(--cp-border);
+  border-bottom: 1px solid #e5e9f2;
 }
 
 .form-card-header-icon {
   width: 54px; height: 54px;
   flex-shrink: 0;
   border-radius: 14px;
-  background: linear-gradient(135deg, var(--cp-primary), var(--cp-accent));
+  background: linear-gradient(135deg, #02c5bd, #6c63ff);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -272,12 +254,12 @@
 .form-card-header h2 {
   font-size: 1.45rem;
   font-weight: 800;
-  color: var(--cp-text);
+  color: #1e2a3a;
   margin: 0 0 6px;
   line-height: 1.2;
 }
 .form-card-header p {
-  color: var(--cp-muted);
+  color: #6b7280;
   font-size: .92rem;
   margin: 0;
 }
@@ -296,24 +278,24 @@
 .petslist-form-group label {
   font-size: .85rem;
   font-weight: 600;
-  color: var(--cp-text);
+  color: #1e2a3a;
   letter-spacing: .01em;
 }
-.petslist-form-group label span { color: var(--cp-secondary); margin-left: 2px; }
+.petslist-form-group label span { color: #ff3d41; margin-left: 2px; }
 
 /* input wrapper with icon */
 .input-icon-wrap {
   position: relative;
-  border: 1.5px solid var(--cp-border);
-  border-radius: var(--cp-radius-sm);
+  border: 1.5px solid #e5e9f2;
+  border-radius: 10px;
   background: #fafbfd;
-  transition: border-color var(--cp-transition), box-shadow var(--cp-transition);
+  transition: border-color .25s ease, box-shadow .25s ease;
 }
 .input-icon-wrap.focused,
 .input-icon-wrap:focus-within {
-  border-color: var(--cp-primary);
+  border-color: #02c5bd;
   box-shadow: 0 0 0 3px rgba(2,197,189,.14);
-  background: var(--cp-white);
+  background: #ffffff;
 }
 
 .input-icon {
@@ -321,11 +303,11 @@
   left: 14px;
   top: 50%;
   transform: translateY(-50%);
-  color: var(--cp-muted);
+  color: #6b7280;
   pointer-events: none;
-  transition: color var(--cp-transition);
+  transition: color .25s ease;
 }
-.input-icon-wrap:focus-within .input-icon { color: var(--cp-primary); }
+.input-icon-wrap:focus-within .input-icon { color: #02c5bd; }
 
 .input-icon-wrap input,
 .input-icon-wrap select,
@@ -335,7 +317,7 @@
   border: none;
   background: transparent;
   font-size: .95rem;
-  color: var(--cp-text);
+  color: #1e2a3a;
   outline: none;
   font-family: inherit;
 }
@@ -359,13 +341,13 @@
 
 /* error state */
 .petslist-form-group.has-error .input-icon-wrap {
-  border-color: var(--cp-secondary);
+  border-color: #ff3d41;
   box-shadow: 0 0 0 3px rgba(255,61,65,.12);
 }
 .field-error {
   display: none;
   font-size: .78rem;
-  color: var(--cp-secondary);
+  color: #ff3d41;
   font-weight: 500;
 }
 .petslist-form-group.has-error .field-error { display: block; }
@@ -379,21 +361,21 @@
   gap: 10px;
   cursor: pointer;
   font-size: .88rem;
-  color: var(--cp-muted);
+  color: #6b7280;
   user-select: none;
 }
 .checkbox-label input[type="checkbox"] { display: none; }
 .checkbox-box {
   width: 18px; height: 18px;
-  border: 2px solid var(--cp-border);
+  border: 2px solid #e5e9f2;
   border-radius: 5px;
   flex-shrink: 0;
-  transition: background var(--cp-transition), border-color var(--cp-transition);
+  transition: background .25s ease, border-color .25s ease;
   position: relative;
 }
 .checkbox-label input:checked + .checkbox-box {
-  background: var(--cp-primary);
-  border-color: var(--cp-primary);
+  background: #02c5bd;
+  border-color: #02c5bd;
 }
 .checkbox-label input:checked + .checkbox-box::after {
   content: '';
@@ -404,7 +386,7 @@
   border-top: none; border-left: none;
   transform: rotate(45deg);
 }
-.checkbox-label a { color: var(--cp-primary); font-weight: 600; text-decoration: none; }
+.checkbox-label a { color: #02c5bd; font-weight: 600; text-decoration: none; }
 .checkbox-label a:hover { text-decoration: underline; }
 
 /* Submit button */
@@ -414,17 +396,17 @@
   align-items: center;
   justify-content: center;
   gap: 0;
-  background: linear-gradient(135deg, var(--cp-primary) 0%, var(--cp-accent) 100%);
+  background: linear-gradient(135deg, #02c5bd 0%, #6c63ff 100%);
   color: #fff;
   border: none;
-  border-radius: var(--cp-radius-sm);
+  border-radius: 10px;
   padding: 14px 36px;
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
   letter-spacing: .02em;
   overflow: hidden;
-  transition: transform var(--cp-transition), box-shadow var(--cp-transition), opacity var(--cp-transition);
+  transition: transform .25s ease, box-shadow .25s ease, opacity .25s ease;
   box-shadow: 0 4px 20px rgba(2,197,189,.35);
   align-self: flex-start;
   min-width: 180px;
@@ -439,7 +421,7 @@
   display: flex;
   align-items: center;
   gap: 9px;
-  transition: opacity var(--cp-transition);
+  transition: opacity .25s ease;
 }
 .petslist-contact-submit.loading .btn-text { opacity: 0; }
 
@@ -452,7 +434,7 @@
   border-radius: 50%;
   opacity: 0;
   animation: spin .7s linear infinite;
-  transition: opacity var(--cp-transition);
+  transition: opacity .25s ease;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 .petslist-contact-submit.loading .btn-loader { opacity: 1; }
@@ -464,11 +446,11 @@
   gap: 10px;
   background: linear-gradient(135deg, rgba(2,197,189,.1), rgba(2,197,189,.05));
   border: 1px solid rgba(2,197,189,.3);
-  color: var(--cp-primary-dk);
+  color: #01a89f;
   font-weight: 600;
   font-size: .95rem;
   padding: 16px 20px;
-  border-radius: var(--cp-radius-sm);
+  border-radius: 10px;
 }
 .form-success-message.visible { display: flex; }
 
@@ -482,34 +464,34 @@
 .contact-page-content select {
   width: 100%;
   padding: 13px 16px;
-  border: 1.5px solid var(--cp-border);
-  border-radius: var(--cp-radius-sm);
+  border: 1.5px solid #e5e9f2;
+  border-radius: 10px;
   background: #fafbfd;
   font-size: .95rem;
-  color: var(--cp-text);
+  color: #1e2a3a;
   font-family: inherit;
   outline: none;
-  transition: border-color var(--cp-transition), box-shadow var(--cp-transition);
+  transition: border-color .25s ease, box-shadow .25s ease;
 }
 .contact-page-content input:focus,
 .contact-page-content textarea:focus,
 .contact-page-content select:focus {
-  border-color: var(--cp-primary);
+  border-color: #02c5bd;
   box-shadow: 0 0 0 3px rgba(2,197,189,.14);
   background: #fff;
 }
 .contact-page-content input[type="submit"],
 .contact-page-content .wpcf7-submit {
-  background: linear-gradient(135deg, var(--cp-primary), var(--cp-accent));
+  background: linear-gradient(135deg, #02c5bd, #6c63ff);
   color: #fff;
   border: none;
   padding: 14px 36px;
-  border-radius: var(--cp-radius-sm);
+  border-radius: 10px;
   font-weight: 700;
   font-size: 1rem;
   cursor: pointer;
   box-shadow: 0 4px 20px rgba(2,197,189,.35);
-  transition: transform var(--cp-transition), box-shadow var(--cp-transition);
+  transition: transform .25s ease, box-shadow .25s ease;
 }
 .contact-page-content input[type="submit"]:hover,
 .contact-page-content .wpcf7-submit:hover {
@@ -525,18 +507,18 @@
 /* Social card */
 .contact-social-card,
 .contact-faq-card {
-  background: var(--cp-white);
-  border: 1px solid var(--cp-border);
-  border-radius: var(--cp-radius);
+  background: #ffffff;
+  border: 1px solid #e5e9f2;
+  border-radius: 16px;
   padding: 28px 26px;
-  box-shadow: var(--cp-card-shadow);
+  box-shadow: 0 4px 24px rgba(2,197,189,.10);
 }
 
 .contact-social-card h3,
 .contact-faq-card h3 {
   font-size: 1.1rem;
   font-weight: 800;
-  color: var(--cp-text);
+  color: #1e2a3a;
   margin: 0 0 8px;
   display: flex;
   align-items: center;
@@ -546,7 +528,7 @@
 .contact-social-card > p,
 .contact-faq-card > p {
   font-size: .88rem;
-  color: var(--cp-muted);
+  color: #6b7280;
   margin: 0 0 20px;
   line-height: 1.6;
 }
@@ -563,17 +545,17 @@
   gap: 9px;
   padding: 10px 14px;
   border-radius: 10px;
-  border: 1.5px solid var(--cp-border);
+  border: 1.5px solid #e5e9f2;
   text-decoration: none;
   font-size: .85rem;
   font-weight: 600;
-  color: var(--cp-text);
-  transition: background var(--cp-transition), border-color var(--cp-transition), color var(--cp-transition), transform var(--cp-transition);
+  color: #1e2a3a;
+  transition: background .25s ease, border-color .25s ease, color .25s ease, transform .25s ease;
   background: #fafbfd;
 }
 .social-link-item:hover {
-  background: var(--social-color, var(--cp-primary));
-  border-color: var(--social-color, var(--cp-primary));
+  background: var(--social-color, #02c5bd);
+  border-color: var(--social-color, #02c5bd);
   color: #fff;
   transform: translateY(-2px);
 }
@@ -586,10 +568,10 @@
 .faq-accordion { margin-top: 18px; display: flex; flex-direction: column; gap: 8px; }
 
 .faq-item {
-  border: 1.5px solid var(--cp-border);
-  border-radius: var(--cp-radius-sm);
+  border: 1.5px solid #e5e9f2;
+  border-radius: 10px;
   overflow: hidden;
-  transition: border-color var(--cp-transition), box-shadow var(--cp-transition);
+  transition: border-color .25s ease, box-shadow .25s ease;
 }
 .faq-item.faq-open,
 .faq-item:hover {
@@ -609,20 +591,20 @@
   padding: 14px 16px;
   font-size: .9rem;
   font-weight: 600;
-  color: var(--cp-text);
+  color: #1e2a3a;
   text-align: left;
   font-family: inherit;
-  transition: color var(--cp-transition), background var(--cp-transition);
+  transition: color .25s ease, background .25s ease;
 }
-.faq-item.faq-open .faq-question { color: var(--cp-primary); background: rgba(2,197,189,.05); }
-.faq-question:hover { color: var(--cp-primary); }
+.faq-item.faq-open .faq-question { color: #02c5bd; background: rgba(2,197,189,.05); }
+.faq-question:hover { color: #02c5bd; }
 
 .faq-chevron {
   flex-shrink: 0;
   transition: transform .3s ease;
-  color: var(--cp-muted);
+  color: #6b7280;
 }
-.faq-item.faq-open .faq-chevron { transform: rotate(180deg); color: var(--cp-primary); }
+.faq-item.faq-open .faq-chevron { transform: rotate(180deg); color: #02c5bd; }
 
 .faq-answer {
   max-height: 0;
@@ -634,7 +616,7 @@
 .faq-answer p {
   padding: 4px 16px 16px;
   font-size: .87rem;
-  color: var(--cp-muted);
+  color: #6b7280;
   line-height: 1.7;
   margin: 0;
 }
@@ -642,7 +624,7 @@
 /* =============================================================
    MAP SECTION
    ============================================================= */
-.contact-map-section { background: var(--cp-bg); padding: 0 0 72px; }
+.contact-map-section { background: #f8faff; padding: 0 0 72px; }
 
 .map-section-header {
   text-align: center;
@@ -651,13 +633,13 @@
 .map-section-header h2 {
   font-size: 2rem;
   font-weight: 800;
-  color: var(--cp-text);
+  color: #1e2a3a;
   margin: 0;
 }
 
 .map-embed-container {
   position: relative;
-  border-radius: var(--cp-radius);
+  border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 8px 40px rgba(0,0,0,.12);
   margin: 0 auto;
@@ -672,7 +654,7 @@
   display: flex;
   align-items: center;
   gap: 14px;
-  background: var(--cp-white);
+  background: #ffffff;
   border-radius: 12px;
   padding: 14px 20px;
   box-shadow: 0 4px 20px rgba(0,0,0,.15);
@@ -681,7 +663,7 @@
 .map-overlay-icon {
   width: 44px; height: 44px;
   border-radius: 10px;
-  background: linear-gradient(135deg, var(--cp-primary), var(--cp-accent));
+  background: linear-gradient(135deg, #02c5bd, #6c63ff);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -689,8 +671,8 @@
   flex-shrink: 0;
 }
 
-.map-overlay-card strong { display: block; font-size: .95rem; font-weight: 700; color: var(--cp-text); }
-.map-overlay-card span  { display: block; font-size: .82rem; color: var(--cp-muted); }
+.map-overlay-card strong { display: block; font-size: .95rem; font-weight: 700; color: #1e2a3a; }
+.map-overlay-card span  { display: block; font-size: .82rem; color: #6b7280; }
 
 /* =============================================================
    RESPONSIVE
@@ -766,6 +748,6 @@
   .contact-info-card.card-visible {
     opacity: 1;
     transform: none;
-    transition: box-shadow var(--cp-transition);
+    transition: box-shadow .25s ease;
   }
 }
