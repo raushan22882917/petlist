@@ -93,6 +93,15 @@ class Layouts {
 			Options::$footer_style      = $this->layout_global_option( 'footer_style' );
 			Options::$has_tr_header     = $this->layout_global_option( 'tr_header', true );
 		}
+
+		$this->force_global_chrome();
+	}
+
+	private function force_global_chrome() {
+		Options::$header_style = '3';
+		Options::$footer_style = '1';
+		Options::$has_top_bar  = false;
+		Options::$has_tr_header = false;
 	}
 
 	// Single

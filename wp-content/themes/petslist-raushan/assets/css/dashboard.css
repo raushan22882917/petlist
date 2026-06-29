@@ -34,7 +34,7 @@
 .ddu-shell,
 .dda-shell {
   display: flex;
-  min-height: 100vh;
+  min-height: auto;
   background: var(--dds-main-bg);
   color: var(--dds-text);
   font-family: var(--petslist-body-font, 'Plus Jakarta Sans', sans-serif);
@@ -42,15 +42,6 @@
   line-height: 1.5;
 }
 
-body.dd-dashboard-page .site-header,
-body.dd-dashboard-page .rt-mobile-menu,
-body.dd-dashboard-page .breadcrumbs-area,
-body.dd-dashboard-page footer.footer {
-  display: none !important;
-}
-body.dd-dashboard-page #page.site {
-  padding-top: 0 !important;
-}
 body.dd-dashboard-page .site-content {
   padding: 0 !important;
   margin: 0 !important;
