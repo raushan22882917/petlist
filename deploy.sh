@@ -8,7 +8,6 @@
 FTP_HOST="computerkingdom.co"
 FTP_USER="compftp@computerkingdom.co"
 FTP_PASS="nYrA9r]v&0x=*BAU"
-REMOTE_THEME_DIR="/wp-content/themes"
 
 LOCAL_THEME_DIR="$(pwd)/wp-content/themes"
 
@@ -21,26 +20,28 @@ if ! command -v lftp &> /dev/null; then
     brew install lftp
 fi
 
-echo "📦 Syncing theme: petslist..."
-lftp -u "$FTP_USER","$FTP_PASS" "$FTP_HOST" <<EOF
-set ssl:verify-certificate no
-set ftp:passive-mode yes
-mirror --reverse --delete --verbose \
-  "$LOCAL_THEME_DIR/petslist" \
-  "$REMOTE_THEME_DIR/petslist"
-bye
-EOF
-
-echo ""
 echo "📦 Syncing theme: petslist-raushan..."
 lftp -u "$FTP_USER","$FTP_PASS" "$FTP_HOST" <<EOF
 set ssl:verify-certificate no
 set ftp:passive-mode yes
 mirror --reverse --delete --verbose \
   "$LOCAL_THEME_DIR/petslist-raushan" \
-  "$REMOTE_THEME_DIR/petslist-raushan"
+  "wp-content/themes/petslist-raushan"
 bye
 EOF
 
 echo ""
-echo "✅ Deployment complete! Visit https://computerkingdom.co/dog/ to verify."
+echo "📦 Uploading push_to_live.sql and import-db.php..."
+lftp -u "$FTP_USER","$FTP_PASS" "$FTP_HOST" <<EOF
+set ssl:verify-certificate no
+set ftp:passive-mode yes
+put -O . push_to_live.sql
+put -O . import-db.php
+bye
+EOF
+
+echo ""
+echo "✅ Files transferred successfully!"
+echo "👉 Visit this link in your browser to import the database live:"
+echo "👉 https://computerkingdom.co/dog/import-db.php?key=raushan2024"
+echo ""

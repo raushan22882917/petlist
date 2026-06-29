@@ -8,6 +8,9 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 global $wpdb;
 
+// Base URL for media uploads (works on both local and live environments)
+$dd_upload_base = wp_upload_dir()['baseurl'];
+
 // Fetch breeds for filter dropdown
 $breeds = dd_get_breeds();
 
@@ -27,8 +30,8 @@ $recent_dogs = new WP_Query([
 <div class="dd-home-wrap">
     <!-- HERO SEARCH SECTION -->
     <section class="dd-home-hero">
-        <img class="dd-home-hero__bg-art dd-home-hero__bg-art--left" src="http://localhost:8000/wp-content/uploads/2023/08/banner-img-1.png" alt="Dog Left">
-        <img class="dd-home-hero__bg-art dd-home-hero__bg-art--right" src="http://localhost:8000/wp-content/uploads/2023/08/banner-img-1.png" alt="Dog Right">
+        <img class="dd-home-hero__bg-art dd-home-hero__bg-art--left" src="<?php echo esc_url( $dd_upload_base . '/2023/08/banner-img-1.png' ); ?>" alt="Dog Left">
+        <img class="dd-home-hero__bg-art dd-home-hero__bg-art--right" src="<?php echo esc_url( $dd_upload_base . '/2023/08/banner-img-1.png' ); ?>" alt="Dog Right">
         <div class="dd-home-hero__container">
             <h1 class="dd-home-hero__title"><?php _e('Find Your Perfect Pedigree Companion', 'petslist'); ?></h1>
             <p class="dd-home-hero__subtitle"><?php _e('Browse verified pedigree dogs, query health clearances, and connect directly with certified owners.', 'petslist'); ?></p>
@@ -180,7 +183,7 @@ $recent_dogs = new WP_Query([
 }
 .dd-home-hero {
     background-color: #070c3e;
-    background-image: url('http://localhost:8000/wp-content/uploads/2023/08/banner-bg.png');
+    background-image: url('<?php echo esc_url( $dd_upload_base . '/2023/08/banner-bg.png' ); ?>');
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;

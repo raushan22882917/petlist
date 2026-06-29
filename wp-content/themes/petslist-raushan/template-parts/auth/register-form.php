@@ -5,14 +5,15 @@
  */
 if (!defined('ABSPATH'))
     exit;
+$dd_upload_base = wp_upload_dir()['baseurl'];
 ?>
 <div id="rtcl-user-login-wrapper" class="separate-registration-form dd-auth-split-layout">
     <div class="dd-auth-split-image">
         <!-- Dog background pattern overlay -->
-        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: url('http://localhost:8000/wp-content/uploads/2023/08/banner-bg.png'); background-size: cover; opacity: 0.15; pointer-events: none; z-index: 1;"></div>
+        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: url('<?php echo esc_url( $dd_upload_base . '/2023/08/banner-bg.png' ); ?>'); background-size: cover; opacity: 0.15; pointer-events: none; z-index: 1;"></div>
         
         <!-- Dog illustration -->
-        <img src="http://localhost:8000/wp-content/uploads/2023/08/banner-img-1.png" alt="Dog" style="max-width: 80%; max-height: 60%; position: absolute; bottom: 20px; z-index: 2; pointer-events: none;">
+        <img src="<?php echo esc_url( $dd_upload_base . '/2023/08/banner-img-1.png' ); ?>" alt="Dog" style="max-width: 80%; max-height: 60%; position: absolute; bottom: 20px; z-index: 2; pointer-events: none;">
 
         <div class="dd-auth-split-overlay">
             <h3>🐾 Dog Directory</h3>
