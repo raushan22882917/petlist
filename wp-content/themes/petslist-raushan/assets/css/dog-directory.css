@@ -1618,3 +1618,12 @@
   margin-bottom: 24px;
 }
 
+/* Fix Elementor inline SVGs being gigantic */
+.e-font-icon-svg {
+  width: 1.2em !important;
+  height: 1.2em !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
+  margin-right: 8px !important;
+}
+
