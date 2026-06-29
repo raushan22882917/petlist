@@ -5666,3 +5666,12 @@ body.rtcl-account.page-template-default .rtcl-MyAccount-wrap .rtcl-MyAccount-con
 		margin: 0;
 	}
 }
+
+/* Fix Elementor inline SVGs being gigantic */
+.e-font-icon-svg {
+  width: 1.2em !important;
+  height: 1.2em !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
+  margin-right: 8px !important;
+}
