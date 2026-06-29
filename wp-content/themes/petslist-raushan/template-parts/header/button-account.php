@@ -12,7 +12,6 @@ $login_icon_title = is_user_logged_in() ? esc_html__( 'Account', 'petslist' ) : 
 $login_link = is_user_logged_in() ? home_url('/dog-dashboard/') : home_url('/dog-login/');
 
 ?>
-<?php if ( class_exists( 'Rtcl' ) && Options::$options['header_login_icon'] ): ?>
     <a class="header-login-icon" data-toggle="tooltip" title="<?php echo esc_html( $login_icon_title ); ?>" href="<?php echo esc_url( $login_link ); ?>">
         <?php if ( is_user_logged_in() ) : 
             $user_id = get_current_user_id();
@@ -27,4 +26,3 @@ $login_link = is_user_logged_in() ? home_url('/dog-dashboard/') : home_url('/dog
         <?php endif; ?>
         <span class="header-login-text"><?php echo esc_html( $login_icon_title ); ?></span>
     </a>
-<?php endif; ?>
