@@ -1,5 +1,4 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/comp/public_html/dog
-    - /bin/rsync -a wp-content/themes/petslist/ $DEPLOYPATH/wp-content/themes/petslist/
     - /bin/rsync -a wp-content/themes/petslist-raushan/ $DEPLOYPATH/wp-content/themes/petslist-raushan/
