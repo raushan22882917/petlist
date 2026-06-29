@@ -2360,3 +2360,8 @@ body.dd-drawer-active {
   box-shadow: 0 0 0 3px rgba(2, 197, 189, 0.1) !important;
   outline: none !important;
 }
+
+/* Helper class to force hide elements overriding !important displays */
+.dd-hide {
+  display: none !important;
+}

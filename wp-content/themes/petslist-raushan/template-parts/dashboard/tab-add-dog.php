@@ -258,14 +258,14 @@ function dd_field( $meta, $key, $fallback = '' ) {
 
         <!-- Wizard Navigation -->
         <div class="dd-wizard-nav">
-            <button type="button" class="dd-btn dd-btn--ghost" id="dd-wizard-prev" style="display:none;">
+            <button type="button" class="dd-btn dd-btn--ghost dd-hide" id="dd-wizard-prev">
                 <i class="fa-solid fa-arrow-left"></i> <?php _e( 'Previous', 'petslist' ); ?>
             </button>
             <button type="button" class="dd-btn dd-btn--primary" id="dd-wizard-next">
                 <?php _e( 'Next', 'petslist' ); ?> <i class="fa-solid fa-arrow-right"></i>
             </button>
             
-            <button type="submit" class="dd-btn dd-btn--primary dd-btn--lg" id="dd-dog-submit" style="display:none;">
+            <button type="submit" class="dd-btn dd-btn--primary dd-btn--lg dd-hide" id="dd-dog-submit">
                 <span class="dd-btn__text">
                     <?php echo $is_edit ? __( 'Update Dog Profile', 'petslist' ) : __( 'Submit Dog for Review', 'petslist' ); ?>
                 </span>

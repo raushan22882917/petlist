@@ -298,17 +298,17 @@
 
           // Show/Hide Buttons
           if (currentStep === 1) {
-            $('#dd-wizard-prev').hide();
-            $('#dd-wizard-next').show();
-            $('#dd-dog-submit').hide();
+            $('#dd-wizard-prev').addClass('dd-hide');
+            $('#dd-wizard-next').removeClass('dd-hide');
+            $('#dd-dog-submit').addClass('dd-hide');
           } else if (currentStep === totalSteps) {
-            $('#dd-wizard-prev').show();
-            $('#dd-wizard-next').hide();
-            $('#dd-dog-submit').show();
+            $('#dd-wizard-prev').removeClass('dd-hide');
+            $('#dd-wizard-next').addClass('dd-hide');
+            $('#dd-dog-submit').removeClass('dd-hide');
           } else {
-            $('#dd-wizard-prev').show();
-            $('#dd-wizard-next').show();
-            $('#dd-dog-submit').hide();
+            $('#dd-wizard-prev').removeClass('dd-hide');
+            $('#dd-wizard-next').removeClass('dd-hide');
+            $('#dd-dog-submit').addClass('dd-hide');
           }
         }
       },
