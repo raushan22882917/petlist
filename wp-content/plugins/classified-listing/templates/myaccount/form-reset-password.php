@@ -1,0 +1,63 @@
+<?php
+/**
+ * Lost password reset form.
+ *
+ * @author        RadiusTheme
+ * @package       classified-listing/templates
+ * @version       1.0.0
+ *
+ * @var array $args
+ */
+
+use Rtcl\Helpers\Functions;
+
+if ( !defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+Functions::print_notices(); ?>
+
+<form method="post" id="rtcl-password-reset-form" class="rtcl-lost-reset-password">
+
+	<p><?php echo apply_filters( 'rtcl_reset_password_message', esc_html__( 'Enter a new password below.', 'classified-listing' ) ); ?></p><?php // @codingStandardsIgnoreLine ?>
+
+	<div class="alert alert-info" role="alert">
+		<?php
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo wp_get_password_hint(); ?>
+	</div>
+
+	<div class="rtcl-form-group">
+		<label for="password-1"
+			   class="control-label"><?php esc_html_e( 'New password', 'classified-listing' ); ?></label>
+		<div class="rtcl-user-pass-wrap">
+			<input type="password" name="password_1" id="password-1" class="rtcl-form-control rtcl-password"
+				   autocomplete="new-password"
+				   required/>
+			<span class="rtcl-toggle-pass rtcl-icon-eye-off"></span>
+		</div>
+	</div>
+
+	<div class="rtcl-form-group">
+		<label for="password-2"
+			   class="control-label"><?php esc_html_e( 'Re-enter new password', 'classified-listing' ); ?></label>
+		<div class="rtcl-user-pass-wrap">
+			<input type="password" name="password_2" id="password-2" class="rtcl-form-control"
+				   autocomplete="new-password"
+				   data-rule-equalTo="#password-1" required/>
+			<span class="rtcl-toggle-pass rtcl-icon-eye-off"></span>
+		</div>
+	</div>
+
+	<input type="hidden" name="reset_key" value="<?php echo esc_attr( $args['key'] ); ?>"/>
+	<input type="hidden" name="reset_login" value="<?php echo esc_attr( $args['login'] ); ?>"/>
+
+	<?php do_action( 'rtcl_resetpassword_form' ); ?>
+
+	<div class="rtcl-form-group">
+		<input type="submit" name="rtcl-reset-password" class="btn btn-primary"
+			   value="<?php esc_attr_e( 'Reset Password', 'classified-listing' ); ?>"/>
+	</div>
+	<?php wp_nonce_field( 'reset_password' ); ?>
+
+</form>

@@ -1,0 +1,10 @@
+span.term-meta-color-block {
+    height: 30px;
+    width: 30px;
+    display: inline-block;
+}
+
+td.rt_category_icon.column-rt_category_icon img {
+    padding: 5px;
+    background-color: #02c5bd;
+}

@@ -1,0 +1,14 @@
+<wpml-config>
+  <admin-texts>
+    <key name="petslist">
+      <key name="header_btn_txt" />
+      <key name="header_login_text" />
+      <key name="header_chat_text" />
+      <key name="error_text" />
+      <key name="error_subtitle" />
+      <key name="error_buttontext" />
+      <key name="copyright_text" />
+      <key name="listing_archive_title_text" />
+    </key>
+  </admin-texts>
+</wpml-config>

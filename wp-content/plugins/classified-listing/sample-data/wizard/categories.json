@@ -1,0 +1,508 @@
+{
+	"classified": [
+		{
+			"name": "Electronics",
+			"slug": "electronics",
+			"description": "",
+			"meta": "",
+			"order": 0,
+			"child": [
+				{
+					"name": "Mobile Phone",
+					"slug": "mobile-phone"
+				},
+				{
+					"name": "Computers & Laptops",
+					"slug": "computers-laptops"
+				},
+				{
+					"name": "Computers & Tablets",
+					"slug": "computers-tablets"
+				},
+				{
+					"name": "TV & Home Appliances",
+					"slug": "tv-home-appliances"
+				}
+			]
+		},
+		{
+			"name": "Property",
+			"slug": "property",
+			"description": "Sell different types of property. Find your preferred property,residential and commercial property as well as plot and lands at the cheapest prices.",
+			"meta": "",
+			"order": 0,
+			"child": [
+				{
+					"name": "Apartments & Flats",
+					"slug": "apartments-flats"
+				},
+				{
+					"name": "Houses",
+					"slug": "houses"
+				},
+				{
+					"name": "Plots & Land",
+					"slug": "plots-land"
+				},
+				{
+					"name": "Commercial Property",
+					"slug": "commercial-property"
+				}
+			]
+		},
+		{
+			"name": "Hobby, Sport & Kids",
+			"slug": "hobby-sport-kids",
+			"child": [
+				{
+					"name": "Sports Equipment",
+					"slug": "sports-equipment"
+				},
+				{
+					"name": "Children's Items",
+					"slug": "childrens-items"
+				}
+			]
+		},
+		{
+			"name": "Vehicles",
+			"slug": "vehicles",
+			"child": [
+				{
+					"name": "Cars",
+					"slug": "cars"
+				},
+				{
+					"name": "Motorcycles",
+					"slug": "motorcycles"
+				},
+				{
+					"name": "Trucks & Buses",
+					"slug": "trucks-buses"
+				},
+				{
+					"name": "Spare Parts",
+					"slug": "spare-parts"
+				}
+			]
+		},
+		{
+			"name": "Home Appliances",
+			"slug": "home-appliances",
+			"child": [
+				{
+					"name": "Home Appliances",
+					"slug": "home-appliances-home-appliances"
+				},
+				{
+					"name": "Others Home Items",
+					"slug": "others-home-items"
+				},
+				{
+					"name": "Furniture",
+					"slug": "furniture"
+				}
+			]
+		},
+		{
+			"name": "Pets",
+			"slug": "pets",
+			"child": [
+				{
+					"name": "Dogs",
+					"slug": "dogs"
+				},
+				{
+					"name": "Cats",
+					"slug": "cats"
+				},
+				{
+					"name": "Birds",
+					"slug": "birds"
+				},
+				{
+					"name": "Pet Supplies",
+					"slug": "pet-supplies"
+				}
+			]
+		},
+		{
+			"name": "Furniture & Home Decor",
+			"slug": "furniture-home-decor",
+			"child": [
+				{
+					"name": "Living Room",
+					"slug": "living-room"
+				},
+				{
+					"name": "Bedroom",
+					"slug": "bedroom"
+				},
+				{
+					"name": "Kitchen & Dining",
+					"slug": "kitchen-dining"
+				},
+				{
+					"name": "Garden & Outdoors",
+					"slug": "garden-outdoors"
+				}
+			]
+		},
+		{
+			"name": "Fashion",
+			"slug": "fashion",
+			"child": [
+				{
+					"name": "Men's Clothing",
+					"slug": "mens-clothing"
+				},
+				{
+					"name": "Women's Clothing",
+					"slug": "womens-clothing"
+				},
+				{
+					"name": "Shoes",
+					"slug": "shoes"
+				},
+				{
+					"name": "Accessories",
+					"slug": "accessories"
+				}
+			]
+		},
+		{
+			"name": "Others",
+			"slug": "others",
+			"child": []
+		}
+	],
+	"directory": [
+		{
+			"name": "Doctor",
+			"slug": "doctor",
+			"description": "",
+			"meta": "",
+			"order": 0,
+			"child": [
+				{
+					"name": "Cardiologist",
+					"slug": "cardiologist"
+				},
+				{
+					"name": "Dentist",
+					"slug": "dentist"
+				},
+				{
+					"name": "Eye Specialist",
+					"slug": "eye-specialist"
+				},
+				{
+					"name": "Neurologist",
+					"slug": "neurologist"
+				},
+				{
+					"name": "Pediatrician",
+					"slug": "pediatrician"
+				}
+			]
+		},
+		{
+			"name": "Travel",
+			"slug": "travel"
+		},
+		{
+			"name": "GYM",
+			"slug": "gym"
+		},
+		{
+			"name": "Restaurant",
+			"slug": "restaurant",
+			"child": [
+				{
+					"name": "American",
+					"slug": "american"
+				},
+				{
+					"name": "Italian",
+					"slug": "Italian"
+				},
+				{
+					"name": "Fast Food",
+					"slug": "fast-food"
+				},
+				{
+					"name": "Mexican",
+					"slug": "mexican"
+				},
+				{
+					"name": "Japanese",
+					"slug": "japanese"
+				}
+			]
+		},
+		{
+			"name": "Shopping",
+			"slug": "shopping"
+		},
+		{
+			"name": "Museum",
+			"slug": "museum"
+		},
+		{
+			"name": "Event",
+			"slug": "event",
+			"child": [
+				{
+					"name": "Hotel",
+					"slug": "hotel"
+				},
+				{
+					"name": "Music",
+					"slug": "music"
+				}
+			]
+		}
+	],
+	"real_estate": [
+		{
+			"name": "Apartments",
+			"slug": "apartments"
+		},
+		{
+			"name": "Commercial Place",
+			"slug": "commercial-place"
+		},
+		{
+			"name": "Clean Lands",
+			"slug": "clean-lands"
+		},
+		{
+			"name": "Private Villa",
+			"slug": "private-villa"
+		},
+		{
+			"name": "House",
+			"slug": "house"
+		},
+		{
+			"name": "Hotel",
+			"slug": "hotel"
+		},
+		{
+			"name": "Motel",
+			"slug": "Motel"
+		}
+	],
+	"restaurants": [
+		{
+			"name": "Italian",
+			"slug": "italian"
+		},
+		{
+			"name": "Chinese",
+			"slug": "chinese"
+		},
+		{
+			"name": "Indian",
+			"slug": "indian"
+		},
+		{
+			"name": "Apple Juice",
+			"slug": "apple-juice"
+		},
+		{
+			"name": "Ice Cream",
+			"slug": "ice-cream"
+		},
+		{
+			"name": "Pizza",
+			"slug": "pizza"
+		},
+		{
+			"name": "Sandwiches",
+			"slug": "sandwiches"
+		},
+		{
+			"name": "Hamburger",
+			"slug": "hamburger"
+		},
+		{
+			"name": "Spaghetti",
+			"slug": "spaghetti"
+		},
+		{
+			"name": "Fast Food",
+			"slug": "fastfood"
+		}
+	],
+	"car": [
+		{
+			"name": "Compact",
+			"slug": "compact"
+		},
+		{
+			"name": "Covertible",
+			"slug": "covertible"
+		},
+		{
+			"name": "Mini-Truck",
+			"slug": "mini-truck"
+		},
+		{
+			"name": "Off-Road",
+			"slug": "off-road"
+		},
+		{
+			"name": "Sedan",
+			"slug": "sedan"
+		},
+		{
+			"name": "Sports Car",
+			"slug": "sports-ca"
+		}
+	],
+	"services": [
+		{
+			"name": "Plumbing",
+			"slug": "plumbing"
+		},
+		{
+			"name": "Electrical",
+			"slug": "electrical"
+		},
+		{
+			"name": "Cleaning",
+			"slug": "cleaning"
+		},
+		{
+			"name": "AC Repair",
+			"slug": "ac-repair"
+		},
+		{
+			"name": "Home Repair",
+			"slug": "home-repair"
+		},
+		{
+			"name": "Landscaping",
+			"slug": "landscaping"
+		},
+		{
+			"name": "Painting",
+			"slug": "painting"
+		},
+		{
+			"name": "CCTV",
+			"slug": "cctv"
+		},
+		{
+			"name": "Pest Control",
+			"slug": "pest-control"
+		}
+	],
+	"hotel": [
+		{
+			"name": "Cottage",
+			"slug": "cottage"
+		},
+		{
+			"name": "Hotel",
+			"slug": "hotel"
+		},
+		{
+			"name": "Inns",
+			"slug": "inns"
+		},
+		{
+			"name": "Motels",
+			"slug": "motels"
+		},
+		{
+			"name": "Resorts",
+			"slug": "resorts"
+		},
+		{
+			"name": "Serviced Apartments",
+			"slug": "serviced-apartments"
+		},
+		{
+			"name": "Villa",
+			"slug": "villa"
+		}
+	],
+	"lawyers": [
+		{
+			"name": "Banking",
+			"slug": "banking"
+		},
+		{
+			"name": "Business",
+			"slug": "business"
+		},
+		{
+			"name": "Criminal",
+			"slug": "criminal"
+		},
+		{
+			"name": "Injured",
+			"slug": "injured"
+		},
+		{
+			"name": "Labor",
+			"slug": "labor"
+		},
+		{
+			"name": "Tax",
+			"slug": "tax"
+		},
+		{
+			"name": "Real Estate",
+			"slug": "real-estate"
+		}
+	],
+	"doctors": [
+		{
+			"name": "Neurologist",
+			"slug": "neurologist"
+		},
+		{
+			"name": "Dentist",
+			"slug": "dentist"
+		},
+		{
+			"name": "Eye Specialist",
+			"slug": "eye-specialist"
+		},
+		{
+			"name": "General Physician",
+			"slug": "general-physician"
+		},
+		{
+			"name": "Gynecologist",
+			"slug": "gynecologist"
+		},
+		{
+			"name": "Orthopedic Surgeon",
+			"slug": "orthopedic-surgeon"
+		},
+		{
+			"name": "Rheumatologist",
+			"slug": "rheumatologist"
+		},
+		{
+			"name": "Dermatologist",
+			"slug": "dermatologist"
+		},
+		{
+			"name": "Medicine",
+			"slug": "medicine"
+		},
+		{
+			"name": "Cardiologist",
+			"slug": "cardiologist"
+		},
+		{
+			"name": "Pediatrician",
+			"slug": "pediatrician"
+		}
+	]
+}

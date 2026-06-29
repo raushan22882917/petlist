@@ -1,0 +1,1034 @@
+[2026-06-28 10:32:39.128900] [error] WP_Error Object
+(
+    [errors] => Array
+        (
+            [wp_mail_failed] => Array
+                (
+                    [0] => Invalid address:  (From): wordpress@localhost
+                )
+
+        )
+
+    [error_data] => Array
+        (
+            [wp_mail_failed] => Array
+                (
+                    [to] => Array
+                        (
+                            [0] => su-22016@sitare.org
+                        )
+
+                    [subject] => [Petslist Test] Login Details
+                    [message] => Username: su-22016@sitare.org
+
+To set your password, visit the following address:
+
+http://localhost:8000/wp-login.php?login=su-22016%40sitare.org&key=2dh2OjeG5jCDHkjhDvri&action=rp
+
+                    [headers] => Array
+                        (
+                        )
+
+                    [attachments] => Array
+                        (
+                        )
+
+                    [phpmailer_exception_code] => 0
+                )
+
+        )
+
+    [additional_data:protected] => Array
+        (
+        )
+
+)
+
+[2026-06-28 10:48:18.840900] [error] WP_Error Object
+(
+    [errors] => Array
+        (
+            [wp_mail_failed] => Array
+                (
+                    [0] => Invalid address:  (From): wordpress@localhost
+                )
+
+        )
+
+    [error_data] => Array
+        (
+            [wp_mail_failed] => Array
+                (
+                    [to] => Array
+                        (
+                            [0] => su-22016@sitare.org
+                        )
+
+                    [subject] => 🎉 Your Yearly subscription is active — Dog Directory
+                    [message] => <!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/1f389.png" alt="🎉" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Subscription Activated!</title></head>
+<body style="margin:0;padding:0;background:#f6f9f9;font-family:'Plus Jakarta Sans',Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f6f9f9;padding:30px 0;">
+    <tr><td align="center">
+      <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.08);">
+        <!-- Header -->
+        <tr><td style="background:#02c5bd;padding:28px 36px;text-align:center;">
+          <a href="http://localhost:8000/" style="color:#fff;font-size:22px;font-weight:800;text-decoration:none;"><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/1f43e.png" alt="🐾" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Petslist Test</a>
+        </td></tr>
+        <!-- Body -->
+        <tr><td style="padding:36px;">
+          <h2 style="color:#070C3E;font-size:22px;margin:0 0 20px;"><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/1f389.png" alt="🎉" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Subscription Activated!</h2>
+          <div style="color:#374151;font-size:15px;line-height:1.7;"><p>Hi <strong>Raushan Raushan Kumar</strong>,</p>
+             <p>Your <strong>Yearly</strong> subscription to <strong>Petslist Test</strong> is now active.</p>
+             
+             <p><strong>You now have access to:</strong></p>
+             <ul style="margin:10px 0 20px;padding-left:0;list-style:none;"><li style="padding:4px 0;color:#374151;"><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/2705.png" alt="✅" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Everything in Monthly</li><li style="padding:4px 0;color:#374151;"><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/2705.png" alt="✅" class="wp-smiley" style="height: 1em; max-height: 1em;" /> 2 months FREE</li><li style="padding:4px 0;color:#374151;"><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/2705.png" alt="✅" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Gallery uploads (up to 10 photos)</li><li style="padding:4px 0;color:#374151;"><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/2705.png" alt="✅" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Featured badge on profiles</li><li style="padding:4px 0;color:#374151;"><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/2705.png" alt="✅" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Early access to new features</li></ul>
+             <p><a href="http://localhost:8000/my-account/" style="display:inline-block;background:#02c5bd;color:#fff;padding:12px 28px;border-radius:50px;text-decoration:none;font-weight:700;">Go to My Dashboard</a></p>
+             <p style="margin-top:24px;">To add your first dog, visit your <a href="http://localhost:8000/my-account/?tab=add-dog">dashboard</a>.</p></div>
+        </td></tr>
+        <!-- Footer -->
+        <tr><td style="background:#f6f9f9;padding:20px 36px;text-align:center;border-top:1px solid #e1e9e9;">
+          <p style="color:#9ca3af;font-size:12px;margin:0;">
+            You received this email because you have an account on <a href="http://localhost:8000/" style="color:#02c5bd;">Petslist Test</a>.<br>
+            <a href="http://localhost:8000/" style="color:#9ca3af;">Visit Site</a> &nbsp;|&nbsp; <a href="http://localhost:8000/my-account/" style="color:#9ca3af;">My Account</a>
+          </p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>
+                    [headers] => Array
+                        (
+                        )
+
+                    [attachments] => Array
+                        (
+                        )
+
+                    [phpmailer_exception_code] => 0
+                )
+
+        )
+
+    [additional_data:protected] => Array
+        (
+        )
+
+)
+
+[2026-06-28 10:48:18.842400] [error] WP_Error Object
+(
+    [errors] => Array
+        (
+            [wp_mail_failed] => Array
+                (
+                    [0] => Invalid address:  (From): wordpress@localhost
+                )
+
+        )
+
+    [error_data] => Array
+        (
+            [wp_mail_failed] => Array
+                (
+                    [to] => Array
+                        (
+                            [0] => admin@example.com
+                        )
+
+                    [subject] => 📋 New Dog Directory Subscriber: Raushan Raushan Kumar
+                    [message] => <!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/1f4cb.png" alt="📋" class="wp-smiley" style="height: 1em; max-height: 1em;" /> New Subscriber</title></head>
+<body style="margin:0;padding:0;background:#f6f9f9;font-family:'Plus Jakarta Sans',Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f6f9f9;padding:30px 0;">
+    <tr><td align="center">
+      <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.08);">
+        <!-- Header -->
+        <tr><td style="background:#02c5bd;padding:28px 36px;text-align:center;">
+          <a href="http://localhost:8000/" style="color:#fff;font-size:22px;font-weight:800;text-decoration:none;"><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/1f43e.png" alt="🐾" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Petslist Test</a>
+        </td></tr>
+        <!-- Body -->
+        <tr><td style="padding:36px;">
+          <h2 style="color:#070C3E;font-size:22px;margin:0 0 20px;"><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/1f4cb.png" alt="📋" class="wp-smiley" style="height: 1em; max-height: 1em;" /> New Subscriber</h2>
+          <div style="color:#374151;font-size:15px;line-height:1.7;"><p><strong>Raushan Raushan Kumar</strong> (su-22016@sitare.org) subscribed to the <strong>Yearly</strong> plan.</p>
+             <p><a href="http://localhost:8000/wp-admin/admin.php?page=dd-subscribers">View All Subscribers</a></p></div>
+        </td></tr>
+        <!-- Footer -->
+        <tr><td style="background:#f6f9f9;padding:20px 36px;text-align:center;border-top:1px solid #e1e9e9;">
+          <p style="color:#9ca3af;font-size:12px;margin:0;">
+            You received this email because you have an account on <a href="http://localhost:8000/" style="color:#02c5bd;">Petslist Test</a>.<br>
+            <a href="http://localhost:8000/" style="color:#9ca3af;">Visit Site</a> &nbsp;|&nbsp; <a href="http://localhost:8000/my-account/" style="color:#9ca3af;">My Account</a>
+          </p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>
+                    [headers] => Array
+                        (
+                        )
+
+                    [attachments] => Array
+                        (
+                        )
+
+                    [phpmailer_exception_code] => 0
+                )
+
+        )
+
+    [additional_data:protected] => Array
+        (
+        )
+
+)
+
+[2026-06-28 10:51:03.383400] [error] WP_Error Object
+(
+    [errors] => Array
+        (
+            [wp_mail_failed] => Array
+                (
+                    [0] => Invalid address:  (From): wordpress@localhost
+                )
+
+        )
+
+    [error_data] => Array
+        (
+            [wp_mail_failed] => Array
+                (
+                    [to] => Array
+                        (
+                            [0] => su-22016@sitare.org
+                        )
+
+                    [subject] => ✅ Dog "test dog 1" submitted for review
+                    [message] => <!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/2705.png" alt="✅" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Dog Submitted for Review</title></head>
+<body style="margin:0;padding:0;background:#f6f9f9;font-family:'Plus Jakarta Sans',Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f6f9f9;padding:30px 0;">
+    <tr><td align="center">
+      <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.08);">
+        <!-- Header -->
+        <tr><td style="background:#02c5bd;padding:28px 36px;text-align:center;">
+          <a href="http://localhost:8000/" style="color:#fff;font-size:22px;font-weight:800;text-decoration:none;"><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/1f43e.png" alt="🐾" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Petslist Test</a>
+        </td></tr>
+        <!-- Body -->
+        <tr><td style="padding:36px;">
+          <h2 style="color:#070C3E;font-size:22px;margin:0 0 20px;"><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/2705.png" alt="✅" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Dog Submitted for Review</h2>
+          <div style="color:#374151;font-size:15px;line-height:1.7;"><p>Hi <strong>Raushan Raushan Kumar</strong>,</p>
+             <p>Your dog <strong>"test dog 1"</strong> has been submitted and is pending review. It will go live within 24 hours.</p>
+             <p>Breed: N/A</p>
+             <p><a href="http://localhost:8000/my-account/?tab=dogs">Manage your dogs</a></p></div>
+        </td></tr>
+        <!-- Footer -->
+        <tr><td style="background:#f6f9f9;padding:20px 36px;text-align:center;border-top:1px solid #e1e9e9;">
+          <p style="color:#9ca3af;font-size:12px;margin:0;">
+            You received this email because you have an account on <a href="http://localhost:8000/" style="color:#02c5bd;">Petslist Test</a>.<br>
+            <a href="http://localhost:8000/" style="color:#9ca3af;">Visit Site</a> &nbsp;|&nbsp; <a href="http://localhost:8000/my-account/" style="color:#9ca3af;">My Account</a>
+          </p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>
+                    [headers] => Array
+                        (
+                        )
+
+                    [attachments] => Array
+                        (
+                        )
+
+                    [phpmailer_exception_code] => 0
+                )
+
+        )
+
+    [additional_data:protected] => Array
+        (
+        )
+
+)
+
+[2026-06-28 10:51:03.386600] [error] WP_Error Object
+(
+    [errors] => Array
+        (
+            [wp_mail_failed] => Array
+                (
+                    [0] => Invalid address:  (From): wordpress@localhost
+                )
+
+        )
+
+    [error_data] => Array
+        (
+            [wp_mail_failed] => Array
+                (
+                    [to] => Array
+                        (
+                            [0] => admin@example.com
+                        )
+
+                    [subject] => 🐾 New Dog Listing Pending Review: test dog 1
+                    [message] => <!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/1f43e.png" alt="🐾" class="wp-smiley" style="height: 1em; max-height: 1em;" /> New Dog Listing for Review</title></head>
+<body style="margin:0;padding:0;background:#f6f9f9;font-family:'Plus Jakarta Sans',Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f6f9f9;padding:30px 0;">
+    <tr><td align="center">
+      <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.08);">
+        <!-- Header -->
+        <tr><td style="background:#02c5bd;padding:28px 36px;text-align:center;">
+          <a href="http://localhost:8000/" style="color:#fff;font-size:22px;font-weight:800;text-decoration:none;"><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/1f43e.png" alt="🐾" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Petslist Test</a>
+        </td></tr>
+        <!-- Body -->
+        <tr><td style="padding:36px;">
+          <h2 style="color:#070C3E;font-size:22px;margin:0 0 20px;"><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/1f43e.png" alt="🐾" class="wp-smiley" style="height: 1em; max-height: 1em;" /> New Dog Listing for Review</h2>
+          <div style="color:#374151;font-size:15px;line-height:1.7;"><p><strong>Raushan Raushan Kumar</strong> submitted a new dog: <strong>test dog 1</strong></p>
+             <p>Breed: N/A | Gender: N/A</p>
+             <p><a href="">Review in Admin</a></p></div>
+        </td></tr>
+        <!-- Footer -->
+        <tr><td style="background:#f6f9f9;padding:20px 36px;text-align:center;border-top:1px solid #e1e9e9;">
+          <p style="color:#9ca3af;font-size:12px;margin:0;">
+            You received this email because you have an account on <a href="http://localhost:8000/" style="color:#02c5bd;">Petslist Test</a>.<br>
+            <a href="http://localhost:8000/" style="color:#9ca3af;">Visit Site</a> &nbsp;|&nbsp; <a href="http://localhost:8000/my-account/" style="color:#9ca3af;">My Account</a>
+          </p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>
+                    [headers] => Array
+                        (
+                        )
+
+                    [attachments] => Array
+                        (
+                        )
+
+                    [phpmailer_exception_code] => 0
+                )
+
+        )
+
+    [additional_data:protected] => Array
+        (
+        )
+
+)
+
+[2026-06-28 10:51:03.460200] [error] WP_Error Object
+(
+    [errors] => Array
+        (
+            [wp_mail_failed] => Array
+                (
+                    [0] => Invalid address:  (From): wordpress@localhost
+                )
+
+        )
+
+    [error_data] => Array
+        (
+            [wp_mail_failed] => Array
+                (
+                    [to] => Array
+                        (
+                            [0] => su-22016@sitare.org
+                        )
+
+                    [subject] => ✅ Dog "test dog 1" submitted for review
+                    [message] => <!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/2705.png" alt="✅" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Dog Submitted for Review</title></head>
+<body style="margin:0;padding:0;background:#f6f9f9;font-family:'Plus Jakarta Sans',Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f6f9f9;padding:30px 0;">
+    <tr><td align="center">
+      <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.08);">
+        <!-- Header -->
+        <tr><td style="background:#02c5bd;padding:28px 36px;text-align:center;">
+          <a href="http://localhost:8000/" style="color:#fff;font-size:22px;font-weight:800;text-decoration:none;"><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/1f43e.png" alt="🐾" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Petslist Test</a>
+        </td></tr>
+        <!-- Body -->
+        <tr><td style="padding:36px;">
+          <h2 style="color:#070C3E;font-size:22px;margin:0 0 20px;"><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/2705.png" alt="✅" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Dog Submitted for Review</h2>
+          <div style="color:#374151;font-size:15px;line-height:1.7;"><p>Hi <strong>Raushan Raushan Kumar</strong>,</p>
+             <p>Your dog <strong>"test dog 1"</strong> has been submitted and is pending review. It will go live within 24 hours.</p>
+             <p>Breed: N/A</p>
+             <p><a href="http://localhost:8000/my-account/?tab=dogs">Manage your dogs</a></p></div>
+        </td></tr>
+        <!-- Footer -->
+        <tr><td style="background:#f6f9f9;padding:20px 36px;text-align:center;border-top:1px solid #e1e9e9;">
+          <p style="color:#9ca3af;font-size:12px;margin:0;">
+            You received this email because you have an account on <a href="http://localhost:8000/" style="color:#02c5bd;">Petslist Test</a>.<br>
+            <a href="http://localhost:8000/" style="color:#9ca3af;">Visit Site</a> &nbsp;|&nbsp; <a href="http://localhost:8000/my-account/" style="color:#9ca3af;">My Account</a>
+          </p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>
+                    [headers] => Array
+                        (
+                        )
+
+                    [attachments] => Array
+                        (
+                        )
+
+                    [phpmailer_exception_code] => 0
+                )
+
+        )
+
+    [additional_data:protected] => Array
+        (
+        )
+
+)
+
+[2026-06-28 10:51:03.462800] [error] WP_Error Object
+(
+    [errors] => Array
+        (
+            [wp_mail_failed] => Array
+                (
+                    [0] => Invalid address:  (From): wordpress@localhost
+                )
+
+        )
+
+    [error_data] => Array
+        (
+            [wp_mail_failed] => Array
+                (
+                    [to] => Array
+                        (
+                            [0] => admin@example.com
+                        )
+
+                    [subject] => 🐾 New Dog Listing Pending Review: test dog 1
+                    [message] => <!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/1f43e.png" alt="🐾" class="wp-smiley" style="height: 1em; max-height: 1em;" /> New Dog Listing for Review</title></head>
+<body style="margin:0;padding:0;background:#f6f9f9;font-family:'Plus Jakarta Sans',Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f6f9f9;padding:30px 0;">
+    <tr><td align="center">
+      <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.08);">
+        <!-- Header -->
+        <tr><td style="background:#02c5bd;padding:28px 36px;text-align:center;">
+          <a href="http://localhost:8000/" style="color:#fff;font-size:22px;font-weight:800;text-decoration:none;"><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/1f43e.png" alt="🐾" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Petslist Test</a>
+        </td></tr>
+        <!-- Body -->
+        <tr><td style="padding:36px;">
+          <h2 style="color:#070C3E;font-size:22px;margin:0 0 20px;"><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/1f43e.png" alt="🐾" class="wp-smiley" style="height: 1em; max-height: 1em;" /> New Dog Listing for Review</h2>
+          <div style="color:#374151;font-size:15px;line-height:1.7;"><p><strong>Raushan Raushan Kumar</strong> submitted a new dog: <strong>test dog 1</strong></p>
+             <p>Breed: N/A | Gender: N/A</p>
+             <p><a href="">Review in Admin</a></p></div>
+        </td></tr>
+        <!-- Footer -->
+        <tr><td style="background:#f6f9f9;padding:20px 36px;text-align:center;border-top:1px solid #e1e9e9;">
+          <p style="color:#9ca3af;font-size:12px;margin:0;">
+            You received this email because you have an account on <a href="http://localhost:8000/" style="color:#02c5bd;">Petslist Test</a>.<br>
+            <a href="http://localhost:8000/" style="color:#9ca3af;">Visit Site</a> &nbsp;|&nbsp; <a href="http://localhost:8000/my-account/" style="color:#9ca3af;">My Account</a>
+          </p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>
+                    [headers] => Array
+                        (
+                        )
+
+                    [attachments] => Array
+                        (
+                        )
+
+                    [phpmailer_exception_code] => 0
+                )
+
+        )
+
+    [additional_data:protected] => Array
+        (
+        )
+
+)
+
+[2026-06-28 10:52:09.775600] [error] WP_Error Object
+(
+    [errors] => Array
+        (
+            [wp_mail_failed] => Array
+                (
+                    [0] => Invalid address:  (From): wordpress@localhost
+                )
+
+        )
+
+    [error_data] => Array
+        (
+            [wp_mail_failed] => Array
+                (
+                    [to] => Array
+                        (
+                            [0] => su-22016@sitare.org
+                        )
+
+                    [subject] => 🎉 Your dog "test dog 1" is now live!
+                    [message] => <!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/1f389.png" alt="🎉" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Dog Profile Published!</title></head>
+<body style="margin:0;padding:0;background:#f6f9f9;font-family:'Plus Jakarta Sans',Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f6f9f9;padding:30px 0;">
+    <tr><td align="center">
+      <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.08);">
+        <!-- Header -->
+        <tr><td style="background:#02c5bd;padding:28px 36px;text-align:center;">
+          <a href="http://localhost:8000/" style="color:#fff;font-size:22px;font-weight:800;text-decoration:none;"><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/1f43e.png" alt="🐾" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Petslist Test</a>
+        </td></tr>
+        <!-- Body -->
+        <tr><td style="padding:36px;">
+          <h2 style="color:#070C3E;font-size:22px;margin:0 0 20px;"><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/1f389.png" alt="🎉" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Dog Profile Published!</h2>
+          <div style="color:#374151;font-size:15px;line-height:1.7;"><p>Hi <strong>Raushan Raushan Kumar</strong>,</p>
+             <p>Great news! Your dog profile <strong>"test dog 1"</strong> has been approved and is now live on the directory.</p>
+             <p><a href="http://localhost:8000/dog-directory/" style="display:inline-block;background:#02c5bd;color:#fff;padding:12px 28px;border-radius:50px;text-decoration:none;font-weight:700;">View Your Dog's Profile</a></p></div>
+        </td></tr>
+        <!-- Footer -->
+        <tr><td style="background:#f6f9f9;padding:20px 36px;text-align:center;border-top:1px solid #e1e9e9;">
+          <p style="color:#9ca3af;font-size:12px;margin:0;">
+            You received this email because you have an account on <a href="http://localhost:8000/" style="color:#02c5bd;">Petslist Test</a>.<br>
+            <a href="http://localhost:8000/" style="color:#9ca3af;">Visit Site</a> &nbsp;|&nbsp; <a href="http://localhost:8000/my-account/" style="color:#9ca3af;">My Account</a>
+          </p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>
+                    [headers] => Array
+                        (
+                        )
+
+                    [attachments] => Array
+                        (
+                        )
+
+                    [phpmailer_exception_code] => 0
+                )
+
+        )
+
+    [additional_data:protected] => Array
+        (
+        )
+
+)
+
+[2026-06-28 10:52:09.781600] [error] WP_Error Object
+(
+    [errors] => Array
+        (
+            [wp_mail_failed] => Array
+                (
+                    [0] => Invalid address:  (From): wordpress@localhost
+                )
+
+        )
+
+    [error_data] => Array
+        (
+            [wp_mail_failed] => Array
+                (
+                    [to] => Array
+                        (
+                            [0] => su-22016@sitare.org
+                        )
+
+                    [subject] => 🎉 Your dog "test dog 1" is now live!
+                    [message] => <!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/1f389.png" alt="🎉" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Dog Profile Published!</title></head>
+<body style="margin:0;padding:0;background:#f6f9f9;font-family:'Plus Jakarta Sans',Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f6f9f9;padding:30px 0;">
+    <tr><td align="center">
+      <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.08);">
+        <!-- Header -->
+        <tr><td style="background:#02c5bd;padding:28px 36px;text-align:center;">
+          <a href="http://localhost:8000/" style="color:#fff;font-size:22px;font-weight:800;text-decoration:none;"><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/1f43e.png" alt="🐾" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Petslist Test</a>
+        </td></tr>
+        <!-- Body -->
+        <tr><td style="padding:36px;">
+          <h2 style="color:#070C3E;font-size:22px;margin:0 0 20px;"><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/1f389.png" alt="🎉" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Dog Profile Published!</h2>
+          <div style="color:#374151;font-size:15px;line-height:1.7;"><p>Hi <strong>Raushan Raushan Kumar</strong>,</p>
+             <p>Great news! Your dog profile <strong>"test dog 1"</strong> has been approved and is now live on the directory.</p>
+             <p><a href="http://localhost:8000/dog-directory/" style="display:inline-block;background:#02c5bd;color:#fff;padding:12px 28px;border-radius:50px;text-decoration:none;font-weight:700;">View Your Dog's Profile</a></p></div>
+        </td></tr>
+        <!-- Footer -->
+        <tr><td style="background:#f6f9f9;padding:20px 36px;text-align:center;border-top:1px solid #e1e9e9;">
+          <p style="color:#9ca3af;font-size:12px;margin:0;">
+            You received this email because you have an account on <a href="http://localhost:8000/" style="color:#02c5bd;">Petslist Test</a>.<br>
+            <a href="http://localhost:8000/" style="color:#9ca3af;">Visit Site</a> &nbsp;|&nbsp; <a href="http://localhost:8000/my-account/" style="color:#9ca3af;">My Account</a>
+          </p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>
+                    [headers] => Array
+                        (
+                        )
+
+                    [attachments] => Array
+                        (
+                        )
+
+                    [phpmailer_exception_code] => 0
+                )
+
+        )
+
+    [additional_data:protected] => Array
+        (
+        )
+
+)
+
+[2026-06-28 12:11:56.428300] [error] WP_Error Object
+(
+    [errors] => Array
+        (
+            [wp_mail_failed] => Array
+                (
+                    [0] => Invalid address:  (From): wordpress@localhost
+                )
+
+        )
+
+    [error_data] => Array
+        (
+            [wp_mail_failed] => Array
+                (
+                    [to] => Array
+                        (
+                            [0] => su-22016@sitare.org
+                        )
+
+                    [subject] => ✅ Dog "test dog 2" submitted for review
+                    [message] => <!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/2705.png" alt="✅" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Dog Submitted for Review</title></head>
+<body style="margin:0;padding:0;background:#f6f9f9;font-family:'Plus Jakarta Sans',Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f6f9f9;padding:30px 0;">
+    <tr><td align="center">
+      <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.08);">
+        <!-- Header -->
+        <tr><td style="background:#02c5bd;padding:28px 36px;text-align:center;">
+          <a href="http://localhost:8000/" style="color:#fff;font-size:22px;font-weight:800;text-decoration:none;"><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/1f43e.png" alt="🐾" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Petslist Test</a>
+        </td></tr>
+        <!-- Body -->
+        <tr><td style="padding:36px;">
+          <h2 style="color:#070C3E;font-size:22px;margin:0 0 20px;"><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/2705.png" alt="✅" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Dog Submitted for Review</h2>
+          <div style="color:#374151;font-size:15px;line-height:1.7;"><p>Hi <strong>Raushan Raushan Kumar</strong>,</p>
+             <p>Your dog <strong>"test dog 2"</strong> has been submitted and is pending review. It will go live within 24 hours.</p>
+             <p>Breed: N/A</p>
+             <p><a href="http://localhost:8000/my-account/?tab=dogs">Manage your dogs</a></p></div>
+        </td></tr>
+        <!-- Footer -->
+        <tr><td style="background:#f6f9f9;padding:20px 36px;text-align:center;border-top:1px solid #e1e9e9;">
+          <p style="color:#9ca3af;font-size:12px;margin:0;">
+            You received this email because you have an account on <a href="http://localhost:8000/" style="color:#02c5bd;">Petslist Test</a>.<br>
+            <a href="http://localhost:8000/" style="color:#9ca3af;">Visit Site</a> &nbsp;|&nbsp; <a href="http://localhost:8000/my-account/" style="color:#9ca3af;">My Account</a>
+          </p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>
+                    [headers] => Array
+                        (
+                        )
+
+                    [attachments] => Array
+                        (
+                        )
+
+                    [phpmailer_exception_code] => 0
+                )
+
+        )
+
+    [additional_data:protected] => Array
+        (
+        )
+
+)
+
+[2026-06-28 12:11:56.431800] [error] WP_Error Object
+(
+    [errors] => Array
+        (
+            [wp_mail_failed] => Array
+                (
+                    [0] => Invalid address:  (From): wordpress@localhost
+                )
+
+        )
+
+    [error_data] => Array
+        (
+            [wp_mail_failed] => Array
+                (
+                    [to] => Array
+                        (
+                            [0] => admin@example.com
+                        )
+
+                    [subject] => 🐾 New Dog Listing Pending Review: test dog 2
+                    [message] => <!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/1f43e.png" alt="🐾" class="wp-smiley" style="height: 1em; max-height: 1em;" /> New Dog Listing for Review</title></head>
+<body style="margin:0;padding:0;background:#f6f9f9;font-family:'Plus Jakarta Sans',Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f6f9f9;padding:30px 0;">
+    <tr><td align="center">
+      <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.08);">
+        <!-- Header -->
+        <tr><td style="background:#02c5bd;padding:28px 36px;text-align:center;">
+          <a href="http://localhost:8000/" style="color:#fff;font-size:22px;font-weight:800;text-decoration:none;"><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/1f43e.png" alt="🐾" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Petslist Test</a>
+        </td></tr>
+        <!-- Body -->
+        <tr><td style="padding:36px;">
+          <h2 style="color:#070C3E;font-size:22px;margin:0 0 20px;"><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/1f43e.png" alt="🐾" class="wp-smiley" style="height: 1em; max-height: 1em;" /> New Dog Listing for Review</h2>
+          <div style="color:#374151;font-size:15px;line-height:1.7;"><p><strong>Raushan Raushan Kumar</strong> submitted a new dog: <strong>test dog 2</strong></p>
+             <p>Breed: N/A | Gender: N/A</p>
+             <p><a href="">Review in Admin</a></p></div>
+        </td></tr>
+        <!-- Footer -->
+        <tr><td style="background:#f6f9f9;padding:20px 36px;text-align:center;border-top:1px solid #e1e9e9;">
+          <p style="color:#9ca3af;font-size:12px;margin:0;">
+            You received this email because you have an account on <a href="http://localhost:8000/" style="color:#02c5bd;">Petslist Test</a>.<br>
+            <a href="http://localhost:8000/" style="color:#9ca3af;">Visit Site</a> &nbsp;|&nbsp; <a href="http://localhost:8000/my-account/" style="color:#9ca3af;">My Account</a>
+          </p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>
+                    [headers] => Array
+                        (
+                        )
+
+                    [attachments] => Array
+                        (
+                        )
+
+                    [phpmailer_exception_code] => 0
+                )
+
+        )
+
+    [additional_data:protected] => Array
+        (
+        )
+
+)
+
+[2026-06-28 12:11:56.504100] [error] WP_Error Object
+(
+    [errors] => Array
+        (
+            [wp_mail_failed] => Array
+                (
+                    [0] => Invalid address:  (From): wordpress@localhost
+                )
+
+        )
+
+    [error_data] => Array
+        (
+            [wp_mail_failed] => Array
+                (
+                    [to] => Array
+                        (
+                            [0] => su-22016@sitare.org
+                        )
+
+                    [subject] => ✅ Dog "test dog 2" submitted for review
+                    [message] => <!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/2705.png" alt="✅" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Dog Submitted for Review</title></head>
+<body style="margin:0;padding:0;background:#f6f9f9;font-family:'Plus Jakarta Sans',Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f6f9f9;padding:30px 0;">
+    <tr><td align="center">
+      <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.08);">
+        <!-- Header -->
+        <tr><td style="background:#02c5bd;padding:28px 36px;text-align:center;">
+          <a href="http://localhost:8000/" style="color:#fff;font-size:22px;font-weight:800;text-decoration:none;"><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/1f43e.png" alt="🐾" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Petslist Test</a>
+        </td></tr>
+        <!-- Body -->
+        <tr><td style="padding:36px;">
+          <h2 style="color:#070C3E;font-size:22px;margin:0 0 20px;"><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/2705.png" alt="✅" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Dog Submitted for Review</h2>
+          <div style="color:#374151;font-size:15px;line-height:1.7;"><p>Hi <strong>Raushan Raushan Kumar</strong>,</p>
+             <p>Your dog <strong>"test dog 2"</strong> has been submitted and is pending review. It will go live within 24 hours.</p>
+             <p>Breed: N/A</p>
+             <p><a href="http://localhost:8000/my-account/?tab=dogs">Manage your dogs</a></p></div>
+        </td></tr>
+        <!-- Footer -->
+        <tr><td style="background:#f6f9f9;padding:20px 36px;text-align:center;border-top:1px solid #e1e9e9;">
+          <p style="color:#9ca3af;font-size:12px;margin:0;">
+            You received this email because you have an account on <a href="http://localhost:8000/" style="color:#02c5bd;">Petslist Test</a>.<br>
+            <a href="http://localhost:8000/" style="color:#9ca3af;">Visit Site</a> &nbsp;|&nbsp; <a href="http://localhost:8000/my-account/" style="color:#9ca3af;">My Account</a>
+          </p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>
+                    [headers] => Array
+                        (
+                        )
+
+                    [attachments] => Array
+                        (
+                        )
+
+                    [phpmailer_exception_code] => 0
+                )
+
+        )
+
+    [additional_data:protected] => Array
+        (
+        )
+
+)
+
+[2026-06-28 12:11:56.507100] [error] WP_Error Object
+(
+    [errors] => Array
+        (
+            [wp_mail_failed] => Array
+                (
+                    [0] => Invalid address:  (From): wordpress@localhost
+                )
+
+        )
+
+    [error_data] => Array
+        (
+            [wp_mail_failed] => Array
+                (
+                    [to] => Array
+                        (
+                            [0] => admin@example.com
+                        )
+
+                    [subject] => 🐾 New Dog Listing Pending Review: test dog 2
+                    [message] => <!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/1f43e.png" alt="🐾" class="wp-smiley" style="height: 1em; max-height: 1em;" /> New Dog Listing for Review</title></head>
+<body style="margin:0;padding:0;background:#f6f9f9;font-family:'Plus Jakarta Sans',Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f6f9f9;padding:30px 0;">
+    <tr><td align="center">
+      <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.08);">
+        <!-- Header -->
+        <tr><td style="background:#02c5bd;padding:28px 36px;text-align:center;">
+          <a href="http://localhost:8000/" style="color:#fff;font-size:22px;font-weight:800;text-decoration:none;"><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/1f43e.png" alt="🐾" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Petslist Test</a>
+        </td></tr>
+        <!-- Body -->
+        <tr><td style="padding:36px;">
+          <h2 style="color:#070C3E;font-size:22px;margin:0 0 20px;"><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/1f43e.png" alt="🐾" class="wp-smiley" style="height: 1em; max-height: 1em;" /> New Dog Listing for Review</h2>
+          <div style="color:#374151;font-size:15px;line-height:1.7;"><p><strong>Raushan Raushan Kumar</strong> submitted a new dog: <strong>test dog 2</strong></p>
+             <p>Breed: N/A | Gender: N/A</p>
+             <p><a href="">Review in Admin</a></p></div>
+        </td></tr>
+        <!-- Footer -->
+        <tr><td style="background:#f6f9f9;padding:20px 36px;text-align:center;border-top:1px solid #e1e9e9;">
+          <p style="color:#9ca3af;font-size:12px;margin:0;">
+            You received this email because you have an account on <a href="http://localhost:8000/" style="color:#02c5bd;">Petslist Test</a>.<br>
+            <a href="http://localhost:8000/" style="color:#9ca3af;">Visit Site</a> &nbsp;|&nbsp; <a href="http://localhost:8000/my-account/" style="color:#9ca3af;">My Account</a>
+          </p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>
+                    [headers] => Array
+                        (
+                        )
+
+                    [attachments] => Array
+                        (
+                        )
+
+                    [phpmailer_exception_code] => 0
+                )
+
+        )
+
+    [additional_data:protected] => Array
+        (
+        )
+
+)
+
+[2026-06-28 12:17:02.422700] [error] WP_Error Object
+(
+    [errors] => Array
+        (
+            [wp_mail_failed] => Array
+                (
+                    [0] => Invalid address:  (From): wordpress@localhost
+                )
+
+        )
+
+    [error_data] => Array
+        (
+            [wp_mail_failed] => Array
+                (
+                    [to] => Array
+                        (
+                            [0] => su-22016@sitare.org
+                        )
+
+                    [subject] => ✅ Dog "test dog 3" submitted for review
+                    [message] => <!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/2705.png" alt="✅" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Dog Submitted for Review</title></head>
+<body style="margin:0;padding:0;background:#f6f9f9;font-family:'Plus Jakarta Sans',Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f6f9f9;padding:30px 0;">
+    <tr><td align="center">
+      <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.08);">
+        <!-- Header -->
+        <tr><td style="background:#02c5bd;padding:28px 36px;text-align:center;">
+          <a href="http://localhost:8000/" style="color:#fff;font-size:22px;font-weight:800;text-decoration:none;"><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/1f43e.png" alt="🐾" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Petslist Test</a>
+        </td></tr>
+        <!-- Body -->
+        <tr><td style="padding:36px;">
+          <h2 style="color:#070C3E;font-size:22px;margin:0 0 20px;"><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/2705.png" alt="✅" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Dog Submitted for Review</h2>
+          <div style="color:#374151;font-size:15px;line-height:1.7;"><p>Hi <strong>Raushan Raushan Kumar</strong>,</p>
+             <p>Your dog <strong>"test dog 3"</strong> has been submitted and is pending review. It will go live within 24 hours.</p>
+             <p>Breed: N/A</p>
+             <p><a href="http://localhost:8000/my-account/?tab=dogs">Manage your dogs</a></p></div>
+        </td></tr>
+        <!-- Footer -->
+        <tr><td style="background:#f6f9f9;padding:20px 36px;text-align:center;border-top:1px solid #e1e9e9;">
+          <p style="color:#9ca3af;font-size:12px;margin:0;">
+            You received this email because you have an account on <a href="http://localhost:8000/" style="color:#02c5bd;">Petslist Test</a>.<br>
+            <a href="http://localhost:8000/" style="color:#9ca3af;">Visit Site</a> &nbsp;|&nbsp; <a href="http://localhost:8000/my-account/" style="color:#9ca3af;">My Account</a>
+          </p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>
+                    [headers] => Array
+                        (
+                        )
+
+                    [attachments] => Array
+                        (
+                        )
+
+                    [phpmailer_exception_code] => 0
+                )
+
+        )
+
+    [additional_data:protected] => Array
+        (
+        )
+
+)
+
+[2026-06-28 12:17:02.426000] [error] WP_Error Object
+(
+    [errors] => Array
+        (
+            [wp_mail_failed] => Array
+                (
+                    [0] => Invalid address:  (From): wordpress@localhost
+                )
+
+        )
+
+    [error_data] => Array
+        (
+            [wp_mail_failed] => Array
+                (
+                    [to] => Array
+                        (
+                            [0] => admin@example.com
+                        )
+
+                    [subject] => 🐾 New Dog Listing Pending Review: test dog 3
+                    [message] => <!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/1f43e.png" alt="🐾" class="wp-smiley" style="height: 1em; max-height: 1em;" /> New Dog Listing for Review</title></head>
+<body style="margin:0;padding:0;background:#f6f9f9;font-family:'Plus Jakarta Sans',Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f6f9f9;padding:30px 0;">
+    <tr><td align="center">
+      <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.08);">
+        <!-- Header -->
+        <tr><td style="background:#02c5bd;padding:28px 36px;text-align:center;">
+          <a href="http://localhost:8000/" style="color:#fff;font-size:22px;font-weight:800;text-decoration:none;"><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/1f43e.png" alt="🐾" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Petslist Test</a>
+        </td></tr>
+        <!-- Body -->
+        <tr><td style="padding:36px;">
+          <h2 style="color:#070C3E;font-size:22px;margin:0 0 20px;"><img src="https://s.w.org/images/core/emoji/17.0.2/72x72/1f43e.png" alt="🐾" class="wp-smiley" style="height: 1em; max-height: 1em;" /> New Dog Listing for Review</h2>
+          <div style="color:#374151;font-size:15px;line-height:1.7;"><p><strong>Raushan Raushan Kumar</strong> submitted a new dog: <strong>test dog 3</strong></p>
+             <p>Breed: N/A | Gender: N/A</p>
+             <p><a href="">Review in Admin</a></p></div>
+        </td></tr>
+        <!-- Footer -->
+        <tr><td style="background:#f6f9f9;padding:20px 36px;text-align:center;border-top:1px solid #e1e9e9;">
+          <p style="color:#9ca3af;font-size:12px;margin:0;">
+            You received this email because you have an account on <a href="http://localhost:8000/" style="color:#02c5bd;">Petslist Test</a>.<br>
+            <a href="http://localhost:8000/" style="color:#9ca3af;">Visit Site</a> &nbsp;|&nbsp; <a href="http://localhost:8000/my-account/" style="color:#9ca3af;">My Account</a>
+          </p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>
+                    [headers] => Array
+                        (
+                        )
+
+                    [attachments] => Array
+                        (
+                        )
+
+                    [phpmailer_exception_code] => 0
+                )
+
+        )
+
+    [additional_data:protected] => Array
+        (
+        )
+
+)
+

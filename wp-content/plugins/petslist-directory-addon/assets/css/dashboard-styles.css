@@ -1,0 +1,363 @@
+/* Dashboard Styles - Modern Glassmorphism UI */
+
+:root {
+  --dir-bg-dark: #070c3e;
+  --dir-bg-card: rgba(255, 255, 255, 0.04);
+  --dir-border: rgba(255, 255, 255, 0.08);
+  --dir-primary: #02c5bd;
+  --dir-accent: #ff3d41;
+  --dir-text: #ffffff;
+  --dir-text-muted: rgba(255, 255, 255, 0.65);
+}
+
+.petslist-dashboard-container {
+  background: linear-gradient(135deg, #050a30 0%, #0c154a 100%);
+  color: var(--dir-text);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  border-radius: 20px;
+  padding: 30px;
+  margin: 30px 0;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--dir-border);
+}
+
+/* Header Info Card */
+.petslist-db-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--dir-border);
+  padding-bottom: 25px;
+  margin-bottom: 30px;
+}
+
+.petslist-db-user h2 {
+  font-family: 'Baloo Bhaijaan 2', sans-serif;
+  font-size: 28px;
+  color: #ffffff;
+  margin: 0;
+  font-weight: 700;
+}
+
+.petslist-db-user p {
+  color: var(--dir-text-muted);
+  font-size: 14px;
+  margin: 5px 0 0 0;
+}
+
+.petslist-badge {
+  background: linear-gradient(135deg, var(--dir-primary) 0%, #009b93 100%);
+  color: #ffffff;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 15px rgba(2, 197, 189, 0.3);
+}
+
+/* Navigation Layout */
+.petslist-db-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 30px;
+}
+
+@media (max-width: 991px) {
+  .petslist-db-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.petslist-db-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-right: 1px solid var(--dir-border);
+  padding-right: 20px;
+}
+
+@media (max-width: 991px) {
+  .petslist-db-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    border-right: none;
+    border-bottom: 1px solid var(--dir-border);
+    padding-right: 0;
+    padding-bottom: 20px;
+  }
+}
+
+.petslist-db-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  border-radius: 10px;
+  color: var(--dir-text-muted);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+}
+
+.petslist-db-nav-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: #ffffff;
+}
+
+.petslist-db-nav-item.active {
+  background: rgba(2, 197, 189, 0.12);
+  color: var(--dir-primary);
+  border-left: 3px solid var(--dir-primary);
+  box-shadow: inset 5px 0 15px rgba(2, 197, 189, 0.05);
+}
+
+@media (max-width: 991px) {
+  .petslist-db-nav-item.active {
+    border-left: none;
+    border-bottom: 3px solid var(--dir-primary);
+  }
+}
+
+/* Dashboard Content Areas */
+.petslist-db-content-section {
+  display: none;
+  animation: fadeIn 0.4s ease;
+}
+
+.petslist-db-content-section.active {
+  display: block;
+}
+
+/* Glassmorphism Cards */
+.petslist-glass-card {
+  background: var(--dir-bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--dir-border);
+  border-radius: 16px;
+  padding: 25px;
+  margin-bottom: 25px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.petslist-glass-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Grid Layouts */
+.petslist-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.petslist-stat-box {
+  text-align: center;
+}
+
+.petslist-stat-box h3 {
+  font-size: 14px;
+  color: var(--dir-text-muted);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.petslist-stat-box .stat-val {
+  font-size: 32px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+/* Interactive elements & Buttons */
+.petslist-btn-primary {
+  background: linear-gradient(135deg, var(--dir-primary) 0%, #009b93 100%);
+  color: #ffffff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 15px rgba(2, 197, 189, 0.3);
+  text-decoration: none;
+}
+
+.petslist-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(2, 197, 189, 0.4);
+  color: #ffffff;
+}
+
+.petslist-btn-secondary {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--dir-border);
+  color: #ffffff;
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.25s ease;
+  text-decoration: none;
+}
+
+.petslist-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+
+.petslist-btn-danger {
+  background: linear-gradient(135deg, var(--dir-accent) 0%, #d62828 100%);
+  color: #ffffff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 12px rgba(255, 61, 65, 0.2);
+}
+
+.petslist-btn-danger:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 15px rgba(255, 61, 65, 0.3);
+}
+
+/* Form Styles */
+.petslist-form-group {
+  margin-bottom: 20px;
+}
+
+.petslist-form-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--dir-text-muted);
+  margin-bottom: 8px;
+}
+
+.petslist-form-input {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--dir-border);
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: #ffffff;
+  font-size: 15px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.petslist-form-input:focus {
+  border-color: var(--dir-primary);
+  box-shadow: 0 0 10px rgba(2, 197, 189, 0.25);
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* Dogs List CRUD UI */
+.petslist-dogs-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.petslist-dog-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.petslist-dog-img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  border: 1px solid var(--dir-border);
+}
+
+.petslist-dog-details h4 {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 5px 0;
+  color: #ffffff;
+}
+
+.petslist-dog-details p {
+  font-size: 13px;
+  color: var(--dir-text-muted);
+  margin: 3px 0;
+}
+
+.petslist-dog-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+  border-top: 1px solid var(--dir-border);
+  padding-top: 15px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Directory Page Styles */
+.petslist-dir-search-wrap {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) 120px;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+@media (max-width: 767px) {
+  .petslist-dir-search-wrap {
+    grid-template-columns: 1fr;
+  }
+}
+
+.petslist-dir-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+.petslist-dir-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.petslist-dir-card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 12px 12px 0 0;
+}
+
+.petslist-dir-info {
+  padding: 20px;
+  flex-grow: 1;
+}
+
+.petslist-dir-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--dir-text-muted);
+  margin: 12px 0;
+}

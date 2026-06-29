@@ -1,0 +1,1250 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Petslist Core\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-09-14 12:16+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.6.6; wp-6.3.1\n"
+"X-Domain: petslist-core"
+
+#: elementor/app-button/class.php:152 elementor/button/class.php:146
+#: elementor/pricing-table/class.php:204 elementor/pricing-table/class.php:457
+#: elementor/team-member/class.php:166 elementor/team-member/class.php:215
+msgid " Background"
+msgstr ""
+
+#: elementor/base.php:98
+msgid "1"
+msgstr ""
+
+#: elementor/base.php:87
+msgid "1 Columns"
+msgstr ""
+
+#: elementor/base.php:112
+msgid "1000"
+msgstr ""
+
+#: elementor/base.php:113
+msgid "1500"
+msgstr ""
+
+#: elementor/base.php:99
+msgid "2"
+msgstr ""
+
+#: elementor/base.php:88
+msgid "2 Columns"
+msgstr ""
+
+#: elementor/base.php:122
+msgid "200"
+msgstr ""
+
+#: elementor/base.php:114
+msgid "2000"
+msgstr ""
+
+#: elementor/base.php:115
+msgid "2500"
+msgstr ""
+
+#: elementor/base.php:100
+msgid "3"
+msgstr ""
+
+#: elementor/base.php:89
+msgid "3 Columns"
+msgstr ""
+
+#: elementor/base.php:123
+msgid "300"
+msgstr ""
+
+#: elementor/base.php:116
+msgid "3000"
+msgstr ""
+
+#: elementor/base.php:101
+msgid "4"
+msgstr ""
+
+#: elementor/base.php:90
+msgid "4 Columns"
+msgstr ""
+
+#: elementor/base.php:124
+msgid "400"
+msgstr ""
+
+#: elementor/base.php:102
+msgid "5"
+msgstr ""
+
+#: elementor/base.php:91
+msgid "5 Columns"
+msgstr ""
+
+#: elementor/base.php:111 elementor/base.php:125
+msgid "500"
+msgstr ""
+
+#: elementor/base.php:103
+msgid "6"
+msgstr ""
+
+#: elementor/base.php:92
+msgid "6 Columns"
+msgstr ""
+
+#: elementor/base.php:126
+msgid "600"
+msgstr ""
+
+#: elementor/base.php:104
+msgid "7"
+msgstr ""
+
+#: elementor/base.php:127
+msgid "700"
+msgstr ""
+
+#: elementor/base.php:105
+msgid "8"
+msgstr ""
+
+#: elementor/base.php:128
+msgid "800"
+msgstr ""
+
+#: elementor/base.php:129
+msgid "900"
+msgstr ""
+
+#. Base ID
+#: widgets/about.php:18
+msgid "A1::About"
+msgstr ""
+
+#. Base ID
+#: widgets/newsletter.php:18
+msgid "A2: Newsletter"
+msgstr ""
+
+#. Base ID
+#: widgets/advanced-search.php:21
+msgid "A3: Advanced Search"
+msgstr ""
+
+#. Base ID
+#: widgets/post.php:18
+msgid "A4: Posts"
+msgstr ""
+
+#: elementor/ad-title/class.php:20
+msgid "Ad Title"
+msgstr ""
+
+#: widgets/advanced-search.php:23
+msgid "Add advanced search field"
+msgstr ""
+
+#: elementor/listing-categories/class.php:128
+#: elementor/listing-categories-slider/class.php:131
+msgid "Add as many categories as you want"
+msgstr ""
+
+#: elementor/listing-locations/class.php:74
+msgid "Add as many locations as you want"
+msgstr ""
+
+#: widgets/advanced-search.php:97
+msgid "Advanced Search"
+msgstr ""
+
+#: elementor/button/class.php:88
+msgid "After"
+msgstr ""
+
+#: elementor/el-extend.php:176 elementor/listing-categories/class.php:220
+#: elementor/listing-categories-slider/class.php:223
+msgid "Alignment"
+msgstr ""
+
+#: widgets/post.php:108
+msgid "All Categories"
+msgstr ""
+
+#: elementor/app-button/class.php:22 elementor/app-button/class.php:38
+msgid "App Button"
+msgstr ""
+
+#: widgets/about.php:122
+msgid "App Store Image"
+msgstr ""
+
+#: widgets/about.php:126
+msgid "App Store URL"
+msgstr ""
+
+#: inc/demo-importer.php:62
+msgid "Apps Builder"
+msgstr ""
+
+#: inc/demo-importer.php:52
+msgid "Apps Development"
+msgstr ""
+
+#: elementor/listing-categories-slider/class.php:274
+msgid "Arrow"
+msgstr ""
+
+#: widgets/advanced-search.php:129
+msgid "Auto Suggestion"
+msgstr ""
+
+#: elementor/listing-categories-slider/class.php:298
+msgid "Autoplay"
+msgstr ""
+
+#: elementor/listing-categories-slider/class.php:310
+msgid "Autoplay Speed"
+msgstr ""
+
+#: elementor/app-button/class.php:148 elementor/app-button/class.php:212
+#: elementor/button/class.php:142 elementor/button/class.php:208
+#: elementor/faq/class.php:312 elementor/faq/class.php:420
+#: elementor/listing-categories/class.php:261
+#: elementor/listing-categories/class.php:265
+#: elementor/listing-categories-slider/class.php:437
+#: elementor/listing-categories-slider/class.php:441
+#: elementor/pricing-table/class.php:200 elementor/pricing-table/class.php:453
+#: elementor/pricing-table/class.php:517 elementor/team-member/class.php:162
+#: elementor/team-member/class.php:211 elementor/title/class.php:167
+#: elementor/title/class.php:241 elementor/title/class.php:344
+#: elementor/title/class.php:390
+msgid "Background"
+msgstr ""
+
+#: elementor/listing-categories/class.php:118
+#: elementor/listing-categories-slider/class.php:121
+msgid "Background Shape"
+msgstr ""
+
+#: inc/post-meta.php:85
+msgid "Banner"
+msgstr ""
+
+#: inc/post-meta.php:105
+msgid "Banner Search Background Image"
+msgstr ""
+
+#: elementor/button/class.php:89
+msgid "Before"
+msgstr ""
+
+#: elementor/app-button/class.php:174 elementor/app-button/class.php:220
+#: elementor/button/class.php:169 elementor/button/class.php:227
+#: elementor/faq/class.php:223 elementor/faq/class.php:274
+#: elementor/faq/class.php:383 elementor/listing-categories/class.php:298
+#: elementor/listing-categories-slider/class.php:474
+#: elementor/pricing-table/class.php:479 elementor/pricing-table/class.php:525
+#: elementor/team-member/class.php:238 elementor/title/class.php:233
+#: elementor/title/class.php:363 elementor/title/class.php:398
+msgid "Border"
+msgstr ""
+
+#: elementor/faq/class.php:392 elementor/listing-categories/class.php:307
+#: elementor/listing-categories-slider/class.php:483
+#: elementor/pricing-table/class.php:227 elementor/team-member/class.php:189
+msgid "Border Radius"
+msgstr ""
+
+#: elementor/listing-locations/class.php:82
+msgid "Box Height"
+msgstr ""
+
+#: inc/post-meta.php:63
+msgid "Box width"
+msgstr ""
+
+#: inc/post-meta.php:95
+msgid "Breadcrumb"
+msgstr ""
+
+#: elementor/button/class.php:22 elementor/button/class.php:38
+#: elementor/title/class.php:300
+msgid "Button"
+msgstr ""
+
+#: elementor/app-button/class.php:112 elementor/button/class.php:105
+#: elementor/pricing-table/class.php:417 elementor/title/class.php:308
+msgid "Button Style"
+msgstr ""
+
+#: elementor/listing/class.php:90
+msgid "By Locations & Categories"
+msgstr ""
+
+#: elementor/listing/class.php:91
+msgid "By Titles"
+msgstr ""
+
+#: widgets/filter.php:186 widgets/post.php:126
+msgid "Category"
+msgstr ""
+
+#: elementor/base.php:71 elementor/el-extend.php:184 elementor/hooks.php:54
+#: elementor/listing-categories/class.php:227
+#: elementor/listing-categories-slider/class.php:230
+msgid "Center"
+msgstr ""
+
+#: widgets/filter.php:35
+msgid "Classified listing Filter."
+msgstr ""
+
+#: widgets/advanced-search.php:65
+msgid "Clear"
+msgstr ""
+
+#: elementor/ad-title/class.php:101 elementor/ad-title/class.php:174
+#: elementor/app-button/class.php:130 elementor/app-button/class.php:202
+#: elementor/button/class.php:123 elementor/button/class.php:198
+#: elementor/faq/class.php:245 elementor/listing/class.php:179
+#: elementor/listing-categories/class.php:372
+#: elementor/listing-categories-slider/class.php:548
+#: elementor/pricing-table/class.php:246 elementor/pricing-table/class.php:273
+#: elementor/pricing-table/class.php:300 elementor/pricing-table/class.php:327
+#: elementor/pricing-table/class.php:372 elementor/pricing-table/class.php:435
+#: elementor/pricing-table/class.php:507 elementor/team-member/class.php:269
+#: elementor/team-member/class.php:321 elementor/title/class.php:130
+#: elementor/title/class.php:204 elementor/title/class.php:268
+#: elementor/title/class.php:326 elementor/title/class.php:380
+msgid "Color"
+msgstr ""
+
+#: elementor/base.php:142
+msgid "Comment Count"
+msgstr ""
+
+#: elementor/faq/class.php:72
+msgid "Content"
+msgstr ""
+
+#: elementor/faq/class.php:163
+msgid "Css class"
+msgstr ""
+
+#: widgets/post.php:80
+msgid "Currently there are no posts to display"
+msgstr ""
+
+#: widgets/post.php:117
+msgid "Custom Order (Available via Order field inside Page Attributes box)"
+msgstr ""
+
+#: elementor/base.php:138
+msgid "Date"
+msgstr ""
+
+#: widgets/post.php:115
+msgid "Date (Recents comes first)"
+msgstr ""
+
+#: elementor/el-extend.php:140 inc/post-meta.php:29 inc/post-meta.php:30
+#: inc/post-meta.php:45 inc/post-meta.php:62 inc/post-meta.php:88
+#: inc/post-meta.php:98
+msgid "Default"
+msgstr ""
+
+#: elementor/base.php:188
+msgid "Default Image Size"
+msgstr ""
+
+#: widgets/advanced-search.php:130
+msgid "Dependency Selection"
+msgstr ""
+
+#: widgets/about.php:118 widgets/newsletter.php:89
+#: elementor/ad-title/class.php:62 elementor/ad-title/class.php:158
+#: elementor/title/class.php:74 elementor/title/class.php:252
+msgid "Description"
+msgstr ""
+
+#: elementor/ad-title/class.php:166 elementor/title/class.php:260
+msgid "Description Style"
+msgstr ""
+
+#: elementor/team-member/class.php:71 elementor/team-member/class.php:313
+msgid "Designation"
+msgstr ""
+
+#: elementor/listing-categories-slider/class.php:377
+msgid "Desktops: >1199px"
+msgstr ""
+
+#: elementor/listing-categories-slider/class.php:386
+msgid "Desktops: >991px"
+msgstr ""
+
+#: inc/post-meta.php:90 inc/post-meta.php:100
+msgid "Disable"
+msgstr ""
+
+#: elementor/listing-categories-slider/class.php:262
+msgid "Dots"
+msgstr ""
+
+#: inc/post-meta.php:89 inc/post-meta.php:99
+msgid "Enable"
+msgstr ""
+
+#: elementor/faq/class.php:101
+msgid "Enable or disable icon. Default: Off"
+msgstr ""
+
+#: elementor/listing-categories/class.php:231
+#: elementor/listing-categories-slider/class.php:234
+msgid "End"
+msgstr ""
+
+#: elementor/faq/class.php:164
+msgid "Extra class for css, if need"
+msgstr ""
+
+#: elementor/faq/class.php:24
+msgid "Faq"
+msgstr ""
+
+#: elementor/faq/class.php:44 elementor/faq/class.php:51
+msgid "Faq List"
+msgstr ""
+
+#: elementor/faq/class.php:80
+msgid "Faq Title 1"
+msgstr ""
+
+#: elementor/faq/class.php:84
+msgid "Faq Title 2"
+msgstr ""
+
+#: elementor/pricing-table/class.php:122
+msgid "Feature List"
+msgstr ""
+
+#: widgets/filter.php:152
+msgid "Filter"
+msgstr ""
+
+#: elementor/init.php:51
+msgid "Fontello Icons"
+msgstr ""
+
+#: inc/post-meta.php:79
+msgid "Footer Style"
+msgstr ""
+
+#: widgets/newsletter.php:93
+msgid "Form Shortcode"
+msgstr ""
+
+#: elementor/pricing-table/class.php:192 elementor/team-member/class.php:146
+#: elementor/team-member/class.php:154
+msgid "Full Box"
+msgstr ""
+
+#: elementor/base.php:192 lib/wp-svg/init.php:133
+msgid "Full Size"
+msgstr ""
+
+#: inc/post-meta.php:46
+msgid "Full Width"
+msgstr ""
+
+#: inc/post-meta.php:64
+msgid "Fullwidth"
+msgstr ""
+
+#: elementor/ad-title/class.php:29 elementor/listing/class.php:36
+#: elementor/listing-categories/class.php:48
+#: elementor/listing-categories-slider/class.php:51
+#: elementor/listing-locations/class.php:35
+#: elementor/pricing-table/class.php:45 elementor/team-member/class.php:47
+#: elementor/title/class.php:32
+msgid "General"
+msgstr ""
+
+#: elementor/listing/class.php:88
+msgid "Get Listings"
+msgstr ""
+
+#: elementor/listing/class.php:66
+msgid "Grid Columns"
+msgstr ""
+
+#: elementor/listing-locations/class.php:147
+msgid "Grid Options"
+msgstr ""
+
+#: inc/post-meta.php:53
+msgid "Header Layout"
+msgstr ""
+
+#: inc/post-meta.php:59
+msgid "Header Width"
+msgstr ""
+
+#: elementor/faq/class.php:98 elementor/listing-categories-slider/class.php:265
+#: elementor/listing-categories-slider/class.php:277
+msgid "Hide"
+msgstr ""
+
+#: elementor/app-button/class.php:195 elementor/button/class.php:191
+#: elementor/pricing-table/class.php:500 elementor/title/class.php:373
+msgid "Hover"
+msgstr ""
+
+#: elementor/button/class.php:216
+msgid "Hover Animation Color"
+msgstr ""
+
+#: elementor/listing-categories/class.php:384
+#: elementor/listing-categories-slider/class.php:560
+#: elementor/team-member/class.php:280
+msgid "Hover Color"
+msgstr ""
+
+#: elementor/ad-title/class.php:46 elementor/title/class.php:58
+msgid "HTML Tag"
+msgstr ""
+
+#. URI of the plugin
+#. Author URI of the plugin
+msgid "https://www.radiustheme.com"
+msgstr ""
+
+#: elementor/app-button/class.php:71 elementor/button/class.php:75
+#: elementor/faq/class.php:56 elementor/faq/class.php:95
+#: elementor/faq/class.php:108 elementor/pricing-table/class.php:129
+#: elementor/team-member/class.php:104
+msgid "Icon"
+msgstr ""
+
+#: elementor/faq/class.php:316 elementor/faq/class.php:424
+msgid "Icon Background Color"
+msgstr ""
+
+#: elementor/listing-categories/class.php:329
+#: elementor/listing-categories-slider/class.php:505
+msgid "Icon Box Size"
+msgstr ""
+
+#: elementor/faq/class.php:294 elementor/faq/class.php:410
+msgid "Icon Color"
+msgstr ""
+
+#: elementor/faq/class.php:125
+msgid "Icon Opened"
+msgstr ""
+
+#: elementor/faq/class.php:142
+msgid "Icon Position"
+msgstr ""
+
+#: elementor/app-button/class.php:81 elementor/faq/class.php:348
+#: elementor/listing-categories/class.php:350
+#: elementor/listing-categories-slider/class.php:526
+#: elementor/pricing-table/class.php:381
+msgid "Icon Size"
+msgstr ""
+
+#: elementor/faq/class.php:286 elementor/listing-categories/class.php:322
+#: elementor/listing-categories-slider/class.php:498
+msgid "Icon Style"
+msgstr ""
+
+#: elementor/listing-categories/class.php:177
+#: elementor/listing-categories-slider/class.php:180
+msgid "Icon To Name Gap"
+msgstr ""
+
+#: inc/post-meta.php:107
+msgid "If not selected, default will be used"
+msgstr ""
+
+#: widgets/newsletter.php:81
+msgid "Image"
+msgstr ""
+
+#: elementor/listing-categories-slider/class.php:286
+msgid "Infinite"
+msgstr ""
+
+#: elementor/el-extend.php:141
+msgid "Inline"
+msgstr ""
+
+#: inc/demo-importer.php:30
+msgid "Install Demo Contents"
+msgstr ""
+
+#: elementor/faq/class.php:74 elementor/faq/class.php:81
+#: elementor/faq/class.php:85
+msgid "Item content. Click the edit button to change this text."
+msgstr ""
+
+#: elementor/listing-categories/class.php:253
+#: elementor/listing-categories-slider/class.php:429
+msgid "Item Style"
+msgstr ""
+
+#: elementor/listing-categories/class.php:156
+msgid "Item To Item Gap"
+msgstr ""
+
+#: elementor/base.php:79 elementor/hooks.php:62
+#: elementor/listing-categories/class.php:235
+#: elementor/listing-categories-slider/class.php:238
+msgid "Justified"
+msgstr ""
+
+#: widgets/filter.php:323
+msgid "km"
+msgstr ""
+
+#: elementor/hooks.php:122
+msgid "label Color"
+msgstr ""
+
+#: lib/wp-svg/init.php:136
+msgid "Large"
+msgstr ""
+
+#: inc/post-meta.php:42
+msgid "Layout"
+msgstr ""
+
+#: elementor/listing/class.php:46
+msgid "layout 1"
+msgstr ""
+
+#: elementor/listing/class.php:47
+msgid "layout 2"
+msgstr ""
+
+#: inc/post-meta.php:32
+msgid "Layout Settings"
+msgstr ""
+
+#: inc/post-meta.php:38
+msgid "Layouts"
+msgstr ""
+
+#: elementor/base.php:67 elementor/el-extend.php:180 elementor/hooks.php:50
+#: elementor/faq/class.php:146
+msgid "Left"
+msgstr ""
+
+#: inc/post-meta.php:47
+msgid "Left Sidebar"
+msgstr ""
+
+#: elementor/app-button/class.php:62 elementor/button/class.php:66
+#: elementor/pricing-table/class.php:97 elementor/team-member/class.php:79
+#: elementor/title/class.php:90
+msgid "Link"
+msgstr ""
+
+#: elementor/pricing-table/class.php:140 elementor/team-member/class.php:115
+msgid "List"
+msgstr ""
+
+#: elementor/listing/class.php:114
+msgid "List By Category"
+msgstr ""
+
+#: elementor/listing/class.php:99
+msgid "List By Location"
+msgstr ""
+
+#: elementor/listing/class.php:130
+msgid "List By Title"
+msgstr ""
+
+#: elementor/pricing-table/class.php:354
+msgid "List Color"
+msgstr ""
+
+#: elementor/pricing-table/class.php:364
+msgid "List Typography"
+msgstr ""
+
+#: elementor/listing-categories/class.php:22
+msgid "Listing Categories"
+msgstr ""
+
+#: elementor/listing-categories-slider/class.php:22
+msgid "Listing Categories Slider"
+msgstr ""
+
+#: elementor/listing-locations/class.php:21
+msgid "Listing Locations"
+msgstr ""
+
+#: elementor/listing/class.php:20
+msgid "Listings"
+msgstr ""
+
+#: elementor/team-member/class.php:124
+msgid "Lists"
+msgstr ""
+
+#: widgets/filter.php:217
+msgid "Location"
+msgstr ""
+
+#: widgets/about.php:114
+msgid "Logo"
+msgstr ""
+
+#: inc/demo-importer.php:47
+msgid "Main Home"
+msgstr ""
+
+#: elementor/ad-title/class.php:120 elementor/ad-title/class.php:193
+#: elementor/faq/class.php:373 elementor/listing/class.php:198
+#: elementor/listing-categories/class.php:288
+#: elementor/listing-categories-slider/class.php:464
+#: elementor/team-member/class.php:299 elementor/team-member/class.php:340
+#: elementor/title/class.php:149 elementor/title/class.php:223
+#: elementor/title/class.php:287
+msgid "Margin"
+msgstr ""
+
+#: widgets/filter.php:282
+msgid "max"
+msgstr ""
+
+#: lib/wp-svg/init.php:135
+msgid "Medium"
+msgstr ""
+
+#: inc/post-meta.php:69
+msgid "Menu Alignment"
+msgstr ""
+
+#: elementor/base.php:143
+msgid "Menu Order"
+msgstr ""
+
+#: widgets/filter.php:323
+msgid "Miles"
+msgstr ""
+
+#: widgets/filter.php:280
+msgid "min"
+msgstr ""
+
+#: elementor/base.php:139
+msgid "Modified"
+msgstr ""
+
+#: elementor/team-member/class.php:62 elementor/team-member/class.php:261
+msgid "Name"
+msgstr ""
+
+#: elementor/listing-categories/class.php:402
+#: elementor/listing-categories-slider/class.php:578
+msgid "Name Style"
+msgstr ""
+
+#: elementor/listing-categories/class.php:198
+#: elementor/listing-categories-slider/class.php:201
+msgid "Name To Count Gap"
+msgstr ""
+
+#: elementor/listing-categories-slider/class.php:289
+#: elementor/listing-categories-slider/class.php:301
+msgid "No"
+msgstr ""
+
+#: elementor/app-button/class.php:122 elementor/button/class.php:115
+#: elementor/pricing-table/class.php:427 elementor/title/class.php:318
+msgid "Normal"
+msgstr ""
+
+#: widgets/post.php:136
+msgid "Number of Post"
+msgstr ""
+
+#: elementor/el-extend.php:151
+msgid "Number part minimun width (optional)"
+msgstr ""
+
+#: elementor/el-extend.php:215
+msgid "Number Typography"
+msgstr ""
+
+#: elementor/el-extend.php:30 elementor/el-extend.php:58
+#: elementor/el-extend.php:75 elementor/el-extend.php:103
+#: elementor/title/class.php:177
+msgid "Off"
+msgstr ""
+
+#: elementor/el-extend.php:31 elementor/el-extend.php:76
+#: elementor/title/class.php:176
+msgid "On"
+msgstr ""
+
+#: elementor/el-extend.php:57 elementor/el-extend.php:102
+msgid "on"
+msgstr ""
+
+#: elementor/faq/class.php:402
+msgid "Open Item Style"
+msgstr ""
+
+#: widgets/post.php:131
+msgid "Order by"
+msgstr ""
+
+#: elementor/ad-title/class.php:146 elementor/app-button/class.php:164
+#: elementor/button/class.php:158 elementor/faq/class.php:213
+#: elementor/faq/class.php:264 elementor/listing-categories/class.php:277
+#: elementor/listing-categories-slider/class.php:453
+#: elementor/pricing-table/class.php:216 elementor/pricing-table/class.php:469
+#: elementor/team-member/class.php:178 elementor/team-member/class.php:228
+#: elementor/title/class.php:353
+msgid "Padding"
+msgstr ""
+
+#: elementor/el-extend.php:28 elementor/el-extend.php:73
+msgid "Parallax"
+msgstr ""
+
+#: elementor/el-extend.php:55 elementor/el-extend.php:100
+msgid "Parallax Transition off?"
+msgstr ""
+
+#: elementor/base.php:140
+msgid "Parent"
+msgstr ""
+
+#. Name of the plugin
+msgid "Petslist Core"
+msgstr ""
+
+#. Description of the plugin
+msgid "Petslist Core Plugin for Petslist Theme"
+msgstr ""
+
+#: elementor/init.php:116
+msgid "Petslist Elements"
+msgstr ""
+
+#: widgets/about.php:20
+msgid "Petslist: About widget"
+msgstr ""
+
+#: widgets/newsletter.php:19
+msgid "Petslist: Newsletter Widget"
+msgstr ""
+
+#: widgets/post.php:19
+msgid "Petslist: Posts Widget"
+msgstr ""
+
+#: widgets/filter.php:32
+msgid "Petslist::Listing Filter"
+msgstr ""
+
+#: elementor/listing-categories-slider/class.php:404
+msgid "Phones: >575px"
+msgstr ""
+
+#: elementor/team-member/class.php:55 elementor/team-member/class.php:203
+msgid "Picture"
+msgstr ""
+
+#: elementor/pricing-table/class.php:88
+msgid "Plan Button Text"
+msgstr ""
+
+#: elementor/pricing-table/class.php:80 elementor/pricing-table/class.php:319
+msgid "Plan Description"
+msgstr ""
+
+#: elementor/pricing-table/class.php:71 elementor/pricing-table/class.php:292
+msgid "Plan Duration"
+msgstr ""
+
+#: elementor/pricing-table/class.php:346
+msgid "Plan Features"
+msgstr ""
+
+#: elementor/pricing-table/class.php:62
+msgid "Plan Price"
+msgstr ""
+
+#: elementor/pricing-table/class.php:265
+msgid "Plan Pricing Style"
+msgstr ""
+
+#: elementor/pricing-table/class.php:53
+msgid "Plan Type"
+msgstr ""
+
+#: elementor/pricing-table/class.php:238
+msgid "Plan Type Style"
+msgstr ""
+
+#: widgets/about.php:130
+msgid "Play Store Image"
+msgstr ""
+
+#: widgets/about.php:134
+msgid "Play Store URL"
+msgstr ""
+
+#: elementor/listing-categories/view.php:30
+#: elementor/listing-categories-slider/view.php:34
+msgid "Please Select a Category"
+msgstr ""
+
+#: elementor/listing-locations/view.php:42
+msgid "Please Select a Location and Background image"
+msgstr ""
+
+#: widgets/advanced-search.php:128
+msgid "Popup"
+msgstr ""
+
+#: elementor/base.php:136
+msgid "Post Author"
+msgstr ""
+
+#: elementor/base.php:135
+msgid "Post Id"
+msgstr ""
+
+#: elementor/pricing-table/class.php:149
+msgid "Price Features"
+msgstr ""
+
+#: widgets/filter.php:293
+msgid "Price Range"
+msgstr ""
+
+#: elementor/pricing-table/class.php:22
+msgid "Pricing Table"
+msgstr ""
+
+#: elementor/faq/class.php:67
+msgid "Put here faq title"
+msgstr ""
+
+#: widgets/filter.php:327 elementor/app-button/class.php:183
+#: elementor/button/class.php:178 elementor/pricing-table/class.php:488
+#: elementor/team-member/class.php:247
+msgid "Radius"
+msgstr ""
+
+#: widgets/filter.php:337
+msgid "Radius Search"
+msgstr ""
+
+#. Author of the plugin
+msgid "RadiusTheme"
+msgstr ""
+
+#: elementor/base.php:141
+msgid "Random"
+msgstr ""
+
+#: elementor/listing-categories-slider/class.php:359
+msgid "Responsive Devices"
+msgstr ""
+
+#: elementor/base.php:75 elementor/el-extend.php:188 elementor/hooks.php:58
+#: elementor/faq/class.php:150
+msgid "Right"
+msgstr ""
+
+#: inc/post-meta.php:48
+msgid "Right Sidebar"
+msgstr ""
+
+#: widgets/advanced-search.php:151
+msgid "Search by Category"
+msgstr ""
+
+#: widgets/advanced-search.php:155
+msgid "Search by Custom Fields"
+msgstr ""
+
+#: widgets/advanced-search.php:147
+msgid "Search by Google Location"
+msgstr ""
+
+#: widgets/advanced-search.php:135
+msgid "Search by Keyword"
+msgstr ""
+
+#: widgets/advanced-search.php:139
+msgid "Search by Listing Types"
+msgstr ""
+
+#: widgets/advanced-search.php:143
+msgid "Search by Local Location"
+msgstr ""
+
+#: widgets/advanced-search.php:159
+msgid "Search by Price"
+msgstr ""
+
+#: widgets/advanced-search.php:125
+msgid "Search Style"
+msgstr ""
+
+#: elementor/title/class.php:23
+msgid "Section Title"
+msgstr ""
+
+#: widgets/filter.php:326
+msgid "Select a location"
+msgstr ""
+
+#: elementor/ad-title/class.php:138 elementor/pricing-table/class.php:112
+msgid "Shape image"
+msgstr ""
+
+#: elementor/faq/class.php:97 elementor/listing-categories-slider/class.php:264
+#: elementor/listing-categories-slider/class.php:276
+msgid "Show"
+msgstr ""
+
+#: widgets/filter.php:243
+msgid "Show More"
+msgstr ""
+
+#: elementor/title/class.php:175
+msgid "Show Title Line"
+msgstr ""
+
+#: elementor/listing-categories-slider/class.php:254
+msgid "Slider Options"
+msgstr ""
+
+#: elementor/listing-categories-slider/class.php:366
+msgid "Slider Per Group"
+msgstr ""
+
+#: elementor/listing-categories-slider/class.php:413
+msgid "Small Phones: <576px"
+msgstr ""
+
+#: elementor/team-member/class.php:97
+msgid "Social List"
+msgstr ""
+
+#: elementor/listing-categories-slider/class.php:337
+msgid "Space"
+msgstr ""
+
+#: elementor/el-extend.php:40 elementor/el-extend.php:85
+#: elementor/listing-categories-slider/class.php:325
+msgid "Speed"
+msgstr ""
+
+#: widgets/advanced-search.php:131
+msgid "Standard"
+msgstr ""
+
+#: elementor/listing-categories/class.php:223
+#: elementor/listing-categories-slider/class.php:226
+msgid "Start"
+msgstr ""
+
+#: elementor/el-extend.php:136 elementor/listing/class.php:44
+#: elementor/pricing-table/class.php:183 elementor/pricing-table/class.php:408
+msgid "Style"
+msgstr ""
+
+#: elementor/button/class.php:48
+msgid "Style 1"
+msgstr ""
+
+#: elementor/button/class.php:49
+msgid "Style 2"
+msgstr ""
+
+#: elementor/hooks.php:43
+msgid "Style 3"
+msgstr ""
+
+#: elementor/hooks.php:143 elementor/hooks.php:162
+msgid "Style 6"
+msgstr ""
+
+#: elementor/hooks.php:147
+msgid "Style 7"
+msgstr ""
+
+#: elementor/button/class.php:46 elementor/button/class.php:86
+msgid "Styles"
+msgstr ""
+
+#: elementor/title/class.php:49 elementor/title/class.php:188
+msgid "Sub Title"
+msgstr ""
+
+#: elementor/title/class.php:196
+msgid "Sub Title Style"
+msgstr ""
+
+#: elementor/listing-categories-slider/class.php:395
+msgid "Tablets: >767px"
+msgstr ""
+
+#: elementor/team-member/class.php:22
+msgid "Team Member"
+msgstr ""
+
+#: elementor/button/class.php:58 elementor/title/class.php:82
+msgid "Text"
+msgstr ""
+
+#: elementor/app-button/class.php:46
+msgid "Text 1"
+msgstr ""
+
+#: elementor/app-button/class.php:54
+msgid "Text 2"
+msgstr ""
+
+#: elementor/faq/class.php:236
+msgid "Text Style"
+msgstr ""
+
+#: lib/wp-svg/init.php:134
+msgid "Thumbnail"
+msgstr ""
+
+#: widgets/post.php:140
+msgid "Thumbnail Image"
+msgstr ""
+
+#: elementor/base.php:137 widgets/about.php:110 widgets/advanced-search.php:121
+#: widgets/newsletter.php:85 widgets/post.php:116 widgets/post.php:122
+#: elementor/ad-title/class.php:37 elementor/ad-title/class.php:85
+#: elementor/faq/class.php:65 elementor/listing/class.php:163
+#: elementor/title/class.php:40 elementor/title/class.php:114
+msgid "Title"
+msgstr ""
+
+#: elementor/faq/class.php:194
+msgid "Title Active Color"
+msgstr ""
+
+#: elementor/ad-title/class.php:70 elementor/listing/class.php:146
+#: elementor/title/class.php:99
+msgid "Title Alignment"
+msgstr ""
+
+#: elementor/ad-title/class.php:130
+msgid "Title Background"
+msgstr ""
+
+#: elementor/faq/class.php:184
+msgid "Title Color"
+msgstr ""
+
+#: elementor/title/class.php:159
+msgid "Title Line"
+msgstr ""
+
+#: elementor/el-extend.php:205
+msgid "Title Margin"
+msgstr ""
+
+#: elementor/ad-title/class.php:93 elementor/faq/class.php:175
+#: elementor/listing/class.php:171 elementor/title/class.php:122
+msgid "Title Style"
+msgstr ""
+
+#: elementor/faq/class.php:204
+msgid "Title Typography"
+msgstr ""
+
+#: elementor/listing/class.php:56
+msgid "Total number of post"
+msgstr ""
+
+#: widgets/filter.php:254
+msgid "Type"
+msgstr ""
+
+#: elementor/ad-title/class.php:111 elementor/ad-title/class.php:184
+#: elementor/app-button/class.php:140 elementor/button/class.php:134
+#: elementor/faq/class.php:255 elementor/faq/class.php:304
+#: elementor/listing/class.php:189 elementor/listing-categories/class.php:430
+#: elementor/listing-categories/class.php:461
+#: elementor/listing-categories-slider/class.php:606
+#: elementor/listing-categories-slider/class.php:637
+#: elementor/pricing-table/class.php:256 elementor/pricing-table/class.php:283
+#: elementor/pricing-table/class.php:310 elementor/pricing-table/class.php:337
+#: elementor/pricing-table/class.php:445 elementor/team-member/class.php:290
+#: elementor/team-member/class.php:331 elementor/title/class.php:140
+#: elementor/title/class.php:214 elementor/title/class.php:278
+#: elementor/title/class.php:336
+msgid "Typography"
+msgstr ""
+
+#: inc/demo-importer.php:57
+msgid "User Application"
+msgstr ""
+
+#: inc/demo-importer.php:38
+msgid ""
+"Warning: All your old data will be lost if you install One Click demo data "
+"from here, so it is suitable only for a new website."
+msgstr ""
+
+#: inc/demo-importer.php:72
+msgid "Web Analytics"
+msgstr ""
+
+#: inc/demo-importer.php:67
+msgid "Web Application"
+msgstr ""
+
+#: elementor/el-extend.php:149 elementor/faq/class.php:326
+msgid "Width"
+msgstr ""
+
+#: widgets/post.php:143
+msgid "With Thumbnail"
+msgstr ""
+
+#: widgets/post.php:144
+msgid "Without Thumbnail"
+msgstr ""
+
+#: elementor/listing/class.php:59
+msgid "Write -1 to show all"
+msgstr ""
+
+#: elementor/listing-categories-slider/class.php:288
+#: elementor/listing-categories-slider/class.php:300
+msgid "Yes"
+msgstr ""

@@ -1,0 +1,122 @@
+/*
+Theme Name: PetsList Dog Directory
+Theme URI: https://example.com/petslist-dogdir
+Author: Custom Build
+Description: A premium subscription-based dog directory platform with full breed profiles, subscriber dashboard, Stripe payments, admin management, and searchable public directory.
+Version: 1.0.0
+Template: petslist
+Requires at least: 5.8
+Tested up to: 6.4
+Requires PHP: 7.4
+Text Domain: petslist-dogdir
+Tags: dog, directory, subscription, pets, classified
+*/
+
+/* ============================================================
+   DESIGN TOKENS & VARIABLES
+   ============================================================ */
+:root {
+  --dd-primary:       #E8580A;
+  --dd-primary-dark:  #C04408;
+  --dd-primary-light: #FFF3EE;
+  --dd-secondary:     #1A2B4A;
+  --dd-secondary-mid: #2D4270;
+  --dd-accent:        #F9A825;
+  --dd-success:       #2E7D32;
+  --dd-danger:        #C62828;
+  --dd-warning:       #F57F17;
+  --dd-info:          #0277BD;
+  --dd-white:         #FFFFFF;
+  --dd-gray-50:       #F8F9FA;
+  --dd-gray-100:      #F1F3F5;
+  --dd-gray-200:      #E9ECEF;
+  --dd-gray-300:      #DEE2E6;
+  --dd-gray-400:      #CED4DA;
+  --dd-gray-500:      #ADB5BD;
+  --dd-gray-600:      #6C757D;
+  --dd-gray-700:      #495057;
+  --dd-gray-800:      #343A40;
+  --dd-gray-900:      #212529;
+  --dd-text:          #2C3E50;
+  --dd-text-muted:    #6C757D;
+  --dd-border:        #E2E8F0;
+  --dd-shadow-sm:     0 1px 3px rgba(0,0,0,.08);
+  --dd-shadow:        0 4px 16px rgba(0,0,0,.10);
+  --dd-shadow-lg:     0 8px 32px rgba(0,0,0,.14);
+  --dd-shadow-xl:     0 20px 60px rgba(0,0,0,.16);
+  --dd-radius-sm:     6px;
+  --dd-radius:        12px;
+  --dd-radius-lg:     20px;
+  --dd-radius-xl:     28px;
+  --dd-radius-full:   9999px;
+  --dd-transition:    all .25s cubic-bezier(.4,0,.2,1);
+  --dd-font-sans:     'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --dd-font-display:  'Poppins', 'Inter', sans-serif;
+}
+
+/* ============================================================
+   GLOBAL RESET & BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--dd-font-sans);
+  color: var(--dd-text);
+  background: var(--dd-gray-50);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,h2,h3,h4,h5,h6 {
+  font-family: var(--dd-font-display);
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--dd-secondary);
+}
+
+a { color: var(--dd-primary); text-decoration: none; transition: var(--dd-transition); }
+a:hover { color: var(--dd-primary-dark); }
+
+img { max-width: 100%; height: auto; display: block; }
+
+.dd-container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.dd-section { padding: 80px 0; }
+.dd-section-sm { padding: 48px 0; }
+.dd-section-lg { padding: 120px 0; }
+
+/* ============================================================
+   UTILITY CLASSES
+   ============================================================ */
+.dd-text-center { text-align: center; }
+.dd-text-primary { color: var(--dd-primary) !important; }
+.dd-text-secondary { color: var(--dd-secondary) !important; }
+.dd-text-muted { color: var(--dd-text-muted) !important; }
+.dd-text-white { color: var(--dd-white) !important; }
+.dd-bg-primary { background: var(--dd-primary) !important; }
+.dd-bg-light { background: var(--dd-gray-50) !important; }
+.dd-bg-white { background: var(--dd-white) !important; }
+.dd-mt-1 { margin-top: 8px; }
+.dd-mt-2 { margin-top: 16px; }
+.dd-mt-3 { margin-top: 24px; }
+.dd-mt-4 { margin-top: 32px; }
+.dd-mb-1 { margin-bottom: 8px; }
+.dd-mb-2 { margin-bottom: 16px; }
+.dd-mb-3 { margin-bottom: 24px; }
+.dd-mb-4 { margin-bottom: 32px; }
+.dd-flex { display: flex; }
+.dd-flex-center { display: flex; align-items: center; justify-content: center; }
+.dd-flex-between { display: flex; align-items: center; justify-content: space-between; }
+.dd-flex-wrap { flex-wrap: wrap; }
+.dd-gap-1 { gap: 8px; }
+.dd-gap-2 { gap: 16px; }
+.dd-gap-3 { gap: 24px; }
+.dd-gap-4 { gap: 32px; }
+.dd-grid { display: grid; }
+.dd-hidden { display: none !important; }
+.dd-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
