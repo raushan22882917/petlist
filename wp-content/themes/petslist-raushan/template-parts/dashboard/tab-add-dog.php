@@ -83,13 +83,16 @@ function dd_field( $meta, $key, $fallback = '' ) {
                 </div>
 
                 <div class="dd-form-group">
-                    <label for="dd-breed"><?php _e( 'Breed', 'petslist' ); ?></label>
-                    <input type="text" id="dd-breed" name="dog_data[breed]" value="<?php echo dd_field($dog_meta,'breed'); ?>" placeholder="<?php esc_attr_e( 'e.g. Golden Retriever', 'petslist' ); ?>" list="dd-breed-datalist">
-                    <datalist id="dd-breed-datalist">
-                        <?php foreach ( $breeds as $b ) : ?>
-                        <option value="<?php echo esc_attr($b->name); ?>">
+                    <label for="dd-breed"><?php _e( 'Breed', 'petslist' ); ?> <span class="dd-required">*</span></label>
+                    <select id="dd-breed" name="dog_data[breed]" required>
+                        <option value=""><?php esc_html_e( 'Select Breed', 'petslist' ); ?></option>
+                        <?php
+                        $current_breed = dd_match_breed_name( $dog_meta['breed'] ?? '' );
+                        foreach ( $breeds as $b ) :
+                            ?>
+                        <option value="<?php echo esc_attr( $b->name ); ?>" <?php selected( $current_breed, $b->name ); ?>><?php echo esc_html( $b->name ); ?></option>
                         <?php endforeach; ?>
-                    </datalist>
+                    </select>
                 </div>
 
                 <div class="dd-form-group">
@@ -258,21 +261,22 @@ function dd_field( $meta, $key, $fallback = '' ) {
 
         <!-- Wizard Navigation -->
         <div class="dd-wizard-nav">
-            <button type="button" class="dd-btn dd-btn--ghost dd-hide" id="dd-wizard-prev">
+            <button type="button" class="dd-btn dd-btn--ghost dd-wizard-nav__prev dd-hide" id="dd-wizard-prev">
                 <i class="fa-solid fa-arrow-left"></i> <?php _e( 'Previous', 'petslist' ); ?>
             </button>
-            <button type="button" class="dd-btn dd-btn--primary" id="dd-wizard-next">
-                <?php _e( 'Next', 'petslist' ); ?> <i class="fa-solid fa-arrow-right"></i>
-            </button>
-            
-            <button type="submit" class="dd-btn dd-btn--primary dd-btn--lg dd-hide" id="dd-dog-submit">
-                <span class="dd-btn__text">
-                    <?php echo $is_edit ? __( 'Update Dog Profile', 'petslist' ) : __( 'Submit Dog for Review', 'petslist' ); ?>
-                </span>
-                <span class="dd-btn__loader" style="display:none">
-                    <i class="fa-solid fa-spinner fa-spin"></i> <?php _e( 'Saving...', 'petslist' ); ?>
-                </span>
-            </button>
+            <div class="dd-wizard-nav__actions">
+                <button type="button" class="dd-btn dd-btn--primary" id="dd-wizard-next">
+                    <?php _e( 'Next', 'petslist' ); ?> <i class="fa-solid fa-arrow-right"></i>
+                </button>
+                <button type="submit" class="dd-btn dd-btn--primary dd-btn--lg dd-hide" id="dd-dog-submit">
+                    <span class="dd-btn__text">
+                        <?php echo $is_edit ? __( 'Update Dog Profile', 'petslist' ) : __( 'Submit Dog for Review', 'petslist' ); ?>
+                    </span>
+                    <span class="dd-btn__loader" style="display:none">
+                        <i class="fa-solid fa-spinner fa-spin"></i> <?php _e( 'Saving...', 'petslist' ); ?>
+                    </span>
+                </button>
+            </div>
         </div>
 
     </form>

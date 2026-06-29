@@ -983,6 +983,15 @@ a.button-style-2:hover i {
 .site-header a.button-style-1 {
 	padding: 10px 15px; 
 }
+.site-header a.button-style-1 .header-auth-avatar {
+	width: 28px;
+	height: 28px;
+	border-radius: 50%;
+	object-fit: cover;
+	border: 2px solid rgba(255, 255, 255, .9);
+	flex-shrink: 0;
+	display: block;
+}
 .site-header a.button-style-1 svg {
 	width: 26px;
 }
@@ -1083,7 +1092,7 @@ a.button-style-2:hover i {
 	align-items: center;
 	gap: 8px;
 	background: #f1f5f9;
-	border: 1px solid #e2e8f0;
+	border: none;
 	padding: 4px 14px 4px 5px;
 	border-radius: 50px;
 	text-decoration: none;

@@ -130,12 +130,16 @@ class Ajax {
 
         // Breed taxonomy
         if ( ! empty( $data['breed'] ) ) {
-            $term = term_exists( $data['breed'], 'dd_breed' );
+            $breed_name = dd_match_breed_name( $data['breed'] );
+            $meta['breed'] = $breed_name;
+            update_post_meta( $result, '_dd_dog_meta', $meta );
+
+            $term = term_exists( $breed_name, 'dd_breed' );
             if ( ! $term ) {
-                $term = wp_insert_term( $data['breed'], 'dd_breed' );
+                $term = wp_insert_term( $breed_name, 'dd_breed' );
             }
-            if ( ! is_wp_error($term) ) {
-                wp_set_post_terms( $result, [ (int) $term['term_id'] ], 'dd_breed' );
+            if ( ! is_wp_error( $term ) ) {
+                wp_set_post_terms( $result, array( (int) $term['term_id'] ), 'dd_breed', false );
             }
         }
 

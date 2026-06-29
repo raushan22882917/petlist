@@ -1278,13 +1278,30 @@ body.dd-dashboard-page .site-content-block { margin: 0 !important; }
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
+  gap: 16px !important;
   margin-top: 30px !important;
-  padding-top: 20px !important;
+  padding-top: 24px !important;
   border-top: 1px solid #e2e8f0 !important;
 }
-
-.dd-wizard-nav button {
-  min-width: 120px !important;
+.dd-wizard-nav__prev {
+  min-width: 130px !important;
+  flex-shrink: 0 !important;
+}
+.dd-wizard-nav__actions {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 12px !important;
+  margin-left: auto !important;
+}
+.dd-wizard-nav__actions .dd-btn {
+  min-width: 130px !important;
+}
+.dd-wizard-nav .dd-btn--primary {
+  min-width: 140px !important;
+}
+.dd-wizard-nav #dd-dog-submit {
+  min-width: 200px !important;
 }
 
 @media (max-width: 767px) {
@@ -1296,6 +1313,20 @@ body.dd-dashboard-page .site-content-block { margin: 0 !important; }
   }
   .dd-wizard-step__line {
     top: 0 !important;
+  }
+  .dd-wizard-nav {
+    flex-direction: column-reverse !important;
+    align-items: stretch !important;
+  }
+  .dd-wizard-nav__prev,
+  .dd-wizard-nav__actions,
+  .dd-wizard-nav__actions .dd-btn {
+    width: 100% !important;
+    min-width: 0 !important;
+    margin-left: 0 !important;
+  }
+  .dd-wizard-nav__actions {
+    flex-direction: column !important;
   }
 }
 
@@ -2355,4 +2386,18 @@ body.dd-drawer-active {
 /* Helper class to force hide elements overriding !important displays */
 .dd-hide {
   display: none !important;
+}
+
+/* ── Dashboard is an app-like view: hide site navbar + footer ── */
+body.dd-dashboard-page #site-header,
+body.dd-dashboard-page .site-header,
+body.dd-dashboard-page .rt-mobile-menu,
+body.dd-dashboard-page .header-height-fixed,
+body.dd-dashboard-page .footer,
+body.dd-dashboard-page .footer-style-3 {
+  display: none !important;
+}
+body.dd-dashboard-page #content.site-content {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
 }

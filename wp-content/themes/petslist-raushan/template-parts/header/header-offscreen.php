@@ -71,15 +71,24 @@ if ( Options::$has_tr_header ) {
 			<?php
 			$html = '';
 			$html .= '<span class="mobile-search-icon"><i aria-hidden="true" class=" icon-pl-search"></i></span>';
-			if ( Options::$options['header_btn'] && Options::$options['header_btn_txt'] ) {
-				$html .= '<a class="header-btn header-btn-mob" href="' . esc_url( Options::$options['header_btn_url'] ) . '"><i class="fas fa-plus" aria-hidden="true"></i><span>' . esc_html( Options::$options['header_btn_txt'] ) . '</span></a>';
+			if ( Options::$options['header_btn'] ) {
+				if ( is_user_logged_in() ) {
+					$dash_url = function_exists( 'dd_dashboard_url' ) ? dd_dashboard_url() : home_url( '/my-account/' );
+					$user_id  = get_current_user_id();
+					$pp_id    = absint( get_user_meta( $user_id, '_rtcl_pp_id', true ) );
+					$avatar   = $pp_id ? wp_get_attachment_image_url( $pp_id, 'thumbnail' ) : get_avatar_url( $user_id, array( 'size' => 56 ) );
+					$html    .= '<a class="header-btn header-btn-mob header-auth-btn--logged-in" href="' . esc_url( $dash_url ) . '"><img src="' . esc_url( $avatar ) . '" alt="" class="header-auth-avatar" width="28" height="28"><span>' . esc_html__( 'Dashboard', 'petslist' ) . '</span></a>';
+				} else {
+					$login_url = function_exists( 'dd_login_url' ) ? dd_login_url() : ( Options::$options['header_btn_url'] ?: home_url( '/login/' ) );
+					$html     .= '<a class="header-btn header-btn-mob" href="' . esc_url( $login_url ) . '"><i class="fas fa-plus" aria-hidden="true"></i><span>' . esc_html__( 'Login', 'petslist' ) . '</span></a>';
+				}
 			}
 
 			if ( Helper::is_chat_enabled() ) {
 				$html .= '<a class="header-chat-icon header-chat-icon-mobile rtcl-chat-unread-count" href="' . esc_url( Link::get_my_account_page_link( 'chat' ) ) . '"><i class="icon-pl-chat"></i></a>';
 			}
 
-			if ( class_exists( 'Rtcl' ) && Options::$options['header_login_icon'] ) {
+			if ( class_exists( 'Rtcl' ) && Options::$options['header_login_icon'] && ! is_user_logged_in() ) {
 				$html .= '<a class="header-login-icon header-login-icon-mobile" href="' . esc_url( Link::get_my_account_page_link() ) . '"><i class="icon-pl-account"></i></a>';
 			}
 

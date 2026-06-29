@@ -29,6 +29,7 @@ class Petslist_Main {
 		require_once get_template_directory() . '/lib/lc-utility.php';
 		require_once get_template_directory() . '/lib/class-tgm-plugin-activation.php';
 		require_once get_template_directory() . '/inc/init.php';
+		require_once get_template_directory() . '/inc/CustomPages/helpers.php';
 		require_once get_template_directory() . '/inc/Customizer/sanitization.php';
 
 	}

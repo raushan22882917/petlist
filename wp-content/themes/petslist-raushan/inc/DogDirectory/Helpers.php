@@ -142,14 +142,131 @@ function dd_subscription_badge( $user_id = 0 ) {
 // BREED LIST (for search filters)
 // -------------------------------------------------------
 
+/**
+ * Canonical dog breeds shown in Add Dog dropdown and home sidebar.
+ */
+function dd_default_breed_names() {
+	return array(
+		'French Bulldog',
+		'English Bulldog',
+		'American Pitbull Terrier',
+		'American Bulldog',
+		'Olde English Bulldogge',
+		'American Staffordshire Terrier',
+		'Brazilian Bull',
+		'Shorty Bull',
+		'German Shepherd',
+		'Rottweiler',
+		'Chihuahua',
+		'Golden Retriever',
+		'Doberman Pinscher',
+		'Cane Corso',
+		'Labrador Retriever',
+		'Fluffy Frenchy',
+	);
+}
+
+/**
+ * Create default breed terms (once) and assign colors for the home sidebar.
+ */
+function dd_ensure_default_breeds() {
+	if ( get_option( 'dd_breeds_seeded' ) ) {
+		return;
+	}
+
+	$colors = array( 'ff3d41', 'ffb13d', 'ff27b6', '21cd1e', '03aaf2', '9b59b6', 'e67e22', '16B4A1', '070C46', '02C5BD', 'FF6B6B', '4A3AFF', 'FFC107', '8E44AD', '2ECC71', 'F39C12' );
+
+	foreach ( dd_default_breed_names() as $i => $name ) {
+		$term = term_exists( $name, 'dd_breed' );
+		if ( ! $term ) {
+			$term = wp_insert_term( $name, 'dd_breed' );
+		}
+		if ( ! is_wp_error( $term ) ) {
+			$term_id = (int) ( is_array( $term ) ? $term['term_id'] : $term );
+			update_term_meta( $term_id, 'dd_breed_color', $colors[ $i % count( $colors ) ] );
+		}
+	}
+
+	update_option( 'dd_breeds_seeded', 1, false );
+	dd_sync_dog_breed_taxonomy();
+}
+
+/**
+ * Match free-text breed meta to a canonical breed name.
+ */
+function dd_match_breed_name( $raw ) {
+	$raw = trim( (string) $raw );
+	if ( '' === $raw ) {
+		return '';
+	}
+
+	foreach ( dd_default_breed_names() as $name ) {
+		if ( strcasecmp( $raw, $name ) === 0 ) {
+			return $name;
+		}
+	}
+
+	$raw_lc = strtolower( $raw );
+	foreach ( dd_default_breed_names() as $name ) {
+		$name_lc = strtolower( $name );
+		if ( str_contains( $name_lc, $raw_lc ) || str_contains( $raw_lc, $name_lc ) ) {
+			return $name;
+		}
+	}
+
+	return $raw;
+}
+
+/**
+ * Assign taxonomy terms from stored breed meta (fixes counts on home page).
+ */
+function dd_sync_dog_breed_taxonomy() {
+	$dogs = get_posts(
+		array(
+			'post_type'      => 'dd_dog',
+			'post_status'    => array( 'publish', 'pending', 'draft' ),
+			'posts_per_page' => -1,
+			'fields'         => 'ids',
+		)
+	);
+
+	foreach ( $dogs as $post_id ) {
+		$meta  = get_post_meta( $post_id, '_dd_dog_meta', true ) ?: array();
+		$breed = dd_match_breed_name( $meta['breed'] ?? '' );
+		if ( '' === $breed ) {
+			continue;
+		}
+
+		if ( ( $meta['breed'] ?? '' ) !== $breed ) {
+			$meta['breed'] = $breed;
+			update_post_meta( $post_id, '_dd_dog_meta', $meta );
+		}
+
+		$term = term_exists( $breed, 'dd_breed' );
+		if ( ! $term ) {
+			$term = wp_insert_term( $breed, 'dd_breed' );
+		}
+		if ( ! is_wp_error( $term ) ) {
+			wp_set_post_terms( $post_id, array( (int) $term['term_id'] ), 'dd_breed', false );
+		}
+	}
+}
+add_action( 'init', 'dd_ensure_default_breeds', 20 );
+
 function dd_get_breeds( $limit = 0 ) {
-    $args = [
-        'taxonomy'   => 'dd_breed',
-        'orderby'    => 'name',
-        'hide_empty' => false,
-    ];
-    if ( $limit ) $args['number'] = $limit;
-    return get_terms($args);
+	$ordered = array();
+	foreach ( dd_default_breed_names() as $name ) {
+		$term = get_term_by( 'name', $name, 'dd_breed' );
+		if ( $term && ! is_wp_error( $term ) ) {
+			$ordered[] = $term;
+		}
+	}
+
+	if ( $limit > 0 ) {
+		$ordered = array_slice( $ordered, 0, $limit );
+	}
+
+	return $ordered;
 }
 
 function dd_get_locations() {

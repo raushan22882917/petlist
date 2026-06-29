@@ -310,7 +310,16 @@
             $('#dd-wizard-next').removeClass('dd-hide');
             $('#dd-dog-submit').addClass('dd-hide');
           }
+
+          // Scroll to top of form on step change
+          var $formTop = $('.dd-tab-add-dog__header');
+          if ($formTop.length) {
+            $('html, body').animate({ scrollTop: $formTop.offset().top - 24 }, 200);
+          }
         }
+
+        // Set initial button state
+        updateWizard();
       },
 
       deleteDog: function () {
