@@ -956,8 +956,8 @@ INSERT INTO `wp_options` VALUES
 (38,'gmt_offset','0','on'),
 (39,'default_email_category','1','on'),
 (40,'recently_edited','','off'),
-(41,'template','petslist','on'),
-(42,'stylesheet','petslist','on'),
+(41,'template','petslist-raushan','on'),
+(42,'stylesheet','petslist-raushan','on'),
 (43,'comment_registration','0','on'),
 (44,'html_type','text/html','on'),
 (45,'use_trackback','0','on'),
@@ -4198,4 +4198,4 @@ SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2026-06-29 12:27:49
+-- Dump completed on 2026-06-29 15:38:42
