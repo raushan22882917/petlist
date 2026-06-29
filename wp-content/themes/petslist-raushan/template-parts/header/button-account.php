@@ -8,7 +8,7 @@
  use RadiusTheme\Petslist\Options;
  use Rtcl\Helpers\Link;
 
-$login_icon_title = is_user_logged_in() ? Options::$options['header_login_text'] : esc_html__( 'Login/Register', 'petslist' );
+$login_icon_title = is_user_logged_in() ? esc_html__( 'Account', 'petslist' ) : esc_html__( 'Login', 'petslist' );
 
 ?>
 <?php if ( class_exists( 'Rtcl' ) && Options::$options['header_login_icon'] ): ?>
