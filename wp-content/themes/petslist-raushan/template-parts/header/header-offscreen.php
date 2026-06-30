@@ -11,37 +11,15 @@ use Rtcl\Helpers\Link;
 
 $nav_menu_args = Helper::nav_menu_args();
 
-$site_name          = get_bloginfo( 'name' );
-$custom_logo_id     = get_theme_mod( 'custom_logo' );
-$default_logo       = $custom_logo_id ? wp_get_attachment_image_src( $custom_logo_id, 'full' ) : [
-	Helper::get_img( 'logo.png' ),
-	196,
-	41
-];
-$default_light_logo = $custom_logo_id ? wp_get_attachment_image_src( $custom_logo_id, 'full' ) : [
-	Helper::get_img( 'logo-white.png' ),
-	157,
-	40
-];
-$main_logo          = ( isset( Options::$options['logo'] ) && 0 != Options::$options['logo'] ) ? wp_get_attachment_image_src( Options::$options['logo'], 'full' ) : $default_logo;
-$light_logo         = ( isset( Options::$options['logo_dark'] ) && 0 != Options::$options['logo_dark'] ) ? wp_get_attachment_image_src( Options::$options['logo_dark'], 'full' )
-	: $default_light_logo;
-$mobile_logo        = ( isset( Options::$options['mobile_logo'] ) && 0 != Options::$options['mobile_logo'] ) ? wp_get_attachment_image_src( Options::$options['mobile_logo'],
-	'full' )
-	: '';
-
-if ( ( isset( Options::$options['logo'] ) && 0 != Options::$options['logo'] ) && ! ( isset( Options::$options['logo_dark'] ) && 0 != Options::$options['logo_dark'] ) ) {
-	$mobile_logo = $main_logo;
-}
-
-if ( ! ( isset( Options::$options['logo'] ) && 0 != Options::$options['logo'] ) && ( isset( Options::$options['logo_dark'] ) && 0 != Options::$options['logo_dark'] ) ) {
-	$mobile_logo = $light_logo;
-}
+$site_name   = get_bloginfo( 'name' );
+$main_logo   = function_exists( 'petslist_logo_src_tuple' ) ? petslist_logo_src_tuple( 'light' ) : array( Helper::get_img( 'logo.png' ), 196, 41 );
+$light_logo  = function_exists( 'petslist_logo_src_tuple' ) ? petslist_logo_src_tuple( 'dark' ) : array( Helper::get_img( 'logo-white.png' ), 157, 40 );
+$mobile_logo = function_exists( 'petslist_logo_src_tuple' ) ? petslist_logo_src_tuple( 'mobile' ) : $main_logo;
 
 if ( Options::$has_tr_header ) {
-	$logo = $light_logo;
+	$logo = function_exists( 'petslist_logo_src_tuple' ) ? petslist_logo_src_tuple( 'transparent' ) : $light_logo;
 } else {
-	$logo = $main_logo;
+	$logo = $light_logo;
 }
 ?>
 

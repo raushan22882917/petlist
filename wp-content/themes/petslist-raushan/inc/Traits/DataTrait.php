@@ -26,12 +26,10 @@ trait DataTrait {
     $meta_logo = get_post_meta(get_the_ID(), 'petslist_layout_settings', true);
     if ( !empty($meta_logo['petslist_logo_version']) ) {
       $logo_one = wp_get_attachment_image( $meta_logo['petslist_logo_version'], 'full' );
+    } elseif ( function_exists( 'petslist_logo_img' ) ) {
+      $logo_one = petslist_logo_img( 'light' );
     } else {
-      if (!empty( Options::$options['logo'] )) {
-        $logo_one = wp_get_attachment_image( Options::$options['logo'], 'full' );
-      } else {
-        $logo_one = '';
-      }
+      $logo_one = '';
     }
     return $logo_one;
   }
@@ -40,28 +38,19 @@ trait DataTrait {
 		$meta_logo = get_post_meta(get_the_ID(), 'petslist_layout_settings', true);
 		if ( !empty($meta_logo['petslist_logo_version']) ) {
 			$logo_two = wp_get_attachment_image( $meta_logo['petslist_logo_version'], 'full' );
+		} elseif ( function_exists( 'petslist_logo_img' ) ) {
+			$logo_two = petslist_logo_img( 'dark' );
 		} else {
-			if (!empty( Options::$options['logo_dark'] )) {
-				$logo_two = wp_get_attachment_image( Options::$options['logo_dark'], 'full' );
-			} else {
-				$logo_two = '';
-			}
+			$logo_two = '';
 		}
 		return $logo_two;
   	}
 
   	public static function rt_mobile_logo(){
-		if ( has_custom_logo() ) {
-			$custom_logo_id = get_theme_mod( 'custom_logo' );
-			$mobile_logo = wp_get_attachment_image( $custom_logo_id, 'full' );
-		} else { 
-			if (!empty( Options::$options['mobile_logo'] )) {
-				$mobile_logo = wp_get_attachment_image( Options::$options['mobile_logo'], 'full' );
-			} else {
-				$mobile_logo = '';
-			}
+		if ( function_exists( 'petslist_logo_img' ) ) {
+			return petslist_logo_img( 'mobile' );
 		}
-		return $mobile_logo;
+		return '';
   	}
 
   	public static function get_primary_color() {

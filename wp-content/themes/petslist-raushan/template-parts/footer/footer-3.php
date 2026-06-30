@@ -33,9 +33,9 @@ $widget_areas = Options::$options['f3_widgets_area'];
     <div class="footer-bottom">
         <div class="container">
             <div class="copyright-area">
-				<?php if ( !empty( Options::$options['f3_cr_logo']) ) { ?>
+				<?php if ( function_exists( 'petslist_logo_img' ) ) { ?>
 					<div class="copyright-logo">
-						<?php echo wp_get_attachment_image( Options::$options['f3_cr_logo'], 'full' ); ?>
+						<?php echo petslist_logo_img( 'footer' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 					</div>
 				<?php } ?>
                 <div class="copyright-text">

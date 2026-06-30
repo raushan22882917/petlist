@@ -5,7 +5,7 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-$img = petslist_upload_url( '2023/09/call-action-img2.png' );
+$img = petslist_img_url( 'cta_img' );
 ?>
 <section class="petslist-cta-band">
 	<div class="container">

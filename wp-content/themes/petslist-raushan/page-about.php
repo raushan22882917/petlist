@@ -15,10 +15,10 @@ $features = array(
 	__( 'More Favourite Pets', 'petslist' ),
 );
 $team = array(
-	array( 'name' => 'Marvin McKinney', 'role' => 'Accountance', 'img' => '2023/09/team-img-1.jpg' ),
-	array( 'name' => 'Eleanor Pena', 'role' => 'Marketing Analytics', 'img' => '2023/09/team-img-2.jpg' ),
-	array( 'name' => 'Annette Black', 'role' => 'User Research', 'img' => '2023/09/team-img-4.jpg' ),
-	array( 'name' => 'Floyd Miles', 'role' => 'HR Admin', 'img' => '2023/09/team-img-3.jpg' ),
+	array( 'name' => 'Marvin McKinney', 'role' => 'Accountance', 'img' => 'team_1' ),
+	array( 'name' => 'Eleanor Pena', 'role' => 'Marketing Analytics', 'img' => 'team_2' ),
+	array( 'name' => 'Annette Black', 'role' => 'User Research', 'img' => 'team_4' ),
+	array( 'name' => 'Floyd Miles', 'role' => 'HR Admin', 'img' => 'team_3' ),
 );
 $plans = array(
 	array( 'title' => 'Basic', 'price' => '$12', 'period' => '/Month' ),
@@ -26,7 +26,7 @@ $plans = array(
 	array( 'title' => 'Platinum', 'price' => '$99', 'period' => '/Month' ),
 );
 $plan_features = petslist_pricing_features();
-$shape = petslist_upload_url( '2023/08/pricing-card-shape.svg' );
+$shape = petslist_img_url( 'pricing_shape' );
 ?>
 
 <main id="primary" class="content-area petslist-custom-page petslist-about-page">
@@ -35,9 +35,9 @@ $shape = petslist_upload_url( '2023/08/pricing-card-shape.svg' );
 		<div class="container">
 			<div class="petslist-about-hero__grid">
 				<div class="petslist-about-hero__gallery">
-					<img src="<?php echo esc_url( petslist_upload_url( '2023/09/about-1.jpg' ) ); ?>" alt="" class="about-img about-img--main" loading="eager">
-					<img src="<?php echo esc_url( petslist_upload_url( '2023/09/about-2.jpg' ) ); ?>" alt="" class="about-img about-img--top" loading="lazy">
-					<img src="<?php echo esc_url( petslist_upload_url( '2023/09/about-3.jpg' ) ); ?>" alt="" class="about-img about-img--bottom" loading="lazy">
+					<img src="<?php echo esc_url( petslist_img_url( 'about_1' ) ); ?>" alt="" class="about-img about-img--main" loading="eager">
+					<img src="<?php echo esc_url( petslist_img_url( 'about_2' ) ); ?>" alt="" class="about-img about-img--top" loading="lazy">
+					<img src="<?php echo esc_url( petslist_img_url( 'about_3' ) ); ?>" alt="" class="about-img about-img--bottom" loading="lazy">
 				</div>
 				<div class="petslist-about-hero__content">
 					<div class="section-heading">
@@ -88,7 +88,7 @@ $shape = petslist_upload_url( '2023/08/pricing-card-shape.svg' );
 				<?php foreach ( $team as $member ) : ?>
 					<div class="team-card">
 						<div class="team-img-wrapper">
-							<img src="<?php echo esc_url( petslist_upload_url( $member['img'] ) ); ?>" alt="<?php echo esc_attr( $member['name'] ); ?>" loading="lazy">
+							<img src="<?php echo esc_url( petslist_img_url( $member['img'] ) ); ?>" alt="<?php echo esc_attr( $member['name'] ); ?>" loading="lazy">
 						</div>
 						<div class="team-content">
 							<h3 class="title"><span class="name"><?php echo esc_html( $member['name'] ); ?></span></h3>

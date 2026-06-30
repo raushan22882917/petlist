@@ -7,30 +7,118 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Ensure header logo + action buttons exist (demo-style navbar).
- * Only fills empty theme_mod values so manual Customizer changes are kept.
+ * Central registry of demo image paths (uploads-relative or theme-relative).
+ * All custom pages and branding use these paths — never attachment IDs.
  */
-function petslist_ensure_header_options() {
-	$logo_dark = get_theme_mod( 'logo_dark' );
-	if ( empty( $logo_dark ) ) {
-		$attachment = get_posts(
-			array(
-				'post_type'      => 'attachment',
-				'posts_per_page' => 1,
-				'meta_query'     => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
-					array(
-						'key'     => '_wp_attached_file',
-						'value'   => '2023/08/petslist_logo2.svg',
-						'compare' => 'LIKE',
-					),
-				),
-			)
-		);
-		if ( $attachment ) {
-			set_theme_mod( 'logo_dark', $attachment[0]->ID );
-		}
+function petslist_image_paths() {
+	return apply_filters(
+		'petslist_image_paths',
+		array(
+			'logo_dark'      => 'uploads:2023/08/petslist_logo2.svg',
+			'logo_light'     => 'uploads:2023/08/petslist_logo.svg',
+			'logo_transparent' => 'theme:logo-white.png',
+			'logo_mobile'    => 'uploads:2023/08/petslist_logo2.svg',
+			'footer_logo'    => 'uploads:2023/08/petslist_logo2.svg',
+			'footer_bg'      => 'theme:theme/footer-3.jpg',
+			'hero_bg'        => 'uploads:2023/09/hero-banner3.png',
+			'hero_img'       => 'uploads:2023/09/hero-img-5.png',
+			'banner_yellow'  => 'uploads:2023/08/banner-img-4.webp',
+			'banner_blue'    => 'uploads:2023/08/banner-img-3.webp',
+			'widget_banner'  => 'uploads:2023/09/widget-banner1.jpg',
+			'cta_img'        => 'uploads:2023/09/call-action-img2.png',
+			'about_1'        => 'uploads:2023/09/about-1.jpg',
+			'about_2'        => 'uploads:2023/09/about-2.jpg',
+			'about_3'        => 'uploads:2023/09/about-3.jpg',
+			'pricing_shape'  => 'uploads:2023/08/pricing-card-shape.svg',
+			'team_1'         => 'uploads:2023/09/team-img-1.jpg',
+			'team_2'         => 'uploads:2023/09/team-img-2.jpg',
+			'team_3'         => 'uploads:2023/09/team-img-3.jpg',
+			'team_4'         => 'uploads:2023/09/team-img-4.jpg',
+		)
+	);
+}
+
+function petslist_theme_img_url( $relative_path ) {
+	return trailingslashit( get_template_directory_uri() ) . 'assets/img/' . ltrim( $relative_path, '/' );
+}
+
+function petslist_img_url( $key ) {
+	$paths = petslist_image_paths();
+	if ( ! isset( $paths[ $key ] ) ) {
+		return '';
 	}
 
+	$path = $paths[ $key ];
+	if ( 0 === strpos( $path, 'uploads:' ) ) {
+		return petslist_upload_url( substr( $path, 8 ) );
+	}
+	if ( 0 === strpos( $path, 'theme:' ) ) {
+		return petslist_theme_img_url( substr( $path, 6 ) );
+	}
+
+	return $path;
+}
+
+function petslist_logo_url( $variant = 'dark' ) {
+	$map = array(
+		'dark'        => 'logo_dark',
+		'light'       => 'logo_light',
+		'transparent' => 'logo_transparent',
+		'mobile'      => 'logo_mobile',
+		'footer'      => 'footer_logo',
+	);
+	$key = $map[ $variant ] ?? 'logo_dark';
+	return petslist_img_url( $key );
+}
+
+/**
+ * Logo <img> tag from hardcoded path (replaces wp_get_attachment_image for branding).
+ */
+function petslist_logo_img( $variant = 'dark', $attrs = array() ) {
+	$url = petslist_logo_url( $variant );
+	if ( ! $url ) {
+		return '';
+	}
+
+	$defaults = array(
+		'src'     => $url,
+		'class'   => 'attachment-full size-full',
+		'alt'     => get_bloginfo( 'name' ),
+		'loading' => 'lazy',
+	);
+	$attrs = wp_parse_args( $attrs, $defaults );
+
+	$html = '<img';
+	foreach ( $attrs as $name => $value ) {
+		if ( '' !== $value && null !== $value ) {
+			$html .= ' ' . esc_attr( $name ) . '="' . esc_attr( $value ) . '"';
+		}
+	}
+	$html .= ' />';
+
+	return $html;
+}
+
+/**
+ * [url, width, height] tuple for mobile menu logo markup.
+ */
+function petslist_logo_src_tuple( $variant = 'dark' ) {
+	$dims = array(
+		'dark'        => array( 196, 41 ),
+		'light'       => array( 196, 41 ),
+		'transparent' => array( 157, 40 ),
+		'mobile'      => array( 196, 41 ),
+		'footer'      => array( 196, 41 ),
+	);
+	$size = $dims[ $variant ] ?? array( 196, 41 );
+
+	return array( petslist_logo_url( $variant ), $size[0], $size[1] );
+}
+
+/**
+ * Ensure header action buttons exist (demo-style navbar).
+ */
+function petslist_ensure_header_options() {
 	// Header action button -> styled red pill, used as the Login button.
 	set_theme_mod( 'header_btn', 1 );
 	set_theme_mod( 'header_btn_txt', 'Login' );
@@ -43,6 +131,81 @@ function petslist_ensure_header_options() {
 	set_theme_mod( 'header_chat_icon', 0 );
 }
 add_action( 'after_setup_theme', 'petslist_ensure_header_options', 25 );
+
+/**
+ * Footer style 3 background + logo use hardcoded paths (not Customizer attachment IDs).
+ */
+function petslist_footer_hardcoded_styles() {
+	$bg = petslist_img_url( 'footer_bg' );
+	if ( ! $bg ) {
+		return;
+	}
+	?>
+	<style id="petslist-footer-hardcoded">
+		footer.footer-style-3 {
+			background-image: url(<?php echo esc_url( $bg ); ?>) !important;
+		}
+	</style>
+	<?php
+}
+add_action( 'wp_head', 'petslist_footer_hardcoded_styles', 100 );
+
+/**
+ * Force the custom (no-Elementor) templates for Home / About / FAQ by slug,
+ * overriding any Elementor Canvas/Full-Width template assigned in the DB.
+ *
+ * Works on any environment (local + live) with just a theme deploy — no DB
+ * changes needed. Our templates render hardcoded markup and never call
+ * the_content(), so stored Elementor data is bypassed entirely.
+ *
+ * Priority 99 so it runs after Elementor's own template_include hook.
+ */
+function petslist_force_custom_templates( $template ) {
+	$theme_dir = get_template_directory();
+
+	// Front page -> front-page.php (already default in the hierarchy, but enforce).
+	if ( is_front_page() && ! is_home() ) {
+		$front = $theme_dir . '/front-page.php';
+		if ( file_exists( $front ) ) {
+			return $front;
+		}
+	}
+
+	// Map of page slug => custom template file.
+	$map = array(
+		'about'   => 'page-about.php',
+		'faq'     => 'page-faq.php',
+		'contact' => 'page-contact.php',
+	);
+
+	if ( is_page() ) {
+		$post = get_queried_object();
+		if ( $post instanceof WP_Post && isset( $map[ $post->post_name ] ) ) {
+			$custom = $theme_dir . '/' . $map[ $post->post_name ];
+			if ( file_exists( $custom ) ) {
+				return $custom;
+			}
+		}
+	}
+
+	return $template;
+}
+add_filter( 'template_include', 'petslist_force_custom_templates', 99 );
+
+/**
+ * Stop Elementor from enqueuing its page CSS/JS on our custom pages so the
+ * design is 100% the theme's own styling.
+ */
+function petslist_is_custom_template_page() {
+	if ( is_front_page() && ! is_home() ) {
+		return true;
+	}
+	if ( is_page() ) {
+		$post = get_queried_object();
+		return $post instanceof WP_Post && in_array( $post->post_name, array( 'about', 'faq', 'contact' ), true );
+	}
+	return false;
+}
 
 function petslist_upload_url( $relative_path ) {
 	return content_url( 'uploads/' . ltrim( $relative_path, '/' ) );

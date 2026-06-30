@@ -7,7 +7,7 @@ get_header();
 $register_url = function_exists( 'dd_register_url' ) ? dd_register_url() : wp_registration_url();
 $directory_url = function_exists( 'dd_dog_directory_url' ) ? dd_dog_directory_url() : home_url( '/dog-directory/' );
 
-$hero_bg = petslist_upload_url( '2023/09/hero-banner3.png' );
+$hero_bg = petslist_img_url( 'hero_bg' );
 ?>
 
 <main id="primary" class="content-area petslist-custom-page petslist-home-page">
@@ -32,7 +32,7 @@ $hero_bg = petslist_upload_url( '2023/09/hero-banner3.png' );
 					?>
 				</div>
 				<div class="petslist-home-hero__visual">
-					<img src="<?php echo esc_url( petslist_upload_url( '2023/09/hero-img-5.png' ) ); ?>" alt="" class="hero-img-main" loading="eager">
+					<img src="<?php echo esc_url( petslist_img_url( 'hero_img' ) ); ?>" alt="" class="hero-img-main" loading="eager">
 				</div>
 			</div>
 		</div>
@@ -47,14 +47,14 @@ $hero_bg = petslist_upload_url( '2023/09/hero-banner3.png' );
 						<h2 class="heading-title"><?php esc_html_e( 'Let’s Find Your New Best Friend', 'petslist' ); ?></h2>
 						<a href="<?php echo esc_url( $register_url ); ?>" class="button-style-2"><?php esc_html_e( 'Creat An Account', 'petslist' ); ?><i aria-hidden="true" class="icon-pl-right-arrow"></i></a>
 					</div>
-					<img src="<?php echo esc_url( petslist_upload_url( '2023/08/banner-img-4.webp' ) ); ?>" alt="" class="petslist-home-banner-card__img" loading="lazy">
+					<img src="<?php echo esc_url( petslist_img_url( 'banner_yellow' ) ); ?>" alt="" class="petslist-home-banner-card__img" loading="lazy">
 				</div>
 				<div class="petslist-home-banner-card petslist-home-banner-card--blue">
 					<div class="petslist-home-banner-card__content">
 						<h2 class="heading-title"><?php esc_html_e( 'Let’s Find Your New Best Friend', 'petslist' ); ?></h2>
 						<a href="<?php echo esc_url( $register_url ); ?>" class="button-style-1"><?php esc_html_e( 'Creat An Account', 'petslist' ); ?><i aria-hidden="true" class="icon-pl-right-arrow"></i></a>
 					</div>
-					<img src="<?php echo esc_url( petslist_upload_url( '2023/08/banner-img-3.webp' ) ); ?>" alt="" class="petslist-home-banner-card__img" loading="lazy">
+					<img src="<?php echo esc_url( petslist_img_url( 'banner_blue' ) ); ?>" alt="" class="petslist-home-banner-card__img" loading="lazy">
 				</div>
 			</div>
 		</div>
@@ -67,7 +67,7 @@ $hero_bg = petslist_upload_url( '2023/09/hero-banner3.png' );
 				<aside class="petslist-home-directory__side">
 					<?php petslist_render_dog_breeds( 16 ); ?>
 					<a href="<?php echo esc_url( $directory_url ); ?>" class="petslist-side-banner-link">
-						<img src="<?php echo esc_url( petslist_upload_url( '2023/09/widget-banner1.jpg' ) ); ?>" alt="" class="petslist-side-banner" loading="lazy">
+						<img src="<?php echo esc_url( petslist_img_url( 'widget_banner' ) ); ?>" alt="" class="petslist-side-banner" loading="lazy">
 					</a>
 				</aside>
 				<div class="petslist-home-directory__main">
