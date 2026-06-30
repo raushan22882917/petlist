@@ -31,8 +31,9 @@ $btn_class    = 'button-style-1 btn-anim header-auth-btn' . ( $is_logged_in ? ' 
 			<img src="<?php echo esc_url( $avatar_url ); ?>" alt="" class="header-auth-avatar" width="28" height="28" loading="lazy">
 			<span><?php echo esc_html( $btn_label ); ?></span>
 		<?php else : ?>
-			<?php echo Helper::plus_icon(); ?>
+			<?php echo Helper::login_icon(); ?>
 			<span><?php echo esc_html( $btn_label ); ?></span>
 		<?php endif; ?>
 	</a>
 </div>
+

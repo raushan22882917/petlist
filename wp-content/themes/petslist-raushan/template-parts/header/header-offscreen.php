@@ -58,7 +58,7 @@ if ( Options::$has_tr_header ) {
 					$html    .= '<a class="header-btn header-btn-mob header-auth-btn--logged-in" href="' . esc_url( $dash_url ) . '"><img src="' . esc_url( $avatar ) . '" alt="" class="header-auth-avatar" width="28" height="28"><span>' . esc_html__( 'Dashboard', 'petslist' ) . '</span></a>';
 				} else {
 					$login_url = function_exists( 'dd_login_url' ) ? dd_login_url() : ( Options::$options['header_btn_url'] ?: home_url( '/login/' ) );
-					$html     .= '<a class="header-btn header-btn-mob" href="' . esc_url( $login_url ) . '"><i class="fas fa-plus" aria-hidden="true"></i><span>' . esc_html__( 'Login', 'petslist' ) . '</span></a>';
+					$html     .= '<a class="header-btn header-btn-mob" href="' . esc_url( $login_url ) . '"><i class="fas fa-user" aria-hidden="true"></i><span>' . esc_html__( 'Login', 'petslist' ) . '</span></a>';
 				}
 			}
 

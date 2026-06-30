@@ -13,7 +13,7 @@ $hero_bg = petslist_img_url( 'hero_bg' );
 <main id="primary" class="content-area petslist-custom-page petslist-home-page">
 
 	<!-- ============ HERO ============ -->
-	<section class="petslist-home-hero" style="background-color:#02c5bd;background-image:linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('<?php echo esc_url( $hero_bg ); ?>');">
+	<section class="petslist-home-hero" style="background-color:#02c5bd;background-image:linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('<?php echo esc_url( $hero_bg ); ?>');">
 		<div class="container">
 			<div class="petslist-home-hero__grid">
 				<div class="petslist-home-hero__text">
@@ -44,14 +44,14 @@ $hero_bg = petslist_img_url( 'hero_bg' );
 				<div class="petslist-home-banner-card petslist-home-banner-card--yellow">
 					<div class="petslist-home-banner-card__content">
 						<h2 class="heading-title"><?php esc_html_e( 'Let’s Find Your New Best Friend', 'petslist' ); ?></h2>
-						<a href="<?php echo esc_url( $register_url ); ?>" class="button-style-2"><?php esc_html_e( 'Creat An Account', 'petslist' ); ?><i aria-hidden="true" class="icon-pl-right-arrow"></i></a>
+						<a href="<?php echo esc_url( $register_url ); ?>" class="button-style-2"><?php esc_html_e( 'Create An Account', 'petslist' ); ?><i aria-hidden="true" class="icon-pl-right-arrow"></i></a>
 					</div>
 					<img src="<?php echo esc_url( petslist_img_url( 'banner_yellow' ) ); ?>" alt="" class="petslist-home-banner-card__img" loading="lazy">
 				</div>
 				<div class="petslist-home-banner-card petslist-home-banner-card--blue">
 					<div class="petslist-home-banner-card__content">
 						<h2 class="heading-title"><?php esc_html_e( 'Let’s Find Your New Best Friend', 'petslist' ); ?></h2>
-						<a href="<?php echo esc_url( $register_url ); ?>" class="button-style-1"><?php esc_html_e( 'Creat An Account', 'petslist' ); ?><i aria-hidden="true" class="icon-pl-right-arrow"></i></a>
+						<a href="<?php echo esc_url( $register_url ); ?>" class="button-style-1"><?php esc_html_e( 'Create An Account', 'petslist' ); ?><i aria-hidden="true" class="icon-pl-right-arrow"></i></a>
 					</div>
 					<img src="<?php echo esc_url( petslist_img_url( 'banner_blue' ) ); ?>" alt="" class="petslist-home-banner-card__img" loading="lazy">
 				</div>

@@ -217,7 +217,7 @@ function petslist_upload_url( $relative_path ) {
 
 function petslist_custom_pages_assets() {
 	$theme_uri = get_template_directory_uri();
-	$ver       = '1.0.0';
+	$ver       = wp_get_theme()->get( 'Version' );
 
 	wp_enqueue_style( 'petslist-pages', $theme_uri . '/assets/css/petslist-pages.css', array(), $ver );
 

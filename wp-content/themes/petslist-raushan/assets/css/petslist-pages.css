@@ -333,14 +333,90 @@
 	.petslist-home-hero__visual { min-height: auto; margin-top: 30px; justify-content: center; }
 	.petslist-home-hero__visual .hero-img-main { max-width: 340px; margin: 0 auto; }
 }
+@media (max-width: 767px) {
+	.petslist-home-hero {
+		background-position: center center;
+		padding-top: 100px;
+		padding-bottom: 40px;
+	}
+	.petslist-home-hero__text {
+		padding-bottom: 0;
+	}
+	.petslist-home-hero .section-heading {
+		text-align: center;
+		margin-bottom: 24px;
+	}
+	.petslist-home-hero .heading-title {
+		font-size: 2rem;
+		margin: 0 auto 12px;
+		text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+	}
+	.petslist-home-hero .section-heading p,
+	.petslist-home-hero p {
+		margin: 0 auto;
+		text-align: center;
+		text-shadow: 0 1px 5px rgba(0,0,0,0.6);
+	}
+	.petslist-home-hero__search {
+		margin: 0 auto;
+	}
+	.petslist-home-hero__search .rtcl-search-inline-form {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 12px;
+		padding: 16px;
+	}
+	.petslist-home-hero__search .rtin-loc-space {
+		flex: 1 1 auto;
+		width: 100%;
+	}
+	.petslist-home-hero__search .rtin-loc-space .form-group {
+		padding: 0 14px;
+		border: 1px solid #e5e8ef;
+		border-radius: 8px;
+		background: #fafbfe;
+	}
+	.petslist-home-hero__search .rtin-loc-space .form-group::after {
+		display: none;
+	}
+	.petslist-home-hero__search .keyword-and-button-wrap {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 12px;
+		width: 100%;
+	}
+	.petslist-home-hero__search .rtin-key-space {
+		flex: 1 1 auto;
+		width: 100%;
+	}
+	.petslist-home-hero__search .rtin-keyword {
+		border: 1px solid #e5e8ef;
+		border-radius: 8px;
+		background: #fafbfe;
+		padding: 0 14px;
+	}
+	.petslist-home-hero__search .rtin-btn-holder {
+		width: 100%;
+	}
+	.petslist-home-hero__search .rtin-btn-holder .rtin-search-btn {
+		width: 100%;
+		min-width: 0;
+	}
+	.category-list.layout-4 .category-item .content .category-name {
+		font-size: 0.9rem !important;
+	}
+	.category-list.layout-4 .category-item .content .item-number {
+		font-size: 0.8rem !important;
+	}
+}
 @media (max-width: 575px) {
 	.petslist-about-hero__gallery,
 	.petslist-stats-grid,
 	.petslist-team-grid { grid-template-columns: 1fr; }
-	.petslist-home-dogs-grid { grid-template-columns: 1fr; }
+	.petslist-home-directory__main .petslist-home-dogs-grid { grid-template-columns: 1fr !important; }
 	.about-img--main { grid-row: auto; min-height: 300px; border-radius: 24px; }
 	.petslist-home-banner-card { flex-direction: column; text-align: center; padding: 30px 20px 0; }
 	.petslist-home-banner-card__content { max-width: 100%; }
-	.petslist-home-banner-card__img { max-width: 70%; }
-	.petslist-home-hero .heading-title { font-size: 2.1rem; }
+	.petslist-home-banner-card__img { max-width: 70%; align-self: center; }
+	.petslist-home-hero .heading-title { font-size: 1.8rem; }
 }
