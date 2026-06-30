@@ -13,7 +13,7 @@ $hero_bg = petslist_img_url( 'hero_bg' );
 <main id="primary" class="content-area petslist-custom-page petslist-home-page">
 
 	<!-- ============ HERO ============ -->
-	<section class="petslist-home-hero" style="background-color:#02c5bd;background-image:url('<?php echo esc_url( $hero_bg ); ?>');">
+	<section class="petslist-home-hero" style="background-color:#02c5bd;background-image:linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('<?php echo esc_url( $hero_bg ); ?>');">
 		<div class="container">
 			<div class="petslist-home-hero__grid">
 				<div class="petslist-home-hero__text">
@@ -32,7 +32,6 @@ $hero_bg = petslist_img_url( 'hero_bg' );
 					?>
 				</div>
 				<div class="petslist-home-hero__visual">
-					<img src="<?php echo esc_url( petslist_img_url( 'hero_img' ) ); ?>" alt="" class="hero-img-main" loading="eager">
 				</div>
 			</div>
 		</div>
@@ -66,16 +65,13 @@ $hero_bg = petslist_img_url( 'hero_bg' );
 			<div class="petslist-home-directory__grid">
 				<aside class="petslist-home-directory__side">
 					<?php petslist_render_dog_breeds( 16 ); ?>
-					<a href="<?php echo esc_url( $directory_url ); ?>" class="petslist-side-banner-link">
-						<img src="<?php echo esc_url( petslist_img_url( 'widget_banner' ) ); ?>" alt="" class="petslist-side-banner" loading="lazy">
-					</a>
 				</aside>
 				<div class="petslist-home-directory__main">
 					<div class="section-heading">
 						<h2 class="heading-title"><?php esc_html_e( 'Latest Dog Profiles', 'petslist' ); ?></h2>
 					</div>
 					<div class="petslist-home-listings">
-						<?php petslist_render_dog_cards( 6 ); ?>
+						<?php petslist_render_dog_cards( 9 ); ?>
 					</div>
 					<div class="petslist-home-directory__actions">
 						<a href="<?php echo esc_url( $directory_url ); ?>" class="button-style-1"><?php esc_html_e( 'See All Dogs', 'petslist' ); ?><i aria-hidden="true" class="icon-pl-right-arrow"></i></a>

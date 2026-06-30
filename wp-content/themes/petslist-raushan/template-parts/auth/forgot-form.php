@@ -8,15 +8,16 @@ if ( is_user_logged_in() ) {
     echo '<p class="dd-notice dd-notice--info">' . sprintf( __( 'You are logged in. <a href="%s">Go to Dashboard</a>.', 'petslist' ), esc_url( dd_dashboard_url() ) ) . '</p>';
     return;
 }
-$dd_upload_base = wp_upload_dir()['baseurl'];
+$dd_auth_bg     = function_exists( 'petslist_img_url' ) ? petslist_img_url( 'auth_bg' ) : wp_upload_dir()['baseurl'] . '/2023/08/banner-bg.png';
+$dd_auth_banner = function_exists( 'petslist_img_url' ) ? petslist_img_url( 'auth_banner' ) : wp_upload_dir()['baseurl'] . '/2023/08/banner-img-1.png';
 ?>
 <div id="rtcl-user-login-wrapper" class="separate-registration-form dd-auth-split-layout">
     <div class="dd-auth-split-image">
         <!-- Dog background pattern overlay -->
-        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: url('<?php echo esc_url( $dd_upload_base . '/2023/08/banner-bg.png' ); ?>'); background-size: cover; opacity: 0.15; pointer-events: none; z-index: 1;"></div>
+        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: url('<?php echo esc_url( $dd_auth_bg ); ?>'); background-size: cover; opacity: 0.15; pointer-events: none; z-index: 1;"></div>
         
         <!-- Dog illustration -->
-        <img src="<?php echo esc_url( $dd_upload_base . '/2023/08/banner-img-1.png' ); ?>" alt="Dog" style="max-width: 80%; max-height: 60%; position: absolute; bottom: 20px; z-index: 2; pointer-events: none;">
+        <img src="<?php echo esc_url( $dd_auth_banner ); ?>" alt="Dog" style="max-width: 80%; max-height: 60%; position: absolute; bottom: 20px; z-index: 2; pointer-events: none;">
 
         <div class="dd-auth-split-overlay">
             <h3>🐾 Reset Password</h3>

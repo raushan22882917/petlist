@@ -182,8 +182,9 @@
 }
 .petslist-home-hero__text { padding-bottom: 48px; }
 .petslist-home-hero .section-heading { margin-bottom: 22px; }
-.petslist-home-hero .heading-title { color: #fff; font-size: 2.5rem; line-height: 1.15; margin: 0 0 12px; }
-.petslist-home-hero p { color: rgba(255, 255, 255, .92); font-size: 1.02rem; margin: 0; max-width: 460px; }
+.petslist-home-hero .heading-title { color: #fff; font-size: 2.5rem; line-height: 1.15; margin: 0 0 12px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+.petslist-home-hero .section-heading p,
+.petslist-home-hero p { color: rgba(255, 255, 255, .95) !important; font-size: 1.05rem; margin: 0; max-width: 460px; text-shadow: 0 1px 3px rgba(0,0,0,0.5); }
 .petslist-home-hero__visual { position: relative; display: flex; align-items: flex-end; justify-content: flex-end; }
 .petslist-home-hero__visual .hero-img-main { max-width: 100%; width: auto; max-height: 380px; height: auto; object-fit: contain; display: block; margin-left: auto; }
 
@@ -256,7 +257,7 @@
 
 /* Red Search button: icon + "Search" label, like the demo */
 .petslist-home-hero__search .rtin-btn-holder .rtin-search-btn {
-	background: #ff3d41;
+	background: #bd8c42;
 	color: #fff;
 	border: 0;
 	border-radius: 8px;
@@ -274,7 +275,7 @@
 }
 .petslist-home-hero__search .rtin-btn-holder .rtin-search-btn .icon-pl-search { font-size: 18px; line-height: 1; }
 .petslist-home-hero__search .rtin-btn-holder .rtin-search-btn::after { content: "Search"; }
-.petslist-home-hero__search .rtin-btn-holder .rtin-search-btn:hover { background: #e62e32; }
+.petslist-home-hero__search .rtin-btn-holder .rtin-search-btn:hover { background: #a37430; }
 
 /* ---------- Home: banners ---------- */
 .petslist-home-banners { padding: 60px 0 20px; }
@@ -307,13 +308,17 @@
 .petslist-home-directory__main .section-heading { margin-bottom: 26px; }
 .petslist-home-directory__main .section-heading .heading-title { font-size: 2rem; }
 .petslist-home-directory__actions { margin-top: 34px; }
-.petslist-home-dogs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.petslist-home-directory__main .petslist-home-dogs-grid {
+	display: grid !important;
+	grid-template-columns: repeat(3, 1fr) !important;
+	gap: 20px !important;
+}
 
 .petslist-empty-note { color: var(--pl-muted); padding: 20px 0; }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 1199px) {
-	.petslist-home-dogs-grid { grid-template-columns: repeat(2, 1fr); }
+	.petslist-home-directory__main .petslist-home-dogs-grid { grid-template-columns: repeat(2, 1fr) !important; }
 }
 @media (max-width: 991px) {
 	.petslist-about-hero__grid,

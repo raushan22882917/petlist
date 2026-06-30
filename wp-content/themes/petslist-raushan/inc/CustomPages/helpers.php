@@ -16,13 +16,13 @@ function petslist_image_paths() {
 	return apply_filters(
 		'petslist_image_paths',
 		array(
-			'logo_dark'        => 'theme:demo/petslist_logo2.svg',
+			'logo_dark'        => 'uploads:2023/08/STUDLOGO.png',
 			'logo_light'       => 'theme:demo/petslist_logo.svg',
 			'logo_transparent' => 'theme:logo-white.png',
-			'logo_mobile'      => 'theme:demo/petslist_logo2.svg',
-			'footer_logo'      => 'theme:demo/petslist_logo2.svg',
+			'logo_mobile'      => 'uploads:2023/08/STUDLOGO.png',
+			'footer_logo'      => 'uploads:2023/08/STUDLOGO.png',
 			'footer_bg'        => 'theme:theme/footer-3.jpg',
-			'hero_bg'          => 'theme:demo/hero-banner3.png',
+			'hero_bg'          => 'uploads:2023/09/hero-banner3.png',
 			'hero_img'         => 'theme:demo/hero-img-5.png',
 			'banner_yellow'    => 'theme:demo/banner-img-4.webp',
 			'banner_blue'      => 'theme:demo/banner-img-3.webp',
@@ -32,6 +32,8 @@ function petslist_image_paths() {
 			'about_2'          => 'theme:demo/about-2.jpg',
 			'about_3'          => 'theme:demo/about-3.jpg',
 			'pricing_shape'    => 'theme:demo/pricing-card-shape.svg',
+			'auth_banner'      => 'theme:demo/banner-img-1.png',
+			'auth_bg'          => 'theme:demo/banner-bg.png',
 			'team_1'           => 'theme:demo/team-img-1.jpg',
 			'team_2'           => 'theme:demo/team-img-2.jpg',
 			'team_3'           => 'theme:demo/team-img-3.jpg',
@@ -334,8 +336,8 @@ function petslist_render_dog_breeds( $limit = 16 ) {
 		$link = add_query_arg( 'breed', $term->name, $directory );
 		?>
 		<li class="category-item">
-			<div class="icon" style="background-color:#<?php echo esc_attr( $color ); ?>">
-				<i class="icon-pl-category" aria-hidden="true"></i>
+			<div class="icon">
+				<img src="<?php echo esc_url( content_url( 'uploads/paw.png' ) ); ?>" alt="" style="max-width:38px;max-height:38px;object-fit:contain;">
 			</div>
 			<div class="content">
 				<a href="<?php echo esc_url( $link ); ?>" class="category-name"><?php echo esc_html( $term->name ); ?></a>

@@ -38,11 +38,11 @@ $button_color_2   = Helper::get_button_color2();
 :root {
 	--petslist-white-color: #ffffff;
 	--petslist-primary-color: <?php echo esc_html( $primary_color ? $primary_color : '#02c5bd' ); ?>;
-	--petslist-secondary-color: <?php echo esc_html( $secondary_color ? $secondary_color : '#FF3D41' ); ?>;
+	--petslist-secondary-color: #bd8c42;
 	--petslist-body-color: <?php echo esc_html( $body_color ? $body_color : '#515167' ); ?>;
 	--petslist-heading-color: <?php echo esc_html( $heading_color ? $heading_color : '#070C3E' ); ?>;
-	--petslist-button-color1: <?php echo esc_html( $button_color_1 ? $button_color_1 : '#FF282C' ); ?>;
-	--petslist-button-color2: <?php echo esc_html( $button_color_2 ? $button_color_2 : '#FF4E51' ); ?>;
+	--petslist-button-color1: #bd8c42;
+	--petslist-button-color2: #bd8c42;
 }
 <?php
 /*-------------------------------------
@@ -156,3 +156,51 @@ if ( !empty( $pt )) { ?>
 }
 
 <?php } ?>
+
+/* Force footer background to black */
+footer.footer-style-3:after {
+	background-color: #000000 !important;
+}
+footer.footer-style-3 .footer-bottom {
+	background-color: #000000 !important;
+}
+footer.footer-style-3 .footer-bottom .copyright-logo {
+	background-color: #ffffff !important;
+	padding: 10px 20px !important;
+	border-radius: 8px !important;
+	display: inline-flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+}
+footer.footer-style-3 .footer-bottom .copyright-logo img {
+	max-height: 44px !important;
+	width: auto !important;
+	object-fit: contain !important;
+}
+
+/* Category Sidebar Text Overrides */
+.category-list .category-item .content .category-name {
+	color: #000000 !important;
+	font-size: 1.08rem !important;
+	font-weight: 600 !important;
+}
+.category-list .category-item .content .category-name:hover {
+	color: var(--petslist-primary-color) !important;
+}
+.category-list .category-item .content .item-number {
+	color: #000000 !important;
+	opacity: 0.8 !important;
+	font-size: 0.9rem !important;
+}
+
+/* Solid Black Text Overrides */
+.main-header .main-navigation-area .main-navigation ul li a,
+.section-heading .heading-title,
+.dd-dir-card__name,
+.dd-dir-card__name a {
+	color: #000000 !important;
+}
+.petslist-home-hero .heading-title,
+.petslist-cta-band .heading-title {
+	color: #ffffff !important;
+}
