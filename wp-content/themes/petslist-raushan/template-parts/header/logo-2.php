@@ -22,12 +22,4 @@ $rt_logo_two = empty( Helper::rt_logo_two() ) ? get_bloginfo( 'name' ) : Helper:
 			</a>
         </h1>
 	<?php endif; ?>
-	<?php 
-		if ( display_header_text() == true ) {
-			$description = get_bloginfo( 'description', 'display' );
-		if ( $description || is_customize_preview() ) : ?>
-			<div class="site-description"><?php echo esc_html( $description ); ?></div>
-		<?php endif; 
-		}
-	?>
 </div>

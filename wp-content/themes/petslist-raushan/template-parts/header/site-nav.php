@@ -8,9 +8,13 @@
 use RadiusTheme\Petslist\Helper;
 use RadiusTheme\Petslist\Options;
 
+// Force a consistent centered menu on every page (demo navbar layout),
+// ignoring per-page layout meta. Override with the filter if needed.
+$petslist_menu_alignment = apply_filters( 'petslist_menu_alignment', 'menu-center', Options::$menu_alignment );
+
 ?>
 
-<div class="main-navigation-area <?php echo esc_attr( Options::$menu_alignment ) ?>">
+<div class="main-navigation-area <?php echo esc_attr( $petslist_menu_alignment ) ?>">
     <div id="main-navigation" class="main-navigation">
         <nav>
             <ul id="menu" class="menu">

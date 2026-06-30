@@ -11,29 +11,31 @@ if ( ! defined( 'ABSPATH' ) ) {
  * All custom pages and branding use these paths — never attachment IDs.
  */
 function petslist_image_paths() {
+	// Images are bundled inside the theme (assets/img/demo) so they deploy with
+	// the theme and never depend on wp-content/uploads existing on the server.
 	return apply_filters(
 		'petslist_image_paths',
 		array(
-			'logo_dark'      => 'uploads:2023/08/petslist_logo2.svg',
-			'logo_light'     => 'uploads:2023/08/petslist_logo.svg',
+			'logo_dark'        => 'theme:demo/petslist_logo2.svg',
+			'logo_light'       => 'theme:demo/petslist_logo.svg',
 			'logo_transparent' => 'theme:logo-white.png',
-			'logo_mobile'    => 'uploads:2023/08/petslist_logo2.svg',
-			'footer_logo'    => 'uploads:2023/08/petslist_logo2.svg',
-			'footer_bg'      => 'theme:theme/footer-3.jpg',
-			'hero_bg'        => 'uploads:2023/09/hero-banner3.png',
-			'hero_img'       => 'uploads:2023/09/hero-img-5.png',
-			'banner_yellow'  => 'uploads:2023/08/banner-img-4.webp',
-			'banner_blue'    => 'uploads:2023/08/banner-img-3.webp',
-			'widget_banner'  => 'uploads:2023/09/widget-banner1.jpg',
-			'cta_img'        => 'uploads:2023/09/call-action-img2.png',
-			'about_1'        => 'uploads:2023/09/about-1.jpg',
-			'about_2'        => 'uploads:2023/09/about-2.jpg',
-			'about_3'        => 'uploads:2023/09/about-3.jpg',
-			'pricing_shape'  => 'uploads:2023/08/pricing-card-shape.svg',
-			'team_1'         => 'uploads:2023/09/team-img-1.jpg',
-			'team_2'         => 'uploads:2023/09/team-img-2.jpg',
-			'team_3'         => 'uploads:2023/09/team-img-3.jpg',
-			'team_4'         => 'uploads:2023/09/team-img-4.jpg',
+			'logo_mobile'      => 'theme:demo/petslist_logo2.svg',
+			'footer_logo'      => 'theme:demo/petslist_logo2.svg',
+			'footer_bg'        => 'theme:theme/footer-3.jpg',
+			'hero_bg'          => 'theme:demo/hero-banner3.png',
+			'hero_img'         => 'theme:demo/hero-img-5.png',
+			'banner_yellow'    => 'theme:demo/banner-img-4.webp',
+			'banner_blue'      => 'theme:demo/banner-img-3.webp',
+			'widget_banner'    => 'theme:demo/widget-banner1.jpg',
+			'cta_img'          => 'theme:demo/call-action-img2.png',
+			'about_1'          => 'theme:demo/about-1.jpg',
+			'about_2'          => 'theme:demo/about-2.jpg',
+			'about_3'          => 'theme:demo/about-3.jpg',
+			'pricing_shape'    => 'theme:demo/pricing-card-shape.svg',
+			'team_1'           => 'theme:demo/team-img-1.jpg',
+			'team_2'           => 'theme:demo/team-img-2.jpg',
+			'team_3'           => 'theme:demo/team-img-3.jpg',
+			'team_4'           => 'theme:demo/team-img-4.jpg',
 		)
 	);
 }
