@@ -202,7 +202,20 @@ class DogCPT {
         if ( ! current_user_can( 'edit_post', $post_id ) ) return;
 
         if ( isset( $_POST['dd_dog_meta'] ) ) {
-            update_post_meta( $post_id, '_dd_dog_meta', array_map( 'sanitize_text_field', $_POST['dd_dog_meta'] ) );
+            $meta_data = array_map( 'sanitize_text_field', $_POST['dd_dog_meta'] );
+            update_post_meta( $post_id, '_dd_dog_meta', $meta_data );
+
+            // Sync the breed taxonomy term
+            if ( ! empty( $meta_data['breed'] ) ) {
+                $breed_name = dd_match_breed_name( $meta_data['breed'] );
+                $term = term_exists( $breed_name, 'dd_breed' );
+                if ( ! $term ) {
+                    $term = wp_insert_term( $breed_name, 'dd_breed' );
+                }
+                if ( ! is_wp_error( $term ) ) {
+                    wp_set_post_terms( $post_id, array( (int) $term['term_id'] ), 'dd_breed', false );
+                }
+            }
         }
         if ( isset( $_POST['dd_dog_health'] ) ) {
             update_post_meta( $post_id, '_dd_dog_health', array_map( 'sanitize_textarea_field', $_POST['dd_dog_health'] ) );
@@ -218,7 +231,11 @@ class DogCPT {
     public function get_dog_profile_fields() {
         return [
             'dog_name'          => [ 'label' => __('Dog Name', 'petslist'), 'type' => 'text' ],
-            'breed'             => [ 'label' => __('Breed', 'petslist'), 'type' => 'text' ],
+            'breed'             => [ 
+                'label' => __('Breed', 'petslist'), 
+                'type' => 'select', 
+                'options' => array_merge( [''], dd_default_breed_names() )
+            ],
             'gender'            => [ 'label' => __('Gender', 'petslist'), 'type' => 'select', 'options' => ['', 'Male', 'Female'] ],
             'dob'               => [ 'label' => __('Date of Birth', 'petslist'), 'type' => 'date' ],
             'color'             => [ 'label' => __('Color', 'petslist'), 'type' => 'text' ],
@@ -229,6 +246,7 @@ class DogCPT {
             'contact_phone'     => [ 'label' => __('Contact Phone', 'petslist'), 'type' => 'text' ],
             'contact_email'     => [ 'label' => __('Contact Email', 'petslist'), 'type' => 'text' ],
             'contact_website'   => [ 'label' => __('Website', 'petslist'), 'type' => 'text' ],
+            'is_sponsored'      => [ 'label' => __('Sponsored Ad (Homepage)', 'petslist'), 'type' => 'select', 'options' => ['No', 'Yes'] ],
         ];
     }
 

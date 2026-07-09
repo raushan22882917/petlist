@@ -21,15 +21,7 @@ $hero_bg = petslist_img_url( 'hero_bg' );
 						<h1 class="heading-title"><?php esc_html_e( 'Find The Perfect Pet For You!', 'petslist' ); ?></h1>
 						<p><?php esc_html_e( 'Browse pets from our network of over 11,500 shelters and rescues.', 'petslist' ); ?></p>
 					</div>
-					<?php
-					if ( class_exists( 'Rtcl' ) && class_exists( '\RadiusTheme\Petslist\Helper' ) ) :
-						?>
-						<div class="rtcl petslist-listing-search petslist-home-hero__search">
-							<?php \RadiusTheme\Petslist\Helper::get_custom_listing_template( 'listing-header-search' ); ?>
-						</div>
-						<?php
-					endif;
-					?>
+
 				</div>
 				<div class="petslist-home-hero__visual">
 				</div>
@@ -41,12 +33,17 @@ $hero_bg = petslist_img_url( 'hero_bg' );
 	<section class="petslist-home-banners">
 		<div class="container">
 			<div class="petslist-home-banners__grid">
-				<div class="petslist-home-banner-card petslist-home-banner-card--yellow">
-					<div class="petslist-home-banner-card__content">
-						<h2 class="heading-title"><?php esc_html_e( 'Let’s Find Your New Best Friend', 'petslist' ); ?></h2>
-						<a href="<?php echo esc_url( $register_url ); ?>" class="button-style-2"><?php esc_html_e( 'Create An Account', 'petslist' ); ?><i aria-hidden="true" class="icon-pl-right-arrow"></i></a>
-					</div>
-					<img src="<?php echo esc_url( petslist_img_url( 'banner_yellow' ) ); ?>" alt="" class="petslist-home-banner-card__img" loading="lazy">
+				<div class="petslist-home-search-standalone">
+					<h2 class="heading-title"><?php esc_html_e( 'Search Dog Directory', 'petslist' ); ?></h2>
+					<?php
+					if ( class_exists( 'Rtcl' ) && class_exists( '\RadiusTheme\Petslist\Helper' ) ) :
+						?>
+						<div class="rtcl petslist-listing-search petslist-home-hero__search">
+							<?php \RadiusTheme\Petslist\Helper::get_custom_listing_template( 'listing-header-search' ); ?>
+						</div>
+						<?php
+					endif;
+					?>
 				</div>
 				<div class="petslist-home-banner-card petslist-home-banner-card--blue">
 					<div class="petslist-home-banner-card__content">
@@ -81,8 +78,7 @@ $hero_bg = petslist_img_url( 'hero_bg' );
 		</div>
 	</section>
 
-	<!-- ============ CTA: SOMETHING TO ADVERTISE ============ -->
-	<?php get_template_part( 'template-parts/custom/section', 'cta' ); ?>
+
 
 </main>
 

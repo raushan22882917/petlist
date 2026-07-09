@@ -328,6 +328,21 @@ function petslist_render_dog_breeds( $limit = 16 ) {
 	}
 
 	echo '<ul class="category-list layout-4">';
+	$add_dog_url = is_user_logged_in() 
+		? dd_dashboard_url('add-dog') 
+		: add_query_arg( 'redirect_to', urlencode( dd_dashboard_url('add-dog') ), dd_login_url() );
+	?>
+	<li class="category-item dda-post-ad-item" style="background: linear-gradient(135deg, #02c5bd 0%, #02a39d 100%); border-radius: 12px; margin-bottom: 16px; padding: 12px 18px; box-shadow: 0 4px 12px rgba(2, 197, 189, 0.2); transition: all 0.2s ease;">
+		<a href="<?php echo esc_url( $add_dog_url ); ?>" style="display: flex; align-items: center; text-decoration: none; width: 100%;">
+			<div class="icon" style="background: rgba(255, 255, 255, 0.2); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 14px; flex-shrink: 0; box-shadow: none;">
+				<i class="fa-solid fa-plus" style="color: #ffffff; font-size: 16px;"></i>
+			</div>
+			<div class="content" style="padding: 0;">
+				<span class="category-name" style="color: #ffffff !important; font-weight: 700; font-size: 15px; letter-spacing: 0.2px;"><?php esc_html_e( 'Post an Ad / Add Dog', 'petslist' ); ?></span>
+			</div>
+		</a>
+	</li>
+	<?php
 	foreach ( $breeds as $i => $term ) {
 		$color = get_term_meta( $term->term_id, 'dd_breed_color', true );
 		if ( ! $color ) {
@@ -341,7 +356,6 @@ function petslist_render_dog_breeds( $limit = 16 ) {
 			</div>
 			<div class="content">
 				<a href="<?php echo esc_url( $link ); ?>" class="category-name"><?php echo esc_html( $term->name ); ?></a>
-				<p class="item-number">(<?php echo esc_html( number_format_i18n( $term->count ) ); ?>)</p>
 			</div>
 		</li>
 		<?php
@@ -369,10 +383,23 @@ function petslist_render_dog_cards( $limit = 6 ) {
 		return;
 	}
 
+	$posts = $query->posts;
+
+	// Filter posts: keep only sponsored dogs
+	$posts = array_filter( $posts, function( $post ) {
+		$meta = get_post_meta( $post->ID, '_dd_dog_meta', true ) ?: [];
+		return isset( $meta['is_sponsored'] ) && $meta['is_sponsored'] === 'Yes';
+	});
+
+	if ( empty( $posts ) ) {
+		echo '<p class="petslist-empty-note">' . esc_html__( 'No sponsored ads yet.', 'petslist' ) . '</p>';
+		return;
+	}
+
 	echo '<div class="dd-dir-grid petslist-home-dogs-grid">';
-	while ( $query->have_posts() ) {
-		$query->the_post();
-		$pid     = get_the_ID();
+	foreach ( $posts as $post ) {
+		setup_postdata( $post );
+		$pid     = $post->ID;
 		$meta    = dd_get_dog_meta( $pid );
 		$age     = dd_get_dog_age( $meta['dob'] ?? '' );
 		$thumb   = get_the_post_thumbnail_url( $pid, 'large' ) ?: dd_placeholder_image();
@@ -384,13 +411,18 @@ function petslist_render_dog_cards( $limit = 6 ) {
 		$country = $meta['country'] ?? '';
 		$loc     = trim( implode( ', ', array_filter( array( $city, $country ) ) ) );
 		$is_male = strtolower( $gender ) === 'male';
+		$is_sponsored = isset( $meta['is_sponsored'] ) && $meta['is_sponsored'] === 'Yes';
+		$sponsored_class = $is_sponsored ? ' dd-dir-card--sponsored' : '';
 		?>
-		<article class="dd-dir-card">
+		<article class="dd-dir-card<?php echo esc_attr( $sponsored_class ); ?>">
 			<div class="dd-dir-card__image">
-				<a href="<?php the_permalink(); ?>" class="dd-dir-card__image-link">
-					<img src="<?php echo esc_url( $thumb ); ?>" alt="<?php the_title_attribute(); ?>" loading="lazy">
+				<a href="<?php echo esc_url( get_permalink( $pid ) ); ?>" class="dd-dir-card__image-link">
+					<img src="<?php echo esc_url( $thumb ); ?>" alt="<?php echo esc_attr( get_the_title( $pid ) ); ?>" loading="lazy">
 					<div class="dd-dir-card__image-overlay"></div>
 				</a>
+				<?php if ( $is_sponsored ) : ?>
+					<span class="dd-dir-card__sponsored-badge"><?php esc_html_e( 'Sponsored', 'petslist' ); ?></span>
+				<?php endif; ?>
 				<?php if ( $gender ) : ?>
 					<span class="dd-dir-card__gender dd-dir-card__gender--<?php echo esc_attr( strtolower( $gender ) ); ?>">
 						<?php echo $is_male ? '&#9794;' : '&#9792;'; ?> <?php echo esc_html( $gender ); ?>
@@ -405,7 +437,7 @@ function petslist_render_dog_cards( $limit = 6 ) {
 					<div class="dd-dir-card__breed"><?php echo esc_html( $breed ); ?></div>
 				<?php endif; ?>
 				<h3 class="dd-dir-card__name">
-					<a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+					<a href="<?php echo esc_url( get_permalink( $pid ) ); ?>"><?php echo esc_html( get_the_title( $pid ) ); ?></a>
 				</h3>
 				<div class="dd-dir-card__meta">
 					<?php if ( $loc ) : ?>
@@ -422,7 +454,7 @@ function petslist_render_dog_cards( $limit = 6 ) {
 					<?php endif; ?>
 				</div>
 				<div class="dd-dir-card__footer">
-					<a href="<?php the_permalink(); ?>" class="dd-dir-card__cta">
+					<a href="<?php echo esc_url( get_permalink( $pid ) ); ?>" class="dd-dir-card__cta">
 						<?php esc_html_e( 'View Profile', 'petslist' ); ?>
 						<span class="dd-dir-card__cta-arrow">&rarr;</span>
 					</a>

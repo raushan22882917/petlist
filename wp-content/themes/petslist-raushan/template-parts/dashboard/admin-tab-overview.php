@@ -139,6 +139,16 @@ $pending_dogs = (int)$total_dogs->pending;
                             <a href="<?php echo esc_url(get_permalink($dog->ID)); ?>" class="dda-action-btn dda-action-btn--view" target="_blank" title="<?php esc_attr_e('View Profile', 'petslist'); ?>">
                                 <i class="fa-solid fa-eye"></i>
                             </a>
+                            <?php
+                            $dog_meta = dd_get_dog_meta($dog->ID);
+                            $is_sponsored = isset($dog_meta['is_sponsored']) && $dog_meta['is_sponsored'] === 'Yes';
+                            $star_icon = $is_sponsored ? 'fa-solid fa-star' : 'fa-regular fa-star';
+                            $star_color = $is_sponsored ? '#eab308' : '#9ca3af';
+                            $title = $is_sponsored ? esc_html__('Unmark Sponsored Ad', 'petslist') : esc_html__('Mark Sponsored Ad', 'petslist');
+                            ?>
+                            <button class="dda-action-btn dd-toggle-sponsored" data-id="<?php echo $dog->ID; ?>" title="<?php echo $title; ?>" style="background: none; border: none; padding: 0 4px; font-size: 16px; cursor: pointer;">
+                                <i class="<?php echo $star_icon; ?>" style="color: <?php echo $star_color; ?>"></i>
+                            </button>
                             <?php endif; ?>
                             <?php endif; ?>
                         </div>
@@ -213,5 +223,5 @@ $pending_dogs = (int)$total_dogs->pending;
             <?php endforeach; ?>
         </div>
     </div>
-
+    <div id="dd-admin-message" class="dd-auth-message" style="display:none;margin-top:12px"></div>
 </div>

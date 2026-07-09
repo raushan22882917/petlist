@@ -294,8 +294,19 @@
 .petslist-home-banner-card__content { position: relative; z-index: 2; max-width: 56%; padding-bottom: 34px; }
 .petslist-home-banner-card__content .heading-title { font-size: 1.7rem; line-height: 1.25; margin-bottom: 22px; }
 .petslist-home-banner-card__img { align-self: flex-end; max-width: 44%; height: auto; display: block; }
-.petslist-home-banner-card--yellow { background: #ffc107; }
-.petslist-home-banner-card--yellow .heading-title { color: #070c3e; }
+.petslist-home-search-standalone {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	min-height: 210px;
+}
+.petslist-home-search-standalone .heading-title {
+	font-size: 1.7rem;
+	line-height: 1.25;
+	margin-bottom: 22px;
+	color: #070c3e;
+	font-weight: 700;
+}
 .petslist-home-banner-card--blue { background: #4a3aff; }
 .petslist-home-banner-card--blue .heading-title { color: #fff; }
 
@@ -419,4 +430,46 @@
 	.petslist-home-banner-card__content { max-width: 100%; }
 	.petslist-home-banner-card__img { max-width: 70%; align-self: center; }
 	.petslist-home-hero .heading-title { font-size: 1.8rem; }
+}
+
+/* ---------- Homepage Sponsored Ads Styling ---------- */
+.petslist-home-dogs-grid .dd-dir-card--sponsored {
+	border: 2px solid #eab308;
+	background: #fffbeb;
+	position: relative;
+}
+.petslist-home-dogs-grid .dd-dir-card--sponsored::before {
+	content: '';
+	position: absolute;
+	top: -2px;
+	left: -2px;
+	right: -2px;
+	bottom: -2px;
+	border-radius: 16px;
+	border: 2px solid #eab308;
+	pointer-events: none;
+	z-index: 5;
+}
+.dd-dir-card__sponsored-badge {
+	position: absolute;
+	top: 12px;
+	left: 12px;
+	background: #eab308;
+	color: #fff;
+	font-size: 11px;
+	font-weight: 700;
+	text-transform: uppercase;
+	padding: 4px 10px;
+	border-radius: 4px;
+	letter-spacing: 0.5px;
+	z-index: 10;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dda-post-ad-item:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 6px 16px rgba(2, 197, 189, 0.35) !important;
+}
+.dda-post-ad-item a:hover {
+	text-decoration: none !important;
 }

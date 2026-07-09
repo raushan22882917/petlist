@@ -163,6 +163,7 @@ footer.footer-style-3:after {
 }
 footer.footer-style-3 .footer-bottom {
 	background-color: #000000 !important;
+	padding: 20px 0 !important;
 }
 footer.footer-style-3 .footer-bottom .copyright-logo {
 	background-color: #ffffff !important;

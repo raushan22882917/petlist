@@ -91,6 +91,34 @@
         });
     });
 
+    // ── Admin: Toggle sponsored status ───────────────────────
+    $(document).on('click', '.dd-toggle-sponsored', function (e) {
+        e.stopPropagation();
+        var $btn = $(this);
+        var id   = $btn.data('id');
+        var $icon = $btn.find('i');
+        $btn.css('pointer-events', 'none').css('opacity', '0.5');
+        $.post(ddVars.ajaxUrl, {
+            action:  'dd_admin_toggle_sponsored',
+            nonce:   ddVars.nonces.dog,
+            post_id: id,
+        }, function (res) {
+            $btn.css('pointer-events', '').css('opacity', '');
+            if (res.success) {
+                if (res.data.is_sponsored) {
+                    $icon.attr('class', 'fa-solid fa-star').css('color', '#eab308');
+                    $btn.attr('title', 'Unmark Sponsored Ad');
+                } else {
+                    $icon.attr('class', 'fa-regular fa-star').css('color', '#9ca3af');
+                    $btn.attr('title', 'Mark Sponsored Ad');
+                }
+                _flashMsg('#dd-admin-message', res.data.message, 'success');
+            } else {
+                _flashMsg('#dd-admin-message', res.data.message || 'Error updating status', 'error');
+            }
+        });
+    });
+
     // ── Table inline filters ─────────────────────────────────
     $(document).on('input change', '.dd-table-filter-input, .dd-table-filter-select', function () {
         var filters = {};

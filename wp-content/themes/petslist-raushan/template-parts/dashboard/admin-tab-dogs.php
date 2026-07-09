@@ -99,6 +99,15 @@ $status_tabs = [
                         <a href="<?php echo esc_url(get_permalink($pid)); ?>" class="dda-action-btn dda-action-btn--view" target="_blank" title="<?php esc_attr_e('View Profile', 'petslist'); ?>">
                             <i class="fa-solid fa-eye"></i>
                         </a>
+                        <?php
+                        $is_sponsored = isset($meta['is_sponsored']) && $meta['is_sponsored'] === 'Yes';
+                        $star_icon = $is_sponsored ? 'fa-solid fa-star' : 'fa-regular fa-star';
+                        $star_color = $is_sponsored ? '#eab308' : '#9ca3af';
+                        $title = $is_sponsored ? esc_html__('Unmark Sponsored Ad', 'petslist') : esc_html__('Mark Sponsored Ad', 'petslist');
+                        ?>
+                        <button class="dda-action-btn dd-toggle-sponsored" data-id="<?php echo $pid; ?>" title="<?php echo $title; ?>" style="background: none; border: none; padding: 0 4px; font-size: 16px; cursor: pointer;">
+                            <i class="<?php echo $star_icon; ?>" style="color: <?php echo $star_color; ?>"></i>
+                        </button>
                         <?php endif; ?>
                         <?php endif; ?>
                     </div>

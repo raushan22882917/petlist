@@ -46,6 +46,7 @@ class Ajax {
         add_action( 'wp_ajax_dd_admin_approve_dog', [ $this, 'admin_approve_dog' ] );
         add_action( 'wp_ajax_dd_admin_reject_dog', [ $this, 'admin_reject_dog' ] );
         add_action( 'wp_ajax_dd_admin_update_plan', [ $this, 'admin_update_plan' ] );
+        add_action( 'wp_ajax_dd_admin_toggle_sponsored', [ $this, 'admin_toggle_sponsored' ] );
         add_action( 'wp_ajax_dd_get_user_drawer', [ $this, 'get_user_drawer' ] );
     }
 
@@ -765,5 +766,19 @@ class Ajax {
         }
         $wpdb->update($table, $data, ['id' => $plan_id]);
         wp_send_json_success(['message' => 'Plan updated.']);
+    }
+
+    public function admin_toggle_sponsored() {
+        check_ajax_referer('dd_dog_nonce', 'nonce');
+        if ( ! current_user_can('manage_options') ) wp_send_json_error(['message' => 'No permission.']);
+        $post_id = absint($_POST['post_id'] ?? 0);
+        $meta = get_post_meta($post_id, '_dd_dog_meta', true) ?: [];
+        $is_sponsored = isset($meta['is_sponsored']) && $meta['is_sponsored'] === 'Yes';
+        $meta['is_sponsored'] = $is_sponsored ? 'No' : 'Yes';
+        update_post_meta($post_id, '_dd_dog_meta', $meta);
+        wp_send_json_success([
+            'message' => $is_sponsored ? 'Dog unmarked as sponsored.' : 'Dog marked as sponsored.',
+            'is_sponsored' => !$is_sponsored
+        ]);
     }
 }
