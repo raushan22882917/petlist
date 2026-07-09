@@ -13,7 +13,7 @@ $hero_bg = petslist_img_url( 'hero_bg' );
 <main id="primary" class="content-area petslist-custom-page petslist-home-page">
 
 	<!-- ============ HERO ============ -->
-	<section class="petslist-home-hero" style="background-color:#02c5bd;background-image:linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('<?php echo esc_url( $hero_bg ); ?>');">
+	<section class="petslist-home-hero" style="background-color:#02c5bd;background-image:linear-gradient(rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3)), url('<?php echo esc_url( $hero_bg ); ?>');">
 		<div class="container">
 			<div class="petslist-home-hero__grid">
 				<div class="petslist-home-hero__text">
@@ -21,9 +21,6 @@ $hero_bg = petslist_img_url( 'hero_bg' );
 						<h1 class="heading-title"><?php esc_html_e( 'Find The Perfect Pet For You!', 'petslist' ); ?></h1>
 						<p><?php esc_html_e( 'Browse pets from our network of over 11,500 shelters and rescues.', 'petslist' ); ?></p>
 					</div>
-
-				</div>
-				<div class="petslist-home-hero__visual">
 				</div>
 			</div>
 		</div>

@@ -174,17 +174,20 @@
 	overflow: hidden;
 }
 .petslist-home-hero__grid {
-	display: grid;
-	grid-template-columns: 1.25fr .75fr;
-	gap: 30px;
-	align-items: end;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	min-height: 340px;
+	text-align: center;
 }
-.petslist-home-hero__text { padding-bottom: 48px; }
+.petslist-home-hero__text {
+	padding-bottom: 48px;
+	width: 100%;
+}
 .petslist-home-hero .section-heading { margin-bottom: 22px; }
-.petslist-home-hero .heading-title { color: #fff; font-size: 2.5rem; line-height: 1.15; margin: 0 0 12px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+.petslist-home-hero .heading-title { color: #fff; font-size: 2.5rem; line-height: 1.15; margin: 0 auto 12px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
 .petslist-home-hero .section-heading p,
-.petslist-home-hero p { color: rgba(255, 255, 255, .95) !important; font-size: 1.05rem; margin: 0; max-width: 460px; text-shadow: 0 1px 3px rgba(0,0,0,0.5); }
+.petslist-home-hero p { color: rgba(255, 255, 255, .95) !important; font-size: 1.05rem; margin: 0 auto; max-width: 600px; text-shadow: 0 1px 3px rgba(0,0,0,0.5); }
 .petslist-home-hero__visual { position: relative; display: flex; align-items: flex-end; justify-content: flex-end; }
 .petslist-home-hero__visual .hero-img-main { max-width: 100%; width: auto; max-height: 380px; height: auto; object-fit: contain; display: block; margin-left: auto; }
 
