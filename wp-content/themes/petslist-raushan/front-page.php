@@ -18,8 +18,6 @@ $hero_bg = petslist_img_url( 'hero_bg' );
 			<div class="petslist-home-hero__grid">
 				<div class="petslist-home-hero__text">
 					<div class="section-heading">
-						<h1 class="heading-title"><?php esc_html_e( 'Find The Perfect Pet For You!', 'petslist' ); ?></h1>
-						<p><?php esc_html_e( 'Browse pets from our network of over 11,500 shelters and rescues.', 'petslist' ); ?></p>
 					</div>
 				</div>
 			</div>
@@ -44,7 +42,7 @@ $hero_bg = petslist_img_url( 'hero_bg' );
 				</div>
 				<div class="petslist-home-banner-card petslist-home-banner-card--blue">
 					<div class="petslist-home-banner-card__content">
-						<h2 class="heading-title"><?php esc_html_e( 'Let’s Find Your New Best Friend', 'petslist' ); ?></h2>
+						<h2 class="heading-title"><?php esc_html_e( "Let's get you connected.", 'petslist' ); ?></h2>
 						<a href="<?php echo esc_url( $register_url ); ?>" class="button-style-1"><?php esc_html_e( 'Create An Account', 'petslist' ); ?><i aria-hidden="true" class="icon-pl-right-arrow"></i></a>
 					</div>
 					<img src="<?php echo esc_url( petslist_img_url( 'banner_blue' ) ); ?>" alt="" class="petslist-home-banner-card__img" loading="lazy">

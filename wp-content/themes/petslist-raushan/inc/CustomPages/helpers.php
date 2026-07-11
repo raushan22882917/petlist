@@ -25,7 +25,7 @@ function petslist_image_paths() {
 			'hero_bg'          => 'uploads:2023/09/hero-banner3.png',
 			'hero_img'         => 'theme:demo/hero-img-5.png',
 			'banner_yellow'    => 'theme:demo/banner-img-4.webp',
-			'banner_blue'      => 'theme:demo/banner-img-3.webp',
+			'banner_blue'      => 'theme:demo/banner-img-3-man.webp',
 			'widget_banner'    => 'theme:demo/widget-banner1.jpg',
 			'cta_img'          => 'theme:demo/call-action-img2.png',
 			'about_1'          => 'theme:demo/about-1.jpg',
