@@ -291,12 +291,12 @@
 	gap: 16px;
 	border-radius: var(--pl-radius);
 	padding: 34px 0 0 38px;
-	overflow: hidden;
+	overflow: visible;
 	min-height: 210px;
 }
 .petslist-home-banner-card__content { position: relative; z-index: 2; max-width: 56%; padding-bottom: 34px; }
 .petslist-home-banner-card__content .heading-title { font-size: 1.7rem; line-height: 1.25; margin-bottom: 22px; }
-.petslist-home-banner-card__img { align-self: flex-end; max-width: 44%; height: auto; display: block; }
+.petslist-home-banner-card__img { align-self: flex-end; max-width: 44%; max-height: 250px; height: auto; object-fit: contain; display: block; }
 .petslist-home-search-standalone {
 	display: flex;
 	flex-direction: column;
@@ -416,6 +416,12 @@
 		width: 100%;
 		min-width: 0;
 	}
+	.petslist-home-hero__search .select2-container,
+	.petslist-home-hero__search .form-control,
+	.petslist-home-hero__search .rtcl-location-search,
+	.petslist-home-hero__search .rtcl-autocomplete {
+		width: 100% !important;
+	}
 	.category-list.layout-4 .category-item .content .category-name {
 		font-size: 0.9rem !important;
 	}
@@ -429,9 +435,9 @@
 	.petslist-team-grid { grid-template-columns: 1fr; }
 	.petslist-home-directory__main .petslist-home-dogs-grid { grid-template-columns: 1fr !important; }
 	.about-img--main { grid-row: auto; min-height: 300px; border-radius: 24px; }
-	.petslist-home-banner-card { flex-direction: column; text-align: center; padding: 30px 20px 0; }
-	.petslist-home-banner-card__content { max-width: 100%; }
-	.petslist-home-banner-card__img { max-width: 70%; align-self: center; }
+	.petslist-home-banner-card { flex-direction: column; text-align: center; padding: 30px 20px 0; height: auto !important; min-height: auto !important; }
+	.petslist-home-banner-card__content { max-width: 100%; padding-bottom: 20px; }
+	.petslist-home-banner-card__img { max-width: 75%; align-self: center; margin-top: 15px; display: block; }
 	.petslist-home-hero .heading-title { font-size: 1.8rem; }
 }
 
