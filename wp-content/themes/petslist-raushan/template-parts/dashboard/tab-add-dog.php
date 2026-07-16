@@ -85,12 +85,12 @@ function dd_field( $meta, $key, $fallback = '' ) {
                 <div class="dd-form-group">
                     <label for="dd-breed"><?php _e( 'Breed', 'petslist' ); ?> <span class="dd-required">*</span></label>
                     <select id="dd-breed" name="dog_data[breed]" required>
-                        <option value=""><?php esc_html_e( 'Select Breed', 'petslist' ); ?></option>
                         <?php
                         $current_breed = dd_match_breed_name( $dog_meta['breed'] ?? '' );
-                        foreach ( $breeds as $b ) :
+                        $breed_options = dd_get_breed_options();
+                        foreach ( $breed_options as $val => $label ) :
                             ?>
-                        <option value="<?php echo esc_attr( $b->name ); ?>" <?php selected( $current_breed, $b->name ); ?>><?php echo esc_html( $b->name ); ?></option>
+                        <option value="<?php echo esc_attr( $val ); ?>" <?php selected( $current_breed, $val ); ?>><?php echo esc_html( $label ); ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>

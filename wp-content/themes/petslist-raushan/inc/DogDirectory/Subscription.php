@@ -104,7 +104,7 @@ class Subscription {
             [
                 'name'      => 'Monthly',
                 'slug'      => 'monthly',
-                'price'     => 9.99,
+                'price'     => 5.99,
                 'duration'  => 30,
                 'features'  => json_encode([
                     'Unlimited dog profiles',
@@ -127,7 +127,7 @@ class Subscription {
                     'Featured badge on profiles',
                     'Early access to new features',
                 ]),
-                'is_active' => 1,
+                'is_active' => 0,
             ],
             [
                 'name'      => 'Lifetime',
@@ -141,7 +141,7 @@ class Subscription {
                     'Premium support',
                     'API access',
                 ]),
-                'is_active' => 1,
+                'is_active' => 0,
             ],
         ];
 

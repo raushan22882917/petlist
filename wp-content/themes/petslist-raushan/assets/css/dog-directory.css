@@ -479,6 +479,7 @@
 .dd-plans-grid { display:grid; gap:24px; margin-bottom:60px; }
 .dd-plans-grid--3col { grid-template-columns:repeat(3,1fr); }
 .dd-plans-grid--2col { grid-template-columns:repeat(2,1fr); }
+.dd-plans-grid--1col { grid-template-columns:1fr; max-width:420px; margin:0 auto 60px; }
 @media(max-width:900px){ .dd-plans-grid--3col,.dd-plans-grid--2col { grid-template-columns:1fr; } }
 
 .dd-plan-card {

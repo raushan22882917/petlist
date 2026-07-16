@@ -39,7 +39,7 @@ $active_plan_slug = $active_sub ? $active_sub->plan_slug : '';
     <!-- Plans Grid -->
     <div class="dd-plans-grid dd-plans-grid--<?php echo count($plans); ?>col">
         <?php
-        $popular_slug = 'yearly'; // Mark yearly as popular
+        $popular_slug = 'monthly'; // Mark monthly as popular
         foreach ( $plans as $plan ) :
             $features = json_decode($plan->features, true) ?: [];
             $is_popular  = $plan->slug === $popular_slug;

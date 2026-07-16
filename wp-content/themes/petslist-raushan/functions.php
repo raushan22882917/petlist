@@ -63,6 +63,7 @@ function petslist_boot_dog_directory() {
         'DogCPT',
         'Subscription',
         'Stripe',
+        'PayPal',
         'Ajax',
         'Scripts',
         'Shortcodes',

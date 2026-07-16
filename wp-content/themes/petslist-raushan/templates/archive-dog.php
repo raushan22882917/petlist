@@ -102,10 +102,12 @@ $query = new WP_Query($args);
                     </div>
                     <div class="dd-search-form__field">
                         <select name="breed">
-                            <option value=""><?php _e('All Breeds', 'petslist'); ?></option>
-                            <?php foreach ( $breeds as $breed ) : ?>
-                            <option value="<?php echo esc_attr($breed->name); ?>" <?php selected($breed_filter, $breed->name); ?>>
-                                <?php echo esc_html($breed->name); ?> (<?php echo $breed->count; ?>)
+                            <?php
+                            $breed_options = dd_get_breed_options( true );
+                            foreach ( $breed_options as $val => $label ) :
+                                ?>
+                            <option value="<?php echo esc_attr( $val ); ?>" <?php selected( $breed_filter, $val ); ?>>
+                                <?php echo esc_html( $label ); ?>
                             </option>
                             <?php endforeach; ?>
                         </select>

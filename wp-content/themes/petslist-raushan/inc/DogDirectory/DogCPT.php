@@ -145,9 +145,10 @@ class DogCPT {
             echo '<label for="dd_' . esc_attr($key) . '">' . esc_html($field['label']) . '</label>';
             if ( $field['type'] === 'select' ) {
                 echo '<select id="dd_' . esc_attr($key) . '" name="dd_dog_meta[' . esc_attr($key) . ']">';
-                foreach ( $field['options'] as $opt ) {
-                    $sel = selected( $value, $opt, false );
-                    echo '<option value="' . esc_attr($opt) . '"' . $sel . '>' . esc_html($opt) . '</option>';
+                foreach ( $field['options'] as $val => $label ) {
+                    $opt_val = is_numeric($val) && !is_string($val) ? $label : $val;
+                    $sel = selected( $value, $opt_val, false );
+                    echo '<option value="' . esc_attr($opt_val) . '"' . $sel . '>' . esc_html($label) . '</option>';
                 }
                 echo '</select>';
             } elseif ( $field['type'] === 'textarea' ) {
@@ -234,7 +235,7 @@ class DogCPT {
             'breed'             => [ 
                 'label' => __('Breed', 'petslist'), 
                 'type' => 'select', 
-                'options' => array_merge( [''], dd_default_breed_names() )
+                'options' => dd_get_breed_options()
             ],
             'gender'            => [ 'label' => __('Gender', 'petslist'), 'type' => 'select', 'options' => ['', 'Male', 'Female'] ],
             'dob'               => [ 'label' => __('Date of Birth', 'petslist'), 'type' => 'date' ],

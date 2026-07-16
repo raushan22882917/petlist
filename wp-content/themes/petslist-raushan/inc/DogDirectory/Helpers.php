@@ -163,6 +163,7 @@ function dd_default_breed_names() {
 		'Cane Corso',
 		'Labrador Retriever',
 		'Fluffy Frenchy',
+		'American Bully',
 	);
 }
 
@@ -170,7 +171,7 @@ function dd_default_breed_names() {
  * Create default breed terms (once) and assign colors for the home sidebar.
  */
 function dd_ensure_default_breeds() {
-	if ( get_option( 'dd_breeds_seeded' ) ) {
+	if ( get_option( 'dd_breeds_seeded' ) && term_exists( 'American Bully', 'dd_breed' ) ) {
 		return;
 	}
 
@@ -184,6 +185,22 @@ function dd_ensure_default_breeds() {
 		if ( ! is_wp_error( $term ) ) {
 			$term_id = (int) ( is_array( $term ) ? $term['term_id'] : $term );
 			update_term_meta( $term_id, 'dd_breed_color', $colors[ $i % count( $colors ) ] );
+		}
+	}
+
+	// Ensure American Bully subcategories are seeded under parent
+	$parent_term = get_term_by( 'name', 'American Bully', 'dd_breed' );
+	if ( $parent_term && ! is_wp_error( $parent_term ) ) {
+		$parent_id = (int) $parent_term->term_id;
+		$subs = array( 'Pocket', 'Classic', 'Standard', 'XL', 'XXL' );
+		foreach ( $subs as $sub_name ) {
+			$sub_term = term_exists( $sub_name, 'dd_breed' );
+			if ( ! $sub_term ) {
+				wp_insert_term( $sub_name, 'dd_breed', array( 'parent' => $parent_id ) );
+			} else {
+				$sub_term_id = (int) ( is_array( $sub_term ) ? $sub_term['term_id'] : $sub_term );
+				wp_update_term( $sub_term_id, 'dd_breed', array( 'parent' => $parent_id ) );
+			}
 		}
 	}
 
@@ -206,6 +223,13 @@ function dd_match_breed_name( $raw ) {
 		}
 	}
 
+	$subs = array( 'Pocket', 'Classic', 'Standard', 'XL', 'XXL' );
+	foreach ( $subs as $name ) {
+		if ( strcasecmp( $raw, $name ) === 0 ) {
+			return $name;
+		}
+	}
+
 	$raw_lc = strtolower( $raw );
 	foreach ( dd_default_breed_names() as $name ) {
 		$name_lc = strtolower( $name );
@@ -214,7 +238,58 @@ function dd_match_breed_name( $raw ) {
 		}
 	}
 
+	foreach ( $subs as $name ) {
+		$name_lc = strtolower( $name );
+		if ( str_contains( $name_lc, $raw_lc ) || str_contains( $raw_lc, $name_lc ) ) {
+			return $name;
+		}
+	}
+
 	return $raw;
+}
+
+/**
+ * Helper to get breed options for select fields.
+ */
+function dd_get_breed_options( $include_counts = false ) {
+	$options = array( '' => $include_counts ? __( 'All Breeds', 'petslist' ) : __( 'Select Breed', 'petslist' ) );
+	$terms = get_terms( array(
+		'taxonomy'   => 'dd_breed',
+		'hide_empty' => false,
+		'parent'     => 0,
+	) );
+
+	if ( is_wp_error( $terms ) || empty( $terms ) ) {
+		foreach ( dd_default_breed_names() as $name ) {
+			$options[$name] = $name;
+		}
+		return $options;
+	}
+
+	foreach ( $terms as $parent ) {
+		$label = $parent->name;
+		if ( $include_counts ) {
+			$label .= ' (' . $parent->count . ')';
+		}
+		$options[$parent->name] = $label;
+
+		$children = get_terms( array(
+			'taxonomy'   => 'dd_breed',
+			'hide_empty' => false,
+			'parent'     => $parent->term_id,
+		) );
+		if ( ! is_wp_error( $children ) && ! empty( $children ) ) {
+			foreach ( $children as $child ) {
+				$child_label = '— ' . $child->name;
+				if ( $include_counts ) {
+					$child_label .= ' (' . $child->count . ')';
+				}
+				$options[$child->name] = $child_label;
+			}
+		}
+	}
+
+	return $options;
 }
 
 /**
@@ -307,6 +382,22 @@ function dd_stripe_secret_key() {
 
 function dd_stripe_webhook_secret() {
     return get_option('dd_stripe_webhook_secret', '');
+}
+
+// -------------------------------------------------------
+// PAYPAL HELPERS
+// -------------------------------------------------------
+
+function dd_paypal_client_id() {
+    return get_option('dd_paypal_client_id', '');
+}
+
+function dd_paypal_secret() {
+    return get_option('dd_paypal_secret', '');
+}
+
+function dd_paypal_mode() {
+    return get_option('dd_paypal_mode', 'sandbox');
 }
 
 // -------------------------------------------------------

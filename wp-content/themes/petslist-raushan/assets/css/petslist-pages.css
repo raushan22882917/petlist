@@ -310,8 +310,8 @@
 	color: #070c3e;
 	font-weight: 700;
 }
-.petslist-home-banner-card--blue { background: #2d3139; }
-.petslist-home-banner-card--blue .heading-title { color: #fff; }
+.petslist-home-banner-card--blue { background: #D3D3D3; }
+.petslist-home-banner-card--blue .heading-title { color: #070c3e; }
 
 /* ---------- Home: directory / latest posted ads ---------- */
 .petslist-home-directory { padding: 60px 0 70px; }
@@ -481,4 +481,101 @@
 }
 .dda-post-ad-item a:hover {
 	text-decoration: none !important;
+}
+
+/* ---------- Homepage Flyer Ads Section ---------- */
+.petslist-home-flyers {
+	padding: 80px 0;
+	background-color: #f7f9fc;
+}
+.petslist-flyers-header {
+	text-align: center;
+	margin-bottom: 50px;
+}
+.petslist-flyers-header .heading-title {
+	font-size: 2.2rem;
+	font-weight: 800;
+	color: #070c3e;
+	margin-bottom: 12px;
+}
+.petslist-flyers-header .heading-subtitle {
+	color: #666e9c;
+	font-size: 1.1rem;
+	max-width: 600px;
+	margin: 0 auto;
+}
+.petslist-flyer-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 30px;
+}
+.petslist-flyer-card {
+	background: #ffffff;
+	border-radius: 16px;
+	overflow: hidden;
+	box-shadow: 0 10px 30px rgba(7, 12, 62, 0.04);
+	transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+	border: 1px solid #eef1f6;
+	display: flex;
+	flex-direction: column;
+}
+.petslist-flyer-card:hover {
+	transform: translateY(-8px);
+	box-shadow: 0 20px 40px rgba(7, 12, 62, 0.08);
+	border-color: #02c5bd;
+}
+.petslist-flyer-card__image {
+	position: relative;
+	overflow: hidden;
+	aspect-ratio: 1; /* Square flyer ads standard */
+	background-color: #eaecef;
+}
+.petslist-flyer-card__image img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform 0.5s ease;
+}
+.petslist-flyer-card:hover .petslist-flyer-card__image img {
+	transform: scale(1.05);
+}
+.petslist-flyer-card__content {
+	padding: 24px;
+	text-align: center;
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+.petslist-flyer-card__content h3 {
+	font-size: 1.25rem;
+	font-weight: 700;
+	color: #070c3e;
+	margin: 0 0 10px;
+	transition: color 0.2s ease;
+}
+.petslist-flyer-card:hover .petslist-flyer-card__content h3 {
+	color: #02c5bd;
+}
+.petslist-flyer-card__content p {
+	font-size: 0.95rem;
+	color: #666e9c;
+	margin: 0;
+	line-height: 1.5;
+}
+
+@media (max-width: 991px) {
+	.petslist-flyer-grid {
+		grid-template-columns: repeat(2, 1fr);
+		gap: 20px;
+	}
+}
+@media (max-width: 575px) {
+	.petslist-flyer-grid {
+		grid-template-columns: 1fr;
+		gap: 20px;
+	}
+	.petslist-flyers-header .heading-title {
+		font-size: 1.8rem;
+	}
 }

@@ -44,6 +44,7 @@ class Init {
         DogCPT::instance();
         Subscription::instance();
         Stripe::instance();
+        PayPal::instance();
         Ajax::instance();
         Scripts::instance();
         Shortcodes::instance();
