@@ -95,6 +95,26 @@ class Subscription {
         if ( '0' === $count ) {
             $this->seed_default_plans();
         }
+
+        // Migrate existing plans to single $5.99 Monthly plan (automatic update for production/cPanel)
+        if ( ! get_option( 'dd_plans_updated_v2' ) ) {
+            $wpdb->update( 
+                $plan_table, 
+                [ 'price' => 5.99, 'is_active' => 1 ], 
+                [ 'slug' => 'monthly' ] 
+            );
+            $wpdb->update( 
+                $plan_table, 
+                [ 'is_active' => 0 ], 
+                [ 'slug' => 'yearly' ] 
+            );
+            $wpdb->update( 
+                $plan_table, 
+                [ 'is_active' => 0 ], 
+                [ 'slug' => 'lifetime' ] 
+            );
+            update_option( 'dd_plans_updated_v2', 1 );
+        }
     }
 
     private function seed_default_plans() {
