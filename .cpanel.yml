@@ -2,3 +2,5 @@ deployment:
   tasks:
     - export DEPLOYPATH=/home/comp/public_html/dog
     - /bin/rsync -a wp-content/themes/petslist-raushan/ $DEPLOYPATH/wp-content/themes/petslist-raushan/
+    - /bin/cp favicon.ico $DEPLOYPATH/favicon.ico
+    - /bin/cp apple-touch-icon.png $DEPLOYPATH/apple-touch-icon.png
