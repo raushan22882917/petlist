@@ -17,7 +17,7 @@ if ( ! is_user_logged_in() ) {
     return;
 }
 
-$plan_slug = sanitize_text_field( $_GET['plan'] ?? 'monthly' );
+$plan_slug = sanitize_text_field( $_GET['plan'] ?? 'studs' );
 $plan      = Subscription::get_plan( $plan_slug );
 
 if ( ! $plan ) {
@@ -25,9 +25,15 @@ if ( ! $plan ) {
     return;
 }
 
-$user       = wp_get_current_user();
 $active_sub = Subscription::get_user_subscription();
-$period     = $plan->duration <= 31 ? __( '/month', 'petslist' ) : ( $plan->duration <= 366 ? __( '/year', 'petslist' ) : __( ' once', 'petslist' ) );
+
+if ( Subscription::has_reached_sales_limit() && ( ! $active_sub || $active_sub->plan_slug !== $plan->slug ) ) {
+    echo '<div class="dd-notice dd-notice--warning">' . __( 'All monthly packages are currently sold out. Please check back later.', 'petslist' ) . '</div>';
+    return;
+}
+
+$user       = wp_get_current_user();
+$period     = __( '/month', 'petslist' );
 $features   = json_decode( $plan->features, true ) ?: [];
 $paypal_client_id = dd_paypal_client_id();
 ?>
@@ -42,7 +48,7 @@ $paypal_client_id = dd_paypal_client_id();
             <div class="dd-checkout-plan-box">
                 <div class="dd-checkout-plan-box__header">
                     <span class="dd-checkout-plan-box__icon">
-                        <?php echo $plan->slug === 'monthly' ? '📅' : ( $plan->slug === 'yearly' ? '⭐' : '♾️' ); ?>
+                        <?php echo $plan->slug === 'studs' ? '📅' : ( $plan->slug === 'kennels' ? '⭐' : '♾️' ); ?>
                     </span>
                     <div>
                         <div class="dd-checkout-plan-box__name"><?php echo esc_html( $plan->name ); ?> <?php _e( 'Plan', 'petslist' ); ?></div>

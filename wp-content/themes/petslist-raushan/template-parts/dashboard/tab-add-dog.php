@@ -87,13 +87,11 @@ function dd_field( $meta, $key, $fallback = '' ) {
                     <select id="dd-breed" name="dog_data[breed]" required>
                         <?php
                         $current_breed = dd_match_breed_name( $dog_meta['breed'] ?? '' );
-                        $breed_options = dd_get_breed_options();
-                        foreach ( $breed_options as $val => $label ) :
-                            ?>
-                        <option value="<?php echo esc_attr( $val ); ?>" <?php selected( $current_breed, $val ); ?>><?php echo esc_html( $label ); ?></option>
-                        <?php endforeach; ?>
+                        dd_render_breed_options( $current_breed );
+                        ?>
                     </select>
                 </div>
+
 
                 <div class="dd-form-group">
                     <label for="dd-gender"><?php _e( 'Gender', 'petslist' ); ?></label>

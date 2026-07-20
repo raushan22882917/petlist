@@ -171,7 +171,7 @@ function dd_default_breed_names() {
  * Create default breed terms (once) and assign colors for the home sidebar.
  */
 function dd_ensure_default_breeds() {
-	if ( get_option( 'dd_breeds_seeded' ) && term_exists( 'American Bully', 'dd_breed' ) ) {
+	if ( get_option( 'dd_breeds_seeded_v3' ) && term_exists( 'American Bully', 'dd_breed' ) ) {
 		return;
 	}
 
@@ -204,7 +204,7 @@ function dd_ensure_default_breeds() {
 		}
 	}
 
-	update_option( 'dd_breeds_seeded', 1, false );
+	update_option( 'dd_breeds_seeded_v3', 1, false );
 	dd_sync_dog_breed_taxonomy();
 }
 
@@ -249,47 +249,147 @@ function dd_match_breed_name( $raw ) {
 }
 
 /**
- * Helper to get breed options for select fields.
+ * Returns a structured breed list for select rendering.
+ *
+ * Each entry is either:
+ *   [ 'value' => string, 'label' => string ]                         – plain option
+ *   [ 'value' => string, 'label' => string, 'children' => [...] ]    – optgroup parent
+ *
+ * @param bool $include_counts Append "(n)" counts to labels.
+ * @return array
  */
 function dd_get_breed_options( $include_counts = false ) {
-	$options = array( '' => $include_counts ? __( 'All Breeds', 'petslist' ) : __( 'Select Breed', 'petslist' ) );
-	$terms = get_terms( array(
+	// Placeholder row (value '' means "nothing selected")
+	$entries = [];
+
+	$terms = get_terms( [
 		'taxonomy'   => 'dd_breed',
 		'hide_empty' => false,
 		'parent'     => 0,
-	) );
+		'orderby'    => 'name',
+		'order'      => 'ASC',
+	] );
 
+	// Fallback: no taxonomy terms yet → return flat list
 	if ( is_wp_error( $terms ) || empty( $terms ) ) {
 		foreach ( dd_default_breed_names() as $name ) {
-			$options[$name] = $name;
+			$entries[] = [ 'value' => $name, 'label' => $name ];
 		}
-		return $options;
+		return $entries;
 	}
+
+	// Order parents to match dd_default_breed_names() ordering
+	$order = array_flip( dd_default_breed_names() );
+	usort( $terms, function( $a, $b ) use ( $order ) {
+		$ia = $order[ $a->name ] ?? 999;
+		$ib = $order[ $b->name ] ?? 999;
+		return $ia - $ib;
+	} );
 
 	foreach ( $terms as $parent ) {
 		$label = $parent->name;
 		if ( $include_counts ) {
 			$label .= ' (' . $parent->count . ')';
 		}
-		$options[$parent->name] = $label;
 
-		$children = get_terms( array(
+		// Fetch children for ANY parent that has sub-terms
+		$children = get_terms( [
 			'taxonomy'   => 'dd_breed',
 			'hide_empty' => false,
 			'parent'     => $parent->term_id,
-		) );
+			'orderby'    => 'name',
+			'order'      => 'ASC',
+		] );
+
 		if ( ! is_wp_error( $children ) && ! empty( $children ) ) {
+			// Build children rows
+			$child_entries = [];
 			foreach ( $children as $child ) {
-				$child_label = '— ' . $child->name;
+				$child_label = $child->name;
 				if ( $include_counts ) {
 					$child_label .= ' (' . $child->count . ')';
 				}
-				$options[$child->name] = $child_label;
+				// display_label shows full context: "ParentName — ChildName"
+				$child_display = $parent->name . ' — ' . $child->name;
+				if ( $include_counts ) {
+					$child_display .= ' (' . $child->count . ')';
+				}
+				$child_entries[] = [
+					'value'         => $child->name,
+					'label'         => $child_label,
+					'display_label' => $child_display,
+				];
 			}
+			$entries[] = [
+				'value'    => $parent->name,
+				'label'    => $label,
+				'children' => $child_entries,
+			];
+		} else {
+			$entries[] = [ 'value' => $parent->name, 'label' => $label ];
 		}
 	}
 
-	return $options;
+	return $entries;
+}
+
+/**
+ * Render <option>/<optgroup> HTML from dd_get_breed_options().
+ *
+ * Usage: dd_render_breed_options( $selected_value, $include_counts, $placeholder_text )
+ *
+ * @param string $selected       Currently selected breed value.
+ * @param bool   $include_counts Whether to append dog counts.
+ * @param string $placeholder    Text for the blank "pick one" option.
+ */
+function dd_render_breed_options( $selected = '', $include_counts = false, $placeholder = '' ) {
+	if ( $placeholder === '' ) {
+		$placeholder = $include_counts ? __( 'All Breeds', 'petslist' ) : __( 'Select Breed', 'petslist' );
+	}
+
+	// Blank / placeholder option
+	printf(
+		'<option value=""%s>%s</option>',
+		selected( $selected, '', false ),
+		esc_html( $placeholder )
+	);
+
+	$entries = dd_get_breed_options( $include_counts );
+
+	foreach ( $entries as $entry ) {
+		if ( ! empty( $entry['children'] ) ) {
+			// Parent with sub-breeds → render as <optgroup>
+			printf( '<optgroup label="%s">', esc_attr( $entry['label'] ) );
+
+			// First option inside the group represents the parent itself
+			printf(
+				'<option value="%s"%s>%s</option>',
+				esc_attr( $entry['value'] ),
+				selected( $selected, $entry['value'], false ),
+				esc_html( __( 'All', 'petslist' ) . ' ' . $entry['label'] )
+			);
+
+			foreach ( $entry['children'] as $child ) {
+				// Use display_label so the selected text reads "ParentBreed — SubBreed"
+				$display = $child['display_label'] ?? $child['label'];
+				printf(
+					'<option value="%s"%s>%s</option>',
+					esc_attr( $child['value'] ),
+					selected( $selected, $child['value'], false ),
+					esc_html( $display )
+				);
+			}
+
+			echo '</optgroup>';
+		} else {
+			printf(
+				'<option value="%s"%s>%s</option>',
+				esc_attr( $entry['value'] ),
+				selected( $selected, $entry['value'], false ),
+				esc_html( $entry['label'] )
+			);
+		}
+	}
 }
 
 /**

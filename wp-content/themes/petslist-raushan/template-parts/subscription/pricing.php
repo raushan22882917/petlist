@@ -11,6 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 $plans      = Subscription::get_plans();
 $active_sub = Subscription::get_user_subscription();
 $active_plan_slug = $active_sub ? $active_sub->plan_slug : '';
+$limit_reached    = Subscription::has_reached_sales_limit();
 ?>
 <div class="dd-pricing-wrap">
 
@@ -36,15 +37,26 @@ $active_plan_slug = $active_sub ? $active_sub->plan_slug : '';
     </div>
     <?php endif; ?>
 
+    <!-- Sales cap warning banner -->
+    <?php if ( $limit_reached && ! $active_sub ) : ?>
+    <div class="dd-notice dd-notice--warning" style="background-color: #fef3c7; color: #92400e; border: 1px solid #fde68a; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: 1.25rem;">⚠️</span>
+        <div>
+            <strong><?php _e('All monthly packages are currently sold out!', 'petslist'); ?></strong>
+            <p style="margin: 2px 0 0 0; font-size: 0.9rem;"><?php _e('Only 9 active ad packages can be sold. Please check back later when an advertising space becomes available.', 'petslist'); ?></p>
+        </div>
+    </div>
+    <?php endif; ?>
+
     <!-- Plans Grid -->
     <div class="dd-plans-grid dd-plans-grid--<?php echo count($plans); ?>col">
         <?php
-        $popular_slug = 'monthly'; // Mark monthly as popular
+        $popular_slug = 'kennels'; // Mark kennels as popular
         foreach ( $plans as $plan ) :
             $features = json_decode($plan->features, true) ?: [];
             $is_popular  = $plan->slug === $popular_slug;
             $is_active   = $plan->slug === $active_plan_slug;
-            $period = $plan->duration <= 31 ? __('/month', 'petslist') : ($plan->duration <= 366 ? __('/year', 'petslist') : __(' once', 'petslist'));
+            $period      = __('/month', 'petslist');
         ?>
         <div class="dd-plan-card <?php echo $is_popular ? 'dd-plan-card--popular' : ''; ?> <?php echo $is_active ? 'dd-plan-card--active' : ''; ?>">
             <?php if ( $is_popular ) : ?>
@@ -56,7 +68,7 @@ $active_plan_slug = $active_sub ? $active_sub->plan_slug : '';
 
             <div class="dd-plan-card__header">
                 <div class="dd-plan-card__icon">
-                    <?php echo $plan->slug === 'monthly' ? '📅' : ($plan->slug === 'yearly' ? '⭐' : '♾️'); ?>
+                    <?php echo $plan->slug === 'studs' ? '📅' : ($plan->slug === 'kennels' ? '⭐' : '♾️'); ?>
                 </div>
                 <h2 class="dd-plan-card__name"><?php echo esc_html($plan->name); ?></h2>
                 <div class="dd-plan-card__price">
@@ -64,9 +76,6 @@ $active_plan_slug = $active_sub ? $active_sub->plan_slug : '';
                     <span class="dd-plan-card__amount"><?php echo number_format($plan->price, 2); ?></span>
                     <span class="dd-plan-card__period"><?php echo $period; ?></span>
                 </div>
-                <?php if ( $plan->slug === 'yearly' ) : ?>
-                <div class="dd-plan-card__saving"><?php _e('Save 33% vs Monthly', 'petslist'); ?></div>
-                <?php endif; ?>
             </div>
 
             <ul class="dd-plan-card__features">
@@ -78,6 +87,8 @@ $active_plan_slug = $active_sub ? $active_sub->plan_slug : '';
             <div class="dd-plan-card__footer">
                 <?php if ( $is_active ) : ?>
                 <button class="dd-btn dd-btn--ghost dd-btn--full" disabled><?php _e('Current Plan', 'petslist'); ?></button>
+                <?php elseif ( $limit_reached ) : ?>
+                <button class="dd-btn dd-btn--ghost dd-btn--full" style="background-color: #e2e8f0; color: #94a3b8; border-color: #cbd5e1;" disabled><?php _e('Sold Out', 'petslist'); ?></button>
                 <?php elseif ( is_user_logged_in() ) : ?>
                 <a href="<?php echo esc_url(dd_checkout_url($plan->slug)); ?>" class="dd-btn <?php echo $is_popular ? 'dd-btn--primary' : 'dd-btn--outline'; ?> dd-btn--full dd-choose-plan" data-plan="<?php echo esc_attr($plan->slug); ?>">
                     <?php _e('Choose Plan', 'petslist'); ?> <i class="icon-pl-right-arrow"></i>

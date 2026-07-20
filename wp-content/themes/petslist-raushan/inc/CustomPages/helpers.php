@@ -350,7 +350,7 @@ function petslist_render_dog_breeds($limit = 16)
 		: add_query_arg('redirect_to', urlencode(dd_dashboard_url('add-dog')), dd_login_url());
 	?>
 	<li class="category-item dda-post-ad-item"
-		style="background: linear-gradient(135deg, #02c5bd 0%, #02a39d 100%); border-radius: 12px; margin-bottom: 16px; padding: 12px 18px; box-shadow: 0 4px 12px rgba(2, 197, 189, 0.2); transition: all 0.2s ease;">
+		style="background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%); border-radius: 12px; margin-bottom: 16px; padding: 12px 18px; box-shadow: 0 4px 12px rgba(234, 179, 8, 0.2); transition: all 0.2s ease;">
 		<a href="<?php echo esc_url($add_dog_url); ?>"
 			style="display: flex; align-items: center; text-decoration: none; width: 100%;">
 			<div class="icon"
@@ -359,7 +359,7 @@ function petslist_render_dog_breeds($limit = 16)
 			</div>
 			<div class="content" style="padding: 0;">
 				<span class="category-name"
-					style="color: #ffffff !important; font-weight: 700; font-size: 15px; letter-spacing: 0.2px;"><?php esc_html_e('Purchase and Ad Package', 'petslist'); ?></span>
+					style="color: #ffffff !important; font-weight: 700; font-size: 15px; letter-spacing: 0.2px;"><?php esc_html_e('Purchase an Ad Package', 'petslist'); ?></span>
 			</div>
 		</a>
 	</li>

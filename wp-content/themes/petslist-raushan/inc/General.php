@@ -19,6 +19,7 @@ class General {
 		add_action( 'petslist_breadcrumb', [ $this, 'breadcrumb' ] );
 		add_filter( 'body_class', [ $this, 'body_classes' ] );
 		add_action( 'wp_head', [ $this, 'pingback' ] );
+		add_action( 'wp_head', [ $this, 'favicon_tags' ] );
 		add_filter( 'upload_mimes',	array( $this, 'petslist_mime_types' ));
 		add_action( 'wp_footer', [ $this, 'scroll_to_top_html' ], 1 );
 		add_filter( 'get_search_form', [ $this, 'search_form' ] );
@@ -220,6 +221,24 @@ class General {
 		if ( is_singular() && pings_open() ) {
 			printf( '<link rel="pingback" href="%s">', esc_url( get_bloginfo( 'pingback_url' ) ) );
 		}
+	}
+
+	/**
+	 * Output favicon <link> tags in <head>.
+	 * Only runs when WordPress hasn't set a site icon via the Customizer.
+	 */
+	public function favicon_tags() {
+		// Skip if WP already handles it via Customizer > Site Identity > Site Icon
+		if ( has_site_icon() ) {
+			return;
+		}
+		$img = get_template_directory_uri() . '/assets/img';
+		?>
+<link rel="icon" type="image/x-icon" href="<?php echo esc_url( home_url( '/favicon.ico' ) ); ?>">
+<link rel="icon" type="image/png" sizes="32x32" href="<?php echo esc_url( $img . '/favicon.png' ); ?>">
+<link rel="apple-touch-icon" sizes="180x180" href="<?php echo esc_url( home_url( '/apple-touch-icon.png' ) ); ?>">
+<link rel="icon" type="image/png" sizes="192x192" href="<?php echo esc_url( $img . '/favicon-192.png' ); ?>">
+		<?php
 	}
 
 	public function wp_body_open() {

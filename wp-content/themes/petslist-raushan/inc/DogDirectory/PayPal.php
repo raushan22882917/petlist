@@ -40,6 +40,10 @@ class PayPal {
             wp_send_json_error(['message' => __('Not logged in.', 'petslist')]);
         }
 
+        if ( Subscription::has_reached_sales_limit() ) {
+            wp_send_json_error(['message' => __('All monthly packages are currently sold out. Please contact support.', 'petslist')]);
+        }
+
         $order_id  = sanitize_text_field( $_POST['order_id'] ?? '' );
         $plan_slug = sanitize_text_field( $_POST['plan'] ?? '' );
         $user_id   = get_current_user_id();

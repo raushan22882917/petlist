@@ -25,12 +25,21 @@ $hero_bg = petslist_img_url('hero_bg');
 		</div>
 	</section>
 
+	<!-- ============ ALL BREEDS WELCOME ============ -->
+	<div class="dd-welcome-bar" style="background-color: #070c3e; padding: 15px 0; text-align: center;">
+		<div class="container">
+			<h3 style="color: #ffffff; margin: 0; font-weight: 700; letter-spacing: 1px; font-family: 'Baloo Bhaijaan 2', sans-serif; text-transform: uppercase;">
+				<?php esc_html_e('ALL BREEDS WELCOME!', 'petslist'); ?>
+			</h3>
+		</div>
+	</div>
+
 	<!-- ============ TWO BANNER CARDS ============ -->
 	<section class="petslist-home-banners">
 		<div class="container">
 			<div class="petslist-home-banners__grid">
 				<div class="petslist-home-search-standalone">
-					<h2 class="heading-title"><?php esc_html_e('Search stud Directory', 'petslist'); ?></h2>
+					<h2 class="heading-title"><?php esc_html_e('Search Studs Directory', 'petslist'); ?></h2>
 					<?php
 					if (class_exists('Rtcl') && class_exists('\RadiusTheme\Petslist\Helper')):
 						?>
@@ -74,7 +83,7 @@ $hero_bg = petslist_img_url('hero_bg');
 							$all_dogs = get_posts( array(
 								'post_type'      => 'dd_dog',
 								'post_status'    => 'publish',
-								'posts_per_page' => 12,
+								'posts_per_page' => 9,
 							) );
 							$real_ads = array_filter( $all_dogs, function( $post ) {
 								$meta = get_post_meta( $post->ID, '_dd_dog_meta', true ) ?: [];
@@ -115,7 +124,7 @@ $hero_bg = petslist_img_url('hero_bg');
 										? content_url( 'uploads/2026/06/download-1.jpeg' )
 										: petslist_theme_img_url( 'dog-placeholder.svg' ) );
 
-								for ($i = 1; $i <= 12; $i++) : ?>
+								for ($i = 1; $i <= 9; $i++) : ?>
 									<div class="petslist-flyer-card">
 										<div class="petslist-flyer-card__image">
 											<img src="<?php echo esc_url($sample_flyer); ?>" alt="<?php echo esc_attr(sprintf(__('Flyer Ad %d', 'petslist'), $i)); ?>" loading="lazy">

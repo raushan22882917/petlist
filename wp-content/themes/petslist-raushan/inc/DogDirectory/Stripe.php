@@ -45,6 +45,10 @@ class Stripe {
             wp_send_json_error(['message' => __('Please log in.', 'petslist')]);
         }
 
+        if ( Subscription::has_reached_sales_limit() ) {
+            wp_send_json_error(['message' => __('All monthly packages are currently sold out. Please contact support.', 'petslist')]);
+        }
+
         $plan_slug = sanitize_text_field( $_POST['plan'] ?? '' );
         $plan      = Subscription::get_plan( $plan_slug );
 

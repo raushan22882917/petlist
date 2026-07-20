@@ -115,6 +115,13 @@ class Subscription {
             );
             update_option( 'dd_plans_updated_v2', 1 );
         }
+
+        // Migrate to Studs ($10), Kennels ($20), Businesses/Companies ($50) plans
+        if ( ! get_option( 'dd_plans_updated_v3' ) ) {
+            $wpdb->query( "TRUNCATE TABLE $plan_table" );
+            $this->seed_default_plans();
+            update_option( 'dd_plans_updated_v3', 1 );
+        }
     }
 
     private function seed_default_plans() {
@@ -122,46 +129,43 @@ class Subscription {
         $table = $wpdb->prefix . 'dd_plans';
         $plans = [
             [
-                'name'      => 'Monthly',
-                'slug'      => 'monthly',
-                'price'     => 5.99,
+                'name'      => 'Studs',
+                'slug'      => 'studs',
+                'price'     => 10.00,
                 'duration'  => 30,
                 'features'  => json_encode([
-                    'Unlimited dog profiles',
+                    'List your stud dogs',
                     'Full directory access',
                     'Photo uploads (front + side)',
-                    'Advanced search & filters',
+                    'Search & filter access',
+                ]),
+                'is_active' => 1,
+            ],
+            [
+                'name'      => 'Kennels',
+                'slug'      => 'kennels',
+                'price'     => 20.00,
+                'duration'  => 30,
+                'features'  => json_encode([
+                    'Everything in Studs',
+                    'Featured badges',
+                    'Gallery uploads',
                     'Priority listing',
                 ]),
                 'is_active' => 1,
             ],
             [
-                'name'      => 'Yearly',
-                'slug'      => 'yearly',
-                'price'     => 79.99,
-                'duration'  => 365,
+                'name'      => 'Businesses/Companies',
+                'slug'      => 'businesses-companies',
+                'price'     => 50.00,
+                'duration'  => 30,
                 'features'  => json_encode([
-                    'Everything in Monthly',
-                    '2 months FREE',
-                    'Gallery uploads (up to 10 photos)',
-                    'Featured badge on profiles',
-                    'Early access to new features',
+                    'Everything in Kennels',
+                    'Premium homepage placement',
+                    'Unlimited listings',
+                    'Priority admin support',
                 ]),
-                'is_active' => 0,
-            ],
-            [
-                'name'      => 'Lifetime',
-                'slug'      => 'lifetime',
-                'price'     => 199.99,
-                'duration'  => 36500,
-                'features'  => json_encode([
-                    'Everything in Yearly',
-                    'One-time payment forever',
-                    'Unlimited gallery photos',
-                    'Premium support',
-                    'API access',
-                ]),
-                'is_active' => 0,
+                'is_active' => 1,
             ],
         ];
 
@@ -227,10 +231,24 @@ class Subscription {
         return self::user_has_subscription();
     }
 
+    public static function get_active_subscriptions_count() {
+        global $wpdb;
+        $table = $wpdb->prefix . 'dd_subscriptions';
+        return (int) $wpdb->get_var( "SELECT COUNT(*) FROM $table WHERE status = 'active' AND expires_at > NOW()" );
+    }
+
+    public static function has_reached_sales_limit() {
+        return self::get_active_subscriptions_count() >= 9;
+    }
+
     /**
      * Create subscription record
      */
     public static function create_subscription( $user_id, $plan_id, $stripe_sub_id = '' ) {
+        if ( self::has_reached_sales_limit() ) {
+            return false;
+        }
+
         global $wpdb;
         $subs  = $wpdb->prefix . 'dd_subscriptions';
         $plans = $wpdb->prefix . 'dd_plans';

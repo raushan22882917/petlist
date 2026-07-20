@@ -150,7 +150,7 @@ $recent_dogs = new WP_Query([
         <div class="dd-home-plans-grid">
             <?php foreach ( $plans as $plan ) :
                 $features = json_decode($plan->features, true) ?: [];
-                $is_popular = ($plan->slug === 'yearly');
+                $is_popular = ($plan->slug === 'kennels');
             ?>
             <div class="dd-home-plan-card <?php echo $is_popular ? 'dd-home-plan-card--popular' : ''; ?>">
                 <?php if ( $is_popular ) : ?>
@@ -160,7 +160,7 @@ $recent_dogs = new WP_Query([
                 <div class="dd-home-plan-card__price">
                     <span class="currency">$</span>
                     <span class="value"><?php echo number_format($plan->price, 2); ?></span>
-                    <span class="period">/ <?php echo $plan->slug === 'lifetime' ? __('lifetime', 'petslist') : ($plan->slug === 'yearly' ? __('year', 'petslist') : __('month', 'petslist')); ?></span>
+                    <span class="period">/ <?php _e('month', 'petslist'); ?></span>
                 </div>
                 <ul class="dd-home-plan-card__features">
                     <?php foreach ( $features as $feat ) : ?>

@@ -145,12 +145,18 @@ class DogCPT {
             echo '<label for="dd_' . esc_attr($key) . '">' . esc_html($field['label']) . '</label>';
             if ( $field['type'] === 'select' ) {
                 echo '<select id="dd_' . esc_attr($key) . '" name="dd_dog_meta[' . esc_attr($key) . ']">';
-                foreach ( $field['options'] as $val => $label ) {
-                    $opt_val = is_numeric($val) && !is_string($val) ? $label : $val;
-                    $sel = selected( $value, $opt_val, false );
-                    echo '<option value="' . esc_attr($opt_val) . '"' . $sel . '>' . esc_html($label) . '</option>';
+                if ( $key === 'breed' ) {
+                    // Breed uses structured optgroup renderer
+                    dd_render_breed_options( $value );
+                } else {
+                    foreach ( $field['options'] as $val => $label ) {
+                        $opt_val = is_numeric($val) && !is_string($val) ? $label : $val;
+                        $sel = selected( $value, $opt_val, false );
+                        echo '<option value="' . esc_attr($opt_val) . '"' . $sel . '>' . esc_html($label) . '</option>';
+                    }
                 }
                 echo '</select>';
+
             } elseif ( $field['type'] === 'textarea' ) {
                 echo '<textarea id="dd_' . esc_attr($key) . '" name="dd_dog_meta[' . esc_attr($key) . ']" rows="3">' . esc_textarea($value) . '</textarea>';
             } else {

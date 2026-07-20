@@ -402,7 +402,7 @@ function petslist_render_public_directory($atts) {
     <div class="petslist-dashboard-container">
         <!-- Filters Form -->
         <form method="get" action="" class="petslist-glass-card" style="margin-bottom: 30px;">
-            <h3 style="color: #ffffff; margin-bottom: 20px; font-weight: 700; font-family: 'Baloo Bhaijaan 2';"><i class="fas fa-search" style="color: var(--dir-primary); margin-right: 8px;"></i> Search Dog Directory</h3>
+            <h3 style="color: #ffffff; margin-bottom: 20px; font-weight: 700; font-family: 'Baloo Bhaijaan 2';"><i class="fas fa-search" style="color: var(--dir-primary); margin-right: 8px;"></i> Search Studs Directory</h3>
             
             <div class="row">
                 <div class="col-md-3 col-sm-6 col-12 petslist-form-group">
