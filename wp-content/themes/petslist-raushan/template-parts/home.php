@@ -147,8 +147,48 @@ $recent_dogs = new WP_Query([
             <p><?php _e('Unlock premium search tools, health records, contact information, and unlimited pedigree listings.', 'petslist'); ?></p>
         </div>
         
+        <?php
+        $listing_plans = array_filter( $plans, function( $p ) {
+            return $p->slug === 'monthly' || strpos( strtolower( $p->name ), 'listing' ) !== false;
+        } );
+        $ad_plans = array_filter( $plans, function( $p ) {
+            return $p->slug !== 'monthly' && strpos( strtolower( $p->name ), 'listing' ) === false;
+        } );
+        ?>
+
+        <?php if ( ! empty($listing_plans) ) : ?>
+        <div style="text-align: center; margin-bottom: 20px;">
+            <h3 style="font-size: 20px; font-weight: 700; color: #070c3e; margin-bottom: 4px;"><?php _e('Directory Listing Plan', 'petslist'); ?></h3>
+        </div>
+        <div class="dd-home-plans-grid" style="grid-template-columns: 1fr; max-width: 420px; margin: 0 auto 50px;">
+            <?php foreach ( $listing_plans as $plan ) :
+                $features = json_decode($plan->features, true) ?: [];
+            ?>
+            <div class="dd-home-plan-card">
+                <h3 class="dd-home-plan-card__name"><?php echo esc_html($plan->name); ?></h3>
+                <div class="dd-home-plan-card__price">
+                    <span class="currency">$</span>
+                    <span class="value"><?php echo number_format($plan->price, 2); ?></span>
+                    <span class="period">/ <?php _e('month', 'petslist'); ?></span>
+                </div>
+                <ul class="dd-home-plan-card__features">
+                    <?php foreach ( $features as $feat ) : ?>
+                    <li>✔️ <?php echo esc_html($feat); ?></li>
+                    <?php endforeach; ?>
+                </ul>
+                <a href="<?php echo esc_url(dd_checkout_url($plan->slug)); ?>" class="dd-home-plan-card__btn"><?php _e('Get Started', 'petslist'); ?></a>
+            </div>
+            <?php endforeach; ?>
+        </div>
+        <?php endif; ?>
+
+        <?php if ( ! empty($ad_plans) ) : ?>
+        <div style="text-align: center; margin-bottom: 20px;">
+            <h3 style="font-size: 26px; font-weight: 800; color: #070c3e; margin-bottom: 4px;"><?php _e('Ad Packages', 'petslist'); ?></h3>
+            <p style="font-size: 14px; color: #64748b; margin: 0;"><?php _e('Promote your studs, kennels, or business across the Dog Directory.', 'petslist'); ?></p>
+        </div>
         <div class="dd-home-plans-grid">
-            <?php foreach ( $plans as $plan ) :
+            <?php foreach ( $ad_plans as $plan ) :
                 $features = json_decode($plan->features, true) ?: [];
                 $is_popular = ($plan->slug === 'kennels');
             ?>
@@ -167,10 +207,11 @@ $recent_dogs = new WP_Query([
                     <li>✔️ <?php echo esc_html($feat); ?></li>
                     <?php endforeach; ?>
                 </ul>
-                <a href="<?php echo esc_url(dd_checkout_url() . '?plan=' . $plan->id); ?>" class="dd-home-plan-card__btn"><?php _e('Get Started', 'petslist'); ?></a>
+                <a href="<?php echo esc_url(dd_checkout_url($plan->slug)); ?>" class="dd-home-plan-card__btn"><?php _e('Get Started', 'petslist'); ?></a>
             </div>
             <?php endforeach; ?>
         </div>
+        <?php endif; ?>
     </section>
 </div>
 

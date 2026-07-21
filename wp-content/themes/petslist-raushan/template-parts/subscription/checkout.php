@@ -17,7 +17,7 @@ if ( ! is_user_logged_in() ) {
     return;
 }
 
-$plan_slug = sanitize_text_field( $_GET['plan'] ?? 'studs' );
+$plan_slug = sanitize_text_field( $_GET['plan'] ?? 'monthly' );
 $plan      = Subscription::get_plan( $plan_slug );
 
 if ( ! $plan ) {
@@ -48,7 +48,7 @@ $paypal_client_id = dd_paypal_client_id();
             <div class="dd-checkout-plan-box">
                 <div class="dd-checkout-plan-box__header">
                     <span class="dd-checkout-plan-box__icon">
-                        <?php echo $plan->slug === 'studs' ? '📅' : ( $plan->slug === 'kennels' ? '⭐' : '♾️' ); ?>
+                        <?php echo $plan->slug === 'monthly' ? '🐾' : ( $plan->slug === 'studs' ? '🐕' : ( $plan->slug === 'kennels' ? '⭐' : '🏢' ) ); ?>
                     </span>
                     <div>
                         <div class="dd-checkout-plan-box__name"><?php echo esc_html( $plan->name ); ?> <?php _e( 'Plan', 'petslist' ); ?></div>

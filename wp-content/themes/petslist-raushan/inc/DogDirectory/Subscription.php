@@ -122,12 +122,32 @@ class Subscription {
             $this->seed_default_plans();
             update_option( 'dd_plans_updated_v3', 1 );
         }
+
+        // Restore $5.99 Standard Listing plan alongside Ad Packages (v4)
+        if ( ! get_option( 'dd_plans_updated_v4' ) ) {
+            $wpdb->query( "TRUNCATE TABLE $plan_table" );
+            $this->seed_default_plans();
+            update_option( 'dd_plans_updated_v4', 1 );
+        }
     }
 
     private function seed_default_plans() {
         global $wpdb;
         $table = $wpdb->prefix . 'dd_plans';
         $plans = [
+            [
+                'name'      => 'Standard Listing',
+                'slug'      => 'monthly',
+                'price'     => 5.99,
+                'duration'  => 30,
+                'features'  => json_encode([
+                    'List unlimited dogs',
+                    'Full directory access',
+                    'Pedigree & health clearance access',
+                    'Direct owner contact',
+                ]),
+                'is_active' => 1,
+            ],
             [
                 'name'      => 'Studs',
                 'slug'      => 'studs',

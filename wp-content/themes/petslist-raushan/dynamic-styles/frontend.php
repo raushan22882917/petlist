@@ -37,7 +37,7 @@ $button_color_2   = Helper::get_button_color2();
 ?>
 :root {
 	--petslist-white-color: #ffffff;
-	--petslist-primary-color: <?php echo esc_html( $primary_color ? $primary_color : '#02c5bd' ); ?>;
+	--petslist-primary-color: <?php echo esc_html( $primary_color ? $primary_color : '#bd8c42' ); ?>;
 	--petslist-secondary-color: #bd8c42;
 	--petslist-body-color: <?php echo esc_html( $body_color ? $body_color : '#515167' ); ?>;
 	--petslist-heading-color: <?php echo esc_html( $heading_color ? $heading_color : '#070C3E' ); ?>;

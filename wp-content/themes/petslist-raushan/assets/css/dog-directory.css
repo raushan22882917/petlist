@@ -5,9 +5,9 @@
 
 /* ── DESIGN TOKENS ────────────────────────────────────────── */
 :root {
-  --dd-primary:      #02c5bd;
-  --dd-primary-dk:   #01a89f;
-  --dd-primary-lt:   #e0faf9;
+  --dd-primary:      #bd8c42;
+  --dd-primary-dk:   #a37430;
+  --dd-primary-lt:   #faf5eb;
   --dd-secondary:    #bd8c42;
   --dd-accent:       #f97316;
   --dd-dark:         #070C3E;

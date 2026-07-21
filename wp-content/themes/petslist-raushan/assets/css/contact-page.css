@@ -374,8 +374,8 @@
   position: relative;
 }
 .checkbox-label input:checked + .checkbox-box {
-  background: #02c5bd;
-  border-color: #02c5bd;
+  background: #bd8c42;
+  border-color: #bd8c42;
 }
 .checkbox-label input:checked + .checkbox-box::after {
   content: '';
@@ -386,7 +386,7 @@
   border-top: none; border-left: none;
   transform: rotate(45deg);
 }
-.checkbox-label a { color: #02c5bd; font-weight: 600; text-decoration: none; }
+.checkbox-label a { color: #bd8c42; font-weight: 600; text-decoration: none; }
 .checkbox-label a:hover { text-decoration: underline; }
 
 /* Submit button */
@@ -396,10 +396,10 @@
   align-items: center;
   justify-content: center;
   gap: 0;
-  background: linear-gradient(135deg, #02c5bd 0%, #6c63ff 100%);
+  background: linear-gradient(122deg, #bd8c42 0%, #a37430 100%);
   color: #fff;
   border: none;
-  border-radius: 10px;
+  border-radius: 100px;
   padding: 14px 36px;
   font-size: 1rem;
   font-weight: 700;
@@ -407,13 +407,13 @@
   letter-spacing: .02em;
   overflow: hidden;
   transition: transform .25s ease, box-shadow .25s ease, opacity .25s ease;
-  box-shadow: 0 4px 20px rgba(2,197,189,.35);
+  box-shadow: 0 4px 20px rgba(189,140,66,.35);
   align-self: flex-start;
   min-width: 180px;
 }
 .petslist-contact-submit:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 28px rgba(2,197,189,.45);
+  box-shadow: 0 8px 28px rgba(189,140,66,.45);
 }
 .petslist-contact-submit:active { transform: translateY(0); }
 
@@ -444,9 +444,9 @@
   display: none;
   align-items: center;
   gap: 10px;
-  background: linear-gradient(135deg, rgba(2,197,189,.1), rgba(2,197,189,.05));
-  border: 1px solid rgba(2,197,189,.3);
-  color: #01a89f;
+  background: linear-gradient(135deg, rgba(189,140,66,.1), rgba(189,140,66,.05));
+  border: 1px solid rgba(189,140,66,.3);
+  color: #a37430;
   font-weight: 600;
   font-size: .95rem;
   padding: 16px 20px;
@@ -476,27 +476,27 @@
 .contact-page-content input:focus,
 .contact-page-content textarea:focus,
 .contact-page-content select:focus {
-  border-color: #02c5bd;
-  box-shadow: 0 0 0 3px rgba(2,197,189,.14);
+  border-color: #bd8c42;
+  box-shadow: 0 0 0 3px rgba(189,140,66,.14);
   background: #fff;
 }
 .contact-page-content input[type="submit"],
 .contact-page-content .wpcf7-submit {
-  background: linear-gradient(135deg, #02c5bd, #6c63ff);
+  background: linear-gradient(122deg, #bd8c42 0%, #a37430 100%);
   color: #fff;
   border: none;
   padding: 14px 36px;
-  border-radius: 10px;
+  border-radius: 100px;
   font-weight: 700;
   font-size: 1rem;
   cursor: pointer;
-  box-shadow: 0 4px 20px rgba(2,197,189,.35);
+  box-shadow: 0 4px 20px rgba(189,140,66,.35);
   transition: transform .25s ease, box-shadow .25s ease;
 }
 .contact-page-content input[type="submit"]:hover,
 .contact-page-content .wpcf7-submit:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 28px rgba(2,197,189,.45);
+  box-shadow: 0 8px 28px rgba(189,140,66,.45);
 }
 
 /* =============================================================
@@ -554,8 +554,8 @@
   background: #fafbfd;
 }
 .social-link-item:hover {
-  background: var(--social-color, #02c5bd);
-  border-color: var(--social-color, #02c5bd);
+  background: var(--social-color, #bd8c42);
+  border-color: var(--social-color, #bd8c42);
   color: #fff;
   transform: translateY(-2px);
 }
@@ -575,8 +575,8 @@
 }
 .faq-item.faq-open,
 .faq-item:hover {
-  border-color: rgba(2,197,189,.4);
-  box-shadow: 0 2px 12px rgba(2,197,189,.1);
+  border-color: rgba(189,140,66,.4);
+  box-shadow: 0 2px 12px rgba(189,140,66,.1);
 }
 
 .faq-question {
@@ -596,8 +596,8 @@
   font-family: inherit;
   transition: color .25s ease, background .25s ease;
 }
-.faq-item.faq-open .faq-question { color: #02c5bd; background: rgba(2,197,189,.05); }
-.faq-question:hover { color: #02c5bd; }
+.faq-item.faq-open .faq-question { color: #bd8c42; background: rgba(189,140,66,.05); }
+.faq-question:hover { color: #bd8c42; }
 
 .faq-chevron {
   flex-shrink: 0;

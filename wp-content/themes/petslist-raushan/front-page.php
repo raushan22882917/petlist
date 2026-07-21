@@ -26,9 +26,9 @@ $hero_bg = petslist_img_url('hero_bg');
 	</section>
 
 	<!-- ============ ALL BREEDS WELCOME ============ -->
-	<div class="dd-welcome-bar" style="background-color: #070c3e; padding: 15px 0; text-align: center;">
+	<div class="dd-welcome-bar" style="background-color: #D3D3D3; padding: 15px 0; text-align: center;">
 		<div class="container">
-			<h3 style="color: #ffffff; margin: 0; font-weight: 700; letter-spacing: 1px; font-family: 'Baloo Bhaijaan 2', sans-serif; text-transform: uppercase;">
+			<h3 style="color: #070c3e; margin: 0; font-weight: 700; letter-spacing: 1px; font-family: 'Baloo Bhaijaan 2', sans-serif; text-transform: uppercase;">
 				<?php esc_html_e('ALL BREEDS WELCOME!', 'petslist'); ?>
 			</h3>
 		</div>

@@ -321,12 +321,12 @@ class Default_Data {
             'typo_h6_height'=> '1.2',
 
 			// Color
-			'primary_color'   				 => '#02c5bd',
-			'secondary_color' 				 => '#FF3D41',
+			'primary_color'   				 => '#bd8c42',
+			'secondary_color' 				 => '#bd8c42',
 			'body_color'      				 => '#515167',
 			'heading_color'   				 => '#070C3E',
-			'button_color_1'   				 => '#FF282C',
-			'button_color_2'   				 => '#FF4E51',
+			'button_color_1'   				 => '#bd8c42',
+			'button_color_2'   				 => '#bd8c42',
 		];
 
 		return apply_filters( 'rttheme_customizer_defaults', $customizer_defaults );

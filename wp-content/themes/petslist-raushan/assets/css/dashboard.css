@@ -10,8 +10,8 @@
   --dds-sidebar-bg:    #ffffff;
   --dds-sidebar-text:  #515167;
   --dds-sidebar-muted: #8b949e;
-  --dds-sidebar-hover: rgba(2, 197, 189, 0.05);
-  --dds-sidebar-active:#02c5bd;
+  --dds-sidebar-hover: rgba(189, 140, 66, 0.08);
+  --dds-sidebar-active:#bd8c42;
   --dds-sidebar-radius:6px;
   --dds-sidebar-border:#E1E9E9;
   --dds-topbar-h:      56px;
@@ -21,8 +21,8 @@
   --dds-text:          #515167;
   --dds-text-muted:    #a3a3c2;
   --dds-heading:       #070C3E;
-  --dds-primary:       #02c5bd;
-  --dds-primary-dk:    #01a89f;
+  --dds-primary:       #bd8c42;
+  --dds-primary-dk:    #a37430;
   --dds-success:       #22c55e;
   --dds-warning:       #f59e0b;
   --dds-danger:        #FF3D41;

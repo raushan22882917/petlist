@@ -147,6 +147,7 @@ function dd_subscription_badge( $user_id = 0 ) {
  */
 function dd_default_breed_names() {
 	return array(
+		'American Bully',
 		'French Bulldog',
 		'English Bulldog',
 		'American Pitbull Terrier',
@@ -163,7 +164,6 @@ function dd_default_breed_names() {
 		'Cane Corso',
 		'Labrador Retriever',
 		'Fluffy Frenchy',
-		'American Bully',
 	);
 }
 

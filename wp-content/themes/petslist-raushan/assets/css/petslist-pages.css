@@ -555,7 +555,7 @@
 	transition: color 0.2s ease;
 }
 .petslist-flyer-card:hover .petslist-flyer-card__content h3 {
-	color: #02c5bd;
+	color: #bd8c42;
 }
 .petslist-flyer-card__content p {
 	font-size: 0.95rem;
@@ -579,3 +579,25 @@
 		font-size: 1.8rem;
 	}
 }
+
+/* Header Navbar — Gold Hover & Active Underline Indicator */
+.main-header.rt-white-color-bg .main-navigation-area .main-navigation nav > ul > li > a:after,
+.main-header .main-navigation-area .main-navigation nav > ul > li > a:after {
+	background-color: #bd8c42 !important;
+}
+.main-header.rt-white-color-bg .main-navigation-area .main-navigation ul.menu > li.menu-item-has-children:hover > a,
+.main-header .main-navigation-area .main-navigation ul.menu > li > a:hover,
+.main-header .main-navigation-area .main-navigation ul.menu > li.current-menu-item > a,
+.main-header .main-navigation-area .main-navigation ul.menu > li.current_page_item > a,
+.main-header .main-navigation-area .main-navigation ul.menu > li.active > a {
+	color: #bd8c42 !important;
+}
+.main-header .main-navigation-area .main-navigation ul.menu > li.current-menu-item > a:after,
+.main-header .main-navigation-area .main-navigation ul.menu > li.current_page_item > a:after,
+.main-header .main-navigation-area .main-navigation ul.menu > li.active > a:after {
+	opacity: 1 !important;
+	width: 100% !important;
+	visibility: visible !important;
+	background-color: #bd8c42 !important;
+}
+
