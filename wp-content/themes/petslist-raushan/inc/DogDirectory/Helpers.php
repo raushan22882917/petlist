@@ -444,6 +444,69 @@ function dd_get_breeds( $limit = 0 ) {
 	return $ordered;
 }
 
+function dd_get_breed_dog_count( $term_id ) {
+	$term = get_term( $term_id, 'dd_breed' );
+	if ( ! $term || is_wp_error( $term ) ) {
+		return 0;
+	}
+
+	$term_ids = array( (int) $term->term_id );
+	$children = get_terms( array(
+		'taxonomy'   => 'dd_breed',
+		'hide_empty' => false,
+		'parent'     => $term->term_id,
+		'fields'     => 'ids',
+	) );
+	if ( ! is_wp_error( $children ) && ! empty( $children ) ) {
+		$term_ids = array_merge( $term_ids, array_map( 'intval', $children ) );
+	}
+
+	$breed_names = array();
+	foreach ( $term_ids as $tid ) {
+		$t = get_term( $tid, 'dd_breed' );
+		if ( $t && ! is_wp_error( $t ) ) {
+			$breed_names[] = $t->name;
+		}
+	}
+
+	$query = new WP_Query( array(
+		'post_type'      => 'dd_dog',
+		'post_status'    => 'publish',
+		'posts_per_page' => -1,
+		'fields'         => 'ids',
+		'tax_query'      => array(
+			array(
+				'taxonomy' => 'dd_breed',
+				'field'    => 'term_id',
+				'terms'    => $term_ids,
+				'operator' => 'IN',
+			),
+		),
+	) );
+	$count = $query->found_posts;
+
+	if ( ! empty( $breed_names ) ) {
+		$all_dogs = get_posts( array(
+			'post_type'      => 'dd_dog',
+			'post_status'    => 'publish',
+			'posts_per_page' => -1,
+			'fields'         => 'ids',
+		) );
+		foreach ( $all_dogs as $dog_id ) {
+			if ( in_array( $dog_id, $query->posts, true ) ) {
+				continue;
+			}
+			$meta = get_post_meta( $dog_id, '_dd_dog_meta', true ) ?: array();
+			$b_name = $meta['breed'] ?? '';
+			if ( ! empty( $b_name ) && in_array( $b_name, $breed_names, true ) ) {
+				$count++;
+			}
+		}
+	}
+
+	return $count;
+}
+
 function dd_get_locations() {
     return get_terms(['taxonomy' => 'dd_location', 'orderby' => 'name', 'hide_empty' => false]);
 }

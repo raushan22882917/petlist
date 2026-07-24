@@ -1628,3 +1628,29 @@
   margin-right: 8px !important;
 }
 
+/* Authentication Page Buttons (Sign In / Register) */
+#dd-login-submit,
+#dd-register-submit,
+.dd-auth-split-form .btn-primary,
+.dd-auth-split-form .rtcl-btn {
+  background: #bd8c42 !important;
+  border-color: #bd8c42 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(189, 140, 66, 0.25) !important;
+  transition: all 0.25s ease !important;
+}
+#dd-login-submit:hover,
+#dd-register-submit:hover,
+.dd-auth-split-form .btn-primary:hover,
+.dd-auth-split-form .rtcl-btn:hover {
+  background: #a37430 !important;
+  border-color: #a37430 !important;
+  box-shadow: 0 6px 16px rgba(163, 116, 48, 0.35) !important;
+}
+.dd-auth-split-form a {
+  color: #bd8c42 !important;
+}
+.dd-auth-split-form a:hover {
+  color: #a37430 !important;
+}
+

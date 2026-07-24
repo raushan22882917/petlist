@@ -350,7 +350,7 @@ function petslist_render_dog_breeds($limit = 16)
 		: add_query_arg('redirect_to', urlencode(dd_dashboard_url('add-dog')), dd_login_url());
 	?>
 	<li class="category-item dda-post-ad-item"
-		style="background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%); border-radius: 12px; margin-bottom: 16px; padding: 12px 18px; box-shadow: 0 4px 12px rgba(234, 179, 8, 0.2); transition: all 0.2s ease;">
+		style="background: #bd8c42; border-radius: 12px; margin-bottom: 16px; padding: 12px 18px; box-shadow: 0 4px 12px rgba(189, 140, 66, 0.25); transition: all 0.2s ease;">
 		<a href="<?php echo esc_url($add_dog_url); ?>"
 			style="display: flex; align-items: center; text-decoration: none; width: 100%;">
 			<div class="icon"
@@ -370,42 +370,97 @@ function petslist_render_dog_breeds($limit = 16)
 			$color = $default_clr[$i % count($default_clr)];
 		}
 		$link = add_query_arg('breed', $term->name, $directory);
+
+		// Fetch sub-categories
+		$children = get_terms(array(
+			'taxonomy'   => 'dd_breed',
+			'hide_empty' => false,
+			'parent'     => $term->term_id,
+		));
+		$has_children = (!is_wp_error($children) && !empty($children));
+		$current_breed = sanitize_text_field($_GET['breed'] ?? '');
+
+		// Determine if expanded by default (if active breed matches parent or child)
+		$is_expanded = false;
+		if ($has_children && !empty($current_breed)) {
+			if (strcasecmp($current_breed, $term->name) === 0) {
+				$is_expanded = true;
+			} else {
+				foreach ($children as $c) {
+					if (strcasecmp($current_breed, $c->name) === 0) {
+						$is_expanded = true;
+						break;
+					}
+				}
+			}
+		}
+		$real_count = function_exists('dd_get_breed_dog_count') ? dd_get_breed_dog_count($term->term_id) : $term->count;
 		?>
-		<li class="category-item" style="flex-wrap: wrap;">
+		<li class="category-item <?php echo $has_children ? 'has-subcategories' : ''; ?>" style="flex-wrap: wrap;">
 			<div style="display: flex; align-items: center; width: 100%;">
 				<div class="icon">
 					<img src="<?php echo esc_url(content_url('uploads/paw.png')); ?>" alt=""
 						style="max-width:38px;max-height:38px;object-fit:contain;">
 				</div>
-				<div class="content">
+				<div class="content" style="flex: 1;">
 					<a href="<?php echo esc_url($link); ?>" class="category-name"><?php echo esc_html($term->name); ?></a>
-					<p class="item-number">(<?php echo esc_html(number_format_i18n($term->count)); ?>)</p>
+					<p class="item-number">(<?php echo esc_html(number_format_i18n($real_count)); ?>)</p>
 				</div>
+				<?php if ($has_children) : ?>
+					<button type="button" class="dd-sub-toggle-btn" aria-label="Toggle subcategories"
+						style="background: none; border: none; padding: 6px 10px; cursor: pointer; color: #515167; font-size: 13px; outline: none;">
+						<i class="fa-solid fa-chevron-down dd-toggle-icon"
+							style="transition: transform 0.25s ease; <?php echo $is_expanded ? 'transform: rotate(180deg);' : ''; ?>"></i>
+					</button>
+				<?php endif; ?>
 			</div>
 			<?php
-			if ($term->name === 'American Bully') {
-				$children = get_terms(array(
-					'taxonomy'   => 'dd_breed',
-					'hide_empty' => false,
-					'parent'     => $term->term_id,
-				));
-				if (!is_wp_error($children) && !empty($children)) {
-					echo '<ul class="sub-category-list" style="margin-top: 8px; padding-left: 55px; list-style: none; width: 100%;">';
-					foreach ($children as $child) {
-						$child_link = add_query_arg('breed', $child->name, $directory);
-						echo '<li class="sub-category-item" style="display: flex; align-items: center; padding: 4px 0; margin-bottom: 2px;">';
-						echo '<a href="' . esc_url($child_link) . '" style="font-size: 0.95rem; color: #333333; text-decoration: none; font-weight: 500;">' . esc_html($child->name) . '</a>';
-						echo '<span style="font-size: 0.85rem; color: #666666; margin-left: 8px;">(' . esc_html(number_format_i18n($child->count)) . ')</span>';
-						echo '</li>';
-					}
-					echo '</ul>';
+			if ($has_children) {
+				$display_style = $is_expanded ? 'display: block;' : 'display: none;';
+				echo '<ul class="sub-category-list" style="' . $display_style . ' margin-top: 8px; padding-left: 55px; list-style: none; width: 100%;">';
+				foreach ($children as $child) {
+					$child_link = add_query_arg('breed', $child->name, $directory);
+					$is_active_child = (strcasecmp($current_breed, $child->name) === 0);
+					$child_style = $is_active_child ? 'font-weight: 700; color: #bd8c42;' : 'font-weight: 500; color: #333333;';
+					$child_real_count = function_exists('dd_get_breed_dog_count') ? dd_get_breed_dog_count($child->term_id) : $child->count;
+					echo '<li class="sub-category-item" style="display: flex; align-items: center; padding: 4px 0; margin-bottom: 2px;">';
+					echo '<a href="' . esc_url($child_link) . '" style="font-size: 0.95rem; text-decoration: none; ' . $child_style . '">' . esc_html($child->name) . '</a>';
+					echo '<span style="font-size: 0.85rem; color: #666666; margin-left: 8px;">(' . esc_html(number_format_i18n($child_real_count)) . ')</span>';
+					echo '</li>';
 				}
+				echo '</ul>';
 			}
 			?>
 		</li>
 		<?php
 	}
 	echo '</ul>';
+	?>
+	<script>
+	document.addEventListener('DOMContentLoaded', function() {
+		document.querySelectorAll('.category-item.has-subcategories').forEach(function(item) {
+			var toggleBtn = item.querySelector('.dd-sub-toggle-btn');
+			var subList = item.querySelector('.sub-category-list');
+			var icon = item.querySelector('.dd-toggle-icon');
+
+			if (toggleBtn && subList) {
+				toggleBtn.addEventListener('click', function(e) {
+					e.preventDefault();
+					e.stopPropagation();
+					var isHidden = (subList.style.display === 'none' || subList.style.display === '');
+					if (isHidden) {
+						subList.style.display = 'block';
+						if (icon) icon.style.transform = 'rotate(180deg)';
+					} else {
+						subList.style.display = 'none';
+						if (icon) icon.style.transform = 'rotate(0deg)';
+					}
+				});
+			}
+		});
+	});
+	</script>
+	<?php
 }
 
 function petslist_render_dog_cards($limit = 6)

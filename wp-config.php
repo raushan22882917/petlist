@@ -37,9 +37,9 @@ define( 'WP_DEBUG', true );
 define( 'WP_DEBUG_LOG', true );
 define( 'WP_DEBUG_DISPLAY', false );
 
-/* Force the site URL to localhost:8000/dog for local development (mirrors live subfolder) */
-define( 'WP_HOME', 'http://localhost:8000/dog' );
-define( 'WP_SITEURL', 'http://localhost:8000/dog' );
+/* Site URL configuration for local development */
+define( 'WP_HOME', 'http://localhost:8080' );
+define( 'WP_SITEURL', 'http://localhost:8080' );
 
 /* That's all, stop editing! Happy publishing. */
 

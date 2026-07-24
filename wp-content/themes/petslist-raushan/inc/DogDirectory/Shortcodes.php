@@ -211,12 +211,35 @@ class Shortcodes {
     font-size: 14px !important;
     border: 1px solid #e2e8f0 !important;
 }
-.dd-auth-split-form .rtcl-btn {
+.dd-auth-split-form .rtcl-btn,
+.dd-auth-split-form .btn-primary,
+#dd-login-submit,
+#dd-register-submit {
     border-radius: 12px !important;
     padding: 12px 20px !important;
     font-weight: 700 !important;
     font-size: 15px !important;
     height: auto !important;
+    background: #bd8c42 !important;
+    border-color: #bd8c42 !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 12px rgba(189, 140, 66, 0.25) !important;
+    transition: all 0.25s ease !important;
+}
+.dd-auth-split-form .rtcl-btn:hover,
+.dd-auth-split-form .btn-primary:hover,
+#dd-login-submit:hover,
+#dd-register-submit:hover {
+    background: #a37430 !important;
+    border-color: #a37430 !important;
+    box-shadow: 0 6px 16px rgba(163, 116, 48, 0.35) !important;
+}
+.dd-auth-split-form a {
+    color: #bd8c42 !important;
+}
+.dd-auth-split-form a:hover {
+    color: #a37430 !important;
+    text-decoration: underline !important;
 }
 .content-area { padding-top: 15px !important; padding-bottom: 40px !important; }
 @media (max-width: 768px) {

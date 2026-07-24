@@ -396,7 +396,7 @@
   align-items: center;
   justify-content: center;
   gap: 0;
-  background: linear-gradient(122deg, #bd8c42 0%, #a37430 100%);
+  background: #bd8c42;
   color: #fff;
   border: none;
   border-radius: 100px;
@@ -444,9 +444,9 @@
   display: none;
   align-items: center;
   gap: 10px;
-  background: linear-gradient(135deg, rgba(189,140,66,.1), rgba(189,140,66,.05));
-  border: 1px solid rgba(189,140,66,.3);
-  color: #a37430;
+  background: rgba(234,179,8,.1);
+  border: 1px solid rgba(234,179,8,.3);
+  color: #eab308;
   font-weight: 600;
   font-size: .95rem;
   padding: 16px 20px;
@@ -482,7 +482,7 @@
 }
 .contact-page-content input[type="submit"],
 .contact-page-content .wpcf7-submit {
-  background: linear-gradient(122deg, #bd8c42 0%, #a37430 100%);
+  background: #bd8c42;
   color: #fff;
   border: none;
   padding: 14px 36px;
