@@ -416,6 +416,17 @@ function petslist_render_dog_breeds($limit = 16)
 			</div>
 			<?php
 			if ($has_children) {
+				// Custom sub-breed ordering: Pocket 1st, then Classic, Standard, XL, XXL
+				$custom_child_order = array( 'Pocket' => 1, 'Classic' => 2, 'Standard' => 3, 'XL' => 4, 'XXL' => 5 );
+				usort( $children, function( $ca, $cb ) use ( $custom_child_order ) {
+					$oa = $custom_child_order[ $ca->name ] ?? 999;
+					$ob = $custom_child_order[ $cb->name ] ?? 999;
+					if ( $oa === $ob ) {
+						return strcmp( $ca->name, $cb->name );
+					}
+					return $oa - $ob;
+				} );
+
 				$display_style = $is_expanded ? 'display: block;' : 'display: none;';
 				echo '<ul class="sub-category-list" style="' . $display_style . ' margin-top: 8px; padding-left: 55px; list-style: none; width: 100%;">';
 				foreach ($children as $child) {

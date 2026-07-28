@@ -13,9 +13,11 @@ $dogs    = dd_get_user_dogs( $user_id, 'any', -1 );
 <div class="dd-tab-dogs">
 
     <div class="dd-tab-dogs__header">
-        <h2><?php _e( 'My Dogs', 'petslist' ); ?> <span class="dd-count"><?php echo count($dogs); ?></span></h2>
-        <p class="dd-tab-dogs__subtitle"><?php _e('Manage and monitor the health records and status of your pets.', 'petslist'); ?></p>
-        <a href="<?php echo esc_url( dd_dashboard_url('add-dog') ); ?>" class="dd-btn dd-btn--primary" style="position: absolute; right: 24px; top: 24px;">
+        <div>
+            <h2><?php _e( 'My Dogs', 'petslist' ); ?> <span class="dd-count"><?php echo count($dogs); ?></span></h2>
+            <p class="dd-tab-dogs__subtitle" style="margin-top:4px;"><?php _e('Manage and monitor the health records and status of your pets.', 'petslist'); ?></p>
+        </div>
+        <a href="<?php echo esc_url( dd_dashboard_url('add-dog') ); ?>" class="dd-btn dd-btn--primary">
             <i class="fa-solid fa-plus" style="margin-right: 6px;"></i><?php _e( 'Add New Dog', 'petslist' ); ?>
         </a>
     </div>

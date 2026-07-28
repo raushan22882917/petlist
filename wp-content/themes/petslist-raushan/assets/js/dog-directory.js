@@ -19,7 +19,12 @@
     msg: function (id, text, type) {
       var $el = $('#' + id);
       if (!$el.length) return;
-      $el.removeClass('success error').addClass(type).html(text).show();
+      var noticeType = (type === 'error' || type === 'danger') ? 'error' : (type === 'warning' ? 'warning' : (type === 'info' ? 'info' : 'success'));
+      var icon = (noticeType === 'error') ? '⚠️' : ((noticeType === 'success') ? '✅' : ((noticeType === 'warning') ? '⚠️' : 'ℹ️'));
+      $el.removeClass('success error danger alert alert-danger alert-success dd-notice dd-notice--error dd-notice--success dd-notice--warning dd-notice--info')
+         .addClass('dd-notice dd-notice--' + noticeType)
+         .html('<span style="font-size:16px; line-height:1;">' + icon + '</span> <span>' + text + '</span>')
+         .show();
       $('html,body').animate({ scrollTop: $el.offset().top - 80 }, 300);
     },
 
@@ -542,6 +547,35 @@
 
   $(document).ready(function () {
     DD.init();
+
+    $(document).on('submit', '#dd-stripe-hosted-form', function (e) {
+      e.preventDefault();
+      var $form = $(this);
+      var $btn  = $('#dd-stripe-checkout-btn');
+      $btn.prop('disabled', true);
+      $btn.find('span').first().hide();
+      $btn.find('.dd-btn__loader').show();
+
+      $.post(ddVars.ajaxUrl, {
+        action: 'dd_create_stripe_session',
+        nonce:  $form.find('[name=nonce]').val() || ddVars.nonces.auth,
+        plan:   $form.find('[name=plan]').val()
+      }, function (res) {
+        if (res.success && res.data.checkout_url) {
+          window.location.href = res.data.checkout_url;
+        } else {
+          $btn.prop('disabled', false);
+          $btn.find('span').first().show();
+          $btn.find('.dd-btn__loader').hide();
+          DD.msg('dd-checkout-message', (res.data && res.data.message) ? res.data.message : 'Stripe checkout error.', 'error');
+        }
+      }).fail(function () {
+        $btn.prop('disabled', false);
+        $btn.find('span').first().show();
+        $btn.find('.dd-btn__loader').hide();
+        DD.msg('dd-checkout-message', 'Server connection error. Please try again.', 'error');
+      });
+    });
   });
 
 })(jQuery);

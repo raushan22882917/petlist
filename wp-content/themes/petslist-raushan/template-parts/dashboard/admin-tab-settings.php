@@ -7,13 +7,17 @@ if ( ! defined('ABSPATH') ) exit;
 $saved = false;
 if ( isset($_POST['dd_admin_settings_nonce']) && wp_verify_nonce($_POST['dd_admin_settings_nonce'], 'dd_admin_settings') ) {
     $fields = [
-        'dd_paypal_client_id' => 'sanitize_text_field',
-        'dd_paypal_secret'    => 'sanitize_text_field',
-        'dd_paypal_mode'      => 'sanitize_text_field',
-        'dd_require_approval' => 'absint',
-        'dd_dogs_per_page'    => 'absint',
-        'dd_email_from_name'  => 'sanitize_text_field',
-        'dd_email_from_email' => 'sanitize_email',
+        'dd_stripe_publishable_key' => 'sanitize_text_field',
+        'dd_stripe_secret_key'      => 'sanitize_text_field',
+        'dd_stripe_webhook_secret' => 'sanitize_text_field',
+        'dd_stripe_mode'            => 'sanitize_text_field',
+        'dd_paypal_client_id'       => 'sanitize_text_field',
+        'dd_paypal_secret'          => 'sanitize_text_field',
+        'dd_paypal_mode'            => 'sanitize_text_field',
+        'dd_require_approval'       => 'absint',
+        'dd_dogs_per_page'          => 'absint',
+        'dd_email_from_name'        => 'sanitize_text_field',
+        'dd_email_from_email'       => 'sanitize_email',
     ];
     foreach ($fields as $key => $sanitize) {
         $val = isset($_POST[$key]) ? call_user_func($sanitize, $_POST[$key]) : '';
@@ -38,6 +42,34 @@ if ( isset($_POST['dd_admin_settings_nonce']) && wp_verify_nonce($_POST['dd_admi
 
     <form method="post" action="">
         <?php wp_nonce_field('dd_admin_settings','dd_admin_settings_nonce'); ?>
+
+        <!-- Stripe -->
+        <div class="ddu-panel" style="margin-bottom:20px">
+            <div class="ddu-panel__head">
+                <h3 class="ddu-panel__title">💳 <?php _e('Stripe Payment Settings','petslist'); ?></h3>
+            </div>
+            <div class="dda-settings-grid">
+                <div class="dd-form-group">
+                    <label><?php _e('Mode','petslist'); ?></label>
+                    <select name="dd_stripe_mode">
+                        <option value="test" <?php selected(get_option('dd_stripe_mode','test'),'test'); ?>>🧪 Test</option>
+                        <option value="live" <?php selected(get_option('dd_stripe_mode','test'),'live'); ?>>🟢 Live</option>
+                    </select>
+                </div>
+                <div class="dd-form-group">
+                    <label><?php _e('Publishable / API Key','petslist'); ?></label>
+                    <input type="text" name="dd_stripe_publishable_key" value="<?php echo esc_attr(get_option('dd_stripe_publishable_key')); ?>" placeholder="pk_test_...">
+                </div>
+                <div class="dd-form-group">
+                    <label><?php _e('Secret Key','petslist'); ?></label>
+                    <input type="password" name="dd_stripe_secret_key" value="<?php echo esc_attr(get_option('dd_stripe_secret_key')); ?>" placeholder="sk_test_...">
+                </div>
+                <div class="dd-form-group">
+                    <label><?php _e('Webhook Secret (Optional)','petslist'); ?></label>
+                    <input type="password" name="dd_stripe_webhook_secret" value="<?php echo esc_attr(get_option('dd_stripe_webhook_secret')); ?>" placeholder="whsec_...">
+                </div>
+            </div>
+        </div>
 
         <!-- PayPal -->
         <div class="ddu-panel" style="margin-bottom:20px">

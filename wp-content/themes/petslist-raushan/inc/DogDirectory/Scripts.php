@@ -56,7 +56,20 @@ class Scripts {
             );
         }
 
-        // Stripe.js is replaced by inline PayPal script on checkout page
+        // Stripe.js & Checkout JS
+        if ( dd_is_checkout_page() ) {
+            $stripe_pub = dd_stripe_publishable_key();
+            if ( ! empty( $stripe_pub ) ) {
+                wp_enqueue_script( 'stripe-js', 'https://js.stripe.com/v3/', [], null, false );
+                wp_enqueue_script( 'dd-checkout', $uri . '/assets/js/dd-checkout.js', ['jquery', 'stripe-js'], $v, true );
+                wp_localize_script( 'dd-checkout', 'ddCheckout', [
+                    'publishableKey' => $stripe_pub,
+                    'ajaxUrl'        => admin_url('admin-ajax.php'),
+                    'nonce'          => wp_create_nonce('dd_checkout_nonce'),
+                    'returnUrl'      => dd_dashboard_url(),
+                ] );
+            }
+        }
 
 
         // Main DD JS — load on all DD pages + auth pages!

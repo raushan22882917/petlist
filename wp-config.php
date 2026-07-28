@@ -40,6 +40,7 @@ define( 'WP_DEBUG_DISPLAY', false );
 /* Site URL configuration for local development */
 define( 'WP_HOME', 'http://localhost:8080' );
 define( 'WP_SITEURL', 'http://localhost:8080' );
+define( 'DISABLE_WP_CRON', true );
 
 /* That's all, stop editing! Happy publishing. */
 

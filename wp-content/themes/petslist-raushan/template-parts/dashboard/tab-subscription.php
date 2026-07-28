@@ -15,9 +15,11 @@ $plans   = Subscription::get_plans();
 
 <div class="dd-tab-subscription">
 
-    <div class="dd-tab-dogs__header">
-        <h2><?php _e( 'My Subscription', 'petslist' ); ?></h2>
-        <p class="dd-tab-dogs__subtitle"><?php _e('View and manage your active membership plan and features.', 'petslist'); ?></p>
+    <div class="dd-tab-dogs__header" style="margin-bottom: 24px;">
+        <div>
+            <h2 style="font-size: 24px; font-weight: 800; color: var(--dd-heading, #070c3e); margin: 0 0 4px 0;"><?php _e( 'My Subscription', 'petslist' ); ?></h2>
+            <p class="dd-tab-dogs__subtitle" style="margin: 0; color: #64748b; font-size: 14px;"><?php _e('View and manage your active membership plan and features.', 'petslist'); ?></p>
+        </div>
     </div>
 
     <div id="dd-sub-message" class="dd-auth-message" style="display:none; margin-bottom: 20px;"></div>

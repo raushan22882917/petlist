@@ -308,6 +308,7 @@
 	flex-direction: column;
 	justify-content: center;
 	min-height: 210px;
+	width: 100%;
 }
 .petslist-home-search-standalone .heading-title {
 	font-size: 1.7rem;
@@ -315,6 +316,151 @@
 	margin-bottom: 22px;
 	color: #070c3e;
 	font-weight: 700;
+}
+.petslist-home-search-standalone .petslist-home-hero__search {
+	width: 100%;
+}
+
+/* --- Desktop View: 1 Row Search Bar --- */
+@media (min-width: 992px) {
+	.petslist-home-search-standalone .rtcl-search-inline-form {
+		display: flex !important;
+		flex-direction: row !important;
+		align-items: center !important;
+		gap: 10px !important;
+		padding: 8px !important;
+		background: #ffffff !important;
+		border-radius: 12px !important;
+		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
+		border: 1px solid #e2e8f0 !important;
+		width: 100% !important;
+		box-sizing: border-box !important;
+	}
+	.petslist-home-search-standalone .rtin-loc-space {
+		flex: 0 0 200px !important;
+		width: 200px !important;
+		box-sizing: border-box !important;
+	}
+	.petslist-home-search-standalone .rtin-loc-space .form-group {
+		position: relative !important;
+		border: 0 !important;
+		background: transparent !important;
+		padding: 0 10px !important;
+		height: 50px !important;
+		width: 100% !important;
+	}
+	.petslist-home-search-standalone .rtin-loc-space .form-group::after {
+		content: "" !important;
+		position: absolute !important;
+		right: 0 !important;
+		top: 15% !important;
+		height: 70% !important;
+		width: 1px !important;
+		background: #e5e8ef !important;
+		display: block !important;
+	}
+	.petslist-home-search-standalone .keyword-and-button-wrap {
+		display: flex !important;
+		flex-direction: row !important;
+		flex: 1 !important;
+		gap: 10px !important;
+		align-items: center !important;
+		width: auto !important;
+	}
+	.petslist-home-search-standalone .rtin-key-space {
+		flex: 1 !important;
+		width: auto !important;
+	}
+	.petslist-home-search-standalone .rtin-keyword {
+		border: 0 !important;
+		background: transparent !important;
+		padding: 0 10px !important;
+		height: 50px !important;
+		width: 100% !important;
+	}
+	.petslist-home-search-standalone .rtin-btn-holder {
+		width: auto !important;
+		flex-shrink: 0 !important;
+	}
+	.petslist-home-search-standalone .rtin-btn-holder .rtin-search-btn {
+		min-width: 120px !important;
+		width: auto !important;
+		height: 50px !important;
+		border-radius: 8px !important;
+		font-size: 1rem !important;
+		font-weight: 600 !important;
+		background: #bd8c42 !important;
+		box-shadow: 0 4px 12px rgba(189, 140, 66, 0.25) !important;
+	}
+}
+
+/* --- Mobile View: 3 Rows Stacked Search Bar --- */
+@media (max-width: 991px) {
+	.petslist-home-search-standalone .rtcl-search-inline-form {
+		display: flex !important;
+		flex-direction: column !important;
+		align-items: stretch !important;
+		gap: 14px !important;
+		padding: 20px 16px !important;
+		background: #ffffff !important;
+		border-radius: 16px !important;
+		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
+		border: 1px solid #e2e8f0 !important;
+		width: 100% !important;
+		box-sizing: border-box !important;
+	}
+	.petslist-home-search-standalone .rtin-loc-space {
+		flex: 1 1 100% !important;
+		width: 100% !important;
+		box-sizing: border-box !important;
+	}
+	.petslist-home-search-standalone .rtin-loc-space .form-group {
+		border: 1px solid #cbd5e1 !important;
+		border-radius: 10px !important;
+		background: #f8fafc !important;
+		padding: 0 14px !important;
+		height: 52px !important;
+		width: 100% !important;
+		box-sizing: border-box !important;
+	}
+	.petslist-home-search-standalone .rtin-loc-space .form-group::after {
+		display: none !important;
+	}
+	.petslist-home-search-standalone .keyword-and-button-wrap {
+		display: flex !important;
+		flex-direction: column !important;
+		gap: 14px !important;
+		width: 100% !important;
+		box-sizing: border-box !important;
+	}
+	.petslist-home-search-standalone .rtin-key-space {
+		width: 100% !important;
+		box-sizing: border-box !important;
+	}
+	.petslist-home-search-standalone .rtin-keyword {
+		border: 1px solid #cbd5e1 !important;
+		border-radius: 10px !important;
+		background: #f8fafc !important;
+		padding: 0 14px !important;
+		height: 52px !important;
+		width: 100% !important;
+		box-sizing: border-box !important;
+	}
+	.petslist-home-search-standalone .rtin-btn-holder {
+		width: 100% !important;
+		box-sizing: border-box !important;
+	}
+	.petslist-home-search-standalone .rtin-btn-holder .rtin-search-btn {
+		width: 100% !important;
+		height: 54px !important;
+		border-radius: 10px !important;
+		font-size: 1.1rem !important;
+		font-weight: 700 !important;
+		justify-content: center !important;
+		background: #bd8c42 !important;
+		box-shadow: 0 4px 14px rgba(189, 140, 66, 0.3) !important;
+		box-sizing: border-box !important;
+	}
 }
 .petslist-home-banner-card--blue { background: #D3D3D3; }
 .petslist-home-banner-card--blue .heading-title { color: #070c3e; }

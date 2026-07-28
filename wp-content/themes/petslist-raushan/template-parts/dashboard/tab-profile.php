@@ -14,8 +14,10 @@ $website = $user->user_url;
 <div class="dd-tab-profile">
 
     <div class="dd-tab-dogs__header">
-        <h2><?php _e( 'Profile Settings', 'petslist' ); ?></h2>
-        <p class="dd-tab-dogs__subtitle"><?php _e('Manage your display name, contact phone, website, and public biography.', 'petslist'); ?></p>
+        <div>
+            <h2><?php _e( 'Profile Settings', 'petslist' ); ?></h2>
+            <p class="dd-tab-dogs__subtitle" style="margin-top:4px;"><?php _e('Manage your display name, contact phone, website, and public biography.', 'petslist'); ?></p>
+        </div>
     </div>
 
     <div id="dd-profile-message" class="dd-auth-message" style="display:none; margin-bottom: 20px;"></div>

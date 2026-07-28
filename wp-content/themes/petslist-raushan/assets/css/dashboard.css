@@ -86,6 +86,10 @@ body.dd-dashboard-page .site-content-block { margin: 0 !important; }
   z-index: 100;
   border-right: 1px solid var(--dds-panel-border);
 }
+body.admin-bar .ddu-sidebar {
+  top: 32px !important;
+  height: calc(100vh - 32px) !important;
+}
 .ddu-sidebar.collapsed { width: 64px; }
 .ddu-sidebar.collapsed .ddu-sidebar__ws-info,
 .ddu-sidebar.collapsed .ddu-sidebar__user-info,
@@ -1008,6 +1012,12 @@ body.dd-dashboard-page .site-content-block { margin: 0 !important; }
   color: #475569 !important;
   padding: 4px 10px !important;
   border-radius: 20px !important;
+}
+.dd-tab-dogs__subtitle {
+  font-size: 14px !important;
+  color: #64748b !important;
+  margin: 4px 0 0 0 !important;
+  font-weight: 400 !important;
 }
 
 .dd-dogs-table-wrap {

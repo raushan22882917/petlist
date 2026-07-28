@@ -302,6 +302,17 @@ function dd_get_breed_options( $include_counts = false ) {
 		] );
 
 		if ( ! is_wp_error( $children ) && ! empty( $children ) ) {
+			// Enforce specific order for sub-breeds (Pocket 1st, then Classic, Standard, XL, XXL)
+			$custom_child_order = [ 'Pocket' => 1, 'Classic' => 2, 'Standard' => 3, 'XL' => 4, 'XXL' => 5 ];
+			usort( $children, function( $ca, $cb ) use ( $custom_child_order ) {
+				$oa = $custom_child_order[ $ca->name ] ?? 999;
+				$ob = $custom_child_order[ $cb->name ] ?? 999;
+				if ( $oa === $ob ) {
+					return strcmp( $ca->name, $cb->name );
+				}
+				return $oa - $ob;
+			} );
+
 			// Build children rows
 			$child_entries = [];
 			foreach ( $children as $child ) {

@@ -16,8 +16,10 @@ $total    = array_sum( array_column( (array)$payments, 'amount' ) );
 <div class="dd-tab-billing">
 
     <div class="dd-tab-dogs__header">
-        <h2><?php _e( 'Billing & Payment History', 'petslist' ); ?></h2>
-        <p class="dd-tab-dogs__subtitle"><?php _e('Review your payment history, transactions, and membership invoices.', 'petslist'); ?></p>
+        <div>
+            <h2><?php _e( 'Billing & Payment History', 'petslist' ); ?></h2>
+            <p class="dd-tab-dogs__subtitle" style="margin-top:4px;"><?php _e('Review your payment history, transactions, and membership invoices.', 'petslist'); ?></p>
+        </div>
     </div>
 
     <?php if ( $payments ) : ?>

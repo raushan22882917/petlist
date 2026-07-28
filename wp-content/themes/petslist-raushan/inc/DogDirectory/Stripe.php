@@ -22,9 +22,11 @@ class Stripe {
     public function __construct() {
         add_action( 'wp_ajax_dd_create_payment_intent', [ $this, 'create_payment_intent' ] );
         add_action( 'wp_ajax_nopriv_dd_create_payment_intent', [ $this, 'create_payment_intent_nopriv' ] );
+        add_action( 'wp_ajax_dd_create_stripe_session', [ $this, 'create_checkout_session' ] );
         add_action( 'wp_ajax_dd_confirm_payment', [ $this, 'confirm_payment' ] );
         add_action( 'wp_ajax_dd_stripe_webhook', [ $this, 'handle_webhook' ] );
         add_action( 'wp_ajax_nopriv_dd_stripe_webhook', [ $this, 'handle_webhook' ] );
+        add_action( 'template_redirect', [ $this, 'handle_return_session' ] );
         add_action( 'init', [ $this, 'register_stripe_settings' ] );
     }
 
@@ -98,6 +100,108 @@ class Stripe {
 
     public function create_payment_intent_nopriv() {
         wp_send_json_error(['message' => __('Please log in to subscribe.', 'petslist'), 'redirect' => dd_login_url()]);
+    }
+
+    /**
+     * Create a Hosted Stripe Checkout Session and return the Stripe redirect URL
+     */
+    public function create_checkout_session() {
+        check_ajax_referer( 'dd_checkout_nonce', 'nonce' );
+
+        if ( ! is_user_logged_in() ) {
+            wp_send_json_error(['message' => __('Please log in to subscribe.', 'petslist'), 'redirect' => dd_login_url()]);
+        }
+
+        if ( Subscription::has_reached_sales_limit() ) {
+            wp_send_json_error(['message' => __('All monthly packages are currently sold out. Please contact support.', 'petslist')]);
+        }
+
+        $plan_slug = sanitize_text_field( $_POST['plan'] ?? '' );
+        $plan      = Subscription::get_plan( $plan_slug );
+
+        if ( ! $plan ) {
+            wp_send_json_error(['message' => __('Invalid plan selected.', 'petslist')]);
+        }
+
+        $secret_key = dd_stripe_secret_key();
+        if ( empty($secret_key) ) {
+            wp_send_json_error(['message' => __('Stripe payment gateway is not configured.', 'petslist')]);
+        }
+
+        $user         = wp_get_current_user();
+        $amount_cents = (int) round( $plan->price * 100 );
+
+        $response = wp_remote_post( 'https://api.stripe.com/v1/checkout/sessions', [
+            'headers' => [
+                'Authorization' => 'Bearer ' . $secret_key,
+                'Content-Type'  => 'application/x-www-form-urlencoded',
+            ],
+            'body' => [
+                'mode'                                          => 'payment',
+                'success_url'                                   => add_query_arg(['dd_stripe' => 'success', 'session_id' => '{CHECKOUT_SESSION_ID}', 'plan' => $plan->slug], dd_dashboard_url()),
+                'cancel_url'                                    => add_query_arg('plan', $plan->slug, dd_checkout_url()),
+                'line_items[0][price_data][currency]'           => 'usd',
+                'line_items[0][price_data][product_data][name]' => sprintf( 'Dog Directory — %s Plan', $plan->name ),
+                'line_items[0][price_data][unit_amount]'        => $amount_cents,
+                'line_items[0][quantity]'                       => 1,
+                'customer_email'                                => $user->user_email,
+                'metadata[user_id]'                             => $user->ID,
+                'metadata[plan_id]'                             => $plan->id,
+                'metadata[plan_slug]'                           => $plan->slug,
+            ],
+        ] );
+
+        if ( is_wp_error($response) ) {
+            wp_send_json_error(['message' => __('Could not connect to Stripe.', 'petslist')]);
+        }
+
+        $body = json_decode( wp_remote_retrieve_body($response), true );
+
+        if ( ! empty($body['error']) ) {
+            wp_send_json_error(['message' => $body['error']['message'] ?? __('Stripe Checkout Error.', 'petslist')]);
+        }
+
+        if ( empty($body['url']) ) {
+            wp_send_json_error(['message' => __('Failed to create Stripe Checkout session.', 'petslist')]);
+        }
+
+        wp_send_json_success([
+            'checkout_url' => $body['url'],
+        ]);
+    }
+
+    /**
+     * Handle return from hosted Stripe Checkout session
+     */
+    public function handle_return_session() {
+        if ( isset($_GET['dd_stripe']) && $_GET['dd_stripe'] === 'success' && ! empty($_GET['session_id']) ) {
+            $session_id = sanitize_text_field($_GET['session_id']);
+            $secret_key = dd_stripe_secret_key();
+            if ( empty($secret_key) ) return;
+
+            $already_processed = get_option('dd_cs_processed_' . $session_id);
+            if ( $already_processed ) return;
+
+            $response = wp_remote_get( "https://api.stripe.com/v1/checkout/sessions/{$session_id}", [
+                'headers' => ['Authorization' => 'Bearer ' . $secret_key],
+            ] );
+
+            if ( ! is_wp_error($response) ) {
+                $session = json_decode( wp_remote_retrieve_body($response), true );
+                if ( ($session['payment_status'] ?? '') === 'paid' ) {
+                    $user_id   = (int) ($session['metadata']['user_id'] ?? get_current_user_id());
+                    $plan_slug = sanitize_text_field($session['metadata']['plan_slug'] ?? ($_GET['plan'] ?? ''));
+                    $plan      = Subscription::get_plan( $plan_slug );
+
+                    if ( $user_id && $plan ) {
+                        $sub_id = Subscription::create_subscription( $user_id, $plan->id );
+                        $amount = ($session['amount_total'] ?? 0) / 100;
+                        Subscription::record_payment( $user_id, $sub_id, $amount, $session['id'], $session['payment_intent'] ?? $session['id'] );
+                        update_option('dd_cs_processed_' . $session_id, 1, false);
+                    }
+                }
+            }
+        }
     }
 
     /**

@@ -97,8 +97,8 @@
             payment_intent_id: result.paymentIntent.id,
           }, function (confirmRes) {
             if (confirmRes.success) {
-              $msg.removeClass('error').addClass('success dd-auth-message')
-                  .html('<i class="fa-solid fa-circle-check"></i> ' + confirmRes.data.message)
+              $msg.removeClass('error dd-auth-message dd-notice--error').addClass('dd-notice dd-notice--success')
+                  .html('<span>✅</span> <span>' + confirmRes.data.message + '</span>')
                   .show();
               setTimeout(function () {
                 window.location.href = confirmRes.data.redirect || ddCheckout.returnUrl;
@@ -122,8 +122,8 @@
       $btn.find('.dd-btn__text').show();
       $btn.find('.dd-btn__loader').hide();
       $btn.prop('disabled', false);
-      $msg.removeClass('success').addClass('error dd-auth-message')
-          .html('<i class="fa-solid fa-circle-xmark"></i> ' + message)
+      $msg.removeClass('success dd-auth-message dd-notice--success').addClass('dd-notice dd-notice--error')
+          .html('<span>⚠️</span> <span>' + message + '</span>')
           .show();
       $('html,body').animate({ scrollTop: $msg.offset().top - 80 }, 300);
     }

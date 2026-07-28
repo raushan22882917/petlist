@@ -501,9 +501,7 @@ class ScriptLoader {
 			wp_enqueue_script( 'rtcl-address-i18n' );
 		}
 
-		if ( $validator_script ) {
-			wp_enqueue_script( 'rtcl-validator' );
-		}
+		wp_enqueue_script( 'rtcl-validator' );
 		wp_enqueue_script( 'daterangepicker' );
 		wp_enqueue_script( 'rtcl-public' );
 
