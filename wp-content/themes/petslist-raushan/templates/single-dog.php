@@ -115,11 +115,16 @@ $gallery_ids   = get_post_meta($post_id, '_dd_gallery', true) ?: [];
                 <div class="dd-profile-grid">
                     <?php
                     $visible_fields = [
-                        'breed'  => __('Breed', 'petslist'),
-                        'gender' => __('Gender', 'petslist'),
-                        'dob'    => __('Date of Birth', 'petslist'),
-                        'color'  => __('Color', 'petslist'),
-                        'weight' => __('Weight', 'petslist'),
+                        'breed'             => __('Breed', 'petslist'),
+                        'gender'            => __('Gender', 'petslist'),
+                        'age'               => __('Age', 'petslist'),
+                        'color'             => __('Color', 'petslist'),
+                        'height'            => __('Height', 'petslist'),
+                        'weight'            => __('Weight', 'petslist'),
+                        'stud_fee'          => __('Stud Fee', 'petslist'),
+                        'semen_type'        => __('Semen Type', 'petslist'),
+                        'titles'            => __('Titles', 'petslist'),
+                        'competition_class' => __('Class', 'petslist'),
                     ];
                     $subscriber_fields = [
                         'registration_no' => __('Registration No.', 'petslist'),
@@ -128,8 +133,7 @@ $gallery_ids   = get_post_meta($post_id, '_dd_gallery', true) ?: [];
                     ];
                     foreach ( $visible_fields as $key => $label ) :
                         $value = $key === 'breed' ? $breed_name : ($meta[$key] ?? '');
-                        if ( $key === 'dob' && $value ) $value .= $age ? " ({$age})" : '';
-                        if ( $key === 'weight' && $value ) $value .= ' kg';
+                        if ( $key === 'age' && empty($value) && !empty($meta['dob']) ) $value = $meta['dob'] . ($age ? " ({$age})" : '');
                         if ( empty($value) ) continue;
                     ?>
                     <div class="dd-profile-item">

@@ -83,13 +83,17 @@
             DD.msg('dd-register-message', 'Please accept the Terms of Service.', 'error');
             return;
           }
+          var fulltimeBreeder = $('input[name="fulltime_breeder"]:checked').val() || 'no';
           DD.Auth._setLoading($btn, true);
           DD.ajax('dd_register', {
-            nonce:       ddVars.nonces.auth,
-            name:        $('#dd-reg-name').val(),
-            email:       $('#dd-reg-email').val(),
-            password:    $('#dd-reg-pass').val(),
-            redirect_to: new URLSearchParams(window.location.search).get('redirect_to') || '',
+            nonce:            ddVars.nonces.auth,
+            name:             $('#dd-reg-name').val(),
+            location:         $('#dd-reg-location').val(),
+            phone:            $('#dd-reg-phone').val(),
+            email:            $('#dd-reg-email').val(),
+            fulltime_breeder: fulltimeBreeder,
+            password:         $('#dd-reg-pass').val(),
+            redirect_to:      new URLSearchParams(window.location.search).get('redirect_to') || '',
           }, function (res) {
             DD.Auth._setLoading($btn, false);
             if (res.success) {
@@ -406,12 +410,14 @@
           var $btn = $('#dd-profile-submit');
           DD.Auth._setLoading($btn, true);
           DD.ajax('dd_update_profile', {
-            nonce:        ddVars.nonces.dashboard,
-            display_name: $('#dd-profile-name').val(),
-            bio:          $('#dd-profile-bio').val(),
-            phone:        $('#dd-profile-phone').val(),
-            website:      $('#dd-profile-website').val(),
-            avatar_id:    $('#dd-profile-avatar-id').val(),
+            nonce:            ddVars.nonces.dashboard,
+            display_name:     $('#dd-profile-name').val(),
+            bio:              $('#dd-profile-bio').val(),
+            phone:            $('#dd-profile-phone').val(),
+            location:         $('#dd-profile-location').val(),
+            fulltime_breeder: $('#dd-profile-fulltime-breeder').val(),
+            website:          $('#dd-profile-website').val(),
+            avatar_id:        $('#dd-profile-avatar-id').val(),
           }, function (res) {
             DD.Auth._setLoading($btn, false);
             DD.msg('dd-profile-message', res.data.message, res.success ? 'success' : 'error');

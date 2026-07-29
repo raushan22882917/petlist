@@ -14,7 +14,7 @@ $tab  = sanitize_key($_GET['tab'] ?? 'overview');
 // Admin nav
 $admin_nav = [
     'overview'    => ['icon'=>'chart',   'label'=>__('Overview','petslist')],
-    'dogs'        => ['icon'=>'dogs',    'label'=>__('All Dogs','petslist')],
+    'dogs'        => ['icon'=>'dogs',    'label'=>__('All Studs','petslist')],
     'users'       => ['icon'=>'users',   'label'=>__('Users','petslist')],
     'subscribers' => ['icon'=>'star',    'label'=>__('Subscribers','petslist')],
     'payments'    => ['icon'=>'billing', 'label'=>__('Payments','petslist')],
@@ -128,7 +128,7 @@ function dda_icon($k) {
             </div>
             <div class="ddu-topbar__right">
                 <a href="<?php echo esc_url(admin_url('post-new.php?post_type=dd_dog')); ?>" class="ddu-btn-primary" style="font-size: 12px; padding: 4px 12px; height: auto; line-height: 1.5;">
-                    + <?php _e('Add Dog','petslist'); ?>
+                    + <?php _e('Add Stud','petslist'); ?>
                 </a>
                 <a href="<?php echo esc_url(admin_url('admin.php?page=dd-settings')); ?>" class="ddu-btn-outline" style="font-size: 12px; padding: 4px 12px; height: auto; line-height: 1.5; border-color: rgba(255,255,255,0.15); color: var(--dds-text-muted);">
                     <?php echo dda_icon('settings'); ?> <?php _e('Settings','petslist'); ?>
@@ -169,7 +169,7 @@ function dda_icon($k) {
     <div class="dd-drawer__overlay"></div>
     <div class="dd-drawer__content">
         <div class="dd-drawer__header">
-            <h3><?php _e('Dog Profile Detail', 'petslist'); ?></h3>
+            <h3><?php _e('Stud Profile Details', 'petslist'); ?></h3>
             <button class="dd-drawer__close" id="dd-drawer-close-btn" aria-label="Close">
                 <i class="fa-solid fa-xmark"></i>
             </button>

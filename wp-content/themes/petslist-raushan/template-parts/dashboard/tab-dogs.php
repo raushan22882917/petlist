@@ -14,11 +14,11 @@ $dogs    = dd_get_user_dogs( $user_id, 'any', -1 );
 
     <div class="dd-tab-dogs__header">
         <div>
-            <h2><?php _e( 'My Dogs', 'petslist' ); ?> <span class="dd-count"><?php echo count($dogs); ?></span></h2>
-            <p class="dd-tab-dogs__subtitle" style="margin-top:4px;"><?php _e('Manage and monitor the health records and status of your pets.', 'petslist'); ?></p>
+            <h2><?php _e( 'My Studs', 'petslist' ); ?> <span class="dd-count"><?php echo count($dogs); ?></span></h2>
+            <p class="dd-tab-dogs__subtitle" style="margin-top:4px;"><?php _e('Manage and monitor the health records and status of your studs.', 'petslist'); ?></p>
         </div>
         <a href="<?php echo esc_url( dd_dashboard_url('add-dog') ); ?>" class="dd-btn dd-btn--primary">
-            <i class="fa-solid fa-plus" style="margin-right: 6px;"></i><?php _e( 'Add New Dog', 'petslist' ); ?>
+            <i class="fa-solid fa-plus" style="margin-right: 6px;"></i><?php _e( 'Add New Stud', 'petslist' ); ?>
         </a>
     </div>
 
@@ -119,7 +119,7 @@ $dogs    = dd_get_user_dogs( $user_id, 'any', -1 );
                         <td><?php echo date('M j, Y', strtotime($dog->post_date)); ?></td>
                         <td>
                             <div class="dd-dogs-table__actions">
-                                <a href="<?php echo esc_url($view_url); ?>" target="_blank" class="dd-action-btn dd-action-btn--view" title="<?php esc_attr_e('View Profile', 'petslist'); ?>">
+                                <a href="<?php echo esc_url($view_url); ?>" target="_blank" class="dd-action-btn dd-action-btn--view" title="<?php esc_attr_e('View Stud Profile', 'petslist'); ?>">
                                     <i class="fa-solid fa-eye"></i>
                                 </a>
                                 <a href="<?php echo esc_url(dd_dashboard_url('dogs') . '&edit=' . $dog->ID); ?>" class="dd-action-btn dd-action-btn--edit" title="<?php esc_attr_e('Edit', 'petslist'); ?>">
@@ -139,7 +139,7 @@ $dogs    = dd_get_user_dogs( $user_id, 'any', -1 );
         <!-- Table Footer / Pagination -->
         <div class="dd-dogs-table-footer">
             <div class="dd-dogs-table-footer__count">
-                <?php printf(__('Showing 1 to %d of %d dogs', 'petslist'), count($dogs), count($dogs)); ?>
+                <?php printf(__('Showing 1 to %d of %d studs', 'petslist'), count($dogs), count($dogs)); ?>
             </div>
             <div class="dd-dogs-table-footer__pagination">
                 <button class="dd-page-btn" disabled><i class="fa-solid fa-angle-left"></i></button>
@@ -155,7 +155,7 @@ $dogs    = dd_get_user_dogs( $user_id, 'any', -1 );
         <div class="dd-drawer__overlay"></div>
         <div class="dd-drawer__content">
             <div class="dd-drawer__header">
-                <h3><?php _e('Dog Profile Details', 'petslist'); ?></h3>
+                <h3><?php _e('Stud Profile Details', 'petslist'); ?></h3>
                 <button class="dd-drawer__close" id="dd-drawer-close-btn">&times;</button>
             </div>
             <div class="dd-drawer__body" id="dd-dog-drawer-body">
@@ -171,10 +171,10 @@ $dogs    = dd_get_user_dogs( $user_id, 'any', -1 );
     <?php else : ?>
     <div class="dd-empty-state">
         <div class="dd-empty-state__icon">🐾</div>
-        <h3><?php _e( 'No dogs listed yet', 'petslist' ); ?></h3>
-        <p><?php _e( 'Start by adding your first dog profile. It will be reviewed and published within 24 hours.', 'petslist' ); ?></p>
+        <h3><?php _e( 'No studs listed yet', 'petslist' ); ?></h3>
+        <p><?php _e( 'Start by adding your first stud profile. It will be reviewed and published within 24 hours.', 'petslist' ); ?></p>
         <a href="<?php echo esc_url( dd_dashboard_url('add-dog') ); ?>" class="dd-btn dd-btn--primary">
-            <i class="fa-solid fa-plus"></i> <?php _e( 'Add Your First Dog', 'petslist' ); ?>
+            <i class="fa-solid fa-plus"></i> <?php _e( 'Add Your First Stud', 'petslist' ); ?>
         </a>
     </div>
     <?php endif; ?>

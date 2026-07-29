@@ -49,7 +49,7 @@ $total_pages = ceil($total_count / $per_pg);
                 <th><?php _e('Email','petslist'); ?></th>
                 <th><?php _e('Subscription','petslist'); ?></th>
                 <th><?php _e('Expires','petslist'); ?></th>
-                <th><?php _e('Dogs','petslist'); ?></th>
+                <th><?php _e('Studs','petslist'); ?></th>
                 <th><?php _e('Joined','petslist'); ?></th>
                 <th><?php _e('Actions','petslist'); ?></th>
             </tr></thead>
@@ -80,7 +80,7 @@ $total_pages = ceil($total_count / $per_pg);
                         <a href="<?php echo esc_url(admin_url('user-edit.php?user_id='.$u->ID)); ?>" class="dda-action-btn dda-action-btn--edit" title="<?php esc_attr_e('Edit User', 'petslist'); ?>">
                             <i class="fa-solid fa-pencil"></i>
                         </a>
-                        <a href="<?php echo esc_url(add_query_arg(['tab'=>'dogs','dog_author'=>$u->ID], dd_dashboard_url('dogs'))); ?>" class="dda-action-btn dda-action-btn--dogs" title="<?php esc_attr_e('View User\'s Dogs', 'petslist'); ?>">
+                        <a href="<?php echo esc_url(add_query_arg(['tab'=>'dogs','dog_author'=>$u->ID], dd_dashboard_url('dogs'))); ?>" class="dda-action-btn dda-action-btn--dogs" title="<?php esc_attr_e('View User\'s Studs', 'petslist'); ?>">
                             <i class="fa-solid fa-dog"></i>
                         </a>
                     </div>

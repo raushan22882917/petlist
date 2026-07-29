@@ -22,7 +22,7 @@ $greet    = $hour < 12 ? __('Good morning','petslist') : ($hour < 17 ? __('Good 
     <!-- Greeting -->
     <div class="ddu-home__greeting">
         <h1 class="ddu-home__title"><?php echo $greet; ?>, <?php echo esc_html(explode(' ',$user->display_name)[0]); ?> 👋</h1>
-        <p class="ddu-home__sub"><?php printf(__("Here's what's happening with your dogs today.",'petslist')); ?></p>
+        <p class="ddu-home__sub"><?php printf(__("Here's what's happening with your studs today.",'petslist')); ?></p>
     </div>
 
     <!-- Stat cards -->
@@ -34,7 +34,7 @@ $greet    = $hour < 12 ? __('Good morning','petslist') : ($hour < 17 ? __('Good 
             </div>
             <div class="ddu-stat-card__body">
                 <div class="ddu-stat-card__num"><?php echo count($dogs); ?></div>
-                <div class="ddu-stat-card__label"><?php _e('Total Dogs','petslist'); ?></div>
+                <div class="ddu-stat-card__label"><?php _e('Total Studs','petslist'); ?></div>
             </div>
             <div class="ddu-stat-card__trend"><?php _e('All time','petslist'); ?></div>
         </div>
@@ -86,10 +86,10 @@ $greet    = $hour < 12 ? __('Good morning','petslist') : ($hour < 17 ? __('Good 
         <!-- Dogs section -->
         <div class="ddu-panel">
             <div class="ddu-panel__head">
-                <h3 class="ddu-panel__title"><?php _e('Recent Dogs','petslist'); ?></h3>
+                <h3 class="ddu-panel__title"><?php _e('Recent Studs','petslist'); ?></h3>
                 <div class="ddu-panel__actions">
                     <?php if ($sub) : ?>
-                    <a href="<?php echo esc_url(dd_dashboard_url('add-dog')); ?>" class="ddu-btn-icon" title="<?php esc_attr_e('Add Dog','petslist'); ?>">
+                    <a href="<?php echo esc_url(dd_dashboard_url('add-dog')); ?>" class="ddu-btn-icon" title="<?php esc_attr_e('Add Stud','petslist'); ?>">
                         <i class="fa-solid fa-plus"></i>
                     </a>
                     <?php endif; ?>
@@ -143,9 +143,9 @@ $greet    = $hour < 12 ? __('Good morning','petslist') : ($hour < 17 ? __('Good 
             <?php else : ?>
             <div class="ddu-empty">
                 <div class="ddu-empty__icon">🐾</div>
-                <p class="ddu-empty__text"><?php _e("You haven't added any dogs yet.","petslist"); ?></p>
+                <p class="ddu-empty__text"><?php _e("You haven't added any studs yet.","petslist"); ?></p>
                 <?php if ($sub) : ?>
-                <a href="<?php echo esc_url(dd_dashboard_url('add-dog')); ?>" class="ddu-btn-primary"><?php _e('Add Your First Dog','petslist'); ?></a>
+                <a href="<?php echo esc_url(dd_dashboard_url('add-dog')); ?>" class="ddu-btn-primary"><?php _e('Add Your First Stud','petslist'); ?></a>
                 <?php else : ?>
                 <a href="<?php echo esc_url(dd_pricing_url()); ?>" class="ddu-btn-primary"><?php _e('Get a Subscription First','petslist'); ?></a>
                 <?php endif; ?>
@@ -192,7 +192,7 @@ $greet    = $hour < 12 ? __('Good morning','petslist') : ($hour < 17 ? __('Good 
                 </div>
                 <?php else : ?>
                 <div class="ddu-sub-card ddu-sub-card--inactive">
-                    <p><?php _e('No active subscription. Subscribe to list dogs and access full directory features.','petslist'); ?></p>
+                    <p><?php _e('No active subscription. Subscribe to list studs and access full directory features.','petslist'); ?></p>
                     <a href="<?php echo esc_url(dd_pricing_url()); ?>" class="ddu-btn-primary"><?php _e('View Plans','petslist'); ?></a>
                 </div>
                 <?php endif; ?>

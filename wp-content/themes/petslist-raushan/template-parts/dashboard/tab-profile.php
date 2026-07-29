@@ -6,9 +6,11 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-$user    = wp_get_current_user();
-$phone   = get_user_meta( $user->ID, 'dd_phone', true );
-$website = $user->user_url;
+$user             = wp_get_current_user();
+$phone            = get_user_meta( $user->ID, 'dd_phone', true );
+$location         = get_user_meta( $user->ID, 'dd_location', true );
+$fulltime_breeder = get_user_meta( $user->ID, 'dd_fulltime_breeder', true ) ?: 'no';
+$website          = $user->user_url;
 ?>
 
 <div class="dd-tab-profile">
@@ -16,7 +18,7 @@ $website = $user->user_url;
     <div class="dd-tab-dogs__header">
         <div>
             <h2><?php _e( 'Profile Settings', 'petslist' ); ?></h2>
-            <p class="dd-tab-dogs__subtitle" style="margin-top:4px;"><?php _e('Manage your display name, contact phone, website, and public biography.', 'petslist'); ?></p>
+            <p class="dd-tab-dogs__subtitle" style="margin-top:4px;"><?php _e('Manage your display name, location, contact phone, breeder status, website, and public biography.', 'petslist'); ?></p>
         </div>
     </div>
 
@@ -64,8 +66,21 @@ $website = $user->user_url;
                     </div>
 
                     <div class="dd-form-group">
+                        <label for="dd-profile-location"><?php _e( 'Location', 'petslist' ); ?></label>
+                        <input type="text" id="dd-profile-location" name="location" value="<?php echo esc_attr( $location ); ?>" placeholder="<?php esc_attr_e( 'City, State / Country', 'petslist' ); ?>">
+                    </div>
+
+                    <div class="dd-form-group">
                         <label for="dd-profile-phone"><?php _e( 'Phone Number', 'petslist' ); ?></label>
                         <input type="tel" id="dd-profile-phone" name="phone" value="<?php echo esc_attr( $phone ); ?>" placeholder="+1 555 000 0000">
+                    </div>
+
+                    <div class="dd-form-group">
+                        <label for="dd-profile-fulltime-breeder"><?php _e( 'Fulltime Breeder?', 'petslist' ); ?></label>
+                        <select id="dd-profile-fulltime-breeder" name="fulltime_breeder" class="dd-form-control">
+                            <option value="no" <?php selected($fulltime_breeder, 'no'); ?>><?php _e('No', 'petslist'); ?></option>
+                            <option value="yes" <?php selected($fulltime_breeder, 'yes'); ?>><?php _e('Yes', 'petslist'); ?></option>
+                        </select>
                     </div>
 
                     <div class="dd-form-group">

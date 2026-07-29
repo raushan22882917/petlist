@@ -59,7 +59,7 @@ foreach ($stats as $s) $st_map2[$s->status] = $s->cnt;
                 <th><?php _e('Status','petslist'); ?></th>
                 <th><?php _e('Started','petslist'); ?></th>
                 <th><?php _e('Expires','petslist'); ?></th>
-                <th><?php _e('Dogs','petslist'); ?></th>
+                <th><?php _e('Studs','petslist'); ?></th>
                 <th><?php _e('Actions','petslist'); ?></th>
             </tr></thead>
             <tbody>
@@ -83,7 +83,7 @@ foreach ($stats as $s) $st_map2[$s->status] = $s->cnt;
                 <td><strong><?php echo (int)$sub->dog_count; ?></strong></td>
                 <td>
                     <a href="<?php echo esc_url(admin_url('user-edit.php?user_id='.$sub->user_id)); ?>" class="dda-action-btn"><?php _e('User','petslist'); ?></a>
-                    <a href="<?php echo esc_url(add_query_arg(['tab'=>'dogs','dog_search'=>$sub->display_name], dd_dashboard_url('dogs'))); ?>" class="dda-action-btn"><?php _e('Dogs','petslist'); ?></a>
+                    <a href="<?php echo esc_url(add_query_arg(['tab'=>'dogs','dog_search'=>$sub->display_name], dd_dashboard_url('dogs'))); ?>" class="dda-action-btn"><?php _e('Studs','petslist'); ?></a>
                 </td>
             </tr>
             <?php endforeach; ?>

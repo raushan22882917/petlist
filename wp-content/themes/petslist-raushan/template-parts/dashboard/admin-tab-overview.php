@@ -63,7 +63,7 @@ $pending_dogs = (int)$total_dogs->pending;
             </div>
             <div class="dda-kpi__body">
                 <div class="dda-kpi__num"><?php echo number_format((int)$total_dogs->publish); ?></div>
-                <div class="dda-kpi__label"><?php _e('Published Dogs','petslist'); ?></div>
+                <div class="dda-kpi__label"><?php _e('Published Studs','petslist'); ?></div>
             </div>
             <div class="dda-kpi__footer">
                 <?php if ($pending_dogs > 0) : ?>
@@ -92,7 +92,7 @@ $pending_dogs = (int)$total_dogs->pending;
     <!-- Pending approval alert -->
     <div class="dda-alert-banner">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        <strong><?php printf(__('%d dog(s) pending review','petslist'), $pending_dogs); ?></strong>
+        <strong><?php printf(__('%d stud(s) pending review','petslist'), $pending_dogs); ?></strong>
         <span><?php _e('Review and approve submissions to make them live.','petslist'); ?></span>
         <a href="<?php echo esc_url(dd_dashboard_url('dogs')); ?>" class="ddu-btn-primary" style="margin-left:auto;font-size:13px"><?php _e('Review Now →','petslist'); ?></a>
     </div>
@@ -104,12 +104,12 @@ $pending_dogs = (int)$total_dogs->pending;
         <!-- Recent Dog Submissions -->
         <div class="ddu-panel">
             <div class="ddu-panel__head">
-                <h3 class="ddu-panel__title"><?php _e('Recent Dog Submissions','petslist'); ?></h3>
-                <a href="<?php echo esc_url(dd_dashboard_url('dogs')); ?>" class="ddu-panel__see-all"><?php _e('All Dogs →','petslist'); ?></a>
+                <h3 class="ddu-panel__title"><?php _e('Recent Stud Submissions','petslist'); ?></h3>
+                <a href="<?php echo esc_url(dd_dashboard_url('dogs')); ?>" class="ddu-panel__see-all"><?php _e('All Studs →','petslist'); ?></a>
             </div>
             <table class="dda-table">
                 <thead><tr>
-                    <th><?php _e('Dog','petslist'); ?></th>
+                    <th><?php _e('Stud','petslist'); ?></th>
                     <th><?php _e('Owner','petslist'); ?></th>
                     <th><?php _e('Status','petslist'); ?></th>
                     <th><?php _e('Date','petslist'); ?></th>
@@ -156,7 +156,7 @@ $pending_dogs = (int)$total_dogs->pending;
                 </tr>
                 <?php endforeach; ?>
                 <?php if (!$recent_dogs) : ?>
-                <tr><td colspan="5" style="text-align:center;color:#9ca3af;padding:30px"><?php _e('No dogs yet.','petslist'); ?></td></tr>
+                <tr><td colspan="5" style="text-align:center;color:#9ca3af;padding:30px"><?php _e('No studs yet.','petslist'); ?></td></tr>
                 <?php endif; ?>
                 </tbody>
             </table>

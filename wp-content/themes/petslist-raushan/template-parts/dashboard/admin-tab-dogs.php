@@ -47,7 +47,7 @@ $status_tabs = [
         <form class="dda-filter-bar__search" method="get">
             <input type="hidden" name="tab" value="dogs">
             <input type="hidden" name="dog_status" value="<?php echo esc_attr($status_filter); ?>">
-            <input type="text" name="dog_search" placeholder="<?php esc_attr_e('Search dogs...','petslist'); ?>" value="<?php echo esc_attr($search); ?>">
+            <input type="text" name="dog_search" placeholder="<?php esc_attr_e('Search studs...','petslist'); ?>" value="<?php echo esc_attr($search); ?>">
             <button type="submit">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
             </button>
@@ -59,7 +59,7 @@ $status_tabs = [
         <table class="dda-table">
             <thead><tr>
                 <th><?php _e('Photo','petslist'); ?></th>
-                <th><?php _e('Dog Name','petslist'); ?></th>
+                <th><?php _e('Stud Name','petslist'); ?></th>
                 <th><?php _e('Breed','petslist'); ?></th>
                 <th><?php _e('Owner','petslist'); ?></th>
                 <th><?php _e('Status','petslist'); ?></th>
@@ -115,7 +115,7 @@ $status_tabs = [
             </tr>
             <?php endwhile; wp_reset_postdata();
             else : ?>
-            <tr><td colspan="7" style="text-align:center;padding:40px;color:#9ca3af"><?php _e('No dogs found.','petslist'); ?></td></tr>
+            <tr><td colspan="7" style="text-align:center;padding:40px;color:#9ca3af"><?php _e('No studs found.','petslist'); ?></td></tr>
             <?php endif; ?>
             </tbody>
         </table>

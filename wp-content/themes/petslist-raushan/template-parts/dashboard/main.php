@@ -24,12 +24,12 @@ $nav = [
             'badge' => 0,
         ],
         'dogs' => [
-            'label' => __('My Dogs', 'petslist'),
+            'label' => __('My Studs', 'petslist'),
             'icon'  => 'dogs',
             'badge' => count($dogs),
         ],
         'add-dog' => [
-            'label' => __('Add Dog', 'petslist'),
+            'label' => __('Add Stud', 'petslist'),
             'icon'  => 'add',
             'badge' => 0,
         ],
@@ -107,7 +107,7 @@ function dd_nav_icon($k) {
         <div class="ddu-sidebar__quick">
             <a href="<?php echo esc_url(dd_dashboard_url('add-dog')); ?>" class="ddu-sidebar__quick-btn">
                 <?php echo dd_nav_icon('add'); ?>
-                <span><?php _e('Add Dog','petslist'); ?></span>
+                <span><?php _e('Add Stud','petslist'); ?></span>
             </a>
         </div>
         <?php else : ?>

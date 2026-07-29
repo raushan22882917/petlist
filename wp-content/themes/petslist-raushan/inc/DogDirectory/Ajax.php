@@ -104,17 +104,36 @@ class Ajax {
         }
 
         // Save meta
-        $meta_fields = ['breed','gender','dob','color','weight','registration_no','country','city','contact_phone','contact_email','contact_website'];
-        $meta        = [];
+        $meta_fields = [
+            'breed', 'gender', 'dob', 'age', 'color', 'height', 'weight',
+            'registration_no', 'stud_fee', 'semen_type', 'titles',
+            'competition_class', 'pedigree', 'health_testing',
+            'country', 'city', 'contact_phone', 'contact_email', 'contact_website'
+        ];
+        $meta = [];
         foreach ( $meta_fields as $field ) {
-            $meta[$field] = sanitize_text_field( $data[$field] ?? '' );
+            $meta[$field] = isset($data[$field]) && (in_array($field, ['pedigree', 'health_testing']))
+                ? sanitize_textarea_field( $data[$field] )
+                : sanitize_text_field( $data[$field] ?? '' );
         }
         $meta['dog_name'] = $title;
         update_post_meta( $result, '_dd_dog_meta', $meta );
 
-        // Health data
+        // Health data (sync with health clearances & pedigree)
+        $health = get_post_meta( $result, '_dd_dog_health', true ) ?: [];
+        if ( ! is_array( $health ) ) {
+            $health = [];
+        }
         if ( ! empty( $data['health'] ) && is_array( $data['health'] ) ) {
-            $health = array_map( 'sanitize_textarea_field', $data['health'] );
+            $health = array_merge( $health, array_map( 'sanitize_textarea_field', $data['health'] ) );
+        }
+        if ( ! empty( $data['pedigree'] ) ) {
+            $health['pedigree'] = sanitize_textarea_field( $data['pedigree'] );
+        }
+        if ( ! empty( $data['health_testing'] ) ) {
+            $health['health_clearances'] = sanitize_textarea_field( $data['health_testing'] );
+        }
+        if ( ! empty( $health ) ) {
             update_post_meta( $result, '_dd_dog_health', $health );
         }
 
@@ -266,16 +285,36 @@ class Ajax {
                         <span class="dd-drawer-value"><?php echo esc_html($meta['breed'] ?: '—'); ?></span>
                     </div>
                     <div class="dd-drawer-item">
-                        <span class="dd-drawer-label"><?php _e('Date of Birth', 'petslist'); ?></span>
-                        <span class="dd-drawer-value"><?php echo esc_html($meta['dob'] ?: '—'); ?><?php if ($age) echo " ({$age})"; ?></span>
+                        <span class="dd-drawer-label"><?php _e('Age', 'petslist'); ?></span>
+                        <span class="dd-drawer-value"><?php echo esc_html(!empty($meta['age']) ? $meta['age'] : ($meta['dob'] ? $meta['dob'] . ($age ? " ({$age})" : '') : '—')); ?></span>
                     </div>
                     <div class="dd-drawer-item">
                         <span class="dd-drawer-label"><?php _e('Color', 'petslist'); ?></span>
                         <span class="dd-drawer-value"><?php echo esc_html($meta['color'] ?: '—'); ?></span>
                     </div>
                     <div class="dd-drawer-item">
+                        <span class="dd-drawer-label"><?php _e('Height', 'petslist'); ?></span>
+                        <span class="dd-drawer-value"><?php echo esc_html($meta['height'] ?: '—'); ?></span>
+                    </div>
+                    <div class="dd-drawer-item">
                         <span class="dd-drawer-label"><?php _e('Weight', 'petslist'); ?></span>
-                        <span class="dd-drawer-value"><?php echo !empty($meta['weight']) ? esc_html($meta['weight'] . ' kg') : '—'; ?></span>
+                        <span class="dd-drawer-value"><?php echo esc_html($meta['weight'] ?: '—'); ?></span>
+                    </div>
+                    <div class="dd-drawer-item">
+                        <span class="dd-drawer-label"><?php _e('Stud Fee', 'petslist'); ?></span>
+                        <span class="dd-drawer-value" style="color: #059669; font-weight: 700;"><?php echo esc_html($meta['stud_fee'] ?: '—'); ?></span>
+                    </div>
+                    <div class="dd-drawer-item">
+                        <span class="dd-drawer-label"><?php _e('Semen Type', 'petslist'); ?></span>
+                        <span class="dd-drawer-value"><?php echo esc_html($meta['semen_type'] ?: '—'); ?></span>
+                    </div>
+                    <div class="dd-drawer-item">
+                        <span class="dd-drawer-label"><?php _e('Titles', 'petslist'); ?></span>
+                        <span class="dd-drawer-value"><?php echo esc_html($meta['titles'] ?: '—'); ?></span>
+                    </div>
+                    <div class="dd-drawer-item">
+                        <span class="dd-drawer-label"><?php _e('Class', 'petslist'); ?></span>
+                        <span class="dd-drawer-value"><?php echo esc_html($meta['competition_class'] ?: '—'); ?></span>
                     </div>
                     <div class="dd-drawer-item">
                         <span class="dd-drawer-label"><?php _e('Registration No.', 'petslist'); ?></span>
@@ -396,9 +435,26 @@ class Ajax {
             </div>
 
             <!-- User Info Section -->
+            <?php
+            $u_location         = get_user_meta( $user_id, 'dd_location', true );
+            $u_phone            = get_user_meta( $user_id, 'dd_phone', true );
+            $u_fulltime_breeder = get_user_meta( $user_id, 'dd_fulltime_breeder', true );
+            ?>
             <div class="dd-drawer-profile__section" style="padding: 20px; border-bottom: 1px solid #edf2f7;">
-                <h4 style="font-size: 14px; font-weight: 700; color: #1e293b; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;"><?php _e('Account details', 'petslist'); ?></h4>
+                <h4 style="font-size: 14px; font-weight: 700; color: #1e293b; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;"><?php _e('Owner Profile Details', 'petslist'); ?></h4>
                 <div class="dd-drawer-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                    <div class="dd-drawer-item">
+                        <span class="dd-drawer-label" style="display:block; font-size:11px; color:#64748b; text-transform:uppercase; margin-bottom:2px;"><?php _e('Location', 'petslist'); ?></span>
+                        <span class="dd-drawer-value" style="font-size:13px; font-weight:600; color:#334155;"><?php echo esc_html($u_location ?: '—'); ?></span>
+                    </div>
+                    <div class="dd-drawer-item">
+                        <span class="dd-drawer-label" style="display:block; font-size:11px; color:#64748b; text-transform:uppercase; margin-bottom:2px;"><?php _e('Phone', 'petslist'); ?></span>
+                        <span class="dd-drawer-value" style="font-size:13px; font-weight:600; color:#334155;"><?php echo esc_html($u_phone ?: '—'); ?></span>
+                    </div>
+                    <div class="dd-drawer-item">
+                        <span class="dd-drawer-label" style="display:block; font-size:11px; color:#64748b; text-transform:uppercase; margin-bottom:2px;"><?php _e('Fulltime Breeder', 'petslist'); ?></span>
+                        <span class="dd-drawer-value" style="font-size:13px; font-weight:600; color:#334155; text-transform: capitalize;"><?php echo esc_html($u_fulltime_breeder ? ucfirst($u_fulltime_breeder) : 'No'); ?></span>
+                    </div>
                     <div class="dd-drawer-item">
                         <span class="dd-drawer-label" style="display:block; font-size:11px; color:#64748b; text-transform:uppercase; margin-bottom:2px;"><?php _e('Role', 'petslist'); ?></span>
                         <span class="dd-drawer-value" style="font-size:13px; font-weight:600; color:#334155; text-transform: capitalize;"><?php echo esc_html(implode(', ', $user->roles)); ?></span>
@@ -411,10 +467,6 @@ class Ajax {
                     <div class="dd-drawer-item">
                         <span class="dd-drawer-label" style="display:block; font-size:11px; color:#64748b; text-transform:uppercase; margin-bottom:2px;"><?php _e('Expires', 'petslist'); ?></span>
                         <span class="dd-drawer-value" style="font-size:13px; font-weight:600; color:#334155;"><?php echo date('M j, Y', strtotime($sub->expires_at)); ?></span>
-                    </div>
-                    <div class="dd-drawer-item">
-                        <span class="dd-drawer-label" style="display:block; font-size:11px; color:#64748b; text-transform:uppercase; margin-bottom:2px;"><?php _e('Price', 'petslist'); ?></span>
-                        <span class="dd-drawer-value" style="font-size:13px; font-weight:600; color:#334155;">$<?php echo number_format($sub->price, 2); ?></span>
                     </div>
                     <?php endif; ?>
                 </div>
@@ -461,11 +513,14 @@ class Ajax {
     public function register_user() {
         check_ajax_referer( 'dd_auth_nonce', 'nonce' );
 
-        $name     = sanitize_text_field( $_POST['name'] ?? '' );
-        $email    = sanitize_email( $_POST['email'] ?? '' );
-        $password = $_POST['password'] ?? '';
+        $name             = sanitize_text_field( $_POST['name'] ?? '' );
+        $location         = sanitize_text_field( $_POST['location'] ?? '' );
+        $phone            = sanitize_text_field( $_POST['phone'] ?? '' );
+        $email            = sanitize_email( $_POST['email'] ?? '' );
+        $fulltime_breeder = sanitize_text_field( $_POST['fulltime_breeder'] ?? 'no' );
+        $password         = $_POST['password'] ?? '';
 
-        if ( empty($name) || empty($email) || empty($password) ) {
+        if ( empty($name) || empty($location) || empty($phone) || empty($email) || empty($password) ) {
             wp_send_json_error(['message' => __('All fields are required.', 'petslist')]);
         }
         if ( ! is_email($email) ) {
@@ -486,6 +541,9 @@ class Ajax {
         wp_update_user(['ID' => $user_id, 'display_name' => $name, 'first_name' => $name]);
         $u = new \WP_User( $user_id );
         $u->set_role( 'dd_subscriber' );
+        update_user_meta( $user_id, 'dd_location', $location );
+        update_user_meta( $user_id, 'dd_phone', $phone );
+        update_user_meta( $user_id, 'dd_fulltime_breeder', strtolower($fulltime_breeder) === 'yes' ? 'yes' : 'no' );
         update_user_meta( $user_id, 'dd_member_since', current_time('mysql') );
 
         // Send verification email
@@ -547,12 +605,14 @@ class Ajax {
         check_ajax_referer( 'dd_dashboard_nonce', 'nonce' );
         if ( ! is_user_logged_in() ) wp_send_json_error(['message' => __('Not logged in.', 'petslist')]);
 
-        $user_id = get_current_user_id();
-        $name    = sanitize_text_field( $_POST['display_name'] ?? '' );
-        $bio     = sanitize_textarea_field( $_POST['bio'] ?? '' );
-        $phone   = sanitize_text_field( $_POST['phone'] ?? '' );
-        $website = esc_url_raw( $_POST['website'] ?? '' );
-        $avatar  = absint( $_POST['avatar_id'] ?? 0 );
+        $user_id          = get_current_user_id();
+        $name             = sanitize_text_field( $_POST['display_name'] ?? '' );
+        $bio              = sanitize_textarea_field( $_POST['bio'] ?? '' );
+        $phone            = sanitize_text_field( $_POST['phone'] ?? '' );
+        $location         = sanitize_text_field( $_POST['location'] ?? '' );
+        $fulltime_breeder = sanitize_text_field( $_POST['fulltime_breeder'] ?? 'no' );
+        $website          = esc_url_raw( $_POST['website'] ?? '' );
+        $avatar           = absint( $_POST['avatar_id'] ?? 0 );
 
         $result = wp_update_user([
             'ID'           => $user_id,
@@ -565,6 +625,8 @@ class Ajax {
         }
 
         update_user_meta($user_id, 'dd_phone', $phone);
+        update_user_meta($user_id, 'dd_location', $location);
+        update_user_meta($user_id, 'dd_fulltime_breeder', strtolower($fulltime_breeder) === 'yes' ? 'yes' : 'no');
         update_user_meta($user_id, 'user_url', $website);
         
         if ( $avatar ) {

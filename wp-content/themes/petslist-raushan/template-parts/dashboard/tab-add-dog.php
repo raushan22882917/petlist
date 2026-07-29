@@ -36,10 +36,10 @@ function dd_field( $meta, $key, $fallback = '' ) {
 <div class="dd-tab-add-dog">
 
     <div class="dd-tab-add-dog__header">
-        <h2><?php echo $is_edit ? __( 'Edit Dog Profile', 'petslist' ) : __( 'Add New Dog', 'petslist' ); ?></h2>
+        <h2><?php echo $is_edit ? __( 'Edit Stud Profile', 'petslist' ) : __( 'Add New Stud', 'petslist' ); ?></h2>
         <?php if ( $is_edit ) : ?>
         <a href="<?php echo esc_url(dd_dashboard_url('dogs')); ?>" class="dd-btn dd-btn--ghost">
-            <i class="fa-solid fa-arrow-left"></i> <?php _e( 'Back to My Dogs', 'petslist' ); ?>
+            <i class="fa-solid fa-arrow-left"></i> <?php _e( 'Back to My Studs', 'petslist' ); ?>
         </a>
         <?php endif; ?>
     </div>
@@ -72,14 +72,14 @@ function dd_field( $meta, $key, $fallback = '' ) {
     <form id="dd-dog-form" class="dd-dog-form" novalidate>
         <input type="hidden" name="post_id" value="<?php echo $is_edit ? $edit_id : 0; ?>">
 
-        <!-- Section 1: Basic Info -->
+        <!-- Section 1: Basic Info / Dog Profile -->
         <div class="dd-dog-form__section" data-step="1">
-            <h3 class="dd-dog-form__section-title"><span>1</span> <?php _e( 'Basic Information', 'petslist' ); ?></h3>
+            <h3 class="dd-dog-form__section-title"><span>1</span> <?php _e( 'Stud Profile Details', 'petslist' ); ?></h3>
             <div class="dd-dog-form__grid">
 
                 <div class="dd-form-group dd-form-group--full">
-                    <label for="dd-dog-name"><?php _e( 'Dog Name', 'petslist' ); ?> <span class="dd-required">*</span></label>
-                    <input type="text" id="dd-dog-name" name="dog_data[dog_name]" value="<?php echo esc_attr($dog_title); ?>" placeholder="<?php esc_attr_e( 'Enter dog\'s registered name', 'petslist' ); ?>" required>
+                    <label for="dd-dog-name"><?php _e( 'Stud Name', 'petslist' ); ?> <span class="dd-required">*</span></label>
+                    <input type="text" id="dd-dog-name" name="dog_data[dog_name]" value="<?php echo esc_attr($dog_title); ?>" placeholder="<?php esc_attr_e( 'Enter stud\'s registered name', 'petslist' ); ?>" required>
                 </div>
 
                 <div class="dd-form-group">
@@ -92,29 +92,56 @@ function dd_field( $meta, $key, $fallback = '' ) {
                     </select>
                 </div>
 
-
                 <div class="dd-form-group">
                     <label for="dd-gender"><?php _e( 'Gender', 'petslist' ); ?></label>
                     <select id="dd-gender" name="dog_data[gender]">
-                        <option value=""><?php _e( 'Select Gender', 'petslist' ); ?></option>
-                        <option value="Male" <?php selected( $dog_meta['gender'] ?? '', 'Male' ); ?>><?php _e( 'Male', 'petslist' ); ?></option>
+                        <option value="Male" <?php selected( $dog_meta['gender'] ?? 'Male', 'Male' ); ?>><?php _e( 'Male (Stud)', 'petslist' ); ?></option>
                         <option value="Female" <?php selected( $dog_meta['gender'] ?? '', 'Female' ); ?>><?php _e( 'Female', 'petslist' ); ?></option>
                     </select>
                 </div>
 
                 <div class="dd-form-group">
-                    <label for="dd-dob"><?php _e( 'Date of Birth', 'petslist' ); ?></label>
-                    <input type="date" id="dd-dob" name="dog_data[dob]" value="<?php echo dd_field($dog_meta,'dob'); ?>">
+                    <label for="dd-age"><?php _e( 'Age', 'petslist' ); ?></label>
+                    <input type="text" id="dd-age" name="dog_data[age]" value="<?php echo dd_field($dog_meta,'age'); ?>" placeholder="<?php esc_attr_e( 'e.g. 2 Years 4 Months', 'petslist' ); ?>">
                 </div>
 
                 <div class="dd-form-group">
-                    <label for="dd-color"><?php _e( 'Color / Coat', 'petslist' ); ?></label>
-                    <input type="text" id="dd-color" name="dog_data[color]" value="<?php echo dd_field($dog_meta,'color'); ?>" placeholder="<?php esc_attr_e( 'e.g. Golden, Black & Tan', 'petslist' ); ?>">
+                    <label for="dd-color"><?php _e( 'Color', 'petslist' ); ?></label>
+                    <input type="text" id="dd-color" name="dog_data[color]" value="<?php echo dd_field($dog_meta,'color'); ?>" placeholder="<?php esc_attr_e( 'e.g. Black & Tan, Fawn', 'petslist' ); ?>">
                 </div>
 
                 <div class="dd-form-group">
-                    <label for="dd-weight"><?php _e( 'Weight (kg)', 'petslist' ); ?></label>
-                    <input type="text" id="dd-weight" name="dog_data[weight]" value="<?php echo dd_field($dog_meta,'weight'); ?>" placeholder="<?php esc_attr_e( 'e.g. 28.5', 'petslist' ); ?>">
+                    <label for="dd-height"><?php _e( 'Height', 'petslist' ); ?></label>
+                    <input type="text" id="dd-height" name="dog_data[height]" value="<?php echo dd_field($dog_meta,'height'); ?>" placeholder="<?php esc_attr_e( 'e.g. 26 inches', 'petslist' ); ?>">
+                </div>
+
+                <div class="dd-form-group">
+                    <label for="dd-weight"><?php _e( 'Weight', 'petslist' ); ?></label>
+                    <input type="text" id="dd-weight" name="dog_data[weight]" value="<?php echo dd_field($dog_meta,'weight'); ?>" placeholder="<?php esc_attr_e( 'e.g. 75 lbs / 34 kg', 'petslist' ); ?>">
+                </div>
+
+                <div class="dd-form-group">
+                    <label for="dd-stud-fee"><?php _e( 'Stud Fee', 'petslist' ); ?></label>
+                    <input type="text" id="dd-stud-fee" name="dog_data[stud_fee]" value="<?php echo dd_field($dog_meta,'stud_fee'); ?>" placeholder="<?php esc_attr_e( 'e.g. $1,500 or Contact for Fee', 'petslist' ); ?>">
+                </div>
+
+                <div class="dd-form-group">
+                    <label for="dd-semen-type"><?php _e( 'Fresh or Frozen Semen', 'petslist' ); ?></label>
+                    <select id="dd-semen-type" name="dog_data[semen_type]">
+                        <option value="Fresh" <?php selected( $dog_meta['semen_type'] ?? '', 'Fresh' ); ?>><?php _e( 'Fresh', 'petslist' ); ?></option>
+                        <option value="Frozen" <?php selected( $dog_meta['semen_type'] ?? '', 'Frozen' ); ?>><?php _e( 'Frozen', 'petslist' ); ?></option>
+                        <option value="Both (Fresh & Frozen)" <?php selected( $dog_meta['semen_type'] ?? '', 'Both (Fresh & Frozen)' ); ?>><?php _e( 'Both (Fresh & Frozen)', 'petslist' ); ?></option>
+                    </select>
+                </div>
+
+                <div class="dd-form-group">
+                    <label for="dd-titles"><?php _e( 'Titles', 'petslist' ); ?></label>
+                    <input type="text" id="dd-titles" name="dog_data[titles]" value="<?php echo dd_field($dog_meta,'titles'); ?>" placeholder="<?php esc_attr_e( 'e.g. CH, GCH, BIS', 'petslist' ); ?>">
+                </div>
+
+                <div class="dd-form-group">
+                    <label for="dd-class"><?php _e( 'Class', 'petslist' ); ?></label>
+                    <input type="text" id="dd-class" name="dog_data[competition_class]" value="<?php echo dd_field($dog_meta,'competition_class'); ?>" placeholder="<?php esc_attr_e( 'e.g. Open Class, Working Line', 'petslist' ); ?>">
                 </div>
 
                 <div class="dd-form-group">
@@ -123,8 +150,18 @@ function dd_field( $meta, $key, $fallback = '' ) {
                 </div>
 
                 <div class="dd-form-group dd-form-group--full">
-                    <label for="dd-description"><?php _e( 'Description', 'petslist' ); ?></label>
-                    <textarea id="dd-description" name="dog_data[description]" rows="4" placeholder="<?php esc_attr_e( 'Describe the dog\'s temperament, history, achievements...', 'petslist' ); ?>"><?php echo esc_textarea($dog_content); ?></textarea>
+                    <label for="dd-pedigree"><?php _e( 'Pedigree', 'petslist' ); ?></label>
+                    <textarea id="dd-pedigree" name="dog_data[pedigree]" rows="3" placeholder="<?php esc_attr_e( 'Sire, Dam, and lineage information...', 'petslist' ); ?>"><?php echo esc_textarea($dog_meta['pedigree'] ?? ($dog_health['pedigree'] ?? '')); ?></textarea>
+                </div>
+
+                <div class="dd-form-group dd-form-group--full">
+                    <label for="dd-health-testing"><?php _e( 'Health Testing (Optional)', 'petslist' ); ?></label>
+                    <textarea id="dd-health-testing" name="dog_data[health_testing]" rows="3" placeholder="<?php esc_attr_e( 'OFA Hips, Elbows, Eyes, Genetic clearances...', 'petslist' ); ?>"><?php echo esc_textarea($dog_meta['health_testing'] ?? ($dog_health['health_clearances'] ?? '')); ?></textarea>
+                </div>
+
+                <div class="dd-form-group dd-form-group--full">
+                    <label for="dd-description"><?php _e( 'Description / Additional Info', 'petslist' ); ?></label>
+                    <textarea id="dd-description" name="dog_data[description]" rows="3" placeholder="<?php esc_attr_e( 'Describe the dog\'s temperament, history, achievements...', 'petslist' ); ?>"><?php echo esc_textarea($dog_content); ?></textarea>
                 </div>
 
             </div>
@@ -268,7 +305,7 @@ function dd_field( $meta, $key, $fallback = '' ) {
                 </button>
                 <button type="submit" class="dd-btn dd-btn--primary dd-btn--lg dd-hide" id="dd-dog-submit">
                     <span class="dd-btn__text">
-                        <?php echo $is_edit ? __( 'Update Dog Profile', 'petslist' ) : __( 'Submit Dog for Review', 'petslist' ); ?>
+                        <?php echo $is_edit ? __( 'Update Stud Profile', 'petslist' ) : __( 'Submit Stud for Review', 'petslist' ); ?>
                     </span>
                     <span class="dd-btn__loader" style="display:none">
                         <i class="fa-solid fa-spinner fa-spin"></i> <?php _e( 'Saving...', 'petslist' ); ?>

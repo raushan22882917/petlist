@@ -28,23 +28,58 @@ $dd_auth_banner = function_exists( 'petslist_img_url' ) ? petslist_img_url( 'aut
             <div id="dd-register-message" class="alert" style="display:none; margin-bottom: 20px;"></div>
 
             <form id="dd-register-form" class="form-horizontal" novalidate>
+                <div class="dd-form-section-title" style="font-size: 15px; font-weight: 700; color: #0f172a; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #bd8c42; display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-user-gear" style="color: #bd8c42;"></i> <?php _e('Owner Profile Details', 'petslist'); ?>
+                </div>
+
                 <div class="rtcl-form-group">
                     <label for="dd-reg-name" class="rtcl-field-label">
-                        <?php _e('Full Name', 'petslist'); ?>
+                        <?php _e('Name', 'petslist'); ?>
                         <strong class="rtcl-required">*</strong>
                     </label>
                     <input type="text" id="dd-reg-name" name="name" class="rtcl-form-control" placeholder="<?php esc_attr_e('Your full name', 'petslist'); ?>" required autocomplete="name">
                 </div>
 
                 <div class="rtcl-form-group">
+                    <label for="dd-reg-location" class="rtcl-field-label">
+                        <?php _e('Location', 'petslist'); ?>
+                        <strong class="rtcl-required">*</strong>
+                    </label>
+                    <input type="text" id="dd-reg-location" name="location" class="rtcl-form-control" placeholder="<?php esc_attr_e('City, State / Country', 'petslist'); ?>" required>
+                </div>
+
+                <div class="rtcl-form-group">
+                    <label for="dd-reg-phone" class="rtcl-field-label">
+                        <?php _e('Phone', 'petslist'); ?>
+                        <strong class="rtcl-required">*</strong>
+                    </label>
+                    <input type="tel" id="dd-reg-phone" name="phone" class="rtcl-form-control" placeholder="<?php esc_attr_e('+1 (555) 000-0000', 'petslist'); ?>" required autocomplete="tel">
+                </div>
+
+                <div class="rtcl-form-group">
                     <label for="dd-reg-email" class="rtcl-field-label">
-                        <?php _e('Email Address', 'petslist'); ?>
+                        <?php _e('Email', 'petslist'); ?>
                         <strong class="rtcl-required">*</strong>
                     </label>
                     <input type="email" id="dd-reg-email" name="email" class="rtcl-form-control" placeholder="<?php esc_attr_e('you@example.com', 'petslist'); ?>" required autocomplete="email">
                 </div>
 
                 <div class="rtcl-form-group">
+                    <label class="rtcl-field-label">
+                        <?php _e('Fulltime Breeder', 'petslist'); ?>
+                        <strong class="rtcl-required">*</strong>
+                    </label>
+                    <div style="display: flex; gap: 24px; margin-top: 6px; padding: 10px 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px;">
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 500; font-size: 14px; color: #1e293b;">
+                            <input type="radio" name="fulltime_breeder" value="yes" required> <?php _e('Yes', 'petslist'); ?>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 500; font-size: 14px; color: #1e293b;">
+                            <input type="radio" name="fulltime_breeder" value="no" checked required> <?php _e('No', 'petslist'); ?>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="rtcl-form-group" style="margin-top: 16px;">
                     <label for="dd-reg-pass" class="rtcl-field-label">
                         <?php _e('Password', 'petslist'); ?>
                         <strong class="rtcl-required">*</strong>
