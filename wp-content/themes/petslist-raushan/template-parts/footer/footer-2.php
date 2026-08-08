@@ -32,23 +32,10 @@ $widget_areas = Options::$options['f2_widgets_area'];
     <?php } ?>
     <div class="footer-bottom">
         <div class="container">
-            <div class="copyright-area">
-                <div class="copyright-text">
-                    <p class="footer-copyright mb-0"><?php echo wp_kses_stripslashes( Options::$options['copyright_text'] ); ?></p>
+            <div class="copyright-area justify-content-center text-center">
+                <div class="copyright-text text-center w-100">
+                    <p class="footer-copyright mb-0 text-center">&copy; Copyright 2026 Studs 4 You &ndash; All Right Reserved</p>
                 </div>
-				<?php if ( $socials ): ?>
-					<div class="social-btn">
-						<ul class="social-list d-flex align-items-center">
-							<?php foreach ( $socials as $social ): ?>
-							<li class="social-item">
-								<a href="<?php echo esc_url( $social['url'] ); ?>" class="<?php echo esc_attr( $social['class'] ); ?> circle-radius d-flex justify-content-center align-items-center" target="_blank">
-									<i class="<?php echo esc_attr( $social['icon'] ); ?>"></i>
-								</a>
-							</li>
-							<?php endforeach; ?>
-						</ul>
-					</div>
-				<?php endif; ?>
             </div>
         </div>
     </div>

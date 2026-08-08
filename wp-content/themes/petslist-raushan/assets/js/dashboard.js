@@ -172,9 +172,46 @@
         $(this).closest('.dd-faq-item').toggleClass('open');
     });
 
-    // ── Drawer Panel Actions ─────────────────────────────────
+    // ── Drawer Panel Actions (Only triggered by Inspect button or non-action elements) ─────────────────────────────────
+    $(document).on('click', '.dd-get-dog-drawer', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var postId = $(this).data('id') || $(this).data('post-id');
+        if (!postId) return;
+
+        $('#dd-dog-drawer-body').html(
+            '<div class="dd-drawer-loading"><i class="fa-solid fa-spinner fa-spin"></i><p>Loading profile details...</p></div>'
+        );
+        $('#dd-dog-drawer').addClass('dd-drawer--open');
+        $('body').addClass('dd-drawer-active');
+
+        $.ajax({
+            url: ddVars.ajaxUrl,
+            type: 'POST',
+            data: {
+                action: 'dd_get_dog_drawer',
+                post_id: postId,
+                nonce: ddVars.nonces.dog
+            },
+            success: function (response) {
+                if (response.success) {
+                    $('#dd-dog-drawer-body').html(response.data.html);
+                } else {
+                    $('#dd-dog-drawer-body').html(
+                        '<div class="dd-drawer-error"><p>' + (response.data.message || 'Error loading profile details.') + '</p></div>'
+                    );
+                }
+            },
+            error: function () {
+                $('#dd-dog-drawer-body').html(
+                    '<div class="dd-drawer-error"><p>Failed to connect. Please try again.</p></div>'
+                );
+            }
+        });
+    });
+
     $(document).on('click', '.dd-dogs-table tbody tr, .dda-table tbody tr', function (e) {
-        if ($(e.target).closest('.dd-dogs-table__actions, .dda-action-btn, a, button').length) {
+        if ($(e.target).closest('.dd-dogs-table__actions, .dda-action-btn, .dd-action-btn, a, button, i, svg').length) {
             return;
         }
 

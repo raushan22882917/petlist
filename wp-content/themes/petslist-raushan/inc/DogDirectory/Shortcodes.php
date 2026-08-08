@@ -151,20 +151,20 @@ class Shortcodes {
 }
 .dd-auth-split-image {
     flex: 1.1 !important;
-    background: linear-gradient(135deg, #070c3e 0%, #0d1656 100%) !important;
+    background: #D3D3D3 !important;
     position: relative !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     padding: 40px !important;
-    color: #fff !important;
+    color: #070c3e !important;
     min-height: 400px !important;
     overflow: hidden !important;
 }
 .dd-auth-split-overlay {
     position: absolute !important;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: linear-gradient(180deg, rgba(7, 12, 62, 0) 30%, rgba(7, 12, 62, 0.85) 100%) !important;
+    background: linear-gradient(180deg, rgba(211, 211, 211, 0) 20%, rgba(211, 211, 211, 0.95) 100%) !important;
     display: flex !important;
     flex-direction: column !important;
     justify-content: flex-end !important;
@@ -172,19 +172,18 @@ class Shortcodes {
     z-index: 3 !important;
 }
 .dd-auth-split-overlay h3 {
-    color: #fff !important;
+    color: #070c3e !important;
     font-size: 28px !important;
     font-weight: 800 !important;
     margin-bottom: 12px !important;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.3) !important;
+    text-shadow: 0 1px 2px rgba(255,255,255,0.8) !important;
     font-family: var(--petslist-heading-font), sans-serif !important;
 }
 .dd-auth-split-overlay p {
-    color: rgba(255,255,255,0.9) !important;
+    color: #334155 !important;
     font-size: 15px !important;
     line-height: 1.6 !important;
     margin: 0 !important;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.3) !important;
 }
 .dd-auth-split-form {
     flex: 1 !important;

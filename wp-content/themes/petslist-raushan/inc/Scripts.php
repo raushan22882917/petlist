@@ -18,6 +18,7 @@ class Scripts {
 		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_scripts' ], 15 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ), 1 );
 		add_action( 'enqueue_block_editor_assets', array( $this, 'admin_enqueue_scripts' ), 1 );
+		add_action( 'wp_head', [ $this, 'rtcl_validator_fallback' ], 0 );
 	}
 
 	public static function instance() {
@@ -359,5 +360,28 @@ class Scripts {
 		}
 		$resultCSS = implode( "}\n", $parts );
 		return $resultCSS;
+	}
+
+	public function rtcl_validator_fallback() {
+		?>
+		<script id="rtcl-validator-fallback">
+		window.rtcl_validator = window.rtcl_validator || {
+			pw_min_length: 6,
+			pwsL10n: {
+				unknown: 'Password strength unknown',
+				bad: 'Weak password',
+				good: 'Good password',
+				strong: 'Strong password',
+				short: 'Very weak'
+			},
+			server_error: 'Server error occurred. Please try again.',
+			messages: {
+				server_error: 'Server error occurred. Please try again.',
+				maxPrice: 'Please enter a valid price',
+				required: 'This field is required'
+			}
+		};
+		</script>
+		<?php
 	}
 }

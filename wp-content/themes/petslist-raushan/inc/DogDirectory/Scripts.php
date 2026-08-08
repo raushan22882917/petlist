@@ -95,6 +95,18 @@ class Scripts {
                 ['jquery'],
                 $v, true
             );
+            if ( current_user_can('manage_options') ) {
+                wp_enqueue_script(
+                    'dd-admin',
+                    $uri . '/assets/js/dog-directory-admin.js',
+                    ['jquery', 'dd-dashboard'],
+                    $v, true
+                );
+                wp_localize_script('dd-admin', 'ddAdminVars', [
+                    'ajaxUrl' => admin_url('admin-ajax.php'),
+                    'nonce'   => wp_create_nonce('dd_admin_nonce'),
+                ]);
+            }
             wp_enqueue_media();
         }
 
@@ -103,6 +115,7 @@ class Scripts {
             'ajaxUrl'      => admin_url('admin-ajax.php'),
             'nonces'       => [
                 'dog'       => wp_create_nonce('dd_dog_nonce'),
+                'admin'     => wp_create_nonce('dd_admin_nonce'),
                 'auth'      => wp_create_nonce('dd_auth_nonce'),
                 'dashboard' => wp_create_nonce('dd_dashboard_nonce'),
                 'upload'    => wp_create_nonce('dd_upload_nonce'),

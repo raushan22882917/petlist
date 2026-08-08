@@ -23,6 +23,7 @@ class Ajax {
         // Dog CRUD
         add_action( 'wp_ajax_dd_save_dog', [ $this, 'save_dog' ] );
         add_action( 'wp_ajax_dd_delete_dog', [ $this, 'delete_dog' ] );
+        add_action( 'wp_ajax_dd_unpublish_dog', [ $this, 'unpublish_dog' ] );
         add_action( 'wp_ajax_dd_get_dog', [ $this, 'get_dog' ] );
         add_action( 'wp_ajax_dd_get_dog_drawer', [ $this, 'get_dog_drawer' ] );
 
@@ -45,6 +46,7 @@ class Ajax {
         // Admin actions
         add_action( 'wp_ajax_dd_admin_approve_dog', [ $this, 'admin_approve_dog' ] );
         add_action( 'wp_ajax_dd_admin_reject_dog', [ $this, 'admin_reject_dog' ] );
+        add_action( 'wp_ajax_dd_admin_expire_dog', [ $this, 'admin_expire_dog' ] );
         add_action( 'wp_ajax_dd_admin_update_plan', [ $this, 'admin_update_plan' ] );
         add_action( 'wp_ajax_dd_admin_toggle_sponsored', [ $this, 'admin_toggle_sponsored' ] );
         add_action( 'wp_ajax_dd_get_user_drawer', [ $this, 'get_user_drawer' ] );
@@ -84,11 +86,28 @@ class Ajax {
             }
         }
 
+        // Determine post status: Require admin approval for non-admin submissions when dd_require_approval is set
+        $require_approval = (bool) get_option( 'dd_require_approval', 1 );
+
+        if ( current_user_can( 'manage_options' ) ) {
+            $post_status = 'publish';
+            if ( $post_id && ( $existing = get_post( $post_id ) ) ) {
+                $post_status = $existing->post_status;
+            }
+        } else {
+            if ( ! $post_id || $require_approval ) {
+                $post_status = 'pending';
+            } else {
+                $existing    = get_post( $post_id );
+                $post_status = $existing ? $existing->post_status : 'pending';
+            }
+        }
+
         $post_data = [
             'post_title'   => $title,
             'post_content' => $content,
             'post_type'    => 'dd_dog',
-            'post_status'  => 'publish',
+            'post_status'  => $post_status,
             'post_author'  => $user_id,
         ];
 
@@ -138,14 +157,16 @@ class Ajax {
         }
 
         // Front/side photos
-        if ( ! empty( $data['front_photo'] ) ) {
-            update_post_meta( $result, '_dd_front_photo', absint($data['front_photo']) );
+        $front_photo_id = ! empty( $data['front_photo'] ) ? absint($data['front_photo']) : 0;
+        if ( $front_photo_id ) {
+            update_post_meta( $result, '_dd_front_photo', $front_photo_id );
         }
         if ( ! empty( $data['side_photo'] ) ) {
             update_post_meta( $result, '_dd_side_photo', absint($data['side_photo']) );
         }
-        if ( ! empty( $data['thumbnail_id'] ) ) {
-            set_post_thumbnail( $result, absint($data['thumbnail_id']) );
+        $thumb_id = ! empty( $data['thumbnail_id'] ) ? absint($data['thumbnail_id']) : $front_photo_id;
+        if ( $thumb_id ) {
+            set_post_thumbnail( $result, $thumb_id );
         }
 
         // Breed taxonomy
@@ -163,8 +184,12 @@ class Ajax {
             }
         }
 
+        $success_message = $post_id
+            ? ( 'pending' === $post_status ? __('Dog updated! Pending admin approval.', 'petslist') : __('Dog updated successfully!', 'petslist') )
+            : __('Dog submitted! Pending admin approval.', 'petslist');
+
         wp_send_json_success( [
-            'message'    => $post_id ? __('Dog updated successfully!', 'petslist') : __('Dog added! Pending approval.', 'petslist'),
+            'message'    => $success_message,
             'post_id'    => $result,
             'edit_url'   => dd_dashboard_url( 'dogs' ),
             'view_url'   => get_permalink( $result ),
@@ -188,6 +213,25 @@ class Ajax {
 
         wp_delete_post( $post_id, true );
         wp_send_json_success(['message' => __('Dog deleted.', 'petslist')]);
+    }
+
+    public function unpublish_dog() {
+        check_ajax_referer( 'dd_dog_nonce', 'nonce' );
+        if ( ! is_user_logged_in() ) wp_send_json_error(['message' => __('Not logged in.', 'petslist')]);
+
+        $post_id = absint( $_POST['post_id'] ?? 0 );
+        $user_id = get_current_user_id();
+        $post    = get_post( $post_id );
+
+        if ( ! $post || $post->post_type !== 'dd_dog' ) {
+            wp_send_json_error(['message' => __('Dog not found.', 'petslist')]);
+        }
+        if ( (int) $post->post_author !== $user_id && ! current_user_can('manage_options') ) {
+            wp_send_json_error(['message' => __('Permission denied.', 'petslist')]);
+        }
+
+        wp_update_post([ 'ID' => $post_id, 'post_status' => 'draft' ]);
+        wp_send_json_success(['message' => __('Ad removed from publish and saved as draft.', 'petslist')]);
     }
 
     public function get_dog() {
@@ -795,7 +839,10 @@ class Ajax {
     // =========================================================
 
     public function admin_approve_dog() {
-        check_ajax_referer('dd_admin_nonce', 'nonce');
+        $nonce = $_POST['nonce'] ?? '';
+        if ( ! wp_verify_nonce($nonce, 'dd_admin_nonce') && ! wp_verify_nonce($nonce, 'dd_dog_nonce') ) {
+            wp_send_json_error(['message' => 'Invalid security token.']);
+        }
         if ( ! current_user_can('manage_options') ) wp_send_json_error(['message' => 'No permission.']);
         $post_id = absint($_POST['post_id'] ?? 0);
         wp_update_post(['ID' => $post_id, 'post_status' => 'publish']);
@@ -803,11 +850,26 @@ class Ajax {
     }
 
     public function admin_reject_dog() {
-        check_ajax_referer('dd_admin_nonce', 'nonce');
+        $nonce = $_POST['nonce'] ?? '';
+        if ( ! wp_verify_nonce($nonce, 'dd_admin_nonce') && ! wp_verify_nonce($nonce, 'dd_dog_nonce') ) {
+            wp_send_json_error(['message' => 'Invalid security token.']);
+        }
         if ( ! current_user_can('manage_options') ) wp_send_json_error(['message' => 'No permission.']);
         $post_id = absint($_POST['post_id'] ?? 0);
         wp_update_post(['ID' => $post_id, 'post_status' => 'draft']);
         wp_send_json_success(['message' => 'Dog rejected.']);
+    }
+
+    public function admin_expire_dog() {
+        $nonce = $_POST['nonce'] ?? '';
+        if ( ! wp_verify_nonce($nonce, 'dd_admin_nonce') && ! wp_verify_nonce($nonce, 'dd_dog_nonce') ) {
+            wp_send_json_error(['message' => 'Invalid security token.']);
+        }
+        if ( ! current_user_can('manage_options') ) wp_send_json_error(['message' => 'No permission.']);
+        $post_id = absint($_POST['post_id'] ?? 0);
+        update_post_meta($post_id, '_dd_is_expired', '1');
+        wp_update_post(['ID' => $post_id, 'post_status' => 'draft']);
+        wp_send_json_success(['message' => 'Dog listing expired.']);
     }
 
     public function admin_update_plan() {

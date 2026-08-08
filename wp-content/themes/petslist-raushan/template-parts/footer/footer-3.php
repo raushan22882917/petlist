@@ -20,36 +20,12 @@ $widget_areas = Options::$options['f3_widgets_area'];
 
     <div class="footer-bottom">
         <div class="container">
-            <div class="copyright-area">
-				<?php if ( function_exists( 'petslist_logo_img' ) ) { ?>
-					<div class="copyright-logo">
-						<?php echo petslist_logo_img( 'footer' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-					</div>
-				<?php } ?>
-                <div class="copyright-text">
-                    <p class="footer-copyright mb-0">
-                        <?php 
-                        $copyright = Options::$options['copyright_text'];
-                        if ( empty( $copyright ) ) {
-                            $copyright = sprintf( __( '&copy; %s Petslist. All Rights Reserved.', 'petslist' ), date( 'Y' ) );
-                        }
-                        echo wp_kses_post( $copyright ); 
-                        ?>
+            <div class="copyright-area justify-content-center text-center">
+                <div class="copyright-text text-center w-100">
+                    <p class="footer-copyright mb-0 text-center">
+                        &copy; Copyright 2026 Studs 4 You &ndash; All Right Reserved
                     </p>
                 </div>
-				<?php if ( $socials ): ?>
-					<div class="social-btn">
-						<ul class="social-list d-flex align-items-center">
-							<?php foreach ( $socials as $social ): ?>
-							<li class="social-item">
-								<a href="<?php echo esc_url( $social['url'] ); ?>" class="<?php echo esc_attr( $social['class'] ); ?> circle-radius d-flex justify-content-center align-items-center" target="_blank">
-									<i class="<?php echo esc_attr( $social['icon'] ); ?>"></i>
-								</a>
-							</li>
-							<?php endforeach; ?>
-						</ul>
-					</div>
-				<?php endif; ?>
             </div>
         </div>
     </div>

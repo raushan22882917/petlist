@@ -14,7 +14,7 @@ $hero_bg = petslist_img_url('hero_bg');
 
 	<!-- ============ HERO ============ -->
 	<section class="petslist-home-hero"
-		style="background-color:#02c5bd;background-image:url('<?php echo esc_url($hero_bg); ?>');">
+		style="background-image:url('<?php echo esc_url($hero_bg); ?>');">
 		<div class="container">
 			<div class="petslist-home-hero__grid">
 				<div class="petslist-home-hero__text">
@@ -39,7 +39,7 @@ $hero_bg = petslist_img_url('hero_bg');
 		<div class="container">
 			<div class="petslist-home-banners__grid">
 				<div class="petslist-home-search-standalone">
-					<h2 class="heading-title"><?php esc_html_e('Search Studs Directory', 'petslist'); ?></h2>
+					<h2 class="heading-title"><?php esc_html_e('Search Stud Directory', 'petslist'); ?></h2>
 					<?php
 					if (class_exists('Rtcl') && class_exists('\RadiusTheme\Petslist\Helper')):
 						?>

@@ -14,7 +14,7 @@ $dd_auth_banner = function_exists( 'petslist_img_url' ) ? petslist_img_url( 'aut
         <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: url('<?php echo esc_url( $dd_auth_bg ); ?>'); background-size: cover; opacity: 0.15; pointer-events: none; z-index: 1;"></div>
         
         <!-- Dog illustration -->
-        <img src="<?php echo esc_url( $dd_auth_banner ); ?>" alt="Dog" style="max-width: 80%; max-height: 60%; position: absolute; bottom: 20px; z-index: 2; pointer-events: none;">
+        <img src="<?php echo esc_url( $dd_auth_banner ); ?>" alt="Dog" style="max-width: 85%; max-height: 75%; position: absolute; bottom: 0; z-index: 2; pointer-events: none; object-fit: contain;">
 
         <div class="dd-auth-split-overlay">
             <h3>🐾 Dog Directory</h3>

@@ -67,8 +67,8 @@ $pending_dogs = (int)$total_dogs->pending;
             </div>
             <div class="dda-kpi__footer">
                 <?php if ($pending_dogs > 0) : ?>
-                <a href="<?php echo esc_url(dd_dashboard_url('dogs')); ?>" style="color:inherit">
-                    ⚠️ <?php printf(__('%d pending','petslist'), $pending_dogs); ?>
+                <a href="<?php echo esc_url(dd_dashboard_url('approvals')); ?>" style="color:inherit">
+                    ⚠️ <?php printf(__('%d pending review','petslist'), $pending_dogs); ?>
                 </a>
                 <?php else : ?>
                 <?php _e('All reviewed','petslist'); ?>
@@ -92,9 +92,9 @@ $pending_dogs = (int)$total_dogs->pending;
     <!-- Pending approval alert -->
     <div class="dda-alert-banner">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        <strong><?php printf(__('%d stud(s) pending review','petslist'), $pending_dogs); ?></strong>
+        <strong><?php printf(__('%d stud ad(s) pending review','petslist'), $pending_dogs); ?></strong>
         <span><?php _e('Review and approve submissions to make them live.','petslist'); ?></span>
-        <a href="<?php echo esc_url(dd_dashboard_url('dogs')); ?>" class="ddu-btn-primary" style="margin-left:auto;font-size:13px"><?php _e('Review Now →','petslist'); ?></a>
+        <a href="<?php echo esc_url(dd_dashboard_url('approvals')); ?>" class="ddu-btn-primary" style="margin-left:auto;font-size:13px"><?php _e('Review & Accept →','petslist'); ?></a>
     </div>
     <?php endif; ?>
 

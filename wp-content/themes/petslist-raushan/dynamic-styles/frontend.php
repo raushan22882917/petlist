@@ -165,18 +165,20 @@ footer.footer-style-3 .footer-bottom {
 	background-color: #000000 !important;
 	padding: 20px 0 !important;
 }
-footer.footer-style-3 .footer-bottom .copyright-logo {
-	background-color: #ffffff !important;
-	padding: 10px 20px !important;
-	border-radius: 8px !important;
-	display: inline-flex !important;
-	align-items: center !important;
+footer.footer-style-3 .footer-bottom .copyright-area {
 	justify-content: center !important;
+	text-align: center !important;
+	width: 100% !important;
 }
-footer.footer-style-3 .footer-bottom .copyright-logo img {
-	max-height: 44px !important;
-	width: auto !important;
-	object-fit: contain !important;
+footer.footer-style-3 .footer-bottom .copyright-text {
+	width: 100% !important;
+	text-align: center !important;
+}
+footer.footer-style-3 .footer-bottom .footer-copyright {
+	text-align: center !important;
+	width: 100% !important;
+	color: #ffffff !important;
+	font-size: 15px !important;
 }
 
 /* Category Sidebar Text Overrides */

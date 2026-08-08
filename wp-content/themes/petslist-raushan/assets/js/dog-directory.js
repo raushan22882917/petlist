@@ -189,6 +189,7 @@
       init: function () {
         this.dogForm();
         this.deleteDog();
+        this.unpublishDog();
         this.mediaUpload();
         this.dogFormWizard();
       },
@@ -212,9 +213,14 @@
             }
           });
 
-          // Validate required photos
-          if (!data['dog_data[thumbnail_id]'] || !data['dog_data[front_photo]'] || !data['dog_data[side_photo]']) {
-            DD.msg('dd-dog-form-message', 'Please upload all 3 required photos (Profile, Front, and Side).', 'error');
+          // Auto-assign thumbnail_id from front_photo if empty
+          if (!data['dog_data[thumbnail_id]'] && data['dog_data[front_photo]']) {
+            data['dog_data[thumbnail_id]'] = data['dog_data[front_photo]'];
+          }
+
+          // Validate required photos (2 photos: Front View and Side View)
+          if (!data['dog_data[front_photo]'] || !data['dog_data[side_photo]']) {
+            DD.msg('dd-dog-form-message', 'Please upload both required photos (Front View and Side View).', 'error');
             return;
           }
 
@@ -240,7 +246,7 @@
 
       dogFormWizard: function () {
         var currentStep = 1;
-        var totalSteps = 4;
+        var totalSteps = 3;
 
         // Next button click
         $(document).on('click', '#dd-wizard-next', function () {
@@ -262,7 +268,7 @@
           });
 
           if (!isValid) {
-            DD.msg('dd-dog-form-message', 'Please fill out all required fields.', 'error');
+            DD.msg('dd-dog-form-message', 'Please fill out all required fields to proceed.', 'error');
             return;
           }
 
@@ -282,7 +288,7 @@
         });
 
         // Remove error class on input
-        $(document).on('input change', '#dd-dog-form input, #dd-dog-form select', function () {
+        $(document).on('input change', '#dd-dog-form input, #dd-dog-form select, #dd-dog-form textarea', function () {
           $(this).removeClass('dd-input-error');
         });
 
@@ -349,6 +355,23 @@
         });
       },
 
+      unpublishDog: function () {
+        $(document).on('click', '.dd-unpublish-dog', function () {
+          if (!confirm('Are you sure you want to unpublish and remove this listing from public view?')) return;
+          var $btn = $(this);
+          var id   = $btn.data('id');
+          $btn.prop('disabled', true).html('<i class="fa-solid fa-spinner fa-spin"></i>');
+          DD.ajax('dd_unpublish_dog', { nonce: ddVars.nonces.dog, post_id: id }, function (res) {
+            if (res.success) {
+              location.reload();
+            } else {
+              $btn.prop('disabled', false).html('<i class="fa-solid fa-ban"></i>');
+              DD.msg('dd-dog-list-message', res.data.message, 'error');
+            }
+          });
+        });
+      },
+
       mediaUpload: function () {
         $(document).on('click', '.dd-upload-photo', function (e) {
           e.preventDefault();
@@ -368,6 +391,10 @@
             $('#' + targetId).val(att.id);
             var $preview = $('#' + previewId);
             $preview.html('<img src="' + att.url + '" style="width:100%;height:100%;object-fit:cover">');
+
+            if (targetId === 'dd-front-id') {
+              $('#dd-thumb-id').val(att.id);
+            }
           });
 
           frame.open();

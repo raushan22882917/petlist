@@ -125,7 +125,12 @@ $dogs    = dd_get_user_dogs( $user_id, 'any', -1 );
                                 <a href="<?php echo esc_url(dd_dashboard_url('dogs') . '&edit=' . $dog->ID); ?>" class="dd-action-btn dd-action-btn--edit" title="<?php esc_attr_e('Edit', 'petslist'); ?>">
                                     <i class="fa-solid fa-pencil"></i>
                                 </a>
-                                <button class="dd-action-btn dd-action-btn--delete dd-delete-dog" data-id="<?php echo $dog->ID; ?>" title="<?php esc_attr_e('Delete', 'petslist'); ?>">
+                                <?php if ($dog->post_status === 'publish') : ?>
+                                <button class="dd-action-btn dd-action-btn--unpublish dd-unpublish-dog" data-id="<?php echo $dog->ID; ?>" title="<?php esc_attr_e('Unpublish & Remove from Directory', 'petslist'); ?>" style="color: #e11d48; background: #fff1f2; border: 1px solid #fecdd3;">
+                                    <i class="fa-solid fa-ban"></i>
+                                </button>
+                                <?php endif; ?>
+                                <button class="dd-action-btn dd-action-btn--delete dd-delete-dog" data-id="<?php echo $dog->ID; ?>" title="<?php esc_attr_e('Delete Permanently', 'petslist'); ?>">
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
                             </div>

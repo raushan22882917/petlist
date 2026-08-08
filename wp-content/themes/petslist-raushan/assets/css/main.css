@@ -1625,10 +1625,12 @@ footer.footer-style-3 .footer-bottom .copyright-logo {
     display: flex;
 	flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
+	text-align: center;
 }
-.copyright-area.none-social {
-	justify-content: center;
+.copyright-text {
+	width: 100%;
+	text-align: center;
 }
 .social-btn ul {
 	gap: 10px;
