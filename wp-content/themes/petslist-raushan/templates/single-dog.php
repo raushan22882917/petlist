@@ -110,6 +110,10 @@ $gallery_ids   = get_post_meta($post_id, '_dd_gallery', true) ?: [];
             </div>
 
             <!-- Profile Details Table -->
+            <?php
+            $is_sponsored = isset( $meta['is_sponsored'] ) && $meta['is_sponsored'] === 'Yes';
+            if ( ! $is_sponsored ) :
+            ?>
             <div class="dd-single-card dd-profile-details">
                 <h2 class="dd-single-card__title"><?php _e('Dog Profile', 'petslist'); ?></h2>
                 <div class="dd-profile-grid">
@@ -159,6 +163,7 @@ $gallery_ids   = get_post_meta($post_id, '_dd_gallery', true) ?: [];
                     <?php endif; ?>
                 </div>
             </div>
+            <?php endif; ?>
 
             <!-- Description -->
             <?php if ( get_the_content() ) : ?>

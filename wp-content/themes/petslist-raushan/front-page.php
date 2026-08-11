@@ -105,12 +105,12 @@ $hero_bg = petslist_img_url('hero_bg');
 									?>
 									<div class="petslist-flyer-card">
 										<div class="petslist-flyer-card__image">
-											<a href="<?php echo esc_url( get_permalink( $pid ) ); ?>">
+											<a href="<?php echo esc_url( $thumb ); ?>" class="dd-flyer-lightbox-trigger" data-full="<?php echo esc_url( $thumb ); ?>" data-title="<?php echo esc_attr( get_the_title( $pid ) ); ?>">
 												<img src="<?php echo esc_url( $thumb ); ?>" alt="<?php echo esc_attr( get_the_title( $pid ) ); ?>" loading="lazy">
 											</a>
 										</div>
 										<div class="petslist-flyer-card__content">
-											<h3><a href="<?php echo esc_url( get_permalink( $pid ) ); ?>" style="color: inherit; text-decoration: none;"><?php echo esc_html( get_the_title( $pid ) ); ?></a></h3>
+											<h3><a href="<?php echo esc_url( $thumb ); ?>" class="dd-flyer-lightbox-trigger" data-full="<?php echo esc_url( $thumb ); ?>" data-title="<?php echo esc_attr( get_the_title( $pid ) ); ?>" style="color: inherit; text-decoration: none;"><?php echo esc_html( get_the_title( $pid ) ); ?></a></h3>
 											<p><?php echo esc_html( $breed ?: __( 'Premium dog breeding ad', 'petslist' ) ); ?></p>
 										</div>
 									</div>
@@ -127,10 +127,12 @@ $hero_bg = petslist_img_url('hero_bg');
 								for ($i = 1; $i <= 9; $i++) : ?>
 									<div class="petslist-flyer-card">
 										<div class="petslist-flyer-card__image">
-											<img src="<?php echo esc_url($sample_flyer); ?>" alt="<?php echo esc_attr(sprintf(__('Flyer Ad %d', 'petslist'), $i)); ?>" loading="lazy">
+											<a href="<?php echo esc_url($sample_flyer); ?>" class="dd-flyer-lightbox-trigger" data-full="<?php echo esc_url($sample_flyer); ?>" data-title="<?php echo esc_attr(sprintf(__('Featured Flyer %d', 'petslist'), $i)); ?>">
+												<img src="<?php echo esc_url($sample_flyer); ?>" alt="<?php echo esc_attr(sprintf(__('Flyer Ad %d', 'petslist'), $i)); ?>" loading="lazy">
+											</a>
 										</div>
 										<div class="petslist-flyer-card__content">
-											<h3><?php echo esc_html(sprintf(__('Featured Flyer %d', 'petslist'), $i)); ?></h3>
+											<h3><a href="<?php echo esc_url($sample_flyer); ?>" class="dd-flyer-lightbox-trigger" data-full="<?php echo esc_url($sample_flyer); ?>" data-title="<?php echo esc_attr(sprintf(__('Featured Flyer %d', 'petslist'), $i)); ?>" style="color: inherit; text-decoration: none;"><?php echo esc_html(sprintf(__('Featured Flyer %d', 'petslist'), $i)); ?></a></h3>
 											<p><?php _e('Premium kennel showcase and breeder flyer ad space.', 'petslist'); ?></p>
 										</div>
 									</div>
@@ -143,6 +145,56 @@ $hero_bg = petslist_img_url('hero_bg');
 			</div>
 		</div>
 	</section>
+
+	<!-- ============ FLYER LIGHTBOX MODAL ============ -->
+	<div id="dd-flyer-lightbox-modal" class="dd-flyer-modal" style="display:none;">
+		<div class="dd-flyer-modal__backdrop"></div>
+		<div class="dd-flyer-modal__content">
+			<button type="button" class="dd-flyer-modal__close" aria-label="Close">&times;</button>
+			<img id="dd-flyer-modal-img" src="" alt="Flyer Ad">
+			<div id="dd-flyer-modal-caption" class="dd-flyer-modal__caption"></div>
+		</div>
+	</div>
+
+	<script>
+	document.addEventListener('DOMContentLoaded', function() {
+		var modal = document.getElementById('dd-flyer-lightbox-modal');
+		var modalImg = document.getElementById('dd-flyer-modal-img');
+		var caption = document.getElementById('dd-flyer-modal-caption');
+		var closeBtn = modal ? modal.querySelector('.dd-flyer-modal__close') : null;
+		var backdrop = modal ? modal.querySelector('.dd-flyer-modal__backdrop') : null;
+
+		document.querySelectorAll('.dd-flyer-lightbox-trigger').forEach(function(trigger) {
+			trigger.addEventListener('click', function(e) {
+				e.preventDefault();
+				var fullSrc = this.getAttribute('data-full') || this.getAttribute('href');
+				var title = this.getAttribute('data-title') || '';
+				if (fullSrc && modal && modalImg) {
+					modalImg.src = fullSrc;
+					if (caption) caption.textContent = title;
+					modal.style.display = 'flex';
+					document.body.style.overflow = 'hidden';
+				}
+			});
+		});
+
+		function closeModal() {
+			if (modal) {
+				modal.style.display = 'none';
+				if (modalImg) modalImg.src = '';
+				document.body.style.overflow = '';
+			}
+		}
+
+		if (closeBtn) closeBtn.addEventListener('click', closeModal);
+		if (backdrop) backdrop.addEventListener('click', closeModal);
+		document.addEventListener('keydown', function(e) {
+			if (e.key === 'Escape' && modal && modal.style.display === 'flex') {
+				closeModal();
+			}
+		});
+	});
+	</script>
 
 </main>
 

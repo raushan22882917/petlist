@@ -231,11 +231,24 @@ $style = Options::$options['header_search_style'];
                 <div class="<?php echo esc_attr( $key_class ); ?>">
                     <div class="form-group">
                         <div class="rtcl-search-input-button rtin-keyword position-relative">
-                            <input type="text" data-type="listing" name="q" class="rtcl-autocomplete"
-                                placeholder="<?php esc_attr_e( 'Enter Keyword here ...', 'petslist' ); ?>"
-                                value="<?php if ( isset( $_GET['q'] ) ) {
-                                    echo esc_attr( Functions::clean( wp_unslash( ( $_GET['q'] ) ) ) );
-                                } ?>"/>
+                            <?php
+                            $selected_breed = isset( $_GET['breed'] ) ? sanitize_text_field( wp_unslash( $_GET['breed'] ) ) : ( isset( $_GET['q'] ) ? sanitize_text_field( wp_unslash( $_GET['q'] ) ) : '' );
+                            ?>
+                            <select name="breed" class="form-control rtcl-breed-select" onchange="if(this.form.querySelector('input[name=q]')) { this.form.querySelector('input[name=q]').value = this.value; }">
+                                <?php
+                                if ( function_exists( 'dd_render_breed_options' ) ) {
+                                    dd_render_breed_options( $selected_breed, false, esc_html__( 'Select Breed', 'petslist' ) );
+                                } else {
+                                    echo '<option value="">' . esc_html__( 'Select Breed', 'petslist' ) . '</option>';
+                                    if ( function_exists( 'dd_default_breed_names' ) ) {
+                                        foreach ( dd_default_breed_names() as $bname ) {
+                                            echo '<option value="' . esc_attr( $bname ) . '" ' . selected( $selected_breed, $bname, false ) . '>' . esc_html( $bname ) . '</option>';
+                                        }
+                                    }
+                                }
+                                ?>
+                            </select>
+                            <input type="hidden" name="q" value="<?php echo esc_attr( $selected_breed ); ?>">
                         </div>
                     </div>
                 </div>
