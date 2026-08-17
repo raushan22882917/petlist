@@ -38,7 +38,6 @@ echo '<p style="color:green;">✓ Connected to database: <b>' . htmlspecialchars
 // 3. Read SQL file
 $sql_file = __DIR__ . '/studs4you_db.sql';
 if (!file_exists($sql_file)) {
-    // Check push_to_live.sql as fallback
     $sql_file = __DIR__ . '/push_to_live.sql';
 }
 
@@ -47,23 +46,64 @@ if (!file_exists($sql_file)) {
 }
 
 $sql = file_get_contents($sql_file);
-echo '<p>Importing database dump (' . number_format(strlen($sql)) . ' bytes)...</p>';
+echo '<p>Reading database dump (' . number_format(strlen($sql)) . ' bytes)...</p>';
 
-// Execute multi_query
-$mysqli->multi_query($sql);
-$queries = 0;
-do {
-    $queries++;
-    if ($result = $mysqli->store_result()) {
-        $result->free();
+// Split SQL into individual statements safely
+$queries = [];
+$lines = explode("\n", $sql);
+$buffer = '';
+
+foreach ($lines as $line) {
+    $trimmed = trim($line);
+    if ($trimmed === '' || strpos($trimmed, '--') === 0 || strpos($trimmed, '/*') === 0) {
+        continue;
     }
-} while ($mysqli->more_results() && $mysqli->next_result());
-
-if ($mysqli->errno) {
-    echo '<p style="color:orange;">Notice during import: ' . htmlspecialchars($mysqli->error) . '</p>';
-} else {
-    echo '<p style="color:green;font-weight:bold;">✓ Database imported successfully! (' . $queries . ' statements executed)</p>';
+    $buffer .= $line . "\n";
+    if (substr(rtrim($trimmed), -1) === ';') {
+        $queries[] = $buffer;
+        $buffer = '';
+    }
 }
+if (!empty(trim($buffer))) {
+    $queries[] = $buffer;
+}
+
+$success_count = 0;
+$error_count = 0;
+$errors = [];
+
+$mysqli->query("SET FOREIGN_KEY_CHECKS=0");
+$mysqli->query("SET SQL_MODE=''");
+
+foreach ($queries as $q) {
+    $q = trim($q);
+    if ($q === '' || strtoupper($q) === 'START TRANSACTION;' || strtoupper($q) === 'COMMIT;' || strtoupper($q) === 'BEGIN;') {
+        continue;
+    }
+    if ($mysqli->query($q)) {
+        $success_count++;
+    } else {
+        $error_count++;
+        if (count($errors) < 5) {
+            $errors[] = $mysqli->error;
+        }
+    }
+}
+
+$mysqli->query("SET FOREIGN_KEY_CHECKS=1");
+
+echo "<p style='color:green;'>✓ Executed {$success_count} statements successfully.</p>";
+if ($error_count > 0) {
+    echo "<p style='color:orange;'>⚠️ {$error_count} statements had warnings/errors: " . htmlspecialchars(implode(', ', $errors)) . "</p>";
+}
+
+// Check tables
+$res = $mysqli->query("SHOW TABLES LIKE 'wp5h_%'");
+$tables = [];
+while ($row = $res->fetch_row()) {
+    $tables[] = $row[0];
+}
+echo "<p style='color:green;'>✓ Found <b>" . count($tables) . "</b> wp5h_ tables in database: " . htmlspecialchars(implode(', ', array_slice($tables, 0, 8))) . "...</p>";
 
 // 4. Update siteurl and home to https://studs4you.com
 $mysqli->query("UPDATE `wp5h_options` SET `option_value`='https://studs4you.com' WHERE `option_name` IN ('siteurl', 'home')");
