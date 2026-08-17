@@ -18,6 +18,13 @@ if ( isset($_POST['dd_admin_settings_nonce']) && wp_verify_nonce($_POST['dd_admi
         'dd_dogs_per_page'          => 'absint',
         'dd_email_from_name'        => 'sanitize_text_field',
         'dd_email_from_email'       => 'sanitize_email',
+        'dd_smtp_enable'            => 'absint',
+        'dd_smtp_host'              => 'sanitize_text_field',
+        'dd_smtp_port'              => 'absint',
+        'dd_smtp_encryption'        => 'sanitize_text_field',
+        'dd_smtp_auth'              => 'absint',
+        'dd_smtp_username'          => 'sanitize_text_field',
+        'dd_smtp_password'          => 'sanitize_text_field',
     ];
     foreach ($fields as $key => $sanitize) {
         $val = isset($_POST[$key]) ? call_user_func($sanitize, $_POST[$key]) : '';
@@ -148,6 +155,53 @@ if ( isset($_POST['dd_admin_settings_nonce']) && wp_verify_nonce($_POST['dd_admi
                 <div class="dd-form-group">
                     <label><?php _e('Email From Address','petslist'); ?></label>
                     <input type="email" name="dd_email_from_email" value="<?php echo esc_attr(get_option('dd_email_from_email', get_option('admin_email'))); ?>">
+                </div>
+            </div>
+        </div>
+
+        <!-- SMTP Settings -->
+        <div class="ddu-panel" style="margin-bottom:20px">
+            <div class="ddu-panel__head">
+                <h3 class="ddu-panel__title">📧 <?php _e('SMTP Email Settings','petslist'); ?></h3>
+            </div>
+            <div class="dda-settings-grid">
+                <div class="dd-form-group">
+                    <label><?php _e('Enable SMTP Mailer','petslist'); ?></label>
+                    <select name="dd_smtp_enable">
+                        <option value="1" <?php selected(get_option('dd_smtp_enable'),1); ?>><?php _e('Enabled','petslist'); ?></option>
+                        <option value="0" <?php selected(get_option('dd_smtp_enable'),0); ?>><?php _e('Disabled (PHP Mail)','petslist'); ?></option>
+                    </select>
+                </div>
+                <div class="dd-form-group">
+                    <label><?php _e('SMTP Host','petslist'); ?></label>
+                    <input type="text" name="dd_smtp_host" value="<?php echo esc_attr(get_option('dd_smtp_host', 'mail.studs4you.com')); ?>" placeholder="mail.studs4you.com">
+                </div>
+                <div class="dd-form-group">
+                    <label><?php _e('SMTP Port','petslist'); ?></label>
+                    <input type="number" name="dd_smtp_port" value="<?php echo esc_attr(get_option('dd_smtp_port', 465)); ?>" placeholder="465">
+                </div>
+                <div class="dd-form-group">
+                    <label><?php _e('Encryption','petslist'); ?></label>
+                    <select name="dd_smtp_encryption">
+                        <option value="ssl" <?php selected(get_option('dd_smtp_encryption', 'ssl'), 'ssl'); ?>>SSL (Port 465)</option>
+                        <option value="tls" <?php selected(get_option('dd_smtp_encryption'), 'tls'); ?>>TLS (Port 587)</option>
+                        <option value="none" <?php selected(get_option('dd_smtp_encryption'), 'none'); ?>>None</option>
+                    </select>
+                </div>
+                <div class="dd-form-group">
+                    <label><?php _e('SMTP Authentication','petslist'); ?></label>
+                    <select name="dd_smtp_auth">
+                        <option value="1" <?php selected(get_option('dd_smtp_auth', 1), 1); ?>><?php _e('Yes (Required)','petslist'); ?></option>
+                        <option value="0" <?php selected(get_option('dd_smtp_auth'), 0); ?>><?php _e('No','petslist'); ?></option>
+                    </select>
+                </div>
+                <div class="dd-form-group">
+                    <label><?php _e('SMTP Username','petslist'); ?></label>
+                    <input type="text" name="dd_smtp_username" value="<?php echo esc_attr(get_option('dd_smtp_username', 'noreply@studs4you.com')); ?>" placeholder="noreply@studs4you.com" autocomplete="off">
+                </div>
+                <div class="dd-form-group">
+                    <label><?php _e('SMTP Password','petslist'); ?></label>
+                    <input type="password" name="dd_smtp_password" value="<?php echo esc_attr(get_option('dd_smtp_password')); ?>" placeholder="••••••••" autocomplete="off">
                 </div>
             </div>
         </div>

@@ -35,13 +35,13 @@ if ( get_query_var( 'rtcl_category' ) && $category = get_term_by( 'slug', get_qu
 }
 
 $orderby = strtolower( Functions::get_option_item( 'rtcl_general_settings', 'taxonomy_orderby', 'name' ) );
-$order   = strtoupper( Functions::get_option_item( 'rtcl_general_settings', 'taxonomy_order', 'ASC' ) );
-
 $style = Options::$options['header_search_style'];
+$dog_search_url = get_post_type_archive_link('dd_dog') ?: home_url('/dog-directory/');
 ?>
 <div class="rtcl rtcl-search rtcl-search-inline">
-    <form action="<?php echo esc_url( Functions::get_filter_form_url() ); ?>"
+    <form action="<?php echo esc_url( $dog_search_url ); ?>" method="get"
           class="form-vertical rtcl-widget-search-form rtcl-search-inline-form petslist-listing-search-form rtin-style-<?php echo esc_attr( $style ); ?>">
+        <input type="hidden" name="post_type" value="dd_dog">
 		<?php if ( ! empty( Options::$options['header_search_location'] ) ): ?>
 			<?php if ( 'local' === Functions::location_type() ): ?>
                 <div class="<?php echo esc_attr( $loc_class ); ?>">

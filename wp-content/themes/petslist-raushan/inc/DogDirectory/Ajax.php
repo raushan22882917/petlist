@@ -48,6 +48,7 @@ class Ajax {
         add_action( 'wp_ajax_dd_admin_reject_dog', [ $this, 'admin_reject_dog' ] );
         add_action( 'wp_ajax_dd_admin_expire_dog', [ $this, 'admin_expire_dog' ] );
         add_action( 'wp_ajax_dd_admin_update_plan', [ $this, 'admin_update_plan' ] );
+        add_action( 'wp_ajax_dd_send_test_email', [ $this, 'send_test_email' ] );
         add_action( 'wp_ajax_dd_admin_toggle_sponsored', [ $this, 'admin_toggle_sponsored' ] );
         add_action( 'wp_ajax_dd_get_user_drawer', [ $this, 'get_user_drawer' ] );
     }
@@ -709,14 +710,103 @@ class Ajax {
     public function forgot_password() {
         check_ajax_referer( 'dd_auth_nonce', 'nonce' );
         $email = sanitize_email( $_POST['email'] ?? '' );
-        if ( ! $email || ! email_exists($email) ) {
-            wp_send_json_error(['message' => __('Email not found.', 'petslist')]);
+        if ( ! $email || ! email_exists( $email ) ) {
+            wp_send_json_error( ['message' => __( 'No user found with that email address.', 'petslist' )] );
         }
-        $result = retrieve_password( $email );
-        if ( is_wp_error($result) ) {
-            wp_send_json_error(['message' => $result->get_error_message()]);
+
+        $user = get_user_by( 'email', $email );
+        if ( ! $user ) {
+            wp_send_json_error( ['message' => __( 'User account not found.', 'petslist' )] );
         }
-        wp_send_json_success(['message' => __('Password reset link sent to your email.', 'petslist')]);
+
+        $key = get_password_reset_key( $user );
+        if ( is_wp_error( $key ) ) {
+            wp_send_json_error( ['message' => $key->get_error_message()] );
+        }
+
+        $reset_url      = add_query_arg([
+            'action' => 'rp',
+            'key'    => $key,
+            'login'  => rawurlencode( $user->user_login ),
+        ], network_site_url( 'wp-login.php', 'login' ) );
+
+        $subject = sprintf( __( '🔐 Password Reset Request — %s', 'petslist' ), get_bloginfo( 'name' ) );
+        $body    = Notifications::instance()->get_formatted_password_reset_email( $user, $reset_url );
+        $headers = [ 'Content-Type: text/html; charset=UTF-8' ];
+
+        $mail_error = '';
+        $capture_error = function( $wp_error ) use ( &$mail_error ) {
+            $mail_error = $wp_error->get_error_message();
+        };
+        add_action( 'wp_mail_failed', $capture_error );
+
+        $sent = wp_mail( $user->user_email, $subject, $body, $headers );
+
+        remove_action( 'wp_mail_failed', $capture_error );
+
+        if ( ! $sent ) {
+            wp_send_json_error( [
+                'message' => $mail_error
+                    ? sprintf( __( 'Mail delivery failed: %s', 'petslist' ), $mail_error )
+                    : __( 'Unable to send password reset email. Please verify your SMTP settings.', 'petslist' )
+            ] );
+        }
+
+        wp_send_json_success( ['message' => sprintf( __( 'A formatted password reset email with instructions has been sent to %s. (Please check your Inbox and Spam/Junk folder).', 'petslist' ), esc_html( $user->user_email ) )] );
+    }
+
+    public function send_test_email() {
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json_error( ['message' => __( 'Unauthorized access.', 'petslist' )] );
+        }
+
+        $email = sanitize_email( $_POST['email'] ?? get_option( 'admin_email' ) );
+        if ( ! $email ) {
+            wp_send_json_error( ['message' => __( 'Please provide a valid email address.', 'petslist' )] );
+        }
+
+        $subject = sprintf( __( '🧪 SMTP & Email Formatting Test — %s', 'petslist' ), get_bloginfo( 'name' ) );
+        $user    = wp_get_current_user();
+        $test_link = home_url( '/' );
+
+        $content = '
+            <p style="font-size:16px;margin-bottom:16px;">Hello <strong>' . esc_html( $user->display_name ) . '</strong>,</p>
+            <p style="margin-bottom:16px;">This is a <strong>test email</strong> sent from your WordPress <strong>Dog Directory Settings</strong> to verify your SMTP configuration and HTML email formatting.</p>
+            <div style="background:#e0f2fe;border-left:4px solid #0284c7;padding:12px 16px;border-radius:6px;margin:20px 0;">
+                <p style="margin:0;font-size:14px;color:#0369a1;">✅ <strong>SMTP Connection:</strong> Successful!<br>
+                   📧 <strong>From Email:</strong> ' . esc_html( get_option( 'dd_email_from_email', get_option( 'admin_email' ) ) ) . '<br>
+                   🏷️ <strong>From Name:</strong> ' . esc_html( get_option( 'dd_email_from_name', get_bloginfo( 'name' ) ) ) . '
+                </p>
+            </div>
+            <p style="text-align:center;margin-top:24px;">
+                <a href="' . esc_url( $test_link ) . '" style="display:inline-block;background:#02c5bd;color:#ffffff;padding:12px 28px;border-radius:50px;text-decoration:none;font-weight:700;">
+                    Visit Site Dashboard
+                </a>
+            </p>
+        ';
+
+        $body    = Notifications::instance()->wrap_email( __( 'SMTP Test Successful', 'petslist' ), $content );
+        $headers = [ 'Content-Type: text/html; charset=UTF-8' ];
+
+        $mail_error = '';
+        $capture_error = function( $wp_error ) use ( &$mail_error ) {
+            $mail_error = $wp_error->get_error_message();
+        };
+        add_action( 'wp_mail_failed', $capture_error );
+
+        $sent = wp_mail( $email, $subject, $body, $headers );
+
+        remove_action( 'wp_mail_failed', $capture_error );
+
+        if ( $sent ) {
+            wp_send_json_success( ['message' => sprintf( __( 'Test email successfully sent to %s! (Please check your Inbox and Spam/Junk folder).', 'petslist' ), $email )] );
+        } else {
+            wp_send_json_error( [
+                'message' => $mail_error
+                    ? sprintf( __( 'Failed to send test email: %s', 'petslist' ), $mail_error )
+                    : __( 'Failed to send test email. Please verify your SMTP Host, Port, and Credentials.', 'petslist' )
+            ] );
+        }
     }
 
     // =========================================================
@@ -748,18 +838,32 @@ class Ajax {
 
         // Meta query
         $meta_query = ['relation' => 'AND'];
-        if ( $gender )  $meta_query[] = ['key' => '_dd_dog_meta', 'value' => '"gender":"'.$gender.'"', 'compare' => 'LIKE'];
-        if ( $country ) $meta_query[] = ['key' => '_dd_dog_meta', 'value' => '"country":"'.$country.'"', 'compare' => 'LIKE'];
-        if ( $city )    $meta_query[] = ['key' => '_dd_dog_meta', 'value' => '"city":"'.$city.'"', 'compare' => 'LIKE'];
-        if ( $reg_no )  $meta_query[] = ['key' => '_dd_dog_meta', 'value' => '"registration_no":"'.$reg_no.'"', 'compare' => 'LIKE'];
+        if ( $gender ) {
+            $search_gender = ( strcasecmp( $gender, 'stud' ) === 0 ) ? 'Male' : $gender;
+            $meta_query[]  = ['key' => '_dd_dog_meta', 'value' => $search_gender, 'compare' => 'LIKE'];
+        }
+        if ( $country ) $meta_query[] = ['key' => '_dd_dog_meta', 'value' => $country, 'compare' => 'LIKE'];
+        if ( $city )    $meta_query[] = ['key' => '_dd_dog_meta', 'value' => $city, 'compare' => 'LIKE'];
+        if ( $reg_no )  $meta_query[] = ['key' => '_dd_dog_meta', 'value' => $reg_no, 'compare' => 'LIKE'];
         if ( count($meta_query) > 1 ) $args['meta_query'] = $meta_query;
 
-        // Taxonomy
-        $tax_query = [];
+        // Taxonomy / Breed resolution
         if ( $breed ) {
-            $tax_query[] = ['taxonomy' => 'dd_breed', 'field' => 'name', 'terms' => $breed];
+            $term_ids = function_exists( 'dd_resolve_breed_term_ids' ) ? dd_resolve_breed_term_ids( $breed ) : [];
+            if ( ! empty( $term_ids ) ) {
+                $args['tax_query'] = [
+                    [
+                        'taxonomy'         => 'dd_breed',
+                        'field'            => 'term_id',
+                        'terms'            => $term_ids,
+                        'include_children' => true,
+                        'operator'         => 'IN',
+                    ]
+                ];
+            } else {
+                $args['meta_query'][] = ['key' => '_dd_dog_meta', 'value' => $breed, 'compare' => 'LIKE'];
+            }
         }
-        if ( $tax_query ) $args['tax_query'] = $tax_query;
 
         // Keyword search
         if ( $keyword ) $args['s'] = $keyword;

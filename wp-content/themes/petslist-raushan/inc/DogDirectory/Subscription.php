@@ -310,20 +310,27 @@ class Subscription {
     /**
      * Record a payment
      */
-    public static function record_payment( $user_id, $sub_id, $amount, $transaction_id, $stripe_pi_id = '', $invoice_url = '' ) {
+    public static function record_payment( $user_id, $sub_id, $amount, $transaction_id, $stripe_pi_id = '', $invoice_url = '', $payment_method = 'stripe' ) {
         global $wpdb;
         $table = $wpdb->prefix . 'dd_payments';
-        return $wpdb->insert( $table, [
+        $inserted = $wpdb->insert( $table, [
             'user_id'         => $user_id,
             'subscription_id' => $sub_id,
             'amount'          => $amount,
             'currency'        => 'USD',
-            'payment_method'  => 'stripe',
+            'payment_method'  => $payment_method,
             'status'          => 'completed',
             'transaction_id'  => $transaction_id,
             'stripe_pi_id'    => $stripe_pi_id,
             'invoice_url'     => $invoice_url,
         ] );
+
+        if ( $inserted ) {
+            $payment_id = $wpdb->insert_id;
+            do_action( 'dd_subscription_payment_recorded', $payment_id, $user_id, $sub_id, $amount, $transaction_id, $payment_method );
+            return $payment_id;
+        }
+        return false;
     }
 
     /**

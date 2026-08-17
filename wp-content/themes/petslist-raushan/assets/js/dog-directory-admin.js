@@ -83,4 +83,40 @@
         });
     });
 
+    // Send SMTP Test Email
+    $(document).on('click', '#dd-send-test-email', function (e) {
+        e.preventDefault();
+        var $btn = $(this);
+        var email = $('#dd-test-email-address').val();
+        var $result = $('#dd-smtp-test-result');
+
+        if (!email) {
+            alert('Please enter a target email address for testing.');
+            return;
+        }
+
+        $btn.prop('disabled', true).text('Sending...');
+        $result.hide().removeClass('notice notice-success notice-error');
+
+        $.post(getAjaxUrl(), {
+            action: 'dd_send_test_email',
+            nonce:  getAdminNonce(),
+            email:  email
+        }, function (res) {
+            $btn.prop('disabled', false).html('<span class="dashicons dashicons-email-alt" style="vertical-align: middle; margin-top: -2px;"></span> Send Test Email');
+            $result.show();
+            if (res.success) {
+                $result.css({ 'padding': '10px 15px', 'background': '#d1fae5', 'border-left': '4px solid #10b981', 'color': '#065f46', 'border-radius': '4px' })
+                       .html('<strong>✅ Success:</strong> ' + res.data.message);
+            } else {
+                $result.css({ 'padding': '10px 15px', 'background': '#fee2e2', 'border-left': '4px solid #ef4444', 'color': '#991b1b', 'border-radius': '4px' })
+                       .html('<strong>❌ Failed:</strong> ' + res.data.message);
+            }
+        }).fail(function () {
+            $btn.prop('disabled', false).html('<span class="dashicons dashicons-email-alt" style="vertical-align: middle; margin-top: -2px;"></span> Send Test Email');
+            $result.show().css({ 'padding': '10px 15px', 'background': '#fee2e2', 'border-left': '4px solid #ef4444', 'color': '#991b1b', 'border-radius': '4px' })
+                   .html('<strong>❌ Error:</strong> Server connection failed.');
+        });
+    });
+
 })(jQuery);

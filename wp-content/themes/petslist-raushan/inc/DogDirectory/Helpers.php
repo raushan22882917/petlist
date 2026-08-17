@@ -18,6 +18,7 @@ function dd_page_url( $option_key, $fallback_slug = '' ) {
 
 function dd_login_url()     { return dd_page_url('dd_page_login',    'login'); }
 function dd_register_url()  { return dd_page_url('dd_page_register', 'register'); }
+function dd_forgot_url()    { return dd_page_url('dd_page_forgot',   'dog-forgot-password'); }
 function dd_pricing_url( $plan = '' ) {
     $url = dd_page_url('dd_page_pricing', 'dog-directory-plans');
     return $plan ? add_query_arg('plan', $plan, $url) : $url;
@@ -246,6 +247,70 @@ function dd_match_breed_name( $raw ) {
 	}
 
 	return $raw;
+}
+
+/**
+ * Resolve any breed input string (e.g. "American Bully — Standard", "Standard", "American Bully")
+ * into matching dd_breed taxonomy term IDs (including parent & sub-breed terms).
+ *
+ * @param string $breed_input
+ * @return array Array of matching term IDs.
+ */
+function dd_resolve_breed_term_ids( $breed_input ) {
+	$breed_input = trim( (string) $breed_input );
+	if ( '' === $breed_input ) {
+		return [];
+	}
+
+	$term_ids = [];
+
+	// 1. Direct term lookup by name or slug
+	$exact_term = get_term_by( 'name', $breed_input, 'dd_breed' );
+	if ( ! $exact_term ) {
+		$exact_term = get_term_by( 'slug', sanitize_title( $breed_input ), 'dd_breed' );
+	}
+	if ( $exact_term && ! is_wp_error( $exact_term ) ) {
+		$term_ids[] = (int) $exact_term->term_id;
+	}
+
+	// 2. Split composite names like "American Bully — Standard" or "American Bully - Standard"
+	$parts = preg_split( '/\s*[—–\-]\s*/u', $breed_input );
+	if ( is_array( $parts ) && count( $parts ) > 1 ) {
+		foreach ( $parts as $part ) {
+			$part = trim( $part );
+			if ( '' !== $part ) {
+				$t = get_term_by( 'name', $part, 'dd_breed' );
+				if ( ! $t ) {
+					$t = get_term_by( 'slug', sanitize_title( $part ), 'dd_breed' );
+				}
+				if ( $t && ! is_wp_error( $t ) ) {
+					$term_ids[] = (int) $t->term_id;
+				}
+			}
+		}
+	}
+
+	// 3. Fallback matching using dd_match_breed_name()
+	if ( function_exists( 'dd_match_breed_name' ) ) {
+		$canonical = dd_match_breed_name( $breed_input );
+		if ( $canonical && $canonical !== $breed_input ) {
+			$cterm = get_term_by( 'name', $canonical, 'dd_breed' );
+			if ( $cterm && ! is_wp_error( $cterm ) ) {
+				$term_ids[] = (int) $cterm->term_id;
+			}
+		}
+	}
+
+	// 4. Include all child term IDs for any parent terms found
+	$all_ids = $term_ids;
+	foreach ( $term_ids as $tid ) {
+		$children = get_term_children( $tid, 'dd_breed' );
+		if ( ! is_wp_error( $children ) && ! empty( $children ) ) {
+			$all_ids = array_merge( $all_ids, $children );
+		}
+	}
+
+	return array_values( array_unique( array_map( 'absint', $all_ids ) ) );
 }
 
 /**

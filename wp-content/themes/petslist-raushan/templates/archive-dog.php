@@ -12,12 +12,12 @@ $is_subscriber  = Subscription::can_access_directory();
 $breeds         = dd_get_breeds();
 $per_page       = (int) get_option('dd_dogs_per_page', 12);
 $paged          = max(1, get_query_var('paged'));
-$breed_filter   = sanitize_text_field($_GET['breed']            ?? '');
-$gender_filter  = sanitize_text_field($_GET['gender']           ?? '');
-$country_filter = sanitize_text_field($_GET['country']          ?? '');
-$health_filter  = sanitize_text_field($_GET['health_clearance'] ?? '');
-$keyword        = sanitize_text_field($_GET['s']                ?? '');
-$orderby        = sanitize_text_field($_GET['orderby']          ?? 'date');
+$breed_filter   = sanitize_text_field( $_GET['breed'] ?? $_GET['q'] ?? '' );
+$gender_filter  = sanitize_text_field( $_GET['gender'] ?? $_GET['filters']['ad_type'] ?? '' );
+$country_filter = sanitize_text_field( $_GET['country'] ?? $_GET['rtcl_location'] ?? $_GET['geo_address'] ?? '' );
+$health_filter  = sanitize_text_field( $_GET['health_clearance'] ?? '' );
+$keyword        = sanitize_text_field( $_GET['s'] ?? '' );
+$orderby        = sanitize_text_field( $_GET['orderby'] ?? 'date' );
 
 // Unique countries from metadata
 global $wpdb;
@@ -43,22 +43,54 @@ $args = [
 ];
 
 if ( $breed_filter ) {
-    $args['tax_query'] = [['taxonomy' => 'dd_breed', 'field' => 'name', 'terms' => $breed_filter]];
+    $term_ids = function_exists('dd_resolve_breed_term_ids') ? dd_resolve_breed_term_ids( $breed_filter ) : [];
+    if ( ! empty( $term_ids ) ) {
+        $args['tax_query'] = [
+            [
+                'taxonomy'         => 'dd_breed',
+                'field'            => 'term_id',
+                'terms'            => $term_ids,
+                'include_children' => true,
+                'operator'         => 'IN',
+            ]
+        ];
+    } else {
+        $args['meta_query'] = [
+            [
+                'key'     => '_dd_dog_meta',
+                'value'   => $breed_filter,
+                'compare' => 'LIKE',
+            ]
+        ];
+    }
 }
 
 $meta_queries = [];
 if ( $gender_filter ) {
-    $meta_queries[] = ['key' => '_dd_dog_meta', 'value' => '"gender";s:'.strlen($gender_filter).':"'.$gender_filter.'"', 'compare' => 'LIKE'];
+    $search_gender = ( strcasecmp($gender_filter, 'stud') === 0 ) ? 'Male' : $gender_filter;
+    $meta_queries[] = [
+        'key'     => '_dd_dog_meta',
+        'value'   => $search_gender,
+        'compare' => 'LIKE',
+    ];
 }
 if ( $country_filter ) {
-    $meta_queries[] = ['key' => '_dd_dog_meta', 'value' => '"country";s:'.strlen($country_filter).':"'.$country_filter.'"', 'compare' => 'LIKE'];
+    $meta_queries[] = [
+        'key'     => '_dd_dog_meta',
+        'value'   => $country_filter,
+        'compare' => 'LIKE',
+    ];
 }
 if ( $health_filter === 'yes' ) {
     $meta_queries[] = ['key' => '_dd_dog_health', 'compare' => 'EXISTS'];
 }
 if ( count($meta_queries) ) {
     if ( count($meta_queries) > 1 ) $meta_queries['relation'] = 'AND';
-    $args['meta_query'] = $meta_queries;
+    if ( isset($args['meta_query']) ) {
+        $args['meta_query'] = array_merge($args['meta_query'], $meta_queries);
+    } else {
+        $args['meta_query'] = $meta_queries;
+    }
 }
 
 if ( $keyword ) $args['s'] = $keyword;

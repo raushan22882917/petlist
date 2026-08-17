@@ -40,7 +40,7 @@ $dd_auth_banner = function_exists( 'petslist_img_url' ) ? petslist_img_url( 'aut
                     <label for="dd-login-pass" class="rtcl-field-label">
                         <?php _e('Password', 'petslist'); ?>
                         <strong class="rtcl-required">*</strong>
-                        <a href="<?php echo esc_url(dd_page_url('dd_page_forgot', 'dog-forgot-password')); ?>" style="float: right; font-size: 13px; font-weight: normal; text-transform: none;"><?php _e('Forgot?', 'petslist'); ?></a>
+                        <a href="<?php echo esc_url(dd_forgot_url()); ?>" style="float: right; font-size: 13px; font-weight: normal; text-transform: none;"><?php _e('Forgot?', 'petslist'); ?></a>
                     </label>
                     <div class="rtcl-user-pass-wrap">
                         <input type="password" id="dd-login-pass" name="password" class="rtcl-form-control rtcl-password" placeholder="••••••••" required autocomplete="current-password">

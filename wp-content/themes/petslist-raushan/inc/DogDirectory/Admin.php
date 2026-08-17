@@ -97,6 +97,13 @@ class Admin {
         register_setting('dd_settings_group', 'dd_dogs_per_page', 'absint');
         register_setting('dd_settings_group', 'dd_email_from_name', 'sanitize_text_field');
         register_setting('dd_settings_group', 'dd_email_from_email', 'sanitize_email');
+        register_setting('dd_settings_group', 'dd_smtp_enable', 'absint');
+        register_setting('dd_settings_group', 'dd_smtp_host', 'sanitize_text_field');
+        register_setting('dd_settings_group', 'dd_smtp_port', 'absint');
+        register_setting('dd_settings_group', 'dd_smtp_encryption', 'sanitize_text_field');
+        register_setting('dd_settings_group', 'dd_smtp_auth', 'absint');
+        register_setting('dd_settings_group', 'dd_smtp_username', 'sanitize_text_field');
+        register_setting('dd_settings_group', 'dd_smtp_password', 'sanitize_text_field');
     }
 
     public function render_settings_page() {
@@ -173,8 +180,8 @@ class Admin {
                         </table>
                     </div>
 
-                    <div class="dd-admin-card">
-                        <h2><?php _e('Email Settings', 'petslist'); ?></h2>
+                    <div class="dd-admin-card" style="grid-column: span 2;">
+                        <h2>📧 <?php _e('Email & SMTP Settings', 'petslist'); ?></h2>
                         <table class="form-table">
                             <tr>
                                 <th><?php _e('From Name', 'petslist'); ?></th>
@@ -184,7 +191,63 @@ class Admin {
                                 <th><?php _e('From Email', 'petslist'); ?></th>
                                 <td><input type="email" name="dd_email_from_email" value="<?php echo esc_attr(get_option('dd_email_from_email', get_option('admin_email'))); ?>" class="regular-text"></td>
                             </tr>
+                            <tr>
+                                <th><?php _e('Enable SMTP Mailer', 'petslist'); ?></th>
+                                <td>
+                                    <label>
+                                        <input type="checkbox" name="dd_smtp_enable" value="1" <?php checked(get_option('dd_smtp_enable'), 1); ?>>
+                                        <?php _e('Route outbound WordPress emails via custom SMTP server', 'petslist'); ?>
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th><?php _e('SMTP Host', 'petslist'); ?></th>
+                                <td><input type="text" name="dd_smtp_host" value="<?php echo esc_attr(get_option('dd_smtp_host')); ?>" placeholder="e.g. smtp.gmail.com or smtp.mailtrap.io" class="regular-text"></td>
+                            </tr>
+                            <tr>
+                                <th><?php _e('SMTP Port', 'petslist'); ?></th>
+                                <td><input type="number" name="dd_smtp_port" value="<?php echo esc_attr(get_option('dd_smtp_port', 587)); ?>" placeholder="587" class="small-text"></td>
+                            </tr>
+                            <tr>
+                                <th><?php _e('Encryption', 'petslist'); ?></th>
+                                <td>
+                                    <select name="dd_smtp_encryption">
+                                        <option value="tls" <?php selected(get_option('dd_smtp_encryption', 'tls'), 'tls'); ?>>TLS (Recommended)</option>
+                                        <option value="ssl" <?php selected(get_option('dd_smtp_encryption'), 'ssl'); ?>>SSL</option>
+                                        <option value="none" <?php selected(get_option('dd_smtp_encryption'), 'none'); ?>>None</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th><?php _e('SMTP Authentication', 'petslist'); ?></th>
+                                <td>
+                                    <label>
+                                        <input type="checkbox" name="dd_smtp_auth" value="1" <?php checked(get_option('dd_smtp_auth', 1), 1); ?>>
+                                        <?php _e('Use Username & Password authentication', 'petslist'); ?>
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th><?php _e('SMTP Username', 'petslist'); ?></th>
+                                <td><input type="text" name="dd_smtp_username" value="<?php echo esc_attr(get_option('dd_smtp_username')); ?>" class="regular-text" autocomplete="off"></td>
+                            </tr>
+                            <tr>
+                                <th><?php _e('SMTP Password', 'petslist'); ?></th>
+                                <td><input type="password" name="dd_smtp_password" value="<?php echo esc_attr(get_option('dd_smtp_password')); ?>" class="regular-text" autocomplete="off"></td>
+                            </tr>
                         </table>
+
+                        <hr style="margin: 20px 0; border: 0; border-top: 1px solid #e2e8f0;">
+                        <h3>🧪 <?php _e('Test SMTP Configuration', 'petslist'); ?></h3>
+                        <p class="description"><?php _e('Send a test email to verify your SMTP and email template settings.', 'petslist'); ?></p>
+                        <div style="display: flex; gap: 10px; align-items: center; margin-top: 10px;">
+                            <input type="email" id="dd-test-email-address" value="<?php echo esc_attr(get_option('admin_email')); ?>" placeholder="test@example.com" class="regular-text">
+                            <button type="button" id="dd-send-test-email" class="button button-secondary">
+                                <span class="dashicons dashicons-email-alt" style="vertical-align: middle; margin-top: -2px;"></span>
+                                <?php _e('Send Test Email', 'petslist'); ?>
+                            </button>
+                        </div>
+                        <div id="dd-smtp-test-result" style="margin-top: 10px; display: none;"></div>
                     </div>
 
                 </div>
