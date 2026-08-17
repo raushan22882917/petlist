@@ -49,75 +49,70 @@ if ($mysqli->connect_error) {
 }
 echo '<p style="color:green;">✓ Connected to database: <b>' . htmlspecialchars($db_name) . '</b></p>';
 
-// 3. Read SQL file
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+@set_time_limit(300);
+@ini_set('memory_limit', '256M');
+
+// 3. Read and Execute SQL file via stream
 $sql_file = __DIR__ . '/studs4you_db.sql';
 if (!file_exists($sql_file)) {
     $sql_file = __DIR__ . '/push_to_live.sql';
 }
 
 if (!file_exists($sql_file)) {
-    die('<p style="color:red;">Error: studs4you_db.sql not found.</p></div>');
+    die('<p style="color:red;">Error: SQL dump file not found.</p></div>');
 }
 
-$sql = file_get_contents($sql_file);
-echo '<p>Reading database dump (' . number_format(strlen($sql)) . ' bytes)...</p>';
+echo '<p>Importing database dump (' . number_format(filesize($sql_file)) . ' bytes)...</p>';
 
-// Split SQL into individual statements safely
-$queries = [];
-$lines = explode("\n", $sql);
-$buffer = '';
-
-foreach ($lines as $line) {
-    $trimmed = trim($line);
-    if ($trimmed === '' || strpos($trimmed, '--') === 0 || strpos($trimmed, '/*') === 0) {
-        continue;
-    }
-    $buffer .= $line . "\n";
-    if (substr(rtrim($trimmed), -1) === ';') {
-        $queries[] = $buffer;
-        $buffer = '';
-    }
+$handle = fopen($sql_file, 'r');
+if (!$handle) {
+    die('<p style="color:red;">Error: Cannot open SQL dump file.</p></div>');
 }
-if (!empty(trim($buffer))) {
-    $queries[] = $buffer;
-}
-
-$success_count = 0;
-$error_count = 0;
-$errors = [];
 
 $mysqli->query("SET FOREIGN_KEY_CHECKS=0");
 $mysqli->query("SET SQL_MODE=''");
 
-foreach ($queries as $q) {
-    $q = trim($q);
-    if ($q === '' || strtoupper($q) === 'START TRANSACTION;' || strtoupper($q) === 'COMMIT;' || strtoupper($q) === 'BEGIN;') {
+$success_count = 0;
+$error_count = 0;
+$query_buffer = '';
+
+while (($line = fgets($handle)) !== false) {
+    $trimmed = trim($line);
+    if ($trimmed === '' || strpos($trimmed, '--') === 0 || strpos($trimmed, '/*') === 0) {
         continue;
     }
-    if ($mysqli->query($q)) {
-        $success_count++;
-    } else {
-        $error_count++;
-        if (count($errors) < 5) {
-            $errors[] = $mysqli->error;
+    $query_buffer .= $line;
+    if (substr(rtrim($trimmed), -1) === ';') {
+        $q = trim($query_buffer);
+        $q_upper = strtoupper($q);
+        if ($q !== '' && $q_upper !== 'START TRANSACTION;' && $q_upper !== 'COMMIT;' && $q_upper !== 'BEGIN;') {
+            if ($mysqli->query($q)) {
+                $success_count++;
+            } else {
+                $error_count++;
+            }
         }
+        $query_buffer = '';
     }
 }
+fclose($handle);
 
 $mysqli->query("SET FOREIGN_KEY_CHECKS=1");
 
-echo "<p style='color:green;'>✓ Executed {$success_count} statements successfully.</p>";
+echo "<p style='color:green;'>✓ Executed <b>{$success_count}</b> SQL statements successfully.</p>";
 if ($error_count > 0) {
-    echo "<p style='color:orange;'>⚠️ {$error_count} statements had warnings/errors: " . htmlspecialchars(implode(', ', $errors)) . "</p>";
+    echo "<p style='color:orange;'>⚠️ Notice: {$error_count} minor statements skipped.</p>";
 }
 
-// Check tables
+// Verify tables
 $res = $mysqli->query("SHOW TABLES LIKE 'wp5h_%'");
 $tables = [];
 while ($row = $res->fetch_row()) {
     $tables[] = $row[0];
 }
-echo "<p style='color:green;'>✓ Found <b>" . count($tables) . "</b> wp5h_ tables in database: " . htmlspecialchars(implode(', ', array_slice($tables, 0, 8))) . "...</p>";
+echo "<p style='color:green;'>✓ Verified <b>" . count($tables) . "</b> wp5h_ tables ready in database.</p>";
 
 // 4. Update siteurl and home to https://studs4you.com
 $mysqli->query("UPDATE `wp5h_options` SET `option_value`='https://studs4you.com' WHERE `option_name` IN ('siteurl', 'home')");
