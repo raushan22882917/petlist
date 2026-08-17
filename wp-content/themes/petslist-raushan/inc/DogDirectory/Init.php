@@ -26,6 +26,7 @@ class Init {
         $this->boot_classes();
         $this->register_shortcodes();
         add_action( 'after_switch_theme', [ $this, 'on_activation' ] );
+        add_action( 'template_redirect', [ $this, 'handle_legacy_urls' ] );
         add_filter( 'body_class', [ $this, 'body_classes' ] );
         add_filter( 'get_avatar', [ $this, 'custom_user_avatar' ], 10, 5 );
         add_filter( 'get_avatar_url', [ $this, 'custom_user_avatar_url' ], 10, 3 );
@@ -57,6 +58,18 @@ class Init {
 
     private function register_shortcodes() {
         // Shortcodes are registered inside the Shortcodes class
+    }
+
+    public function handle_legacy_urls() {
+        $req = trim( parse_url( $_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH ), '/' );
+        if ( $req === 'dog-register' ) {
+            wp_safe_redirect( dd_register_url(), 301 );
+            exit;
+        }
+        if ( $req === 'dog-login' ) {
+            wp_safe_redirect( dd_login_url(), 301 );
+            exit;
+        }
     }
 
     public function on_activation() {
