@@ -8,16 +8,30 @@ if ($key !== 'studs2026') {
 echo '<div style="font-family:sans-serif; max-width:700px; margin:40px auto; padding:25px; border:1px solid #ddd; border-radius:8px; background:#f9f9f9;">';
 echo '<h2 style="color:#2271b1;margin-top:0;">Studs4You WordPress Sync & Import</h2>';
 
-// 1. Check wp-config.php
+// 1. Parse wp-config.php constants
 $wp_config_file = __DIR__ . '/wp-config.php';
 if (!file_exists($wp_config_file)) {
     die('<p style="color:red;">Error: wp-config.php not found in current directory.</p></div>');
 }
 
-require_once $wp_config_file;
-
-// Check table prefix in wp-config.php and update to wp5h_ if needed
 $wp_config_content = file_get_contents($wp_config_file);
+
+// Extract DB constants
+preg_match("/define\(\s*['\"]DB_NAME['\"]\s*,\s*['\"]([^'\"]+)['\"]\s*\);/", $wp_config_content, $m_name);
+preg_match("/define\(\s*['\"]DB_USER['\"]\s*,\s*['\"]([^'\"]+)['\"]\s*\);/", $wp_config_content, $m_user);
+preg_match("/define\(\s*['\"]DB_PASSWORD['\"]\s*,\s*['\"]([^'\"]*)['\"]\s*\);/", $wp_config_content, $m_pass);
+preg_match("/define\(\s*['\"]DB_HOST['\"]\s*,\s*['\"]([^'\"]+)['\"]\s*\);/", $wp_config_content, $m_host);
+
+$db_name = $m_name[1] ?? '';
+$db_user = $m_user[1] ?? '';
+$db_pass = $m_pass[1] ?? '';
+$db_host = $m_host[1] ?? 'localhost';
+
+if (!$db_name || !$db_user) {
+    die('<p style="color:red;">Could not parse DB credentials from wp-config.php</p></div>');
+}
+
+// Ensure table prefix in wp-config.php is set to wp5h_
 if (strpos($wp_config_content, "\$table_prefix = 'wp5h_';") === false) {
     $updated_config = preg_replace("/\\\$table_prefix\s*=\s*['\"][^'\"]+['\"];/", "\$table_prefix = 'wp5h_';", $wp_config_content);
     if ($updated_config && $updated_config !== $wp_config_content) {
@@ -28,12 +42,12 @@ if (strpos($wp_config_content, "\$table_prefix = 'wp5h_';") === false) {
     echo '<p style="color:green;">✓ $table_prefix is already set to <b>wp5h_</b></p>';
 }
 
-// 2. Connect to Database
-$mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+// 2. Connect to Database directly
+$mysqli = new mysqli($db_host, $db_user, $db_pass, $db_name);
 if ($mysqli->connect_error) {
     die('<p style="color:red;">Database Connection Failed: ' . $mysqli->connect_error . '</p></div>');
 }
-echo '<p style="color:green;">✓ Connected to database: <b>' . htmlspecialchars(DB_NAME) . '</b></p>';
+echo '<p style="color:green;">✓ Connected to database: <b>' . htmlspecialchars($db_name) . '</b></p>';
 
 // 3. Read SQL file
 $sql_file = __DIR__ . '/studs4you_db.sql';
