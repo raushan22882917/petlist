@@ -1,12 +1,12 @@
 
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+
+
+
+
+
+
+
+
 
 
 --
@@ -14,8 +14,8 @@
 --
 
 DROP TABLE IF EXISTS `wp5h_actionscheduler_actions`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_actionscheduler_actions` (
   `action_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `hook` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
@@ -42,7 +42,7 @@ CREATE TABLE `wp5h_actionscheduler_actions` (
   KEY `status_last_attempt_gmt` (`status`,`last_attempt_gmt`),
   KEY `status_claim_id` (`status`,`claim_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_actionscheduler_actions`
@@ -70,15 +70,15 @@ INSERT INTO `wp5h_actionscheduler_actions` VALUES
 --
 
 DROP TABLE IF EXISTS `wp5h_actionscheduler_claims`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_actionscheduler_claims` (
   `claim_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `date_created_gmt` datetime DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`claim_id`),
   KEY `date_created_gmt` (`date_created_gmt`)
 ) ENGINE=InnoDB AUTO_INCREMENT=912 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_actionscheduler_claims`
@@ -97,15 +97,15 @@ CREATE TABLE `wp5h_actionscheduler_claims` (
 --
 
 DROP TABLE IF EXISTS `wp5h_actionscheduler_groups`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_actionscheduler_groups` (
   `group_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `slug` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
   PRIMARY KEY (`group_id`),
   KEY `slug` (`slug`(191))
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_actionscheduler_groups`
@@ -127,8 +127,8 @@ INSERT INTO `wp5h_actionscheduler_groups` VALUES
 --
 
 DROP TABLE IF EXISTS `wp5h_actionscheduler_logs`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_actionscheduler_logs` (
   `log_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `action_id` bigint unsigned NOT NULL,
@@ -139,7 +139,7 @@ CREATE TABLE `wp5h_actionscheduler_logs` (
   KEY `action_id` (`action_id`),
   KEY `log_date_gmt` (`log_date_gmt`)
 ) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_actionscheduler_logs`
@@ -181,8 +181,8 @@ INSERT INTO `wp5h_actionscheduler_logs` VALUES
 --
 
 DROP TABLE IF EXISTS `wp5h_commentmeta`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_commentmeta` (
   `meta_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `comment_id` bigint unsigned NOT NULL DEFAULT '0',
@@ -192,7 +192,7 @@ CREATE TABLE `wp5h_commentmeta` (
   KEY `comment_id` (`comment_id`),
   KEY `meta_key` (`meta_key`(191))
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_commentmeta`
@@ -214,8 +214,8 @@ INSERT INTO `wp5h_commentmeta` VALUES
 --
 
 DROP TABLE IF EXISTS `wp5h_comments`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_comments` (
   `comment_ID` bigint unsigned NOT NULL AUTO_INCREMENT,
   `comment_post_ID` bigint unsigned NOT NULL DEFAULT '0',
@@ -239,7 +239,7 @@ CREATE TABLE `wp5h_comments` (
   KEY `comment_parent` (`comment_parent`),
   KEY `comment_author_email` (`comment_author_email`(10))
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_comments`
@@ -267,8 +267,8 @@ INSERT INTO `wp5h_comments` VALUES
 --
 
 DROP TABLE IF EXISTS `wp5h_dd_payments`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_dd_payments` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint unsigned NOT NULL,
@@ -285,7 +285,7 @@ CREATE TABLE `wp5h_dd_payments` (
   KEY `user_id` (`user_id`),
   KEY `subscription_id` (`subscription_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_dd_payments`
@@ -308,8 +308,8 @@ INSERT INTO `wp5h_dd_payments` VALUES
 --
 
 DROP TABLE IF EXISTS `wp5h_dd_plans`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_dd_plans` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
@@ -322,7 +322,7 @@ CREATE TABLE `wp5h_dd_plans` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `slug` (`slug`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_dd_plans`
@@ -346,8 +346,8 @@ INSERT INTO `wp5h_dd_plans` VALUES
 --
 
 DROP TABLE IF EXISTS `wp5h_dd_subscriptions`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_dd_subscriptions` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint unsigned NOT NULL,
@@ -362,7 +362,7 @@ CREATE TABLE `wp5h_dd_subscriptions` (
   KEY `user_id` (`user_id`),
   KEY `status` (`status`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_dd_subscriptions`
@@ -385,8 +385,8 @@ INSERT INTO `wp5h_dd_subscriptions` VALUES
 --
 
 DROP TABLE IF EXISTS `wp5h_dog_dogs`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_dog_dogs` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint unsigned NOT NULL,
@@ -414,7 +414,7 @@ CREATE TABLE `wp5h_dog_dogs` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_dog_dogs`
@@ -438,8 +438,8 @@ INSERT INTO `wp5h_dog_dogs` VALUES
 --
 
 DROP TABLE IF EXISTS `wp5h_dog_payments`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_dog_payments` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint unsigned NOT NULL,
@@ -451,7 +451,7 @@ CREATE TABLE `wp5h_dog_payments` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_dog_payments`
@@ -474,8 +474,8 @@ INSERT INTO `wp5h_dog_payments` VALUES
 --
 
 DROP TABLE IF EXISTS `wp5h_dog_plans`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_dog_plans` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(191) NOT NULL,
@@ -484,7 +484,7 @@ CREATE TABLE `wp5h_dog_plans` (
   `features` text NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_dog_plans`
@@ -506,8 +506,8 @@ INSERT INTO `wp5h_dog_plans` VALUES
 --
 
 DROP TABLE IF EXISTS `wp5h_dog_users`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_dog_users` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `wp5h_user_id` bigint unsigned DEFAULT NULL,
@@ -519,7 +519,7 @@ CREATE TABLE `wp5h_dog_users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_dog_users`
@@ -545,8 +545,8 @@ INSERT INTO `wp5h_dog_users` VALUES
 --
 
 DROP TABLE IF EXISTS `wp5h_e_events`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_e_events` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `event_data` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci,
@@ -554,7 +554,7 @@ CREATE TABLE `wp5h_e_events` (
   PRIMARY KEY (`id`),
   KEY `created_at_index` (`created_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_e_events`
@@ -573,8 +573,8 @@ CREATE TABLE `wp5h_e_events` (
 --
 
 DROP TABLE IF EXISTS `wp5h_ff_scheduled_actions`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_ff_scheduled_actions` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `action` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
@@ -590,7 +590,7 @@ CREATE TABLE `wp5h_ff_scheduled_actions` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_ff_scheduled_actions`
@@ -609,8 +609,8 @@ CREATE TABLE `wp5h_ff_scheduled_actions` (
 --
 
 DROP TABLE IF EXISTS `wp5h_fluentform_entry_details`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_fluentform_entry_details` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `form_id` bigint unsigned DEFAULT NULL,
@@ -620,7 +620,7 @@ CREATE TABLE `wp5h_fluentform_entry_details` (
   `field_value` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_fluentform_entry_details`
@@ -639,8 +639,8 @@ CREATE TABLE `wp5h_fluentform_entry_details` (
 --
 
 DROP TABLE IF EXISTS `wp5h_fluentform_form_analytics`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_fluentform_form_analytics` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `form_id` int unsigned DEFAULT NULL,
@@ -657,7 +657,7 @@ CREATE TABLE `wp5h_fluentform_form_analytics` (
   KEY `form_id_ip` (`form_id`,`ip`),
   KEY `created_at` (`created_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_fluentform_form_analytics`
@@ -676,8 +676,8 @@ CREATE TABLE `wp5h_fluentform_form_analytics` (
 --
 
 DROP TABLE IF EXISTS `wp5h_fluentform_form_meta`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_fluentform_form_meta` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `form_id` int unsigned DEFAULT NULL,
@@ -687,7 +687,7 @@ CREATE TABLE `wp5h_fluentform_form_meta` (
   KEY `form_id_meta_key` (`form_id`,`meta_key`(191)),
   KEY `meta_key` (`meta_key`(191))
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_fluentform_form_meta`
@@ -716,8 +716,8 @@ INSERT INTO `wp5h_fluentform_form_meta` VALUES
 --
 
 DROP TABLE IF EXISTS `wp5h_fluentform_forms`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_fluentform_forms` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
@@ -732,7 +732,7 @@ CREATE TABLE `wp5h_fluentform_forms` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_fluentform_forms`
@@ -754,8 +754,8 @@ INSERT INTO `wp5h_fluentform_forms` VALUES
 --
 
 DROP TABLE IF EXISTS `wp5h_fluentform_logs`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_fluentform_logs` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `parent_source_id` int unsigned DEFAULT NULL,
@@ -768,7 +768,7 @@ CREATE TABLE `wp5h_fluentform_logs` (
   `created_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_fluentform_logs`
@@ -787,8 +787,8 @@ CREATE TABLE `wp5h_fluentform_logs` (
 --
 
 DROP TABLE IF EXISTS `wp5h_fluentform_submission_meta`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_fluentform_submission_meta` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `response_id` bigint unsigned DEFAULT NULL,
@@ -803,7 +803,7 @@ CREATE TABLE `wp5h_fluentform_submission_meta` (
   PRIMARY KEY (`id`),
   KEY `response_id_meta_key` (`response_id`,`meta_key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_fluentform_submission_meta`
@@ -822,8 +822,8 @@ CREATE TABLE `wp5h_fluentform_submission_meta` (
 --
 
 DROP TABLE IF EXISTS `wp5h_fluentform_submissions`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_fluentform_submissions` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `form_id` int unsigned DEFAULT NULL,
@@ -852,7 +852,7 @@ CREATE TABLE `wp5h_fluentform_submissions` (
   KEY `user_id` (`user_id`),
   KEY `serial_number` (`serial_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_fluentform_submissions`
@@ -871,8 +871,8 @@ CREATE TABLE `wp5h_fluentform_submissions` (
 --
 
 DROP TABLE IF EXISTS `wp5h_links`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_links` (
   `link_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `link_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL DEFAULT '',
@@ -890,7 +890,7 @@ CREATE TABLE `wp5h_links` (
   PRIMARY KEY (`link_id`),
   KEY `link_visible` (`link_visible`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_links`
@@ -909,8 +909,8 @@ CREATE TABLE `wp5h_links` (
 --
 
 DROP TABLE IF EXISTS `wp5h_options`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_options` (
   `option_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `option_name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL DEFAULT '',
@@ -920,7 +920,7 @@ CREATE TABLE `wp5h_options` (
   UNIQUE KEY `option_name` (`option_name`),
   KEY `autoload` (`autoload`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3048 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_options`
@@ -1218,8 +1218,8 @@ INSERT INTO `wp5h_options` VALUES
 --
 
 DROP TABLE IF EXISTS `wp5h_postmeta`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_postmeta` (
   `meta_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `post_id` bigint unsigned NOT NULL DEFAULT '0',
@@ -1229,7 +1229,7 @@ CREATE TABLE `wp5h_postmeta` (
   KEY `post_id` (`post_id`),
   KEY `meta_key` (`meta_key`(191))
 ) ENGINE=InnoDB AUTO_INCREMENT=1846 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_postmeta`
@@ -2515,8 +2515,8 @@ INSERT INTO `wp5h_postmeta` VALUES
 --
 
 DROP TABLE IF EXISTS `wp5h_posts`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_posts` (
   `ID` bigint unsigned NOT NULL AUTO_INCREMENT,
   `post_author` bigint unsigned NOT NULL DEFAULT '0',
@@ -2548,7 +2548,7 @@ CREATE TABLE `wp5h_posts` (
   KEY `post_author` (`post_author`),
   KEY `type_status_author` (`post_type`,`post_status`,`post_author`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4738 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_posts`
@@ -2841,8 +2841,8 @@ INSERT INTO `wp5h_posts` VALUES
 --
 
 DROP TABLE IF EXISTS `wp5h_rtcl_conversation_messages`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_rtcl_conversation_messages` (
   `message_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `con_id` bigint unsigned NOT NULL,
@@ -2853,7 +2853,7 @@ CREATE TABLE `wp5h_rtcl_conversation_messages` (
   PRIMARY KEY (`message_id`),
   KEY `con_id` (`con_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_rtcl_conversation_messages`
@@ -2872,8 +2872,8 @@ CREATE TABLE `wp5h_rtcl_conversation_messages` (
 --
 
 DROP TABLE IF EXISTS `wp5h_rtcl_conversations`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_rtcl_conversations` (
   `con_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `listing_id` bigint unsigned NOT NULL,
@@ -2888,7 +2888,7 @@ CREATE TABLE `wp5h_rtcl_conversations` (
   `created_at` timestamp NOT NULL,
   PRIMARY KEY (`con_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_rtcl_conversations`
@@ -2907,8 +2907,8 @@ CREATE TABLE `wp5h_rtcl_conversations` (
 --
 
 DROP TABLE IF EXISTS `wp5h_rtcl_forms`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_rtcl_forms` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
@@ -2930,7 +2930,7 @@ CREATE TABLE `wp5h_rtcl_forms` (
   KEY `type_idx` (`type`),
   KEY `created_by_idx` (`created_by`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_rtcl_forms`
@@ -2951,8 +2951,8 @@ INSERT INTO `wp5h_rtcl_forms` VALUES
 --
 
 DROP TABLE IF EXISTS `wp5h_rtcl_import_history`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_rtcl_import_history` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `source_type` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
@@ -2973,7 +2973,7 @@ CREATE TABLE `wp5h_rtcl_import_history` (
   KEY `started_at_idx` (`started_at`),
   KEY `user_id_idx` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_rtcl_import_history`
@@ -2992,8 +2992,8 @@ CREATE TABLE `wp5h_rtcl_import_history` (
 --
 
 DROP TABLE IF EXISTS `wp5h_rtcl_import_sources`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_rtcl_import_sources` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `source_type` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
@@ -3015,7 +3015,7 @@ CREATE TABLE `wp5h_rtcl_import_sources` (
   KEY `schedule_idx` (`schedule`),
   KEY `next_run_at_idx` (`next_run_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_rtcl_import_sources`
@@ -3034,8 +3034,8 @@ CREATE TABLE `wp5h_rtcl_import_sources` (
 --
 
 DROP TABLE IF EXISTS `wp5h_rtcl_listing_stats`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_rtcl_listing_stats` (
   `stat_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `listing_id` bigint unsigned NOT NULL,
@@ -3046,7 +3046,7 @@ CREATE TABLE `wp5h_rtcl_listing_stats` (
   UNIQUE KEY `listing_date_key` (`listing_id`,`stat_date`,`stat_key`),
   KEY `listing_id` (`listing_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_rtcl_listing_stats`
@@ -3065,8 +3065,8 @@ CREATE TABLE `wp5h_rtcl_listing_stats` (
 --
 
 DROP TABLE IF EXISTS `wp5h_rtcl_membership`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_rtcl_membership` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
@@ -3078,7 +3078,7 @@ CREATE TABLE `wp5h_rtcl_membership` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_rtcl_membership`
@@ -3097,8 +3097,8 @@ CREATE TABLE `wp5h_rtcl_membership` (
 --
 
 DROP TABLE IF EXISTS `wp5h_rtcl_membership_meta`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_rtcl_membership_meta` (
   `meta_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `membership_id` bigint unsigned NOT NULL,
@@ -3108,7 +3108,7 @@ CREATE TABLE `wp5h_rtcl_membership_meta` (
   KEY `membership_id` (`membership_id`),
   KEY `meta_key` (`meta_key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_rtcl_membership_meta`
@@ -3127,8 +3127,8 @@ CREATE TABLE `wp5h_rtcl_membership_meta` (
 --
 
 DROP TABLE IF EXISTS `wp5h_rtcl_posting_log`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_rtcl_posting_log` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `post_id` int NOT NULL,
@@ -3140,7 +3140,7 @@ CREATE TABLE `wp5h_rtcl_posting_log` (
   KEY `post_id` (`post_id`),
   KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_rtcl_posting_log`
@@ -3159,8 +3159,8 @@ CREATE TABLE `wp5h_rtcl_posting_log` (
 --
 
 DROP TABLE IF EXISTS `wp5h_rtcl_push_notifications`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_rtcl_push_notifications` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `push_token` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
@@ -3171,7 +3171,7 @@ CREATE TABLE `wp5h_rtcl_push_notifications` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `push_token` (`push_token`(191))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_rtcl_push_notifications`
@@ -3190,8 +3190,8 @@ CREATE TABLE `wp5h_rtcl_push_notifications` (
 --
 
 DROP TABLE IF EXISTS `wp5h_rtcl_sessions`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_rtcl_sessions` (
   `session_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `session_key` char(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
@@ -3200,7 +3200,7 @@ CREATE TABLE `wp5h_rtcl_sessions` (
   PRIMARY KEY (`session_key`),
   UNIQUE KEY `session_id` (`session_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=903 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_rtcl_sessions`
@@ -3332,8 +3332,8 @@ INSERT INTO `wp5h_rtcl_sessions` VALUES
 --
 
 DROP TABLE IF EXISTS `wp5h_rtcl_subscription_meta`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_rtcl_subscription_meta` (
   `meta_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `subscription_id` bigint unsigned NOT NULL,
@@ -3343,7 +3343,7 @@ CREATE TABLE `wp5h_rtcl_subscription_meta` (
   KEY `subscription_id` (`subscription_id`),
   KEY `meta_key` (`meta_key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_rtcl_subscription_meta`
@@ -3362,8 +3362,8 @@ CREATE TABLE `wp5h_rtcl_subscription_meta` (
 --
 
 DROP TABLE IF EXISTS `wp5h_rtcl_subscriptions`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_rtcl_subscriptions` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
@@ -3382,7 +3382,7 @@ CREATE TABLE `wp5h_rtcl_subscriptions` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_rtcl_subscriptions`
@@ -3401,8 +3401,8 @@ CREATE TABLE `wp5h_rtcl_subscriptions` (
 --
 
 DROP TABLE IF EXISTS `wp5h_rtcl_tax_rates`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_rtcl_tax_rates` (
   `tax_rate_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `country` varchar(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL DEFAULT '',
@@ -3414,7 +3414,7 @@ CREATE TABLE `wp5h_rtcl_tax_rates` (
   `tax_rate_priority` bigint unsigned NOT NULL,
   PRIMARY KEY (`tax_rate_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_rtcl_tax_rates`
@@ -3433,8 +3433,8 @@ CREATE TABLE `wp5h_rtcl_tax_rates` (
 --
 
 DROP TABLE IF EXISTS `wp5h_term_relationships`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_term_relationships` (
   `object_id` bigint unsigned NOT NULL DEFAULT '0',
   `term_taxonomy_id` bigint unsigned NOT NULL DEFAULT '0',
@@ -3442,7 +3442,7 @@ CREATE TABLE `wp5h_term_relationships` (
   PRIMARY KEY (`object_id`,`term_taxonomy_id`),
   KEY `term_taxonomy_id` (`term_taxonomy_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_term_relationships`
@@ -3561,8 +3561,8 @@ INSERT INTO `wp5h_term_relationships` VALUES
 --
 
 DROP TABLE IF EXISTS `wp5h_term_taxonomy`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_term_taxonomy` (
   `term_taxonomy_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `term_id` bigint unsigned NOT NULL DEFAULT '0',
@@ -3574,7 +3574,7 @@ CREATE TABLE `wp5h_term_taxonomy` (
   UNIQUE KEY `term_id_taxonomy` (`term_id`,`taxonomy`),
   KEY `taxonomy` (`taxonomy`)
 ) ENGINE=InnoDB AUTO_INCREMENT=74 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_term_taxonomy`
@@ -3651,8 +3651,8 @@ INSERT INTO `wp5h_term_taxonomy` VALUES
 --
 
 DROP TABLE IF EXISTS `wp5h_termmeta`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_termmeta` (
   `meta_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `term_id` bigint unsigned NOT NULL DEFAULT '0',
@@ -3662,7 +3662,7 @@ CREATE TABLE `wp5h_termmeta` (
   KEY `term_id` (`term_id`),
   KEY `meta_key` (`meta_key`(191))
 ) ENGINE=InnoDB AUTO_INCREMENT=110 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_termmeta`
@@ -3791,8 +3791,8 @@ INSERT INTO `wp5h_termmeta` VALUES
 --
 
 DROP TABLE IF EXISTS `wp5h_terms`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_terms` (
   `term_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL DEFAULT '',
@@ -3802,7 +3802,7 @@ CREATE TABLE `wp5h_terms` (
   KEY `slug` (`slug`(191)),
   KEY `name` (`name`(191))
 ) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_terms`
@@ -3879,8 +3879,8 @@ INSERT INTO `wp5h_terms` VALUES
 --
 
 DROP TABLE IF EXISTS `wp5h_usermeta`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_usermeta` (
   `umeta_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint unsigned NOT NULL DEFAULT '0',
@@ -3890,7 +3890,7 @@ CREATE TABLE `wp5h_usermeta` (
   KEY `user_id` (`user_id`),
   KEY `meta_key` (`meta_key`(191))
 ) ENGINE=InnoDB AUTO_INCREMENT=165 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_usermeta`
@@ -4049,8 +4049,8 @@ INSERT INTO `wp5h_usermeta` VALUES
 --
 
 DROP TABLE IF EXISTS `wp5h_users`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_users` (
   `ID` bigint unsigned NOT NULL AUTO_INCREMENT,
   `user_login` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL DEFAULT '',
@@ -4067,7 +4067,7 @@ CREATE TABLE `wp5h_users` (
   KEY `user_nicename` (`user_nicename`),
   KEY `user_email` (`user_email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_users`
@@ -4095,15 +4095,15 @@ INSERT INTO `wp5h_users` VALUES
 --
 
 DROP TABLE IF EXISTS `wp5h_wpfm_backup`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
+
+
 CREATE TABLE `wp5h_wpfm_backup` (
   `id` int NOT NULL AUTO_INCREMENT,
   `backup_name` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci,
   `backup_date` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `wp5h_wpfm_backup`
@@ -4116,14 +4116,14 @@ CREATE TABLE `wp5h_wpfm_backup` (
 
 
 
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+
+
+
+
+
+
 
 
 -- Dump completed on 2026-08-17 13:26:39
