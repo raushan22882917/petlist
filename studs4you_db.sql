@@ -55,15 +55,15 @@ CREATE TABLE `wp5h_actionscheduler_actions` (
 -- Dumping data for table `wp5h_actionscheduler_actions`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_actionscheduler_actions` DISABLE KEYS */;
 INSERT INTO `wp5h_actionscheduler_actions` (`action_id`, `hook`, `status`, `scheduled_date_gmt`, `scheduled_date_local`, `priority`, `args`, `schedule`, `group_id`, `attempts`, `last_attempt_gmt`, `last_attempt_local`, `claim_id`, `extended_args`) VALUES (7,'action_scheduler_run_recurring_actions_schedule_hook','complete','2026-06-28 02:54:10','2026-06-28 02:54:10',20,'[]','O:32:\"ActionScheduler_IntervalSchedule\":5:{s:22:\"\0*\0scheduled_timestamp\";i:1782615250;s:18:\"\0*\0first_timestamp\";i:1782615250;s:13:\"\0*\0recurrence\";i:86400;s:49:\"\0ActionScheduler_IntervalSchedule\0start_timestamp\";i:1782615250;s:53:\"\0ActionScheduler_IntervalSchedule\0interval_in_seconds\";i:86400;}',1,1,'2026-06-28 02:54:14','2026-06-28 02:54:14',1,NULL),
 (8,'action_scheduler/migration_hook','complete','2026-06-28 02:55:14','2026-06-28 02:55:14',10,'[]','O:30:\"ActionScheduler_SimpleSchedule\":2:{s:22:\"\0*\0scheduled_timestamp\";i:1782615314;s:41:\"\0ActionScheduler_SimpleSchedule\0timestamp\";i:1782615314;}',2,1,'2026-06-28 02:55:24','2026-06-28 02:55:24',3,NULL),
 (9,'action_scheduler_run_recurring_actions_schedule_hook','complete','2026-06-29 02:54:14','2026-06-29 02:54:14',20,'[]','O:32:\"ActionScheduler_IntervalSchedule\":5:{s:22:\"\0*\0scheduled_timestamp\";i:1782701654;s:18:\"\0*\0first_timestamp\";i:1782615250;s:13:\"\0*\0recurrence\";i:86400;s:49:\"\0ActionScheduler_IntervalSchedule\0start_timestamp\";i:1782701654;s:53:\"\0ActionScheduler_IntervalSchedule\0interval_in_seconds\";i:86400;}',1,1,'2026-06-29 03:30:32','2026-06-29 03:30:32',525,NULL),
 (10,'action_scheduler_run_recurring_actions_schedule_hook','pending','2026-06-30 03:30:32','2026-06-30 03:30:32',20,'[]','O:32:\"ActionScheduler_IntervalSchedule\":5:{s:22:\"\0*\0scheduled_timestamp\";i:1782790232;s:18:\"\0*\0first_timestamp\";i:1782615250;s:13:\"\0*\0recurrence\";i:86400;s:49:\"\0ActionScheduler_IntervalSchedule\0start_timestamp\";i:1782790232;s:53:\"\0ActionScheduler_IntervalSchedule\0interval_in_seconds\";i:86400;}',1,0,'0000-00-00 00:00:00','0000-00-00 00:00:00',0,NULL);
 /*!40000 ALTER TABLE `wp5h_actionscheduler_actions` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_actionscheduler_claims`
@@ -84,11 +84,11 @@ CREATE TABLE `wp5h_actionscheduler_claims` (
 -- Dumping data for table `wp5h_actionscheduler_claims`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_actionscheduler_claims` DISABLE KEYS */;
 /*!40000 ALTER TABLE `wp5h_actionscheduler_claims` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_actionscheduler_groups`
@@ -109,13 +109,13 @@ CREATE TABLE `wp5h_actionscheduler_groups` (
 -- Dumping data for table `wp5h_actionscheduler_groups`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_actionscheduler_groups` DISABLE KEYS */;
 INSERT INTO `wp5h_actionscheduler_groups` (`group_id`, `slug`) VALUES (1,'ActionScheduler'),
 (2,'action-scheduler-migration');
 /*!40000 ALTER TABLE `wp5h_actionscheduler_groups` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_actionscheduler_logs`
@@ -140,7 +140,7 @@ CREATE TABLE `wp5h_actionscheduler_logs` (
 -- Dumping data for table `wp5h_actionscheduler_logs`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_actionscheduler_logs` DISABLE KEYS */;
 INSERT INTO `wp5h_actionscheduler_logs` (`log_id`, `action_id`, `message`, `log_date_gmt`, `log_date_local`) VALUES (1,7,'action created','2026-06-28 02:54:10','2026-06-28 02:54:10'),
 (2,8,'action created','2026-06-28 02:54:14','2026-06-28 02:54:14'),
@@ -153,8 +153,8 @@ INSERT INTO `wp5h_actionscheduler_logs` (`log_id`, `action_id`, `message`, `log_
 (9,9,'action complete via WP Cron','2026-06-29 03:30:32','2026-06-29 03:30:32'),
 (10,10,'action created','2026-06-29 03:30:32','2026-06-29 03:30:32');
 /*!40000 ALTER TABLE `wp5h_actionscheduler_logs` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_commentmeta`
@@ -178,13 +178,13 @@ CREATE TABLE `wp5h_commentmeta` (
 -- Dumping data for table `wp5h_commentmeta`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_commentmeta` DISABLE KEYS */;
 INSERT INTO `wp5h_commentmeta` (`meta_id`, `comment_id`, `meta_key`, `meta_value`) VALUES (1,8,'rating','5'),
 (2,8,'title','test');
 /*!40000 ALTER TABLE `wp5h_commentmeta` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_comments`
@@ -222,7 +222,7 @@ CREATE TABLE `wp5h_comments` (
 -- Dumping data for table `wp5h_comments`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_comments` DISABLE KEYS */;
 INSERT INTO `wp5h_comments` (`comment_ID`, `comment_post_ID`, `comment_author`, `comment_author_email`, `comment_author_url`, `comment_author_IP`, `comment_date`, `comment_date_gmt`, `comment_content`, `comment_karma`, `comment_approved`, `comment_agent`, `comment_type`, `comment_parent`, `user_id`) VALUES (1,1,'A WordPress Commenter','wapuu@wordpress.example','https://wordpress.org/','','2026-06-28 02:47:07','2026-06-28 02:47:07','Hi, this is a comment.\nTo get started with moderating, editing, and deleting comments, please visit the Comments screen in the dashboard.\nCommenter avatars come from <a href=\"https://gravatar.com/\">Gravatar</a>.',0,'1','','comment',0,0),
 (2,4590,'Jessica Rose','techlabpro18@gmail.com','','127.0.0.1','2023-08-25 08:45:01','2023-08-25 08:45:01','Finanappreciate Your Trust Greatly Our Clients Choose Dentace Ducts Because Know We Are The Best Area Awaitingare Really.',0,'1','','comment',0,0),
@@ -233,8 +233,8 @@ INSERT INTO `wp5h_comments` (`comment_ID`, `comment_post_ID`, `comment_author`, 
 (7,243,'Sofia Zika','techlabpro18@gmail.com','','127.0.0.1','2023-08-25 11:53:24','2023-08-25 11:53:24','Finanappreciate Your Trust Greatly Our Clients Choose Dentace Ducts Because Know We Are The Best Area Awaitingare Really.',0,'1','','comment',5,0),
 (8,280,'sa','saklslkd@gmail.com','','1.231.202.66','2023-09-30 21:41:37','2023-09-30 21:41:37','test',0,'0','','comment',0,0);
 /*!40000 ALTER TABLE `wp5h_comments` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_dd_payments`
@@ -265,12 +265,12 @@ CREATE TABLE `wp5h_dd_payments` (
 -- Dumping data for table `wp5h_dd_payments`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_dd_payments` DISABLE KEYS */;
 INSERT INTO `wp5h_dd_payments` (`id`, `user_id`, `subscription_id`, `amount`, `currency`, `payment_method`, `status`, `transaction_id`, `stripe_pi_id`, `invoice_url`, `created_at`) VALUES (1,5,85,79.99,'USD','stripe','completed','ch_manual_admin_pro','pi_manual_admin_pro','','2026-06-28 16:18:18');
 /*!40000 ALTER TABLE `wp5h_dd_payments` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_dd_plans`
@@ -297,14 +297,14 @@ CREATE TABLE `wp5h_dd_plans` (
 -- Dumping data for table `wp5h_dd_plans`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_dd_plans` DISABLE KEYS */;
 INSERT INTO `wp5h_dd_plans` (`id`, `name`, `slug`, `price`, `duration`, `features`, `is_active`, `created_at`) VALUES (1,'Monthly','monthly',9.99,30,'[\"Unlimited dog profiles\",\"Full directory access\",\"Photo uploads (front + side)\",\"Advanced search & filters\",\"Priority listing\"]',1,'2026-06-28 12:15:48'),
 (2,'Yearly','yearly',79.99,365,'[\"Everything in Monthly\",\"2 months FREE\",\"Gallery uploads (up to 10 photos)\",\"Featured badge on profiles\",\"Early access to new features\"]',1,'2026-06-28 12:15:48'),
 (3,'Lifetime','lifetime',199.99,36500,'[\"Everything in Yearly\",\"One-time payment forever\",\"Unlimited gallery photos\",\"Premium support\",\"API access\"]',1,'2026-06-28 12:15:48');
 /*!40000 ALTER TABLE `wp5h_dd_plans` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_dd_subscriptions`
@@ -333,12 +333,12 @@ CREATE TABLE `wp5h_dd_subscriptions` (
 -- Dumping data for table `wp5h_dd_subscriptions`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_dd_subscriptions` DISABLE KEYS */;
 INSERT INTO `wp5h_dd_subscriptions` (`id`, `user_id`, `plan_id`, `status`, `starts_at`, `expires_at`, `stripe_sub_id`, `created_at`, `updated_at`) VALUES (1,5,2,'active','2026-06-28 10:48:18','2027-06-28 10:48:18','sub_manual_admin_pro','2026-06-28 16:18:18','2026-06-28 16:18:18');
 /*!40000 ALTER TABLE `wp5h_dd_subscriptions` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_dog_dogs`
@@ -380,15 +380,15 @@ CREATE TABLE `wp5h_dog_dogs` (
 -- Dumping data for table `wp5h_dog_dogs`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_dog_dogs` DISABLE KEYS */;
 INSERT INTO `wp5h_dog_dogs` (`id`, `user_id`, `name`, `breed`, `gender`, `dob`, `age`, `description`, `front_image`, `side_image`, `gallery`, `color`, `weight`, `registration_number`, `awards`, `health_info`, `pedigree`, `kennel`, `country`, `city`, `phone`, `views`, `created_at`) VALUES (1,2,'Max','Golden Retriever','Male','2023-04-12',3,'Max is a highly energetic Golden Retriever who loves swimming and playing fetch. He has excellent retrieval instinct.','https://studs4you.com/wp-content/uploads/2023/08/post-img-1.webp','https://studs4you.com/wp-content/uploads/2023/08/post-img-2.webp','https://studs4you.com/wp-content/uploads/2023/08/post-img-3.webp','Golden','72 lbs','AKC-987654','Best of Breed (2025 California Dog Show)','OFA Hips: Excellent, Eyes: Clear','Sire: Gold Rush Champion, Dam: Sweet Honey Bee','Sunshine Kennels','United States','Los Angeles','310-555-0192',154,'2026-06-18 11:59:29'),
 (2,3,'Bella','German Shepherd','Female','2024-02-18',2,'Bella is an intelligent and protective German Shepherd, currently training in agility. She is quick to learn new commands.','https://studs4you.com/wp-content/uploads/2023/08/post-img-4.webp','https://studs4you.com/wp-content/uploads/2023/08/post-img-5.webp','https://studs4you.com/wp-content/uploads/2023/08/post-img-6.webp','Black & Tan','65 lbs','AKC-123456','Agility Novice Title (2025 Texas Agility Cup)','Elbows: Normal, DNA: Clear','Sire: Von Bismarck King, Dam: Von Kaiser Queen','Vanguard Shepherds','United States','Houston','713-555-0143',210,'2026-05-29 11:59:29'),
 (3,3,'Charlie','Poodle','Male','2022-09-05',4,'Charlie is a Standard Poodle with an elegant coat and friendly demeanor. He is great with kids and other pets.','https://studs4you.com/wp-content/uploads/2023/08/post-img-7.webp','https://studs4you.com/wp-content/uploads/2023/08/post-img-8.webp','','White','58 lbs','AKC-246810','Grand Champion (2024 Florida Royal Poodle Show)','Cardiac: Normal, Thyroid: Normal','Sire: Starry Night Prince, Dam: White Velvet Queen','Majestic Poodles','United States','Miami','305-555-0177',98,'2026-06-03 11:59:29'),
 (4,4,'Lucy','French Bulldog','Female','2025-06-01',1,'Lucy is a playful French Bulldog puppy. She loves cuddling and taking short walks in the park.','https://studs4you.com/wp-content/uploads/2023/08/post-img-9.webp','https://studs4you.com/wp-content/uploads/2023/08/post-img-10.webp','','Fawn','22 lbs','AKC-135791','Best Puppy (2025 East Coast Bulldog Meet)','Patella: Normal','Sire: Frenchie Pierre, Dam: Frenchie Chloe','Royal Frenchies','United States','New York','212-555-0188',342,'2026-06-23 11:59:29');
 /*!40000 ALTER TABLE `wp5h_dog_dogs` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_dog_payments`
@@ -414,14 +414,14 @@ CREATE TABLE `wp5h_dog_payments` (
 -- Dumping data for table `wp5h_dog_payments`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_dog_payments` DISABLE KEYS */;
 INSERT INTO `wp5h_dog_payments` (`id`, `user_id`, `amount`, `payment_method`, `status`, `transaction_id`, `created_at`) VALUES (1,2,12.00,'Stripe CC','completed','txn_stripe_mock_12345a','2026-06-18 11:59:29'),
 (2,3,99.00,'Stripe CC','completed','txn_stripe_mock_12345b','2026-05-29 11:59:29'),
 (3,4,12.00,'Stripe CC','completed','txn_stripe_mock_12345c','2026-06-23 11:59:29');
 /*!40000 ALTER TABLE `wp5h_dog_payments` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_dog_plans`
@@ -444,13 +444,13 @@ CREATE TABLE `wp5h_dog_plans` (
 -- Dumping data for table `wp5h_dog_plans`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_dog_plans` DISABLE KEYS */;
 INSERT INTO `wp5h_dog_plans` (`id`, `name`, `price`, `duration`, `features`) VALUES (1,'Gold Membership',12.00,'Monthly','Add up to 10 Dogs,2 Featured Listings,Unlimited Browsing,Full Profile Management'),
 (2,'Platinum Membership',99.00,'Yearly','Add up to 50 Dogs,10 Featured Listings,Unlimited Browsing,Full Profile Management');
 /*!40000 ALTER TABLE `wp5h_dog_plans` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_dog_users`
@@ -476,7 +476,7 @@ CREATE TABLE `wp5h_dog_users` (
 -- Dumping data for table `wp5h_dog_users`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_dog_users` DISABLE KEYS */;
 INSERT INTO `wp5h_dog_users` (`id`, `wp5h_user_id`, `name`, `email`, `role`, `subscription_id`, `created_at`) VALUES (1,1,'Admin User','admin@example.com','admin',NULL,'2026-06-28 11:59:29'),
 (2,NULL,'Jane Doe','jane@example.com','subscriber',1,'2026-06-18 11:59:29'),
@@ -485,8 +485,8 @@ INSERT INTO `wp5h_dog_users` (`id`, `wp5h_user_id`, `name`, `email`, `role`, `su
 (5,NULL,'Bobby Brown','bobby@example.com','visitor',NULL,'2026-06-27 11:59:29'),
 (6,4,'Raushan Raushan Kumar','raushan22882917@gmail.com','admin',NULL,'2026-06-28 10:53:25');
 /*!40000 ALTER TABLE `wp5h_dog_users` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_e_events`
@@ -508,11 +508,11 @@ CREATE TABLE `wp5h_e_events` (
 -- Dumping data for table `wp5h_e_events`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_e_events` DISABLE KEYS */;
 /*!40000 ALTER TABLE `wp5h_e_events` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_ff_scheduled_actions`
@@ -542,11 +542,11 @@ CREATE TABLE `wp5h_ff_scheduled_actions` (
 -- Dumping data for table `wp5h_ff_scheduled_actions`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_ff_scheduled_actions` DISABLE KEYS */;
 /*!40000 ALTER TABLE `wp5h_ff_scheduled_actions` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_fluentform_entry_details`
@@ -570,11 +570,11 @@ CREATE TABLE `wp5h_fluentform_entry_details` (
 -- Dumping data for table `wp5h_fluentform_entry_details`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_fluentform_entry_details` DISABLE KEYS */;
 /*!40000 ALTER TABLE `wp5h_fluentform_entry_details` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_fluentform_form_analytics`
@@ -605,11 +605,11 @@ CREATE TABLE `wp5h_fluentform_form_analytics` (
 -- Dumping data for table `wp5h_fluentform_form_analytics`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_fluentform_form_analytics` DISABLE KEYS */;
 /*!40000 ALTER TABLE `wp5h_fluentform_form_analytics` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_fluentform_form_meta`
@@ -633,7 +633,7 @@ CREATE TABLE `wp5h_fluentform_form_meta` (
 -- Dumping data for table `wp5h_fluentform_form_meta`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_fluentform_form_meta` DISABLE KEYS */;
 INSERT INTO `wp5h_fluentform_form_meta` (`id`, `form_id`, `meta_key`, `value`) VALUES (1,1,'template_name','basic_contact_form'),
 (2,1,'formSettings','{\"confirmation\":{\"redirectTo\":\"samePage\",\"messageToShow\":\"Thank you for your message. We will get in touch with you shortly\",\"customPage\":null,\"samePageFormBehavior\":\"hide_form\",\"customUrl\":null},\"restrictions\":{\"limitNumberOfEntries\":{\"enabled\":false,\"numberOfEntries\":null,\"period\":\"total\",\"limitReachedMsg\":\"Maximum number of entries exceeded.\"},\"scheduleForm\":{\"enabled\":false,\"start\":null,\"end\":null,\"selectedDays\":[\"Monday\",\"Tuesday\",\"Wednesday\",\"Thursday\",\"Friday\",\"Saturday\",\"Sunday\"],\"pendingMsg\":\"Form submission is not started yet.\",\"expiredMsg\":\"Form submission is now closed.\"},\"requireLogin\":{\"enabled\":false,\"requireLoginMsg\":\"You must be logged in to submit the form.\"},\"denyEmptySubmission\":{\"enabled\":false,\"message\":\"Sorry, you cannot submit an empty form. Let\'s hear what you wanna say.\"}},\"layout\":{\"labelPlacement\":\"top\",\"helpMessagePlacement\":\"with_label\",\"errorMessagePlacement\":\"inline\",\"cssClassName\":\"\",\"asteriskPlacement\":\"asterisk-right\"},\"delete_entry_on_submission\":\"no\",\"appendSurveyResult\":{\"enabled\":false,\"showLabel\":false,\"showCount\":false}}'),
@@ -645,8 +645,8 @@ INSERT INTO `wp5h_fluentform_form_meta` (`id`, `form_id`, `meta_key`, `value`) V
 (8,2,'step_data_persistency_status','no'),
 (9,2,'_primary_email_field','email');
 /*!40000 ALTER TABLE `wp5h_fluentform_form_meta` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_fluentform_forms`
@@ -675,13 +675,13 @@ CREATE TABLE `wp5h_fluentform_forms` (
 -- Dumping data for table `wp5h_fluentform_forms`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_fluentform_forms` DISABLE KEYS */;
 INSERT INTO `wp5h_fluentform_forms` (`id`, `title`, `status`, `appearance_settings`, `form_fields`, `has_payment`, `type`, `conditions`, `created_by`, `created_at`, `updated_at`) VALUES (1,'Contact Form Demo','published',NULL,'{\"fields\":[{\"index\":0,\"element\":\"input_name\",\"attributes\":{\"name\":\"names\",\"data-type\":\"name-element\"},\"settings\":{\"container_class\":\"\",\"admin_field_label\":\"Name\",\"conditional_logics\":[]},\"fields\":{\"first_name\":{\"element\":\"input_text\",\"attributes\":{\"type\":\"text\",\"name\":\"first_name\",\"value\":\"\",\"id\":\"\",\"class\":\"\",\"placeholder\":\"First Name\"},\"settings\":{\"container_class\":\"\",\"label\":\"First Name\",\"help_message\":\"\",\"visible\":true,\"validation_rules\":{\"required\":{\"value\":false,\"message\":\"This field is required\"}},\"conditional_logics\":[]},\"editor_options\":{\"template\":\"inputText\"}},\"middle_name\":{\"element\":\"input_text\",\"attributes\":{\"type\":\"text\",\"name\":\"middle_name\",\"value\":\"\",\"id\":\"\",\"class\":\"\",\"placeholder\":\"\",\"required\":false},\"settings\":{\"container_class\":\"\",\"label\":\"Middle Name\",\"help_message\":\"\",\"error_message\":\"\",\"visible\":false,\"validation_rules\":{\"required\":{\"value\":false,\"message\":\"This field is required\"}},\"conditional_logics\":[]},\"editor_options\":{\"template\":\"inputText\"}},\"last_name\":{\"element\":\"input_text\",\"attributes\":{\"type\":\"text\",\"name\":\"last_name\",\"value\":\"\",\"id\":\"\",\"class\":\"\",\"placeholder\":\"Last Name\",\"required\":false},\"settings\":{\"container_class\":\"\",\"label\":\"Last Name\",\"help_message\":\"\",\"error_message\":\"\",\"visible\":true,\"validation_rules\":{\"required\":{\"value\":false,\"message\":\"This field is required\"}},\"conditional_logics\":[]},\"editor_options\":{\"template\":\"inputText\"}}},\"editor_options\":{\"title\":\"Name Fields\",\"element\":\"name-fields\",\"icon_class\":\"ff-edit-name\",\"template\":\"nameFields\"},\"uniqElKey\":\"el_1570866006692\"},{\"index\":1,\"element\":\"input_email\",\"attributes\":{\"type\":\"email\",\"name\":\"email\",\"value\":\"\",\"id\":\"\",\"class\":\"\",\"placeholder\":\"Email Address\"},\"settings\":{\"container_class\":\"\",\"label\":\"Email\",\"label_placement\":\"\",\"help_message\":\"\",\"admin_field_label\":\"\",\"validation_rules\":{\"required\":{\"value\":true,\"message\":\"This field is required\"},\"email\":{\"value\":true,\"message\":\"This field must contain a valid email\"}},\"conditional_logics\":[]},\"editor_options\":{\"title\":\"Email Address\",\"icon_class\":\"ff-edit-email\",\"template\":\"inputText\"},\"uniqElKey\":\"el_1570866012914\"},{\"index\":2,\"element\":\"input_text\",\"attributes\":{\"type\":\"text\",\"name\":\"subject\",\"value\":\"\",\"class\":\"\",\"placeholder\":\"Subject\"},\"settings\":{\"container_class\":\"\",\"label\":\"Subject\",\"label_placement\":\"\",\"admin_field_label\":\"Subject\",\"help_message\":\"\",\"validation_rules\":{\"required\":{\"value\":false,\"message\":\"This field is required\"}},\"conditional_logics\":{\"type\":\"any\",\"status\":false,\"conditions\":[{\"field\":\"\",\"value\":\"\",\"operator\":\"\"}]}},\"editor_options\":{\"title\":\"Simple Text\",\"icon_class\":\"ff-edit-text\",\"template\":\"inputText\"},\"uniqElKey\":\"el_1570878958648\"},{\"index\":3,\"element\":\"textarea\",\"attributes\":{\"name\":\"message\",\"value\":\"\",\"id\":\"\",\"class\":\"\",\"placeholder\":\"Your Message\",\"rows\":4,\"cols\":2},\"settings\":{\"container_class\":\"\",\"label\":\"Your Message\",\"admin_field_label\":\"\",\"label_placement\":\"\",\"help_message\":\"\",\"validation_rules\":{\"required\":{\"value\":true,\"message\":\"This field is required\"}},\"conditional_logics\":{\"type\":\"any\",\"status\":false,\"conditions\":[{\"field\":\"\",\"value\":\"\",\"operator\":\"\"}]}},\"editor_options\":{\"title\":\"Text Area\",\"icon_class\":\"ff-edit-textarea\",\"template\":\"inputTextarea\"},\"uniqElKey\":\"el_1570879001207\"}],\"submitButton\":{\"uniqElKey\":\"el_1524065200616\",\"element\":\"button\",\"attributes\":{\"type\":\"submit\",\"class\":\"\"},\"settings\":{\"align\":\"left\",\"button_style\":\"default\",\"container_class\":\"\",\"help_message\":\"\",\"background_color\":\"#1a7efb\",\"button_size\":\"md\",\"color\":\"#ffffff\",\"button_ui\":{\"type\":\"default\",\"text\":\"Submit Form\",\"img_url\":\"\"}},\"editor_options\":{\"title\":\"Submit Button\"}}}',0,'',NULL,1,'2026-06-27 21:24:10','2026-06-27 21:24:10'),
 (2,'Subscription Form','published',NULL,'{\"fields\":[{\"index\":1,\"element\":\"container\",\"attributes\":[],\"settings\":{\"container_class\":\"\",\"conditional_logics\":{\"type\":\"any\",\"status\":false,\"conditions\":[{\"field\":\"\",\"value\":\"\",\"operator\":\"\"}]}},\"columns\":[{\"fields\":[{\"index\":1,\"element\":\"input_email\",\"attributes\":{\"type\":\"email\",\"name\":\"email\",\"value\":\"\",\"id\":\"\",\"class\":\"\",\"placeholder\":\"Your Email Address\"},\"settings\":{\"container_class\":\"\",\"label\":\"\",\"label_placement\":\"\",\"help_message\":\"\",\"admin_field_label\":\"Email\",\"validation_rules\":{\"required\":{\"value\":true,\"message\":\"This field is required\"},\"email\":{\"value\":true,\"message\":\"This field must contain a valid email\"}},\"conditional_logics\":[],\"is_unique\":\"no\",\"unique_validation_message\":\"Email address need to be unique.\"},\"editor_options\":{\"title\":\"Email Address\",\"icon_class\":\"ff-edit-email\",\"template\":\"inputText\"},\"uniqElKey\":\"el_16231279686950.8779857923682932\"}]},{\"fields\":[{\"index\":15,\"element\":\"custom_submit_button\",\"attributes\":{\"class\":\"\",\"type\":\"submit\"},\"settings\":{\"button_style\":\"\",\"button_size\":\"md\",\"align\":\"left\",\"container_class\":\"\",\"current_state\":\"normal_styles\",\"background_color\":\"\",\"color\":\"\",\"hover_styles\":{\"backgroundColor\":\"#ffffff\",\"borderColor\":\"#1a7efb\",\"color\":\"#1a7efb\",\"borderRadius\":\"\",\"minWidth\":\"100%\"},\"normal_styles\":{\"backgroundColor\":\"#1a7efb\",\"borderColor\":\"#1a7efb\",\"color\":\"#ffffff\",\"borderRadius\":\"\",\"minWidth\":\"100%\"},\"button_ui\":{\"text\":\"Subscribe\",\"type\":\"default\",\"img_url\":\"\"},\"conditional_logics\":{\"type\":\"any\",\"status\":false,\"conditions\":[{\"field\":\"\",\"value\":\"\",\"operator\":\"\"}]}},\"editor_options\":{\"title\":\"Custom Submit Button\",\"icon_class\":\"dashicons dashicons-arrow-right-alt\",\"template\":\"customButton\"},\"uniqElKey\":\"el_16231279798380.5947400167493171\"}]}],\"editor_options\":{\"title\":\"Two Column Container\",\"icon_class\":\"ff-edit-column-2\"},\"uniqElKey\":\"el_16231279284710.40955091024524304\"}],\"submitButton\":{\"uniqElKey\":\"el_1524065200616\",\"element\":\"button\",\"attributes\":{\"type\":\"submit\",\"class\":\"\"},\"settings\":{\"align\":\"left\",\"button_style\":\"default\",\"container_class\":\"\",\"help_message\":\"\",\"background_color\":\"#1a7efb\",\"button_size\":\"md\",\"color\":\"#ffffff\",\"button_ui\":{\"type\":\"default\",\"text\":\"Subscribe\",\"img_url\":\"\"}},\"editor_options\":{\"title\":\"Submit Button\"}}}',0,'form',NULL,1,'2026-06-27 21:24:10','2026-06-27 21:24:10');
 /*!40000 ALTER TABLE `wp5h_fluentform_forms` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_fluentform_logs`
@@ -708,11 +708,11 @@ CREATE TABLE `wp5h_fluentform_logs` (
 -- Dumping data for table `wp5h_fluentform_logs`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_fluentform_logs` DISABLE KEYS */;
 /*!40000 ALTER TABLE `wp5h_fluentform_logs` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_fluentform_submission_meta`
@@ -741,11 +741,11 @@ CREATE TABLE `wp5h_fluentform_submission_meta` (
 -- Dumping data for table `wp5h_fluentform_submission_meta`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_fluentform_submission_meta` DISABLE KEYS */;
 /*!40000 ALTER TABLE `wp5h_fluentform_submission_meta` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_fluentform_submissions`
@@ -788,11 +788,11 @@ CREATE TABLE `wp5h_fluentform_submissions` (
 -- Dumping data for table `wp5h_fluentform_submissions`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_fluentform_submissions` DISABLE KEYS */;
 /*!40000 ALTER TABLE `wp5h_fluentform_submissions` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_links`
@@ -824,11 +824,11 @@ CREATE TABLE `wp5h_links` (
 -- Dumping data for table `wp5h_links`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_links` DISABLE KEYS */;
 /*!40000 ALTER TABLE `wp5h_links` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_options`
@@ -852,7 +852,7 @@ CREATE TABLE `wp5h_options` (
 -- Dumping data for table `wp5h_options`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_options` DISABLE KEYS */;
 INSERT INTO `wp5h_options` (`option_id`, `option_name`, `option_value`, `autoload`) VALUES (1,'cron','a:15:{i:1782763391;a:1:{s:26:\"action_scheduler_run_queue\";a:1:{s:32:\"0d04ed39571b55704c122d726248bbac\";a:3:{s:8:\"schedule\";s:12:\"every_minute\";s:4:\"args\";a:1:{i:0;s:7:\"WP Cron\";}s:8:\"interval\";i:60;}}}i:1782766037;a:1:{s:34:\"wp_privacy_delete_old_export_files\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:6:\"hourly\";s:4:\"args\";a:0:{}s:8:\"interval\";i:3600;}}}i:1782766450;a:3:{s:21:\"rtcl_cleanup_sessions\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:10:\"twicedaily\";s:4:\"args\";a:0:{}s:8:\"interval\";i:43200;}}s:26:\"rtcl_cleanup_temp_listings\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:10:\"twicedaily\";s:4:\"args\";a:0:{}s:8:\"interval\";i:43200;}}s:28:\"rtcl_hourly_scheduled_events\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:6:\"hourly\";s:4:\"args\";a:0:{}s:8:\"interval\";i:3600;}}}i:1782777600;a:1:{s:27:\"rtcl_daily_scheduled_events\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:5:\"daily\";s:4:\"args\";a:0:{}s:8:\"interval\";i:86400;}}}i:1782787637;a:1:{s:32:\"recovery_mode_clean_expired_keys\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:5:\"daily\";s:4:\"args\";a:0:{}s:8:\"interval\";i:86400;}}}i:1782787703;a:3:{s:19:\"wp_scheduled_delete\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:5:\"daily\";s:4:\"args\";a:0:{}s:8:\"interval\";i:86400;}}s:25:\"delete_expired_transients\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:5:\"daily\";s:4:\"args\";a:0:{}s:8:\"interval\";i:86400;}}s:21:\"wp_update_user_counts\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:10:\"twicedaily\";s:4:\"args\";a:0:{}s:8:\"interval\";i:43200;}}}i:1782787706;a:1:{s:30:\"wp_scheduled_auto_draft_delete\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:5:\"daily\";s:4:\"args\";a:0:{}s:8:\"interval\";i:86400;}}}i:1782788050;a:2:{s:42:\"fluentform_do_email_report_scheduled_tasks\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:5:\"daily\";s:4:\"args\";a:0:{}s:8:\"interval\";i:86400;}}s:28:\"elementor/tracker/send_event\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:5:\"daily\";s:4:\"args\";a:0:{}s:8:\"interval\";i:86400;}}}i:1782791226;a:1:{s:16:\"wp_version_check\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:10:\"twicedaily\";s:4:\"args\";a:0:{}s:8:\"interval\";i:43200;}}}i:1782793026;a:1:{s:17:\"wp_update_plugins\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:10:\"twicedaily\";s:4:\"args\";a:0:{}s:8:\"interval\";i:43200;}}}i:1782794826;a:1:{s:16:\"wp_update_themes\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:10:\"twicedaily\";s:4:\"args\";a:0:{}s:8:\"interval\";i:43200;}}}i:1782801948;a:1:{s:30:\"dd_check_expired_subscriptions\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:5:\"daily\";s:4:\"args\";a:0:{}s:8:\"interval\";i:86400;}}}i:1783219979;a:1:{s:30:\"wp_delete_temp_updater_backups\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:6:\"weekly\";s:4:\"args\";a:0:{}s:8:\"interval\";i:604800;}}}i:1783306037;a:1:{s:30:\"wp_site_health_scheduled_check\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:6:\"weekly\";s:4:\"args\";a:0:{}s:8:\"interval\";i:604800;}}}s:7:\"version\";i:2;}','on'),
 (2,'siteurl','https://studs4you.com','on'),
@@ -1142,8 +1142,8 @@ INSERT INTO `wp5h_options` (`option_id`, `option_name`, `option_value`, `autoloa
 (2586,'_site_transient_timeout_wp_theme_files_patterns-b203e1cb9b6c75c0ad202bbfc36af4d4','1782764864','off'),
 (2587,'_site_transient_wp_theme_files_patterns-b203e1cb9b6c75c0ad202bbfc36af4d4','a:2:{s:7:\"version\";s:5:\"1.0.0\";s:8:\"patterns\";a:0:{}}','off');
 /*!40000 ALTER TABLE `wp5h_options` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_postmeta`
@@ -1167,7 +1167,7 @@ CREATE TABLE `wp5h_postmeta` (
 -- Dumping data for table `wp5h_postmeta`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_postmeta` DISABLE KEYS */;
 INSERT INTO `wp5h_postmeta` (`meta_id`, `post_id`, `meta_key`, `meta_value`) VALUES (1,2,'_wp_page_template','default'),
 (2,3,'_wp_page_template','default'),
@@ -2428,8 +2428,8 @@ INSERT INTO `wp5h_postmeta` (`meta_id`, `post_id`, `meta_key`, `meta_value`) VAL
 (1834,4728,'_thumbnail_id','4710'),
 (1835,4729,'_edit_lock','1782762819:4');
 /*!40000 ALTER TABLE `wp5h_postmeta` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_posts`
@@ -2475,7 +2475,7 @@ CREATE TABLE `wp5h_posts` (
 -- Dumping data for table `wp5h_posts`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_posts` DISABLE KEYS */;
 INSERT INTO `wp5h_posts` (`ID`, `post_author`, `post_date`, `post_date_gmt`, `post_content`, `post_title`, `post_excerpt`, `post_status`, `comment_status`, `ping_status`, `post_password`, `post_name`, `to_ping`, `pinged`, `post_modified`, `post_modified_gmt`, `post_content_filtered`, `post_parent`, `guid`, `menu_order`, `post_type`, `post_mime_type`, `comment_count`) VALUES (1,1,'2026-06-28 02:47:07','2026-06-28 02:47:07','<!-- wp:paragraph -->\n<p>Welcome to WordPress. This is your first post. Edit or delete it, then start writing!</p>\n<!-- /wp:paragraph -->','Hello world!','','publish','open','open','','hello-world','','','2026-06-28 02:47:07','2026-06-28 02:47:07','',0,'https://studs4you.com/?p=1',0,'post','',1),
 (2,1,'2026-06-28 02:47:07','2026-06-28 02:47:07','<!-- wp:paragraph -->\n<p>This is an example page. It\'s different from a blog post because it will stay in one place and will show up in your site navigation (in most themes). Most people start with an About page that introduces them to potential site visitors. It might say something like this:</p>\n<!-- /wp:paragraph -->\n\n<!-- wp:quote -->\n<blockquote class=\"wp-block-quote\">\n<!-- wp:paragraph -->\n<p>Hi there! I\'m a bike messenger by day, aspiring actor by night, and this is my website. I live in Los Angeles, have a great dog named Jack, and I like pi&#241;a coladas. (And gettin\' caught in the rain.)</p>\n<!-- /wp:paragraph -->\n</blockquote>\n<!-- /wp:quote -->\n\n<!-- wp:paragraph -->\n<p>...or something like this:</p>\n<!-- /wp:paragraph -->\n\n<!-- wp:quote -->\n<blockquote class=\"wp-block-quote\">\n<!-- wp:paragraph -->\n<p>The XYZ Doohickey Company was founded in 1971, and has been providing quality doohickeys to the public ever since. Located in Gotham City, XYZ employs over 2,000 people and does all kinds of awesome things for the Gotham community.</p>\n<!-- /wp:paragraph -->\n</blockquote>\n<!-- /wp:quote -->\n\n<!-- wp:paragraph -->\n<p>As a new WordPress user, you should go to <a href=\"https://studs4you.com/wp-admin/\">your dashboard</a> to delete this page and create new pages for your content. Have fun!</p>\n<!-- /wp:paragraph -->','Sample Page','','publish','closed','open','','sample-page','','','2026-06-28 02:47:07','2026-06-28 02:47:07','',0,'https://studs4you.com/?page_id=2',0,'page','',0),
@@ -2751,8 +2751,8 @@ INSERT INTO `wp5h_posts` (`ID`, `post_author`, `post_date`, `post_date_gmt`, `po
 (4729,4,'2026-06-29 19:56:01','0000-00-00 00:00:00','','Auto Draft','','auto-draft','closed','closed','','','','','2026-06-29 19:56:01','0000-00-00 00:00:00','',0,'https://studs4you.com/?post_type=dd_dog&p=4729',0,'dd_dog','',0),
 (4730,4,'2026-06-29 19:56:01','2026-06-29 19:56:01','{\"version\": 3, \"isGlobalStylesUserThemeJSON\": true }','Custom Styles','','publish','closed','closed','','wp-global-styles-petslist-raushan','','','2026-06-29 19:56:01','2026-06-29 19:56:01','',0,'https://studs4you.com/wp-global-styles-petslist-raushan/',0,'wp_global_styles','',0);
 /*!40000 ALTER TABLE `wp5h_posts` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_rtcl_conversation_messages`
@@ -2777,11 +2777,11 @@ CREATE TABLE `wp5h_rtcl_conversation_messages` (
 -- Dumping data for table `wp5h_rtcl_conversation_messages`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_rtcl_conversation_messages` DISABLE KEYS */;
 /*!40000 ALTER TABLE `wp5h_rtcl_conversation_messages` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_rtcl_conversations`
@@ -2810,11 +2810,11 @@ CREATE TABLE `wp5h_rtcl_conversations` (
 -- Dumping data for table `wp5h_rtcl_conversations`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_rtcl_conversations` DISABLE KEYS */;
 /*!40000 ALTER TABLE `wp5h_rtcl_conversations` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_rtcl_forms`
@@ -2850,12 +2850,12 @@ CREATE TABLE `wp5h_rtcl_forms` (
 -- Dumping data for table `wp5h_rtcl_forms`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_rtcl_forms` DISABLE KEYS */;
 INSERT INTO `wp5h_rtcl_forms` (`id`, `title`, `slug`, `status`, `fields`, `sections`, `single_layout`, `translations`, `settings`, `type`, `default`, `created_by`, `created_at`, `updated_at`) VALUES (1,'Sample Form','sample-form','publish','{\"14f66d8d\": {\"name\": \"rtcl_agree\", \"type\": \"checkbox\", \"uuid\": \"14f66d8d\", \"class\": \"\", \"editor\": {\"title\": \"Terms & Conditions\", \"template\": \"termsCheckbox\", \"icon_class\": \"rtcl-icon-doc-text\"}, \"logics\": \"\", \"preset\": 1, \"element\": \"terms_and_condition\", \"tnc_html\": \"I have read and agree to the <a target=\\\"_blank\\\" rel=\\\"noopener\\\" href=\\\"#\\\">Terms and Conditions</a> and <a target=\\\"_blank\\\" rel=\\\"noopener\\\" href=\\\"#\\\">Privacy Policy</a>\", \"validation\": {\"required\": {\"value\": true, \"message\": \"This field is required\"}}, \"has_checkbox\": true, \"default_value\": false, \"container_class\": \"\", \"admin_field_label\": \"Terms & Conditions\"}, \"29ce8640\": {\"name\": \"phone\", \"type\": \"tel\", \"uuid\": \"29ce8640\", \"label\": \"Phone\", \"editor\": {\"title\": \"Phone\", \"template\": \"inputText\", \"icon_class\": \"rtcl-icon-phone\"}, \"logics\": \"\", \"preset\": 1, \"element\": \"phone\", \"validation\": {\"required\": {\"value\": true, \"message\": \"This field is required\"}}, \"placeholder\": \"\", \"help_message\": \"\", \"admin_use_only\": false, \"allow_whatsapp\": false, \"container_class\": \"\", \"label_placement\": \"\"}, \"339b84ad\": {\"name\": \"email\", \"type\": \"email\", \"uuid\": \"339b84ad\", \"label\": \"Email\", \"editor\": {\"title\": \"Email\", \"template\": \"inputText\", \"icon_class\": \"rtcl-icon-mail\"}, \"logics\": \"\", \"preset\": 1, \"element\": \"email\", \"validation\": {\"email\": {\"value\": true, \"message\": \"This field must contain a valid email\"}, \"required\": {\"value\": false, \"message\": \"This field is required\"}}, \"placeholder\": \"\", \"help_message\": \"\", \"default_value\": \"{user.user_email}\", \"admin_use_only\": false, \"container_class\": \"\", \"label_placement\": \"\"}, \"33a0b69d\": {\"ai\": false, \"name\": \"title\", \"type\": \"text\", \"uuid\": \"33a0b69d\", \"label\": \"Title\", \"editor\": {\"title\": \"Title\", \"template\": \"inputText\", \"icon_class\": \"rtcl-icon-header\"}, \"logics\": \"\", \"preset\": 1, \"element\": \"title\", \"validation\": {\"max\": {\"value\": 255, \"message\": \"Maximum {value} character\"}, \"min\": {\"value\": 2, \"message\": \"Minimum {value} character\"}, \"required\": {\"value\": true, \"message\": \"This field is required\"}}, \"placeholder\": \"Listing Title\", \"help_message\": \"\", \"default_value\": \"\", \"container_class\": \"\", \"label_placement\": \"\"}, \"38087e38\": {\"name\": \"pricing\", \"uuid\": \"38087e38\", \"class\": \"\", \"label\": \"Pricing\", \"editor\": {\"title\": \"Pricing\", \"template\": \"pricing\", \"icon_class\": \"rtcl-icon-dollar\"}, \"logics\": {\"status\": true, \"conditions\": [{\"value\": \"job\", \"fieldId\": \"c101806d\", \"operator\": \"!=\"}]}, \"preset\": 1, \"element\": \"pricing\", \"options\": [\"pricing_type\", \"price_type\"], \"price_type\": \"fixed\", \"validation\": {\"required\": {\"value\": false, \"message\": \"This field is required\"}}, \"placeholder\": \"\", \"price_label\": \"Price\", \"help_message\": \"\", \"pricing_type\": \"price\", \"admin_use_only\": false, \"container_class\": \"\", \"label_placement\": \"\", \"price_type_label\": \"Price Type\", \"price_unit_label\": \"Price Unit\", \"pricing_type_label\": \"Pricing Type\"}, \"6e28fe4e\": {\"name\": \"_rtcl_video_urls\", \"uuid\": \"6e28fe4e\", \"label\": \"Video Url\", \"editor\": {\"title\": \"Video Url\", \"template\": \"inputText\", \"icon_class\": \"rtcl-icon-videocam\"}, \"logics\": \"\", \"preset\": 1, \"element\": \"video_urls\", \"validation\": {\"required\": {\"value\": false, \"message\": \"This field is required\"}}, \"placeholder\": \"Only YouTube & Vimeo URLs.\", \"help_message\": \"E.g. https://www.youtube.com/watch?v=RiXdDGk_XCU, https://vimeo.com/620922414\", \"admin_use_only\": false, \"container_class\": \"\", \"label_placement\": \"\"}, \"778b7b40\": {\"id\": \"\", \"name\": \"checkbox_778b7b40\", \"uuid\": \"778b7b40\", \"class\": \"\", \"label\": \"Features\", \"order\": 0, \"editor\": {\"title\": \"Checkbox\", \"template\": \"inputCheckbox\", \"icon_class\": \"rtcl-icon-check\"}, \"logics\": \"\", \"element\": \"checkbox\", \"options\": [{\"image\": \"\", \"label\": \"256GB PCI flash storage\", \"value\": \"256GB_PCI_flash_storage\", \"calc_value\": \"\"}, {\"image\": \"\", \"label\": \"Turbo Boost up to 3.1GHz\", \"value\": \"Turbo_Boost_up_to_3.1GHz\", \"calc_value\": \"\"}, {\"label\": \"Intel Iris Graphics 6100\", \"value\": \"Intel_Iris_Graphics_6100\", \"calc_value\": \"\"}, {\"label\": \"1 Year international warranty\", \"value\": \"1_Year_international_warranty\", \"calc_value\": \"\"}, {\"label\": \"10 hour battery life\", \"value\": \"10_hour_battery_life\", \"calc_value\": \"\"}, {\"label\": \"Intact Box\", \"value\": \"Intact_Box\", \"calc_value\": \"\"}], \"direction\": \"vertical\", \"filterable\": false, \"validation\": {\"required\": {\"value\": false, \"message\": \"This field is required\"}}, \"single_view\": true, \"archive_view\": false, \"help_message\": \"\", \"values_visible\": false, \"container_class\": \"\", \"label_placement\": \"\", \"enable_icon_class\": false}, \"8d611b8a\": {\"name\": \"website\", \"uuid\": \"8d611b8a\", \"label\": \"Website\", \"editor\": {\"title\": \"Website\", \"template\": \"inputText\", \"icon_class\": \"rtcl-icon-globe\"}, \"logics\": \"\", \"preset\": 1, \"element\": \"website\", \"validation\": {\"required\": {\"value\": false, \"message\": \"This field is required\"}}, \"placeholder\": \"\", \"help_message\": \"\", \"admin_use_only\": false, \"container_class\": \"\", \"label_placement\": \"\"}, \"98f0709c\": {\"ai\": false, \"cols\": \"\", \"name\": \"description\", \"rows\": 5, \"uuid\": \"98f0709c\", \"label\": \"Description\", \"editor\": {\"title\": \"Description\", \"template\": \"inputTextarea\", \"icon_class\": \"rtcl-icon-align-left\"}, \"logics\": \"\", \"preset\": 1, \"element\": \"description\", \"validation\": {\"max\": {\"value\": \"\", \"message\": \"Maximum {value} character\"}, \"min\": {\"value\": \"\", \"message\": \"Minimum {value} character\"}, \"required\": {\"value\": true, \"message\": \"This field is required\"}}, \"editor_type\": \"wp_editor\", \"placeholder\": \"\", \"help_message\": \"\", \"admin_use_only\": false, \"container_class\": \"\", \"label_placement\": \"\"}, \"9ab5c1ea\": {\"id\": \"\", \"name\": \"radio_9ab5c1ea\", \"uuid\": \"9ab5c1ea\", \"class\": \"\", \"label\": \"Condition\", \"order\": 0, \"editor\": {\"title\": \"Radio\", \"template\": \"inputRadio\", \"icon_class\": \"rtcl-icon-dot-circled\"}, \"logics\": \"\", \"element\": \"radio\", \"options\": [{\"image\": \"\", \"label\": \"New\", \"value\": \"new\", \"calc_value\": \"\"}, {\"image\": \"\", \"label\": \"Used\", \"value\": \"used\", \"calc_value\": \"\"}], \"direction\": \"vertical\", \"filterable\": false, \"validation\": {\"required\": {\"value\": false, \"message\": \"This field is required\"}}, \"single_view\": true, \"archive_view\": false, \"help_message\": \"\", \"values_visible\": false, \"container_class\": \"\", \"label_placement\": \"\", \"enable_icon_class\": false}, \"b33327ec\": {\"name\": \"zipcode\", \"uuid\": \"b33327ec\", \"label\": \"Zip/Post Code\", \"editor\": {\"title\": \"Zip/Post Code\", \"template\": \"inputText\", \"icon_class\": \"rtcl-icon-map-pin\"}, \"logics\": \"\", \"preset\": 1, \"element\": \"zipcode\", \"validation\": {\"required\": {\"value\": false, \"message\": \"This field is required\"}}, \"placeholder\": \"\", \"help_message\": \"\", \"admin_use_only\": false, \"container_class\": \"\", \"label_placement\": \"\"}, \"b97226f4\": {\"name\": \"map\", \"uuid\": \"b97226f4\", \"label\": \"Map\", \"editor\": {\"title\": \"Map\", \"template\": \"map\", \"icon_class\": \"rtcl-icon-map\"}, \"logics\": \"\", \"preset\": 1, \"element\": \"map\", \"validation\": [], \"help_message\": \"\", \"admin_use_only\": false, \"allow_hide_map\": true, \"container_class\": \"\", \"label_placement\": \"\", \"visible_lat_lng\": false}, \"bf33fc2f\": {\"name\": \"images\", \"uuid\": \"bf33fc2f\", \"label\": \"Images\", \"editor\": {\"title\": \"Images\", \"template\": \"imagesUpload\", \"icon_class\": \"rtcl-icon-picture\"}, \"logics\": \"\", \"preset\": 1, \"element\": \"images\", \"validation\": {\"required\": {\"value\": false, \"message\": \"This field is required\"}, \"max_file_size\": {\"value\": 10, \"message\": \"Maximum file size limit is {value}MB\", \"_valueFrom\": \"MB\"}, \"max_file_count\": {\"value\": 5, \"message\": \"You can upload maximum {value} image\"}, \"allowed_image_types\": {\"value\": [\"jpeg\", \"jpg\", \"png\", \"webp\"], \"message\": \"Allowed image types does not match. {value}\"}}, \"placeholder\": \"\", \"help_message\": \"\", \"admin_use_only\": false, \"container_class\": \"\", \"label_placement\": \"\"}, \"c101806d\": {\"name\": \"listing_type\", \"uuid\": \"c101806d\", \"label\": \"Listing type\", \"editor\": {\"title\": \"Listing type\", \"template\": \"inputText\", \"icon_class\": \"rtcl-icon-header\"}, \"logics\": \"\", \"preset\": 1, \"element\": \"listing_type\", \"validation\": {\"required\": {\"value\": true, \"message\": \"This field is required\"}}, \"placeholder\": \"Select a type\", \"help_message\": \"\", \"default_value\": \"\", \"container_class\": \"\", \"label_placement\": \"\"}, \"c6af4915\": {\"name\": \"location\", \"uuid\": \"c6af4915\", \"label\": \"Location\", \"editor\": {\"title\": \"Location\", \"template\": \"location\", \"icon_class\": \"rtcl-icon-location\"}, \"logics\": \"\", \"preset\": 1, \"element\": \"location\", \"is_unique\": \"no\", \"validation\": {\"required\": {\"value\": true, \"message\": \"This field is required\"}}, \"placeholder\": \"\", \"help_message\": \"\", \"admin_use_only\": false, \"container_class\": \"\", \"label_placement\": \"\"}, \"c77f66bd\": {\"name\": \"address\", \"type\": \"text\", \"uuid\": \"c77f66bd\", \"label\": \"Address\", \"editor\": {\"title\": \"Address\", \"template\": \"inputText\", \"icon_class\": \"rtcl-icon-address-card\"}, \"logics\": \"\", \"preset\": 1, \"element\": \"address\", \"is_unique\": \"no\", \"validation\": {\"required\": {\"value\": false, \"message\": \"This field is required\"}}, \"placeholder\": \"Listing address eg. New York, USA\", \"help_message\": \"\", \"admin_use_only\": false, \"container_class\": \"\", \"label_placement\": \"\"}, \"e7e532f2\": {\"name\": \"_rtcl_bhs\", \"uuid\": \"e7e532f2\", \"label\": \"Business Hours\", \"editor\": {\"title\": \"Business Hours\", \"template\": \"businessHours\", \"icon_class\": \"rtcl-icon-clock\"}, \"logics\": \"\", \"preset\": 1, \"element\": \"business_hours\", \"validation\": {\"required\": {\"value\": false, \"message\": \"This field is required\"}}, \"time_format\": \"H:i\", \"help_message\": \"\", \"admin_use_only\": false, \"container_class\": \"\", \"label_placement\": \"\"}, \"ec6e79ee\": {\"name\": \"category\", \"type\": \"single\", \"uuid\": \"ec6e79ee\", \"label\": \"Category\", \"editor\": {\"title\": \"Category\", \"template\": \"category\", \"icon_class\": \"rtcl-icon-folder-open\"}, \"logics\": \"\", \"preset\": 1, \"element\": \"category\", \"validation\": {\"required\": {\"value\": true, \"message\": \"This field is required\"}}, \"placeholder\": \"\", \"help_message\": \"\", \"admin_use_only\": false, \"container_class\": \"\", \"label_placement\": \"\"}, \"ee8600ff\": {\"name\": \"_rtcl_social_profiles\", \"uuid\": \"ee8600ff\", \"label\": \"Social Profiles\", \"editor\": {\"title\": \"Social Profiles\", \"template\": \"socialProfiles\", \"icon_class\": \"rtcl-icon-users\"}, \"logics\": \"\", \"preset\": 1, \"element\": \"social_profiles\", \"validation\": {\"required\": {\"value\": false, \"message\": \"This field is required\"}}, \"help_message\": \"\", \"admin_use_only\": false, \"container_class\": \"\", \"label_placement\": \"\"}}','[{\"id\": \"\", \"icon\": \"\", \"uuid\": \"6feb67d0\", \"title\": \"Basic Information\", \"logics\": \"\", \"columns\": [{\"width\": 100, \"fields\": [\"c101806d\", \"ec6e79ee\"]}], \"element\": \"section\", \"container_class\": \"\"}, {\"id\": \"\", \"icon\": \"\", \"uuid\": \"34ca0ec0\", \"title\": \"Product Information\", \"logics\": \"\", \"columns\": [{\"width\": 100, \"fields\": [\"33a0b69d\", \"38087e38\", \"9ab5c1ea\", \"778b7b40\", \"98f0709c\"]}], \"element\": \"section\", \"container_class\": \"\"}, {\"id\": \"\", \"icon\": \"\", \"uuid\": \"6fd36f9\", \"title\": \"Featured & Gallery Images\", \"logics\": \"\", \"columns\": [{\"width\": 100, \"fields\": [\"bf33fc2f\"]}], \"element\": \"section\", \"container_class\": \"\"}, {\"id\": \"\", \"icon\": \"\", \"uuid\": \"fcb303e5\", \"title\": \"Video URL\", \"logics\": \"\", \"columns\": [{\"width\": 100, \"fields\": [\"6e28fe4e\"]}], \"element\": \"section\", \"container_class\": \"\"}, {\"id\": \"\", \"icon\": \"\", \"uuid\": \"5175cf58\", \"title\": \"Contact Details\", \"logics\": \"\", \"columns\": [{\"width\": 100, \"fields\": [\"c6af4915\", \"b33327ec\", \"c77f66bd\", \"29ce8640\", \"ce4e11b\", \"339b84ad\", \"8d611b8a\", \"b97226f4\"]}], \"element\": \"section\", \"container_class\": \"\"}, {\"id\": \"\", \"icon\": \"\", \"uuid\": \"bd2842c4\", \"title\": \"Business Hours\", \"logics\": \"\", \"columns\": [{\"width\": 100, \"fields\": [\"e7e532f2\"]}], \"element\": \"section\", \"container_class\": \"\"}, {\"id\": \"\", \"icon\": \"\", \"uuid\": \"7cff98c7\", \"title\": \"Social Profiles\", \"logics\": \"\", \"columns\": [{\"width\": 100, \"fields\": [\"ee8600ff\", \"14f66d8d\"]}], \"element\": \"section\", \"container_class\": \"\"}]',NULL,NULL,'{\"submit_btn_text\": \"Submit\", \"update_btn_text\": \"Update\"}',NULL,1,1,'2026-06-28 08:24:10','2026-06-28 08:24:10');
 /*!40000 ALTER TABLE `wp5h_rtcl_forms` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_rtcl_import_history`
@@ -2890,11 +2890,11 @@ CREATE TABLE `wp5h_rtcl_import_history` (
 -- Dumping data for table `wp5h_rtcl_import_history`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_rtcl_import_history` DISABLE KEYS */;
 /*!40000 ALTER TABLE `wp5h_rtcl_import_history` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_rtcl_import_sources`
@@ -2930,11 +2930,11 @@ CREATE TABLE `wp5h_rtcl_import_sources` (
 -- Dumping data for table `wp5h_rtcl_import_sources`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_rtcl_import_sources` DISABLE KEYS */;
 /*!40000 ALTER TABLE `wp5h_rtcl_import_sources` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_rtcl_listing_stats`
@@ -2959,11 +2959,11 @@ CREATE TABLE `wp5h_rtcl_listing_stats` (
 -- Dumping data for table `wp5h_rtcl_listing_stats`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_rtcl_listing_stats` DISABLE KEYS */;
 /*!40000 ALTER TABLE `wp5h_rtcl_listing_stats` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_rtcl_membership`
@@ -2989,11 +2989,11 @@ CREATE TABLE `wp5h_rtcl_membership` (
 -- Dumping data for table `wp5h_rtcl_membership`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_rtcl_membership` DISABLE KEYS */;
 /*!40000 ALTER TABLE `wp5h_rtcl_membership` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_rtcl_membership_meta`
@@ -3017,11 +3017,11 @@ CREATE TABLE `wp5h_rtcl_membership_meta` (
 -- Dumping data for table `wp5h_rtcl_membership_meta`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_rtcl_membership_meta` DISABLE KEYS */;
 /*!40000 ALTER TABLE `wp5h_rtcl_membership_meta` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_rtcl_posting_log`
@@ -3047,11 +3047,11 @@ CREATE TABLE `wp5h_rtcl_posting_log` (
 -- Dumping data for table `wp5h_rtcl_posting_log`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_rtcl_posting_log` DISABLE KEYS */;
 /*!40000 ALTER TABLE `wp5h_rtcl_posting_log` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_rtcl_push_notifications`
@@ -3076,11 +3076,11 @@ CREATE TABLE `wp5h_rtcl_push_notifications` (
 -- Dumping data for table `wp5h_rtcl_push_notifications`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_rtcl_push_notifications` DISABLE KEYS */;
 /*!40000 ALTER TABLE `wp5h_rtcl_push_notifications` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_rtcl_sessions`
@@ -3103,7 +3103,7 @@ CREATE TABLE `wp5h_rtcl_sessions` (
 -- Dumping data for table `wp5h_rtcl_sessions`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_rtcl_sessions` DISABLE KEYS */;
 INSERT INTO `wp5h_rtcl_sessions` (`session_id`, `session_key`, `session_value`, `session_expiry`) VALUES (163,'007f4f4a121c5492a3a08bb48db93e55','a:1:{s:4:\"cart\";s:6:\"a:0:{}\";}',1782817673),
 (40,'01cca3d0be3f3950dbb8121b73713e90','a:1:{s:4:\"cart\";s:6:\"a:0:{}\";}',1782795164),
@@ -3386,8 +3386,8 @@ INSERT INTO `wp5h_rtcl_sessions` (`session_id`, `session_key`, `session_value`, 
 (22,'fcdc3f971133a4041added4637e7c3f9','a:1:{s:4:\"cart\";s:6:\"a:0:{}\";}',1782794794),
 (292,'fe8ec26cda358e3422a5bdc1dc0b6dd9','a:1:{s:4:\"cart\";s:6:\"a:0:{}\";}',1782924360);
 /*!40000 ALTER TABLE `wp5h_rtcl_sessions` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_rtcl_subscription_meta`
@@ -3411,11 +3411,11 @@ CREATE TABLE `wp5h_rtcl_subscription_meta` (
 -- Dumping data for table `wp5h_rtcl_subscription_meta`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_rtcl_subscription_meta` DISABLE KEYS */;
 /*!40000 ALTER TABLE `wp5h_rtcl_subscription_meta` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_rtcl_subscriptions`
@@ -3448,11 +3448,11 @@ CREATE TABLE `wp5h_rtcl_subscriptions` (
 -- Dumping data for table `wp5h_rtcl_subscriptions`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_rtcl_subscriptions` DISABLE KEYS */;
 /*!40000 ALTER TABLE `wp5h_rtcl_subscriptions` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_rtcl_tax_rates`
@@ -3478,11 +3478,11 @@ CREATE TABLE `wp5h_rtcl_tax_rates` (
 -- Dumping data for table `wp5h_rtcl_tax_rates`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_rtcl_tax_rates` DISABLE KEYS */;
 /*!40000 ALTER TABLE `wp5h_rtcl_tax_rates` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_term_relationships`
@@ -3504,7 +3504,7 @@ CREATE TABLE `wp5h_term_relationships` (
 -- Dumping data for table `wp5h_term_relationships`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_term_relationships` DISABLE KEYS */;
 INSERT INTO `wp5h_term_relationships` (`object_id`, `term_taxonomy_id`, `term_order`) VALUES (1,1,0),
 (103,15,0),
@@ -3604,8 +3604,8 @@ INSERT INTO `wp5h_term_relationships` (`object_id`, `term_taxonomy_id`, `term_or
 (4728,36,0),
 (4730,67,0);
 /*!40000 ALTER TABLE `wp5h_term_relationships` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_term_taxonomy`
@@ -3631,7 +3631,7 @@ CREATE TABLE `wp5h_term_taxonomy` (
 -- Dumping data for table `wp5h_term_taxonomy`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_term_taxonomy` DISABLE KEYS */;
 INSERT INTO `wp5h_term_taxonomy` (`term_taxonomy_id`, `term_id`, `taxonomy`, `description`, `parent`, `count`) VALUES (1,1,'category','',0,1),
 (2,2,'category','',0,2),
@@ -3685,8 +3685,8 @@ INSERT INTO `wp5h_term_taxonomy` (`term_taxonomy_id`, `term_id`, `taxonomy`, `de
 (51,51,'dd_breed','',0,0),
 (67,52,'wp_theme','',0,1);
 /*!40000 ALTER TABLE `wp5h_term_taxonomy` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_termmeta`
@@ -3710,7 +3710,7 @@ CREATE TABLE `wp5h_termmeta` (
 -- Dumping data for table `wp5h_termmeta`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_termmeta` DISABLE KEYS */;
 INSERT INTO `wp5h_termmeta` (`meta_id`, `term_id`, `meta_key`, `meta_value`) VALUES (1,14,'_rtcl_order','0'),
 (2,14,'_rtcl_map_icon','0'),
@@ -3821,8 +3821,8 @@ INSERT INTO `wp5h_termmeta` (`meta_id`, `term_id`, `meta_key`, `meta_value`) VAL
 (107,50,'dd_breed_color','2ECC71'),
 (108,51,'dd_breed_color','F39C12');
 /*!40000 ALTER TABLE `wp5h_termmeta` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_terms`
@@ -3846,7 +3846,7 @@ CREATE TABLE `wp5h_terms` (
 -- Dumping data for table `wp5h_terms`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_terms` DISABLE KEYS */;
 INSERT INTO `wp5h_terms` (`term_id`, `name`, `slug`, `term_group`) VALUES (1,'Uncategorized','uncategorized',0),
 (2,'Birds Nest','birds-nest',0),
@@ -3900,8 +3900,8 @@ INSERT INTO `wp5h_terms` (`term_id`, `name`, `slug`, `term_group`) VALUES (1,'Un
 (51,'Fluffy Frenchy','fluffy-frenchy',0),
 (52,'petslist-raushan','petslist-raushan',0);
 /*!40000 ALTER TABLE `wp5h_terms` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_usermeta`
@@ -3925,7 +3925,7 @@ CREATE TABLE `wp5h_usermeta` (
 -- Dumping data for table `wp5h_usermeta`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_usermeta` DISABLE KEYS */;
 INSERT INTO `wp5h_usermeta` (`umeta_id`, `user_id`, `meta_key`, `meta_value`) VALUES (1,1,'nickname','admin'),
 (2,1,'first_name',''),
@@ -4019,8 +4019,8 @@ INSERT INTO `wp5h_usermeta` (`umeta_id`, `user_id`, `meta_key`, `meta_value`) VA
 (108,4,'session_tokens','a:1:{s:64:\"4f82f368f13d0f6bd0f8d16c07080414684520d47eccd2cc369f6078553aa115\";a:4:{s:10:\"expiration\";i:1782935742;s:2:\"ip\";s:3:\"::1\";s:2:\"ua\";s:117:\"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36\";s:5:\"login\";i:1782762942;}}'),
 (109,4,'wp5h_persisted_preferences','a:2:{s:4:\"core\";a:1:{s:26:\"isComplementaryAreaVisible\";b:1;}s:9:\"_modified\";s:24:\"2026-06-29T19:56:01.580Z\";}');
 /*!40000 ALTER TABLE `wp5h_usermeta` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_users`
@@ -4051,7 +4051,7 @@ CREATE TABLE `wp5h_users` (
 -- Dumping data for table `wp5h_users`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_users` DISABLE KEYS */;
 INSERT INTO `wp5h_users` (`ID`, `user_login`, `user_pass`, `user_nicename`, `user_email`, `user_url`, `user_registered`, `user_activation_key`, `user_status`, `display_name`) VALUES (1,'admin','$wp$2y$12$Ah4lpFRAAgvkNtoW9S7EA.Q3HPllhBtUtEogihFSd4i.qLbjOYUTK','admin','admin@example.com','https://studs4you.com','2026-06-28 02:47:07','',0,'admin'),
 (2,'alina_petslist','$wp$2y$12$fAi0/hwerJc5pZPQr2zDy.C27NNnqxIbtM5JhTZQ5YTjyJAarLJQ2','alina_petslist','alina_petslist@gmail.com','','2026-06-28 04:47:11','',0,'Alina Fraser'),
@@ -4059,8 +4059,8 @@ INSERT INTO `wp5h_users` (`ID`, `user_login`, `user_pass`, `user_nicename`, `use
 (4,'raushan22882917@gmail.com','$wp$2y$12$Hofn.OzQgB94IwGNWGeZouYHGel8EzN9UzEeS1VL.LVr9iiFca4LG','raushan22882917gmail-com','raushan22882917@gmail.com','','2026-06-28 05:39:44','',0,'Raushan Raushan Kumar'),
 (5,'su-22016@sitare.org','$wp$2y$12$T4If6FOI5bkyBcJS8W6fuuGyYQMj7sBSX4oB7g7BGpYIxpy/CdSuG','su-22016sitare-org','su-22016@sitare.org','','2026-06-28 10:32:39','',0,'Raushan Raushan Kumar');
 /*!40000 ALTER TABLE `wp5h_users` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 
 --
 -- Table structure for table `wp5h_wpfm_backup`
@@ -4081,11 +4081,11 @@ CREATE TABLE `wp5h_wpfm_backup` (
 -- Dumping data for table `wp5h_wpfm_backup`
 --
 
-SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
+
 /*!40000 ALTER TABLE `wp5h_wpfm_backup` DISABLE KEYS */;
 /*!40000 ALTER TABLE `wp5h_wpfm_backup` ENABLE KEYS */;
-COMMIT;
-SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
+
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
