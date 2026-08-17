@@ -41,7 +41,22 @@ function dd_dog_directory_url() {
 
 function dd_is_page( $option_key ) {
     if ( ! is_page() ) return false;
-    return (int) get_option($option_key) === (int) get_the_ID();
+    $opt_id = (int) get_option($option_key);
+    $current_id = (int) get_the_ID();
+    if ( $opt_id && $opt_id === $current_id ) return true;
+
+    $slug_map = [
+        'dd_page_login'     => ['login', 'dog-login'],
+        'dd_page_register'  => ['register', 'dog-register'],
+        'dd_page_pricing'   => ['dog-directory-plans', 'pricing'],
+        'dd_page_checkout'  => ['dog-checkout', 'checkout'],
+        'dd_page_dashboard' => ['dog-dashboard', 'my-account', 'dashboard'],
+        'dd_page_forgot'    => ['dog-forgot-password', 'forgot-password'],
+    ];
+    if ( isset($slug_map[$option_key]) && is_page($slug_map[$option_key]) ) {
+        return true;
+    }
+    return false;
 }
 
 function dd_is_login_page()     { return dd_is_page('dd_page_login'); }

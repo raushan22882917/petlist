@@ -13,4 +13,32 @@ Tags: classified, directory, dog, pedigree, listing
 License: Private
 */
 
+/* Sticky Footer Layout */
+html, body {
+    height: 100%;
+}
+#page.site {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+#content.site-content {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+#content.site-content > .content-area {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+footer.site-footer,
+.site-footer,
+.footer-style-3 {
+    margin-top: auto !important;
+    flex-shrink: 0;
+    width: 100%;
+}
+
 

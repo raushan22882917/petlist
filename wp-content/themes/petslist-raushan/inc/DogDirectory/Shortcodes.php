@@ -240,8 +240,12 @@ class Shortcodes {
     color: #a37430 !important;
     text-decoration: underline !important;
 }
-.content-area { padding-top: 15px !important; padding-bottom: 40px !important; }
+.content-area { padding-top: 40px !important; padding-bottom: 60px !important; flex: 1 0 auto !important; display: flex !important; align-items: center !important; justify-content: center !important; }
+#page.site { min-height: 100vh !important; display: flex !important; flex-direction: column !important; }
+#content.site-content { flex: 1 0 auto !important; display: flex !important; flex-direction: column !important; }
+footer.site-footer, .site-footer, .footer-style-3 { margin-top: auto !important; flex-shrink: 0 !important; width: 100% !important; }
 @media (max-width: 768px) {
+    .content-area { padding-top: 20px !important; padding-bottom: 40px !important; }
     .dd-auth-split-layout {
         flex-direction: column !important;
         max-width: 100% !important;

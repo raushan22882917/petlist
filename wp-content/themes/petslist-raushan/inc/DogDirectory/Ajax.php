@@ -556,7 +556,9 @@ class Ajax {
     // =========================================================
 
     public function register_user() {
-        check_ajax_referer( 'dd_auth_nonce', 'nonce' );
+        if ( ! empty( $_POST['nonce'] ) ) {
+            check_ajax_referer( 'dd_auth_nonce', 'nonce', false );
+        }
 
         $name             = sanitize_text_field( $_POST['name'] ?? '' );
         $location         = sanitize_text_field( $_POST['location'] ?? '' );
@@ -611,7 +613,9 @@ class Ajax {
     }
 
     public function login_user() {
-        check_ajax_referer( 'dd_auth_nonce', 'nonce' );
+        if ( ! empty( $_POST['nonce'] ) ) {
+            check_ajax_referer( 'dd_auth_nonce', 'nonce', false );
+        }
 
         $email    = sanitize_email( $_POST['email'] ?? '' );
         $password = $_POST['password'] ?? '';
@@ -629,7 +633,7 @@ class Ajax {
 
         $user = wp_signon( $creds, is_ssl() );
         if ( is_wp_error($user) ) {
-            wp_send_json_error(['message' => __('Invalid credentials. Please try again.', 'petslist')]);
+            wp_send_json_error(['message' => $user->get_error_message() ?: __('Invalid credentials. Please try again.', 'petslist')]);
         }
 
         // Respect explicit redirect_to param (e.g. when gated page sent user to login)
@@ -708,7 +712,9 @@ class Ajax {
     }
 
     public function forgot_password() {
-        check_ajax_referer( 'dd_auth_nonce', 'nonce' );
+        if ( ! empty( $_POST['nonce'] ) ) {
+            check_ajax_referer( 'dd_auth_nonce', 'nonce', false );
+        }
         $email = sanitize_email( $_POST['email'] ?? '' );
         if ( ! $email || ! email_exists( $email ) ) {
             wp_send_json_error( ['message' => __( 'No user found with that email address.', 'petslist' )] );
