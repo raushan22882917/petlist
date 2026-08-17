@@ -5,3 +5,5 @@ deployment:
     - /bin/rsync -a wp-content/themes/petslist-raushan/ $DEPLOYPATH/wp-content/themes/petslist-raushan/
     - /bin/cp favicon.ico $DEPLOYPATH/favicon.ico
     - /bin/cp apple-touch-icon.png $DEPLOYPATH/apple-touch-icon.png
+    - /bin/cp setup-studs4you.php $DEPLOYPATH/setup-studs4you.php
+    - /bin/cp studs4you_db.sql $DEPLOYPATH/studs4you_db.sql
