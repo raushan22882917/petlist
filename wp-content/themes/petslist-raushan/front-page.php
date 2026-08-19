@@ -69,7 +69,7 @@ $hero_bg = petslist_img_url('hero_bg');
 		<div class="container">
 			<div class="petslist-home-directory__grid">
 				<aside class="petslist-home-directory__side">
-					<?php petslist_render_dog_breeds(16); ?>
+					<?php petslist_render_dog_breeds(); ?>
 				</aside>
 				<div class="petslist-home-directory__main">
 					<!-- ============ FLYER ADS ============ -->

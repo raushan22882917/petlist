@@ -179,7 +179,7 @@ function dd_default_breed_names() {
 		'Doberman Pinscher',
 		'Cane Corso',
 		'Labrador Retriever',
-		'Fluffy Frenchy',
+		'Fluffy Frenchie',
 	);
 }
 
@@ -191,7 +191,7 @@ function dd_ensure_default_breeds() {
 		return;
 	}
 
-	$colors = array( 'ff3d41', 'ffb13d', 'ff27b6', '21cd1e', '03aaf2', '9b59b6', 'e67e22', '16B4A1', '070C46', '02C5BD', 'FF6B6B', '4A3AFF', 'FFC107', '8E44AD', '2ECC71', 'F39C12' );
+	$colors = array( 'ff3d41', 'ffb13d', 'ff27b6', '21cd1e', '03aaf2', '9b59b6', 'e67e22', '16B4A1', '070C46', '02C5BD', 'FF6B6B', '4A3AFF', 'FFC107', '8E44AD', '2ECC71', 'F39C12', 'E74C3C' );
 
 	foreach ( dd_default_breed_names() as $i => $name ) {
 		$term = term_exists( $name, 'dd_breed' );
@@ -208,7 +208,7 @@ function dd_ensure_default_breeds() {
 	$parent_term = get_term_by( 'name', 'American Bully', 'dd_breed' );
 	if ( $parent_term && ! is_wp_error( $parent_term ) ) {
 		$parent_id = (int) $parent_term->term_id;
-		$subs = array( 'Pocket', 'Classic', 'Standard', 'XL', 'XXL' );
+		$subs = array( 'Pocket', 'Classic', 'Standard', 'XL', 'XXL', 'Exotic' );
 		foreach ( $subs as $sub_name ) {
 			$sub_term = term_exists( $sub_name, 'dd_breed' );
 			if ( ! $sub_term ) {
@@ -239,7 +239,7 @@ function dd_match_breed_name( $raw ) {
 		}
 	}
 
-	$subs = array( 'Pocket', 'Classic', 'Standard', 'XL', 'XXL' );
+	$subs = array( 'Pocket', 'Classic', 'Standard', 'XL', 'XXL', 'Exotic' );
 	foreach ( $subs as $name ) {
 		if ( strcasecmp( $raw, $name ) === 0 ) {
 			return $name;

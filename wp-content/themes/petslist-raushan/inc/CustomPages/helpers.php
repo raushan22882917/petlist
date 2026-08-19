@@ -232,7 +232,9 @@ function petslist_custom_pages_assets()
 	$theme_uri = get_template_directory_uri();
 	$ver = wp_get_theme()->get('Version');
 
-	wp_enqueue_style('petslist-pages', $theme_uri . '/assets/css/petslist-pages.css', array(), $ver);
+	$css_file = get_template_directory() . '/assets/css/petslist-pages.css';
+	$pages_ver = file_exists($css_file) ? filemtime($css_file) : $ver;
+	wp_enqueue_style('petslist-pages', $theme_uri . '/assets/css/petslist-pages.css', array(), $pages_ver);
 
 	$core_css = WP_PLUGIN_DIR . '/petslist-core/assets/css/petslist-elementor.css';
 	if (file_exists($core_css)) {
@@ -331,7 +333,7 @@ function petslist_render_listing_categories($limit = 7)
 /**
  * Dog breed sidebar for home page (real dd_breed counts + colors).
  */
-function petslist_render_dog_breeds($limit = 16)
+function petslist_render_dog_breeds($limit = 0)
 {
 	if (!function_exists('dd_get_breeds')) {
 		return;
@@ -417,8 +419,8 @@ function petslist_render_dog_breeds($limit = 16)
 			</div>
 			<?php
 			if ($has_children) {
-				// Custom sub-breed ordering: Pocket 1st, then Classic, Standard, XL, XXL
-				$custom_child_order = array( 'Pocket' => 1, 'Classic' => 2, 'Standard' => 3, 'XL' => 4, 'XXL' => 5 );
+				// Custom sub-breed ordering: Pocket 1st, then Classic, Standard, XL, XXL, Exotic
+				$custom_child_order = array( 'Pocket' => 1, 'Classic' => 2, 'Standard' => 3, 'XL' => 4, 'XXL' => 5, 'Exotic' => 6 );
 				usort( $children, function( $ca, $cb ) use ( $custom_child_order ) {
 					$oa = $custom_child_order[ $ca->name ] ?? 999;
 					$ob = $custom_child_order[ $cb->name ] ?? 999;
