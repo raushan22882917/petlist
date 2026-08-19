@@ -187,11 +187,20 @@ function dd_default_breed_names() {
  * Create default breed terms (once) and assign colors for the home sidebar.
  */
 function dd_ensure_default_breeds() {
-	if ( get_option( 'dd_breeds_seeded_v3' ) && term_exists( 'American Bully', 'dd_breed' ) ) {
+	if ( get_option( 'dd_breeds_seeded_v4' ) && term_exists( 'American Bully', 'dd_breed' ) && term_exists( 'Exotic', 'dd_breed' ) ) {
 		return;
 	}
 
 	$colors = array( 'ff3d41', 'ffb13d', 'ff27b6', '21cd1e', '03aaf2', '9b59b6', 'e67e22', '16B4A1', '070C46', '02C5BD', 'FF6B6B', '4A3AFF', 'FFC107', '8E44AD', '2ECC71', 'F39C12', 'E74C3C' );
+
+	// Auto-rename old 'Fluffy Frenchy' if present
+	$old_ff = get_term_by( 'name', 'Fluffy Frenchy', 'dd_breed' );
+	if ( $old_ff && ! is_wp_error( $old_ff ) ) {
+		wp_update_term( $old_ff->term_id, 'dd_breed', array(
+			'name' => 'Fluffy Frenchie',
+			'slug' => 'fluffy-frenchie',
+		) );
+	}
 
 	foreach ( dd_default_breed_names() as $i => $name ) {
 		$term = term_exists( $name, 'dd_breed' );
@@ -220,7 +229,7 @@ function dd_ensure_default_breeds() {
 		}
 	}
 
-	update_option( 'dd_breeds_seeded_v3', 1, false );
+	update_option( 'dd_breeds_seeded_v4', 1, false );
 	dd_sync_dog_breed_taxonomy();
 }
 
