@@ -438,7 +438,7 @@ class Notifications {
 
     /* ── HTML email wrapper ───────────────────────────────── */
 
-    private function wrap_email( $heading, $content ) {
+    public function wrap_email( $heading, $content ) {
         $site_name = esc_html( get_bloginfo('name') );
         $site_url  = esc_url( home_url('/') );
         $primary   = '#02c5bd';
