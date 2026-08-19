@@ -99,7 +99,7 @@ $hero_bg = petslist_img_url('hero_bg');
 									$thumb = get_the_post_thumbnail_url( $pid, 'large' ) 
 										?: ( get_post_meta( $pid, '_dd_front_photo', true ) 
 											? wp_get_attachment_url( get_post_meta( $pid, '_dd_front_photo', true ) ) 
-											: petslist_theme_img_url( 'dog-placeholder.svg' ) );
+											: petslist_theme_img_url( 'theme/flyer-ad-placeholder.png' ) );
 									$terms = get_the_terms( $pid, 'dd_breed' );
 									$breed = ( $terms && ! is_wp_error( $terms ) ) ? $terms[0]->name : ( $meta['breed'] ?? '' );
 									?>
@@ -118,11 +118,7 @@ $hero_bg = petslist_img_url('hero_bg');
 								}
 								wp_reset_postdata();
 							} else {
-								$sample_flyer = file_exists( get_template_directory() . '/assets/img/theme/flyer-ad-placeholder.png' )
-									? petslist_theme_img_url( 'theme/flyer-ad-placeholder.png' )
-									: ( file_exists( WP_CONTENT_DIR . '/uploads/2026/06/download.jpeg' )
-										? content_url( 'uploads/2026/06/download.jpeg' )
-										: petslist_theme_img_url( 'dog-placeholder.svg' ) );
+								$sample_flyer = petslist_theme_img_url( 'theme/flyer-ad-placeholder.png' );
 
 								for ($i = 1; $i <= 9; $i++) : ?>
 									<div class="petslist-flyer-card">
