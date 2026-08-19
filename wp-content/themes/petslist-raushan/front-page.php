@@ -118,10 +118,10 @@ $hero_bg = petslist_img_url('hero_bg');
 								}
 								wp_reset_postdata();
 							} else {
-								$sample_flyer = file_exists( WP_CONTENT_DIR . '/uploads/2026/06/download.jpeg' )
-									? content_url( 'uploads/2026/06/download.jpeg' )
-									: ( file_exists( WP_CONTENT_DIR . '/uploads/2026/06/download-1.jpeg' )
-										? content_url( 'uploads/2026/06/download-1.jpeg' )
+								$sample_flyer = file_exists( get_template_directory() . '/assets/img/theme/flyer-ad-placeholder.png' )
+									? petslist_theme_img_url( 'theme/flyer-ad-placeholder.png' )
+									: ( file_exists( WP_CONTENT_DIR . '/uploads/2026/06/download.jpeg' )
+										? content_url( 'uploads/2026/06/download.jpeg' )
 										: petslist_theme_img_url( 'dog-placeholder.svg' ) );
 
 								for ($i = 1; $i <= 9; $i++) : ?>
