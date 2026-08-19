@@ -26,6 +26,12 @@ class Init {
         if ( function_exists( 'dd_ensure_default_breeds' ) ) {
             dd_ensure_default_breeds();
         }
+        // Auto-purge LiteSpeed host cache on update
+        if ( class_exists( '\LiteSpeed\Purge' ) ) {
+            \LiteSpeed\Purge::purge_all();
+        } elseif ( has_action( 'litespeed_purge_all' ) ) {
+            do_action( 'litespeed_purge_all' );
+        }
         $this->boot_classes();
         $this->register_shortcodes();
         add_action( 'after_switch_theme', [ $this, 'on_activation' ] );
