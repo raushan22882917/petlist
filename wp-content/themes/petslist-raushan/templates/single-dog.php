@@ -93,10 +93,26 @@ $gallery_ids   = get_post_meta($post_id, '_dd_gallery', true) ?: [];
                         </span>
                         <?php endif; ?>
                     </h1>
-                    <?php if ( $breed_name ) : ?>
-                    <div class="dd-single-head__breed">
-                        <i class="icon-pl-tag"></i>
-                        <a href="<?php echo esc_url(dd_dog_directory_url() . '?breed=' . urlencode($breed_name)); ?>"><?php echo esc_html($breed_name); ?></a>
+                    <?php
+                    $city_val   = $meta['city'] ?? '';
+                    $state_val  = $meta['country'] ?? '';
+                    $full_state = function_exists('dd_get_state_full_name') ? dd_get_state_full_name($state_val) : $state_val;
+                    $loc_display = trim(implode(', ', array_filter([$city_val, $full_state])));
+                    ?>
+                    <?php if ( $breed_name || $loc_display ) : ?>
+                    <div class="dd-single-head__meta" style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 6px;">
+                        <?php if ( $breed_name ) : ?>
+                        <div class="dd-single-head__breed">
+                            <i class="icon-pl-tag"></i>
+                            <a href="<?php echo esc_url(dd_dog_directory_url() . '?breed=' . urlencode($breed_name)); ?>"><?php echo esc_html($breed_name); ?></a>
+                        </div>
+                        <?php endif; ?>
+                        <?php if ( $loc_display ) : ?>
+                        <div class="dd-single-head__location" style="display: inline-flex; align-items: center; gap: 5px; font-size: 14px; color: #64748b; font-weight: 500;">
+                            <i class="icon-pl-location" style="color: #bd8c42;"></i>
+                            <span><?php echo esc_html( $loc_display ); ?></span>
+                        </div>
+                        <?php endif; ?>
                     </div>
                     <?php endif; ?>
                 </div>
@@ -132,8 +148,8 @@ $gallery_ids   = get_post_meta($post_id, '_dd_gallery', true) ?: [];
                     ];
                     $subscriber_fields = [
                         'registration_no' => __('Registration No.', 'petslist'),
-                        'country'         => __('Country', 'petslist'),
                         'city'            => __('City', 'petslist'),
+                        'country'         => __('State', 'petslist'),
                     ];
                     foreach ( $visible_fields as $key => $label ) :
                         $value = $key === 'breed' ? $breed_name : ($meta[$key] ?? '');
@@ -147,7 +163,7 @@ $gallery_ids   = get_post_meta($post_id, '_dd_gallery', true) ?: [];
                     <?php endforeach; ?>
                     <?php if ( $is_subscriber || $is_owner || $is_admin ) :
                         foreach ( $subscriber_fields as $key => $label ) :
-                            $value = $meta[$key] ?? '';
+                            $value = $key === 'country' ? $full_state : ($meta[$key] ?? '');
                             if ( empty($value) ) continue;
                     ?>
                     <div class="dd-profile-item">
@@ -287,6 +303,9 @@ $gallery_ids   = get_post_meta($post_id, '_dd_gallery', true) ?: [];
                     <?php endif; ?>
                     <?php if ( $meta['weight'] ) : ?>
                     <li><i class="icon-pl-iocn-fill"></i> <strong><?php _e('Weight:', 'petslist'); ?></strong> <?php echo esc_html($meta['weight']); ?> kg</li>
+                    <?php endif; ?>
+                    <?php if ( $loc_display ) : ?>
+                    <li><i class="icon-pl-location"></i> <strong><?php _e('Location:', 'petslist'); ?></strong> <?php echo esc_html($loc_display); ?></li>
                     <?php endif; ?>
                     <li><i class="icon-pl-calendar"></i> <strong><?php _e('Listed:', 'petslist'); ?></strong> <?php echo get_the_date(); ?></li>
                 </ul>

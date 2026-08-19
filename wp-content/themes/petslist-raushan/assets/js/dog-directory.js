@@ -84,11 +84,16 @@
             return;
           }
           var fulltimeBreeder = $('input[name="fulltime_breeder"]:checked').val() || 'no';
+          var regState = $('#dd-reg-state').val() || '';
+          var regCity  = $('#dd-reg-city').val() || '';
+          var regLoc   = $('#dd-reg-location').length ? $('#dd-reg-location').val() : [regCity, regState].filter(Boolean).join(', ');
           DD.Auth._setLoading($btn, true);
           DD.ajax('dd_register', {
             nonce:            ddVars.nonces.auth,
             name:             $('#dd-reg-name').val(),
-            location:         $('#dd-reg-location').val(),
+            state:            regState,
+            city:             regCity,
+            location:         regLoc,
             phone:            $('#dd-reg-phone').val(),
             email:            $('#dd-reg-email').val(),
             fulltime_breeder: fulltimeBreeder,
@@ -373,11 +378,21 @@
       },
 
       mediaUpload: function () {
-        $(document).on('click', '.dd-upload-photo', function (e) {
+        $(document).on('click', '.dd-upload-photo, .dd-photo-upload-area', function (e) {
           e.preventDefault();
-          var $btn     = $(this);
-          var targetId = $btn.data('target');
-          var previewId = $btn.data('preview');
+          var $el       = $(this);
+          var targetId  = $el.data('target');
+          var previewId = $el.data('preview');
+
+          if (!targetId || !previewId) {
+            var $box = $el.closest('.dd-photo-upload-box');
+            targetId  = $box.find('.dd-upload-photo').data('target');
+            previewId = $box.find('.dd-upload-photo').data('preview');
+          }
+
+          if (typeof wp === 'undefined' || !wp.media) {
+            return;
+          }
 
           var frame = wp.media({
             title:    'Select Photo',
@@ -388,9 +403,11 @@
 
           frame.on('select', function () {
             var att = frame.state().get('selection').first().toJSON();
+            var imgUrl = (att.sizes && att.sizes.medium) ? att.sizes.medium.url : (att.sizes && att.sizes.large ? att.sizes.large.url : (att.sizes && att.sizes.full ? att.sizes.full.url : att.url));
+
             $('#' + targetId).val(att.id);
             var $preview = $('#' + previewId);
-            $preview.html('<img src="' + att.url + '" style="width:100%;height:100%;object-fit:cover">');
+            $preview.html('<img src="' + imgUrl + '" alt="Selected Dog Photo" style="width:100%;height:100%;object-fit:cover;border-radius:8px;display:block;">');
 
             if (targetId === 'dd-front-id') {
               $('#dd-thumb-id').val(att.id);
@@ -435,13 +452,18 @@
         $(document).on('submit', '#dd-profile-form', function (e) {
           e.preventDefault();
           var $btn = $('#dd-profile-submit');
+          var profState = $('#dd-profile-state').val() || '';
+          var profCity  = $('#dd-profile-city').val() || '';
+          var profLoc   = $('#dd-profile-location').length ? $('#dd-profile-location').val() : [profCity, profState].filter(Boolean).join(', ');
           DD.Auth._setLoading($btn, true);
           DD.ajax('dd_update_profile', {
             nonce:            ddVars.nonces.dashboard,
             display_name:     $('#dd-profile-name').val(),
             bio:              $('#dd-profile-bio').val(),
             phone:            $('#dd-profile-phone').val(),
-            location:         $('#dd-profile-location').val(),
+            state:            profState,
+            city:             profCity,
+            location:         profLoc,
             fulltime_breeder: $('#dd-profile-fulltime-breeder').val(),
             website:          $('#dd-profile-website').val(),
             avatar_id:        $('#dd-profile-avatar-id').val(),
@@ -546,6 +568,25 @@
         this.faqAccordion();
         this.mobileNav();
         this.galleryNav();
+        this.searchableSelects();
+      },
+
+      searchableSelects: function () {
+        if ($.fn.select2) {
+          $('select.dd-searchable-select, #dd-reg-state, #dd-profile-state, #dd-country').each(function () {
+            var $sel = $(this);
+            if (!$sel.hasClass('select2-hidden-accessible')) {
+              var placeholderText = $sel.find('option:first').text() || 'Select State';
+              $sel.select2({
+                theme: 'classic',
+                width: '100%',
+                dropdownAutoWidth: true,
+                placeholder: placeholderText,
+                allowClear: false
+              });
+            }
+          });
+        }
       },
 
       faqAccordion: function () {

@@ -79,6 +79,24 @@ class Init {
             wp_safe_redirect( dd_login_url(), 301 );
             exit;
         }
+        // Redirect any rtcl listing-location or listings archive to our dog directory
+        if ( strpos( $req, 'listing-location' ) !== false || $req === 'listings' ) {
+            $parts = explode( '/', $req );
+            $loc_slug = end( $parts );
+            $args = $_GET;
+            if ( ! empty( $loc_slug ) && $loc_slug !== 'listings' && $loc_slug !== 'listing-location' ) {
+                $args['country'] = sanitize_text_field( $loc_slug );
+            }
+            if ( isset( $args['rtcl_location'] ) ) {
+                if ( empty( $args['country'] ) ) {
+                    $args['country'] = $args['rtcl_location'];
+                }
+                unset( $args['rtcl_location'] );
+            }
+            $redirect_url = add_query_arg( $args, dd_dog_directory_url() );
+            wp_safe_redirect( $redirect_url, 301 );
+            exit;
+        }
     }
 
     public function on_activation() {

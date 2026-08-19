@@ -493,6 +493,118 @@ function dd_render_breed_options( $selected = '', $include_counts = false, $plac
 }
 
 /**
+ * Get the list of all US States (Code => Name).
+ */
+function dd_get_us_states() {
+	return array(
+		'AL' => 'Alabama',
+		'AK' => 'Alaska',
+		'AZ' => 'Arizona',
+		'AR' => 'Arkansas',
+		'CA' => 'California',
+		'CO' => 'Colorado',
+		'CT' => 'Connecticut',
+		'DE' => 'Delaware',
+		'DC' => 'District Of Columbia',
+		'FL' => 'Florida',
+		'GA' => 'Georgia',
+		'HI' => 'Hawaii',
+		'ID' => 'Idaho',
+		'IL' => 'Illinois',
+		'IN' => 'Indiana',
+		'IA' => 'Iowa',
+		'KS' => 'Kansas',
+		'KY' => 'Kentucky',
+		'LA' => 'Louisiana',
+		'ME' => 'Maine',
+		'MD' => 'Maryland',
+		'MA' => 'Massachusetts',
+		'MI' => 'Michigan',
+		'MN' => 'Minnesota',
+		'MS' => 'Mississippi',
+		'MO' => 'Missouri',
+		'MT' => 'Montana',
+		'NE' => 'Nebraska',
+		'NV' => 'Nevada',
+		'NH' => 'New Hampshire',
+		'NJ' => 'New Jersey',
+		'NM' => 'New Mexico',
+		'NY' => 'New York',
+		'NC' => 'North Carolina',
+		'ND' => 'North Dakota',
+		'OH' => 'Ohio',
+		'OK' => 'Oklahoma',
+		'OR' => 'Oregon',
+		'PA' => 'Pennsylvania',
+		'RI' => 'Rhode Island',
+		'SC' => 'South Carolina',
+		'SD' => 'South Dakota',
+		'TN' => 'Tennessee',
+		'TX' => 'Texas',
+		'UT' => 'Utah',
+		'VT' => 'Vermont',
+		'VA' => 'Virginia',
+		'WA' => 'Washington',
+		'WV' => 'West Virginia',
+		'WI' => 'Wisconsin',
+		'WY' => 'Wyoming',
+	);
+}
+
+/**
+ * Render <option> HTML for US States location select with full state names.
+ *
+ * @param string      $selected    Currently selected state code or full name.
+ * @param string|bool $placeholder Placeholder text, or false to omit blank option.
+ */
+function dd_render_location_options( $selected = '', $placeholder = 'All Locations' ) {
+	if ( false !== $placeholder ) {
+		if ( true === $placeholder || '' === $placeholder ) {
+			$placeholder = __( 'All Locations', 'petslist' );
+		}
+		printf(
+			'<option value=""%s>%s</option>',
+			empty( $selected ) ? ' selected="selected"' : '',
+			esc_html( $placeholder )
+		);
+	}
+
+	$states = dd_get_us_states();
+	foreach ( $states as $code => $name ) {
+		$is_selected = ( strcasecmp( $selected, $code ) === 0 || strcasecmp( $selected, $name ) === 0 );
+		printf(
+			'<option value="%s"%s>%s</option>',
+			esc_attr( $name ),
+			$is_selected ? ' selected="selected"' : '',
+			esc_html( $name )
+		);
+	}
+}
+
+/**
+ * Helper to get the full name of a US State from code or name.
+ *
+ * @param string $state State code or name.
+ * @return string Full state name.
+ */
+function dd_get_state_full_name( $state ) {
+	if ( empty( $state ) ) {
+		return '';
+	}
+	$states = dd_get_us_states();
+	$upper  = strtoupper( trim( $state ) );
+	if ( isset( $states[ $upper ] ) ) {
+		return $states[ $upper ];
+	}
+	foreach ( $states as $code => $name ) {
+		if ( strcasecmp( $state, $name ) === 0 ) {
+			return $name;
+		}
+	}
+	return $state;
+}
+
+/**
  * Assign taxonomy terms from stored breed meta (fixes counts on home page).
  */
 function dd_sync_dog_breed_taxonomy() {

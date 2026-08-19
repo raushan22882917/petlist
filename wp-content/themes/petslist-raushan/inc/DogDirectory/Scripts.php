@@ -35,13 +35,17 @@ class Scripts {
             || dd_is_pricing_page()
             || dd_is_checkout_page()
             || dd_is_dashboard_page()
+            || dd_is_login_page()
+            || dd_is_register_page()
+            || dd_is_forgot_page()
             || is_front_page();
 
         if ( $load_dd_css ) {
+            wp_enqueue_style( 'select2' );
             wp_enqueue_style(
                 'dd-main',
                 $uri . '/assets/css/dog-directory.css',
-                ['petslist-main'],
+                ['petslist-main', 'select2'],
                 $v
             );
         }
@@ -73,17 +77,15 @@ class Scripts {
 
 
         // Main DD JS — load on all DD pages + auth pages!
-        $load_dd_js = $load_dd_css 
-            || dd_is_login_page()
-            || dd_is_register_page()
-            || dd_is_forgot_page();
+        $load_dd_js = $load_dd_css;
 
         if ( ! $load_dd_js ) return;
 
+        wp_enqueue_script( 'select2' );
         wp_enqueue_script(
             'dd-main',
             $uri . '/assets/js/dog-directory.js',
-            ['jquery'],
+            ['jquery', 'select2'],
             $v, true
         );
 

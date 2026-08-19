@@ -74,7 +74,7 @@ $hero_bg = petslist_img_url('hero_bg');
 				<div class="petslist-home-directory__main">
 					<!-- ============ FLYER ADS ============ -->
 					<div class="petslist-home-flyers-inline">
-						<div class="section-heading" style="margin-bottom: 26px;">
+						<div class="section-heading" style="margin-bottom: 16px;">
 							<h2 class="heading-title"><?php esc_html_e('Flyer Ads', 'petslist'); ?></h2>
 						</div>
 						<div class="petslist-flyer-grid">

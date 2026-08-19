@@ -156,13 +156,15 @@ function dd_field( $meta, $key, $fallback = '' ) {
             <div class="dd-dog-form__grid">
 
                 <div class="dd-form-group">
-                    <label for="dd-country"><?php _e( 'Country', 'petslist' ); ?> <span class="dd-required">*</span></label>
-                    <input type="text" id="dd-country" name="dog_data[country]" value="<?php echo dd_field($dog_meta,'country'); ?>" placeholder="<?php esc_attr_e( 'e.g. United States', 'petslist' ); ?>" required>
+                    <label for="dd-country"><?php _e( 'State', 'petslist' ); ?> <span class="dd-required">*</span></label>
+                    <select id="dd-country" name="dog_data[country]" class="select2 dd-searchable-select" style="width:100%;" required>
+                        <?php dd_render_location_options( dd_field($dog_meta, 'country'), __( 'Select State', 'petslist' ) ); ?>
+                    </select>
                 </div>
 
                 <div class="dd-form-group">
-                    <label for="dd-city"><?php _e( 'City / State', 'petslist' ); ?> <span class="dd-required">*</span></label>
-                    <input type="text" id="dd-city" name="dog_data[city]" value="<?php echo dd_field($dog_meta,'city'); ?>" placeholder="<?php esc_attr_e( 'e.g. New York, NY', 'petslist' ); ?>" required>
+                    <label for="dd-city"><?php _e( 'City', 'petslist' ); ?> <span class="dd-required">*</span></label>
+                    <input type="text" id="dd-city" name="dog_data[city]" value="<?php echo dd_field($dog_meta,'city'); ?>" placeholder="<?php esc_attr_e( 'Enter City (e.g. Los Angeles, Miami)', 'petslist' ); ?>" required>
                 </div>
 
                 <div class="dd-form-group">

@@ -87,21 +87,16 @@ class Ajax {
             }
         }
 
-        // Determine post status: Require admin approval for non-admin submissions when dd_require_approval is set
-        $require_approval = (bool) get_option( 'dd_require_approval', 1 );
+        // Determine post status: Publish immediately so newly added dogs appear right away
+        $require_approval = (bool) get_option( 'dd_require_approval', 0 );
 
-        if ( current_user_can( 'manage_options' ) ) {
+        if ( current_user_can( 'manage_options' ) || ! $require_approval ) {
             $post_status = 'publish';
             if ( $post_id && ( $existing = get_post( $post_id ) ) ) {
-                $post_status = $existing->post_status;
+                $post_status = $existing->post_status === 'draft' ? 'draft' : 'publish';
             }
         } else {
-            if ( ! $post_id || $require_approval ) {
-                $post_status = 'pending';
-            } else {
-                $existing    = get_post( $post_id );
-                $post_status = $existing ? $existing->post_status : 'pending';
-            }
+            $post_status = 'pending';
         }
 
         $post_data = [
@@ -371,7 +366,7 @@ class Ajax {
                             <?php 
                             $loc = [];
                             if (!empty($meta['city'])) $loc[] = $meta['city'];
-                            if (!empty($meta['country'])) $loc[] = $meta['country'];
+                            if (!empty($meta['country'])) $loc[] = function_exists('dd_get_state_full_name') ? dd_get_state_full_name($meta['country']) : $meta['country'];
                             echo esc_html(implode(', ', $loc) ?: '—');
                             ?>
                         </span>
@@ -561,7 +556,13 @@ class Ajax {
         }
 
         $name             = sanitize_text_field( $_POST['name'] ?? '' );
+        $state            = sanitize_text_field( $_POST['state'] ?? '' );
+        $city             = sanitize_text_field( $_POST['city'] ?? '' );
         $location         = sanitize_text_field( $_POST['location'] ?? '' );
+        if ( empty( $location ) && ( ! empty( $state ) || ! empty( $city ) ) ) {
+            $full_state = function_exists('dd_get_state_full_name') ? dd_get_state_full_name($state) : $state;
+            $location   = trim(implode(', ', array_filter([$city, $full_state])));
+        }
         $phone            = sanitize_text_field( $_POST['phone'] ?? '' );
         $email            = sanitize_email( $_POST['email'] ?? '' );
         $fulltime_breeder = sanitize_text_field( $_POST['fulltime_breeder'] ?? 'no' );
@@ -589,6 +590,8 @@ class Ajax {
         $u = new \WP_User( $user_id );
         $u->set_role( 'dd_subscriber' );
         update_user_meta( $user_id, 'dd_location', $location );
+        if ( ! empty( $state ) ) update_user_meta( $user_id, 'dd_state', $state );
+        if ( ! empty( $city ) ) update_user_meta( $user_id, 'dd_city', $city );
         update_user_meta( $user_id, 'dd_phone', $phone );
         update_user_meta( $user_id, 'dd_fulltime_breeder', strtolower($fulltime_breeder) === 'yes' ? 'yes' : 'no' );
         update_user_meta( $user_id, 'dd_member_since', current_time('mysql') );
@@ -658,7 +661,13 @@ class Ajax {
         $name             = sanitize_text_field( $_POST['display_name'] ?? '' );
         $bio              = sanitize_textarea_field( $_POST['bio'] ?? '' );
         $phone            = sanitize_text_field( $_POST['phone'] ?? '' );
+        $state            = sanitize_text_field( $_POST['state'] ?? '' );
+        $city             = sanitize_text_field( $_POST['city'] ?? '' );
         $location         = sanitize_text_field( $_POST['location'] ?? '' );
+        if ( empty( $location ) && ( ! empty( $state ) || ! empty( $city ) ) ) {
+            $full_state = function_exists('dd_get_state_full_name') ? dd_get_state_full_name($state) : $state;
+            $location   = trim(implode(', ', array_filter([$city, $full_state])));
+        }
         $fulltime_breeder = sanitize_text_field( $_POST['fulltime_breeder'] ?? 'no' );
         $website          = esc_url_raw( $_POST['website'] ?? '' );
         $avatar           = absint( $_POST['avatar_id'] ?? 0 );
@@ -675,6 +684,8 @@ class Ajax {
 
         update_user_meta($user_id, 'dd_phone', $phone);
         update_user_meta($user_id, 'dd_location', $location);
+        if ( ! empty( $state ) ) update_user_meta($user_id, 'dd_state', $state);
+        if ( ! empty( $city ) ) update_user_meta($user_id, 'dd_city', $city);
         update_user_meta($user_id, 'dd_fulltime_breeder', strtolower($fulltime_breeder) === 'yes' ? 'yes' : 'no');
         update_user_meta($user_id, 'user_url', $website);
         
@@ -848,7 +859,25 @@ class Ajax {
             $search_gender = ( strcasecmp( $gender, 'stud' ) === 0 ) ? 'Male' : $gender;
             $meta_query[]  = ['key' => '_dd_dog_meta', 'value' => $search_gender, 'compare' => 'LIKE'];
         }
-        if ( $country ) $meta_query[] = ['key' => '_dd_dog_meta', 'value' => $country, 'compare' => 'LIKE'];
+        if ( $country ) {
+            $states_map = function_exists('dd_get_us_states') ? dd_get_us_states() : [];
+            $state_name = $states_map[ strtoupper($country) ] ?? '';
+            if ( ! $state_name && in_array( $country, $states_map, true ) ) {
+                $state_code = array_search( $country, $states_map, true );
+                $state_name = $country;
+            } else {
+                $state_code = strtoupper($country);
+            }
+            if ( $state_name && $state_code ) {
+                $meta_query[] = [
+                    'relation' => 'OR',
+                    ['key' => '_dd_dog_meta', 'value' => $state_code, 'compare' => 'LIKE'],
+                    ['key' => '_dd_dog_meta', 'value' => $state_name, 'compare' => 'LIKE'],
+                ];
+            } else {
+                $meta_query[] = ['key' => '_dd_dog_meta', 'value' => $country, 'compare' => 'LIKE'];
+            }
+        }
         if ( $city )    $meta_query[] = ['key' => '_dd_dog_meta', 'value' => $city, 'compare' => 'LIKE'];
         if ( $reg_no )  $meta_query[] = ['key' => '_dd_dog_meta', 'value' => $reg_no, 'compare' => 'LIKE'];
         if ( count($meta_query) > 1 ) $args['meta_query'] = $meta_query;

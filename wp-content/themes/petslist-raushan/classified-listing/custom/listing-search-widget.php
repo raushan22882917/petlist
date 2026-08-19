@@ -132,54 +132,16 @@ $order = strtoupper(Functions::get_option_item('rtcl_general_settings', 'taxonom
 
 			<?php if ( method_exists( 'Rtcl\Helpers\Functions', 'location_type' ) && $can_search_by_location && 'local' === Functions::location_type() ): ?>
                <div class="search-item search-select rtin-location">
-					<?php if ($style === 'suggestion') { ?>
-                        <input type="text" data-type="location"
-                               class="rtcl-autocomplete rtcl-location form-control"
-                               placeholder="<?php echo esc_attr(Text::get_select_location_text()) ?>"
-                               value="<?php echo esc_attr( $selected_location ? $selected_location->name : '' ); ?>">
-                        <input type="hidden" name="rtcl_location"
-                               value="<?php echo esc_attr( $selected_location ? $selected_location->slug : '' ); ?>">
-                        <?php
-                    } elseif ($style === 'standard') {
-                        $args = [
-                            'show_option_none'  => Text::get_select_location_text(),
-                            'option_none_value' => '',
-                            'taxonomy'          => rtcl()->location,
-                            'name'              => 'rtcl_location',
-                            'id'                => 'rtcl-location-search-' . wp_rand(),
-                            'class'             => 'form-control rtcl-location-search',
-                            'selected'          => get_query_var('rtcl_location'),
-                            'hierarchical'      => true,
-                            'value_field'       => 'slug',
-                            'depth'             => Functions::get_location_depth_limit(),
-                            'orderby'           => $orderby,
-                            'order'             => ('DESC' === $order) ? 'DESC' : 'ASC',
-                            'show_count'        => false,
-                            'hide_empty'        => false,
-                        ];
-                        if ('_rtcl_order' === $orderby) {
-                            $args['orderby'] = 'meta_value_num';
-                            $args['meta_key'] = '_rtcl_order';
-                        }
-                        wp_dropdown_categories($args);
-                    } elseif ($style === 'dependency') {
-                        Functions::dropdown_terms([
-                            'show_option_none' => Text::get_select_location_text(),
-                            'taxonomy'         => rtcl()->location,
-                            'name'             => 'l',
-                            'class'            => 'form-control',
-                            'selected'         => $selected_location ? $selected_location->term_id : 0,
-                        ]);
-                    } elseif ($style == 'popup') {
-                        ?>
-                        <div class="rtcl-search-input-button rtcl-search-input-location btn btn-primary">
-                            <span class="search-input-label location-name">
-                                <?php echo  esc_html( $selected_location ? $selected_location->name : Text::get_select_location_text() ); ?>
-                            </span>
-                            <input type="hidden" class="rtcl-term-field" name="rtcl_location" value="<?php echo esc_attr( $selected_location ? $selected_location->slug : '' ); ?>">
-                        </div>
-                        <?php
-                    } ?>
+					<select name="country" id="rtcl-location-search-<?php echo wp_rand(); ?>" class="form-control rtcl-location-search">
+						<?php
+						$selected_loc = sanitize_text_field( $_GET['country'] ?? $_GET['rtcl_location'] ?? '' );
+						if ( function_exists( 'dd_render_location_options' ) ) {
+							dd_render_location_options( $selected_loc, __( 'All Locations', 'petslist' ) );
+						} else {
+							echo '<option value="">' . esc_html__( 'All Locations', 'petslist' ) . '</option>';
+						}
+						?>
+					</select>
                 </div>
 			<?php endif; ?>
 

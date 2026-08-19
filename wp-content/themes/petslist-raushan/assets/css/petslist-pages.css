@@ -476,12 +476,12 @@
 .petslist-home-banner-card--blue .heading-title { color: #070c3e; }
 
 /* ---------- Home: directory / latest posted ads ---------- */
-.petslist-home-directory { padding: 60px 0 70px; }
-.petslist-home-directory__grid { display: grid; grid-template-columns: 310px 1fr; gap: 36px; align-items: start; }
-.petslist-home-directory__side .category-list { margin: 0 0 24px; padding: 0; list-style: none; }
+.petslist-home-directory { padding: 40px 0 50px; }
+.petslist-home-directory__grid { display: grid; grid-template-columns: 300px 1fr; gap: 28px; align-items: start; }
+.petslist-home-directory__side .category-list { margin: 0 0 20px; padding: 0; list-style: none; }
 .petslist-side-banner { width: 100%; border-radius: var(--pl-radius); display: block; }
 .petslist-side-banner-link { display: block; }
-.petslist-home-directory__main .section-heading { margin-bottom: 26px; }
+.petslist-home-directory__main .section-heading { margin-bottom: 18px; }
 .petslist-home-directory__main .section-heading .heading-title { font-size: 2rem; }
 .petslist-home-directory__actions { margin-top: 34px; }
 .petslist-home-directory__main .petslist-home-dogs-grid {
@@ -700,27 +700,27 @@
 .petslist-flyer-grid {
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
-	gap: 24px;
+	gap: 16px;
 }
 .petslist-flyer-card {
 	background: #ffffff;
-	border-radius: 16px;
+	border-radius: 12px;
 	overflow: hidden;
-	box-shadow: 0 8px 24px rgba(7, 12, 62, 0.05);
+	box-shadow: 0 6px 18px rgba(7, 12, 62, 0.05);
 	transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 	border: 1px solid #e9edf4;
 	display: flex;
 	flex-direction: column;
 }
 .petslist-flyer-card:hover {
-	transform: translateY(-6px);
-	box-shadow: 0 16px 36px rgba(7, 12, 62, 0.1);
+	transform: translateY(-4px);
+	box-shadow: 0 12px 28px rgba(7, 12, 62, 0.09);
 	border-color: #bd8c42;
 }
 .petslist-flyer-card__image {
 	position: relative;
 	overflow: hidden;
-	aspect-ratio: 2 / 3; /* Vertical flyer poster format (matches 1024x1536) */
+	aspect-ratio: 3 / 4; /* Compact flyer poster format */
 	background-color: #eef1f6;
 	display: flex;
 	align-items: center;
@@ -743,7 +743,7 @@
 	transform: scale(1.03);
 }
 .petslist-flyer-card__content {
-	padding: 20px 18px 22px;
+	padding: 12px 14px 14px;
 	text-align: center;
 	flex-grow: 1;
 	display: flex;
@@ -752,20 +752,20 @@
 	background: #ffffff;
 }
 .petslist-flyer-card__content h3 {
-	font-size: 1.2rem;
+	font-size: 1.05rem;
 	font-weight: 700;
 	color: #070c3e;
-	margin: 0 0 8px;
+	margin: 0 0 4px;
 	transition: color 0.2s ease;
 }
 .petslist-flyer-card:hover .petslist-flyer-card__content h3 {
 	color: #bd8c42;
 }
 .petslist-flyer-card__content p {
-	font-size: 0.92rem;
+	font-size: 0.84rem;
 	color: #666e9c;
 	margin: 0;
-	line-height: 1.45;
+	line-height: 1.35;
 }
 
 /* Sidebar Breed List UI Improvements */
@@ -773,26 +773,21 @@
 	margin: 0 0 24px;
 	padding: 0;
 	list-style: none;
+	gap: 2px !important;
 }
 .petslist-home-directory__side .category-list .category-item {
 	display: flex;
 	align-items: center;
-	padding: 10px 14px;
-	border-radius: 10px;
-	margin-bottom: 6px;
+	padding: 8px 12px;
+	border-radius: 8px;
+	margin-bottom: 2px;
 	transition: background-color 0.2s ease;
 }
 .petslist-home-directory__side .category-list .category-item:hover:not(.dda-post-ad-item) {
 	background-color: #f4f6fb;
 }
-.petslist-home-directory__side .category-list .category-item .icon {
-	width: 36px;
-	height: 36px;
-	margin-right: 12px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-shrink: 0;
+.petslist-home-directory__side .category-list .category-item:not(.dda-post-ad-item) .icon {
+	display: none !important;
 }
 .petslist-home-directory__side .category-list .category-item .content {
 	display: flex !important;

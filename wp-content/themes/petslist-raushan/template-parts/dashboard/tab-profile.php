@@ -9,6 +9,17 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 $user             = wp_get_current_user();
 $phone            = get_user_meta( $user->ID, 'dd_phone', true );
 $location         = get_user_meta( $user->ID, 'dd_location', true );
+$user_state       = get_user_meta( $user->ID, 'dd_state', true );
+$user_city        = get_user_meta( $user->ID, 'dd_city', true );
+if ( empty( $user_state ) && ! empty( $location ) ) {
+    $loc_parts = array_map( 'trim', explode( ',', $location ) );
+    if ( count( $loc_parts ) >= 2 ) {
+        $user_city = $loc_parts[0];
+        $user_state = $loc_parts[1];
+    } else {
+        $user_state = $location;
+    }
+}
 $fulltime_breeder = get_user_meta( $user->ID, 'dd_fulltime_breeder', true ) ?: 'no';
 $website          = $user->user_url;
 ?>
@@ -66,8 +77,19 @@ $website          = $user->user_url;
                     </div>
 
                     <div class="dd-form-group">
-                        <label for="dd-profile-location"><?php _e( 'Location', 'petslist' ); ?></label>
-                        <input type="text" id="dd-profile-location" name="location" value="<?php echo esc_attr( $location ); ?>" placeholder="<?php esc_attr_e( 'City, State / Country', 'petslist' ); ?>">
+                        <label for="dd-profile-state"><?php _e( 'State / Location', 'petslist' ); ?></label>
+                        <select id="dd-profile-state" name="state" class="dd-form-control select2 dd-searchable-select" style="width: 100%;">
+                            <?php
+                            if ( function_exists( 'dd_render_location_options' ) ) {
+                                dd_render_location_options( $user_state, __( 'Select State', 'petslist' ) );
+                            }
+                            ?>
+                        </select>
+                    </div>
+
+                    <div class="dd-form-group">
+                        <label for="dd-profile-city"><?php _e( 'City', 'petslist' ); ?></label>
+                        <input type="text" id="dd-profile-city" name="city" value="<?php echo esc_attr( $user_city ); ?>" placeholder="<?php esc_attr_e( 'Enter City (e.g. Los Angeles, Miami)', 'petslist' ); ?>">
                     </div>
 
                     <div class="dd-form-group">

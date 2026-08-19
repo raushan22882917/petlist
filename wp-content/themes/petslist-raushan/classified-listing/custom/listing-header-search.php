@@ -20,7 +20,7 @@ $cat_class    = 'rtin-cat-space rtin-input-item';
 $key_class    = 'rtin-key-space rtin-input-item';
 $btn_class    = 'rtin-btn-holder';
 
-$loc_text = esc_html__( 'Select Location', 'petslist' );
+$loc_text = esc_html__( 'All Locations', 'petslist' );
 $cat_text = esc_html__( 'Select Category', 'petslist' );
 $typ_text = esc_html__( 'Select Type', 'petslist' );
 
@@ -47,64 +47,18 @@ $dog_search_url = get_post_type_archive_link('dd_dog') ?: home_url('/dog-directo
                 <div class="<?php echo esc_attr( $loc_class ); ?>">
                     <div class="form-group">
                         <i class="icon-pl-location"></i>
-						<?php if ( $style == 'suggestion' ): ?>
                             <div class="rtcl-search-input-button petslist-search-style-2 rtin-location">
-                                <input type="text" data-type="location" class="rtcl-autocomplete rtcl-location"
-                                       placeholder="<?php echo esc_attr( $loc_text ); ?>"
-                                       value="<?php echo esc_attr( $selected_location ? $selected_location->name : '' ); ?>">
-                                <input type="hidden" name="rtcl_location"
-                                       value="<?php echo esc_attr( $selected_location ? $selected_location->slug : '' ); ?>">
+                                <select name="country" id="rtcl-location-search-<?php echo wp_rand(); ?>" class="form-control rtcl-location-search">
+                                    <?php
+                                    $selected_loc = sanitize_text_field( $_GET['country'] ?? $_GET['rtcl_location'] ?? '' );
+                                    if ( function_exists( 'dd_render_location_options' ) ) {
+                                        dd_render_location_options( $selected_loc, $loc_text );
+                                    } else {
+                                        echo '<option value="">' . esc_html( $loc_text ) . '</option>';
+                                    }
+                                    ?>
+                                </select>
                             </div>
-						<?php elseif ( $style == 'standard' ): ?>
-                            <div class="rtcl-search-input-button petslist-search-style-2 rtin-location">
-								<?php
-								$loc_args = [
-									'show_option_none'  => $loc_text,
-									'option_none_value' => '',
-									'taxonomy'          => rtcl()->location,
-									'name'              => 'rtcl_location',
-									'id'                => 'rtcl-location-search-' . wp_rand(),
-									'class'             => 'form-control rtcl-location-search',
-									'selected'          => get_query_var( 'rtcl_location' ),
-									'hierarchical'      => true,
-									'value_field'       => 'slug',
-									'depth'             => Functions::get_location_depth_limit(),
-									'orderby'           => $orderby,
-									'order'             => ( 'DESC' === $order ) ? 'DESC' : 'ASC',
-									'show_count'        => false,
-									'hide_empty'        => false,
-								];
-								if ( '_rtcl_order' === $orderby ) {
-									$args['orderby']  = 'meta_value_num';
-									$args['meta_key'] = '_rtcl_order';
-								}
-								wp_dropdown_categories( $loc_args );
-								?>
-                            </div>
-						<?php elseif ( $style == 'dependency' ): ?>
-                            <div class="rtcl-search-input-button petslist-search-style-2 rtin-location">
-								<?php
-								Functions::dropdown_terms( [
-									'show_option_none' => $loc_text,
-									'taxonomy'         => rtcl()->location,
-									'name'             => 'l',
-									'class'            => 'form-control',
-									'selected'         => $selected_location ? $selected_location->term_id : 0
-								] );
-								?>
-                            </div>
-						<?php else: ?>
-                            <div class="rtcl-search-input-button rtcl-search-input-location">
-                                <span class="cl-input-icon">
-                                    <img src="<?php echo esc_url( Helper::get_img( 'map.svg' ) ); ?>" alt="<?php esc_attr_e( 'icon', 'petslist' ); ?>"/>
-                                </span>
-                                <span class="search-input-label location-name">
-                                    <?php echo esc_html( $selected_location ? $selected_location->name : $loc_text ); ?>
-                                </span>
-                                <input type="hidden" class="rtcl-term-field" name="rtcl_location"
-                                       value="<?php echo esc_attr( $selected_location ? $selected_location->slug : '' ); ?>">
-                            </div>
-						<?php endif; ?>
                     </div>
                 </div>
 			<?php else: ?>

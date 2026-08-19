@@ -148,6 +148,8 @@ class DogCPT {
                 if ( $key === 'breed' ) {
                     // Breed uses structured optgroup renderer
                     dd_render_breed_options( $value );
+                } elseif ( $key === 'country' ) {
+                    dd_render_location_options( $value, __( 'Select State', 'petslist' ) );
                 } else {
                     foreach ( $field['options'] as $val => $label ) {
                         $opt_val = is_numeric($val) && !is_string($val) ? $label : $val;
@@ -255,7 +257,7 @@ class DogCPT {
             'pedigree'          => [ 'label' => __('Pedigree', 'petslist'), 'type' => 'textarea' ],
             'health_testing'    => [ 'label' => __('Health Testing (Optional)', 'petslist'), 'type' => 'textarea' ],
             'registration_no'   => [ 'label' => __('Registration Number', 'petslist'), 'type' => 'text' ],
-            'country'           => [ 'label' => __('Country', 'petslist'), 'type' => 'text' ],
+            'country'           => [ 'label' => __('State', 'petslist'), 'type' => 'select' ],
             'city'              => [ 'label' => __('City', 'petslist'), 'type' => 'text' ],
             'contact_phone'     => [ 'label' => __('Contact Phone', 'petslist'), 'type' => 'text' ],
             'contact_email'     => [ 'label' => __('Contact Email', 'petslist'), 'type' => 'text' ],

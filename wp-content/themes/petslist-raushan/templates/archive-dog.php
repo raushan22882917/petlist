@@ -75,11 +75,36 @@ if ( $gender_filter ) {
     ];
 }
 if ( $country_filter ) {
-    $meta_queries[] = [
-        'key'     => '_dd_dog_meta',
-        'value'   => $country_filter,
-        'compare' => 'LIKE',
-    ];
+    $states_map = function_exists('dd_get_us_states') ? dd_get_us_states() : [];
+    $state_name = $states_map[ strtoupper($country_filter) ] ?? '';
+    if ( ! $state_name && in_array( $country_filter, $states_map, true ) ) {
+        $state_code = array_search( $country_filter, $states_map, true );
+        $state_name = $country_filter;
+    } else {
+        $state_code = strtoupper($country_filter);
+    }
+
+    if ( $state_name && $state_code ) {
+        $meta_queries[] = [
+            'relation' => 'OR',
+            [
+                'key'     => '_dd_dog_meta',
+                'value'   => $state_code,
+                'compare' => 'LIKE',
+            ],
+            [
+                'key'     => '_dd_dog_meta',
+                'value'   => $state_name,
+                'compare' => 'LIKE',
+            ],
+        ];
+    } else {
+        $meta_queries[] = [
+            'key'     => '_dd_dog_meta',
+            'value'   => $country_filter,
+            'compare' => 'LIKE',
+        ];
+    }
 }
 if ( $health_filter === 'yes' ) {
     $meta_queries[] = ['key' => '_dd_dog_health', 'compare' => 'EXISTS'];
@@ -147,12 +172,12 @@ $query = new WP_Query($args);
                     </div>
                     <div class="dd-search-form__field">
                         <select name="country">
-                            <option value=""><?php _e('All Countries', 'petslist'); ?></option>
-                            <?php foreach ( $countries as $country ) : if(empty($country)) continue; ?>
-                            <option value="<?php echo esc_attr($country); ?>" <?php selected($country_filter, $country); ?>>
-                                <?php echo esc_html($country); ?>
-                            </option>
-                            <?php endforeach; ?>
+                            <option value=""><?php _e('All Locations', 'petslist'); ?></option>
+                            <?php
+                            if ( function_exists( 'dd_render_location_options' ) ) {
+                                dd_render_location_options( $country_filter, false );
+                            }
+                            ?>
                         </select>
                     </div>
                     <div class="dd-search-form__field">
@@ -207,8 +232,9 @@ $query = new WP_Query($args);
                 $color      = $meta['color']  ?? '';
                 $city       = $meta['city']   ?? '';
                 $country    = $meta['country']?? '';
+                $full_state = function_exists('dd_get_state_full_name') ? dd_get_state_full_name($country) : $country;
                 $reg_no     = $meta['registration_no'] ?? '';
-                $location   = trim(implode(', ', array_filter([$city, $country])));
+                $location   = trim(implode(', ', array_filter([$city, $full_state])));
                 $health_data = get_post_meta($pid, '_dd_dog_health', true);
                 $has_health  = !empty($health_data) && array_filter((array)$health_data);
                 $is_male     = strtolower($gender) === 'male';

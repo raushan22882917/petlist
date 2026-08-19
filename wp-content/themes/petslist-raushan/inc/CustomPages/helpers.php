@@ -431,15 +431,15 @@ function petslist_render_dog_breeds($limit = 0)
 				} );
 
 				$display_style = $is_expanded ? 'display: block;' : 'display: none;';
-				echo '<ul class="sub-category-list" style="' . $display_style . ' margin-top: 8px; padding-left: 55px; list-style: none; width: 100%;">';
+				echo '<ul class="sub-category-list" style="' . $display_style . ' margin-top: 4px; padding-left: 16px; list-style: none; width: 100%;">';
 				foreach ($children as $child) {
 					$child_link = add_query_arg('breed', $child->name, $directory);
 					$is_active_child = (strcasecmp($current_breed, $child->name) === 0);
 					$child_style = $is_active_child ? 'font-weight: 700; color: #bd8c42;' : 'font-weight: 500; color: #333333;';
 					$child_real_count = function_exists('dd_get_breed_dog_count') ? dd_get_breed_dog_count($child->term_id) : $child->count;
-					echo '<li class="sub-category-item" style="display: flex; align-items: center; padding: 4px 0; margin-bottom: 2px;">';
-					echo '<a href="' . esc_url($child_link) . '" style="font-size: 0.95rem; text-decoration: none; ' . $child_style . '">' . esc_html($child->name) . '</a>';
-					echo '<span style="font-size: 0.85rem; color: #666666; margin-left: 8px;">(' . esc_html(number_format_i18n($child_real_count)) . ')</span>';
+					echo '<li class="sub-category-item" style="display: flex; align-items: center; justify-content: space-between; padding: 3px 0; margin-bottom: 1px;">';
+					echo '<a href="' . esc_url($child_link) . '" style="font-size: 0.9rem; text-decoration: none; ' . $child_style . '">' . esc_html($child->name) . '</a>';
+					echo '<span style="font-size: 0.82rem; color: #717182;">(' . esc_html(number_format_i18n($child_real_count)) . ')</span>';
 					echo '</li>';
 				}
 				echo '</ul>';
