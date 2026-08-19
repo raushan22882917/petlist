@@ -145,6 +145,16 @@ function dd_nav_icon($k) {
                 <span class="ddu-sidebar__nav-label"><?php _e('Browse Directory','petslist'); ?></span>
                 <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 10px; margin-left: auto; opacity: 0.4;"></i>
             </a>
+
+            <?php if ( current_user_can( 'manage_options' ) ) : ?>
+            <!-- WP Admin link for administrators -->
+            <a href="<?php echo esc_url( admin_url() ); ?>"
+               class="ddu-sidebar__nav-item" style="color: #b45309; font-weight: 600;">
+                <span class="ddu-sidebar__nav-icon"><i class="fa-solid fa-gauge-high" style="font-size: 15px;"></i></span>
+                <span class="ddu-sidebar__nav-label"><?php _e('WP Admin Panel','petslist'); ?></span>
+                <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 10px; margin-left: auto; opacity: 0.6;"></i>
+            </a>
+            <?php endif; ?>
         </nav>
 
         <!-- Divider -->
