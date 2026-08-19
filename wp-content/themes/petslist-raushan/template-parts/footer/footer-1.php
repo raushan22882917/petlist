@@ -11,6 +11,8 @@ use RadiusTheme\Petslist\Options;
 $socials = Helper::socials();
 $widget_areas = Options::$options['f1_widgets_area'];
 $social_btn = $socials ? 'has-social' : 'none-social';
+$privacy_url = get_privacy_policy_url() ? get_privacy_policy_url() : home_url( '/privacy-policy/' );
+$terms_url   = home_url( '/terms-and-conditions/' );
 ?>
 
 <!--=====================================-->
@@ -34,7 +36,7 @@ $social_btn = $socials ? 'has-social' : 'none-social';
         <div class="container">
             <div class="copyright-area justify-content-center text-center">
                 <div class="copyright-text text-center w-100">
-                    <p class="footer-copyright mb-0 text-center">&copy; Copyright 2026 Studs 4 You &ndash; All Right Reserved</p>
+                    <p class="footer-copyright mb-0 text-center">&copy; Copyright <?php echo esc_html( date( 'Y' ) ); ?> Studs 4 You &ndash; All Right Reserved<span class="footer-sep">|</span><a href="<?php echo esc_url( $privacy_url ); ?>"><?php esc_html_e( 'Privacy Policy', 'petslist' ); ?></a><span class="footer-sep">|</span><a href="<?php echo esc_url( $terms_url ); ?>"><?php esc_html_e( 'Terms and Conditions', 'petslist' ); ?></a></p>
                 </div>
             </div>
         </div>

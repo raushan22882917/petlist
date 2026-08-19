@@ -11,10 +11,12 @@ use RadiusTheme\Petslist\Options;
 $socials = Helper::socials();
 $widget_areas = Options::$options['f3_widgets_area'];
 
+$privacy_url = get_privacy_policy_url() ? get_privacy_policy_url() : home_url( '/privacy-policy/' );
+$terms_url   = home_url( '/terms-and-conditions/' );
 ?>
 
 <!--=====================================-->
-<!--=        Footer 1 Area Start        =-->
+<!--=        Footer 3 Area Start        =-->
 <!--=====================================-->
 <footer class="footer footer-style-3">
 
@@ -23,7 +25,7 @@ $widget_areas = Options::$options['f3_widgets_area'];
             <div class="copyright-area justify-content-center text-center">
                 <div class="copyright-text text-center w-100">
                     <p class="footer-copyright mb-0 text-center">
-                        &copy; Copyright 2026 Studs 4 You &ndash; All Right Reserved
+                        &copy; Copyright <?php echo esc_html( date( 'Y' ) ); ?> Studs 4 You &ndash; All Right Reserved<span class="footer-sep">|</span><a href="<?php echo esc_url( $privacy_url ); ?>"><?php esc_html_e( 'Privacy Policy', 'petslist' ); ?></a><span class="footer-sep">|</span><a href="<?php echo esc_url( $terms_url ); ?>"><?php esc_html_e( 'Terms and Conditions', 'petslist' ); ?></a>
                     </p>
                 </div>
             </div>

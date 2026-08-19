@@ -41,4 +41,28 @@ footer.site-footer,
     width: 100%;
 }
 
+.footer-copyright {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0;
+    line-height: 1.8;
+}
 
+.footer-copyright a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.2s ease;
+}
+
+.footer-copyright a:hover {
+    color: var(--petslist-primary-color, #02c5bd) !important;
+}
+
+.footer-copyright .footer-sep {
+    margin: 0 10px;
+    opacity: 0.45;
+    display: inline-block;
+}
