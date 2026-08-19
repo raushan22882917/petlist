@@ -96,10 +96,14 @@ $hero_bg = petslist_img_url('hero_bg');
 									setup_postdata( $post );
 									$pid = $post->ID;
 									$meta = dd_get_dog_meta( $pid );
-									$thumb = get_the_post_thumbnail_url( $pid, 'large' ) 
-										?: ( get_post_meta( $pid, '_dd_front_photo', true ) 
-											? wp_get_attachment_url( get_post_meta( $pid, '_dd_front_photo', true ) ) 
-											: petslist_theme_img_url( 'theme/flyer-ad-placeholder.png' ) );
+									$thumb = get_the_post_thumbnail_url( $pid, 'large' );
+									if ( ! $thumb ) {
+										$front_id = get_post_meta( $pid, '_dd_front_photo', true );
+										$thumb = $front_id ? wp_get_attachment_url( $front_id ) : '';
+									}
+									if ( ! $thumb || strpos( $thumb, 'download-2' ) !== false || strpos( $thumb, 'dog-placeholder' ) !== false ) {
+										$thumb = petslist_theme_img_url( 'theme/flyer-ad-placeholder.png' );
+									}
 									$terms = get_the_terms( $pid, 'dd_breed' );
 									$breed = ( $terms && ! is_wp_error( $terms ) ) ? $terms[0]->name : ( $meta['breed'] ?? '' );
 									?>
