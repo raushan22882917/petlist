@@ -24,6 +24,7 @@ $admin_nav = [
     'payments'    => ['icon'=>'billing', 'label'=>__('Payments','petslist')],
     'plans'       => ['icon'=>'plans',   'label'=>__('Plans','petslist')],
     'settings'    => ['icon'=>'settings','label'=>__('Settings','petslist')],
+    'profile'     => ['icon'=>'profile', 'label'=>__('My Profile','petslist')],
 ];
 
 // Admin SVG icons
@@ -38,6 +39,7 @@ function dda_icon($k) {
         'billing' => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>',
         'plans'   => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2M12 12h.01M12 16h.01"/></svg>',
         'settings'=> '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>',
+        'profile' => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
         'exit'    => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>',
     ];
     return $i[$k] ?? '';
@@ -61,8 +63,8 @@ function dda_icon($k) {
             </button>
         </div>
 
-        <!-- User identity -->
-        <div class="ddu-sidebar__user">
+        <!-- User identity (clickable to profile) -->
+        <a href="<?php echo esc_url(dd_dashboard_url('profile')); ?>" class="ddu-sidebar__user" title="<?php esc_attr_e('View My Profile', 'petslist'); ?>" style="text-decoration:none; color:inherit;">
             <div class="ddu-sidebar__user-avatar-wrap">
                 <?php echo get_avatar($uid, 36, '', '', ['class'=>'ddu-sidebar__user-avatar']); ?>
                 <span class="ddu-sidebar__user-dot ddu-sidebar__user-dot--active"></span>
@@ -71,7 +73,7 @@ function dda_icon($k) {
                 <span class="ddu-sidebar__user-name"><?php echo esc_html($user->display_name); ?></span>
                 <span class="ddu-sidebar__user-email"><?php echo esc_html($user->user_email); ?></span>
             </div>
-        </div>
+        </a>
 
         <!-- Divider -->
         <div class="ddu-sidebar__divider"><span><?php _e('Management','petslist'); ?></span></div>
@@ -132,6 +134,9 @@ function dda_icon($k) {
                     <?php if ($tab !== 'overview' && isset($admin_nav[$tab])) : ?>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M9 18l6-6-6-6"/></svg>
                     <span><?php echo esc_html($admin_nav[$tab]['label']); ?></span>
+                    <?php elseif ($tab === 'password') : ?>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M9 18l6-6-6-6"/></svg>
+                    <span><?php _e('Change Password', 'petslist'); ?></span>
                     <?php endif; ?>
                 </nav>
             </div>
@@ -142,8 +147,51 @@ function dda_icon($k) {
                 <a href="<?php echo esc_url(admin_url('admin.php?page=dd-settings')); ?>" class="ddu-btn-outline" style="font-size: 12px; padding: 4px 12px; height: auto; line-height: 1.5; border-color: rgba(255,255,255,0.15); color: var(--dds-text-muted);">
                     <?php echo dda_icon('settings'); ?> <?php _e('Settings','petslist'); ?>
                 </a>
-                <div class="ddu-topbar__avatar-btn">
-                    <?php echo get_avatar($uid, 32, '', '', ['class'=>'ddu-topbar__avatar']); ?>
+                
+                <!-- Profile & Logout Dropdown -->
+                <div class="ddu-topbar__profile-menu">
+                    <button type="button" class="ddu-topbar__avatar-btn" id="ddu-header-avatar-toggle" aria-expanded="false" aria-label="<?php esc_attr_e('Account menu', 'petslist'); ?>">
+                        <?php echo get_avatar($uid, 32, '', '', ['class'=>'ddu-topbar__avatar']); ?>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="12" height="12" class="ddu-topbar__avatar-chevron"><path d="M6 9l6 6 6-6"/></svg>
+                    </button>
+                    <div class="ddu-profile-dropdown" id="ddu-header-profile-dropdown">
+                        <div class="ddu-profile-dropdown__header">
+                            <div class="ddu-profile-dropdown__avatar">
+                                <?php echo get_avatar($uid, 38, '', '', ['class'=>'ddu-topbar__avatar']); ?>
+                            </div>
+                            <div class="ddu-profile-dropdown__info">
+                                <span class="ddu-profile-dropdown__name"><?php echo esc_html($user->display_name); ?></span>
+                                <span class="ddu-profile-dropdown__email"><?php echo esc_html($user->user_email); ?></span>
+                                <span class="ddu-profile-dropdown__badge"><?php _e('Administrator', 'petslist'); ?></span>
+                            </div>
+                        </div>
+                        <div class="ddu-profile-dropdown__divider"></div>
+                        <div class="ddu-profile-dropdown__menu">
+                            <a href="<?php echo esc_url(dd_dashboard_url('profile')); ?>" class="ddu-profile-dropdown__item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                <span><?php _e('My Profile', 'petslist'); ?></span>
+                            </a>
+                            <a href="<?php echo esc_url(dd_dashboard_url('password')); ?>" class="ddu-profile-dropdown__item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                                <span><?php _e('Change Password', 'petslist'); ?></span>
+                            </a>
+                            <a href="<?php echo esc_url(dd_dashboard_url('settings')); ?>" class="ddu-profile-dropdown__item">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+                                <span><?php _e('Settings', 'petslist'); ?></span>
+                            </a>
+                            <a href="<?php echo esc_url(dd_dog_directory_url()); ?>" class="ddu-profile-dropdown__item" target="_blank">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+                                <span><?php _e('View Directory', 'petslist'); ?></span>
+                            </a>
+                        </div>
+                        <div class="ddu-profile-dropdown__divider"></div>
+                        <div class="ddu-profile-dropdown__footer">
+                            <a href="<?php echo esc_url(wp_logout_url(dd_login_url())); ?>" class="ddu-profile-dropdown__item ddu-profile-dropdown__item--logout">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+                                <span><?php _e('Log Out', 'petslist'); ?></span>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </header>
@@ -161,6 +209,8 @@ function dda_icon($k) {
                 'payments'    => get_template_directory() . '/template-parts/dashboard/admin-tab-payments.php',
                 'plans'       => get_template_directory() . '/template-parts/dashboard/admin-tab-plans.php',
                 'settings'    => get_template_directory() . '/template-parts/dashboard/admin-tab-settings.php',
+                'profile'     => get_template_directory() . '/template-parts/dashboard/tab-profile.php',
+                'password'    => get_template_directory() . '/template-parts/dashboard/tab-password.php',
             ];
             $tab_file = $admin_tabs[$tab] ?? $admin_tabs['overview'];
             if ( file_exists($tab_file) ) {

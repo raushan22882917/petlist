@@ -199,7 +199,174 @@ body.admin-bar .ddu-sidebar {
   background: linear-gradient(135deg,#f59e0b,#ef4444);
   color: #fff; border-radius: 50px; text-decoration: none;
 }
-.ddu-topbar__avatar { width: 32px; height: 32px; border-radius: 8px; }
+/* Profile Menu & Dropdown */
+.ddu-topbar__profile-menu {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.ddu-topbar__avatar-btn {
+  background: none;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 3px 6px 3px 3px;
+  border-radius: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+.ddu-topbar__avatar-btn:hover,
+.ddu-topbar__avatar-btn:focus-visible {
+  border-color: var(--dds-primary, #02c5bd);
+  background: rgba(2, 197, 189, 0.06);
+}
+.ddu-topbar__avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+.ddu-topbar__avatar-chevron {
+  color: var(--dds-text-muted, #64748b);
+  transition: transform 0.2s ease;
+}
+.ddu-topbar__avatar-btn[aria-expanded="true"] .ddu-topbar__avatar-chevron {
+  transform: rotate(180deg);
+}
+
+.ddu-profile-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 260px;
+  background: #ffffff;
+  border: 1px solid var(--dds-panel-border, #e2e8f0);
+  border-radius: 12px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.08);
+  padding: 8px 0;
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+}
+.ddu-profile-dropdown.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.ddu-profile-dropdown__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px 12px;
+}
+.ddu-profile-dropdown__avatar img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e2e8f0;
+  display: block;
+}
+.ddu-profile-dropdown__info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.ddu-profile-dropdown__name {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--dds-heading, #1e293b);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ddu-profile-dropdown__email {
+  font-size: 11.5px;
+  color: var(--dds-text-muted, #64748b);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 4px;
+}
+.ddu-profile-dropdown__badge {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: #f0fdfa;
+  color: #0d9488;
+  border: 1px solid #ccfbf1;
+}
+
+.ddu-profile-dropdown__divider {
+  height: 1px;
+  background: var(--dds-panel-border, #e2e8f0);
+  margin: 6px 0;
+}
+
+.ddu-profile-dropdown__menu {
+  display: flex;
+  flex-direction: column;
+}
+.ddu-profile-dropdown__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  color: var(--dds-text, #334155);
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.ddu-profile-dropdown__item i,
+.ddu-profile-dropdown__item svg {
+  width: 16px;
+  text-align: center;
+  font-size: 14px;
+  color: #64748b;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.ddu-profile-dropdown__item:hover {
+  background: #f8fafc;
+  color: var(--dds-primary, #02c5bd);
+}
+.ddu-profile-dropdown__item:hover i,
+.ddu-profile-dropdown__item:hover svg {
+  color: var(--dds-primary, #02c5bd);
+}
+
+.ddu-profile-dropdown__footer {
+  padding-top: 2px;
+}
+.ddu-profile-dropdown__item--logout {
+  color: #ef4444 !important;
+}
+.ddu-profile-dropdown__item--logout i,
+.ddu-profile-dropdown__item--logout svg {
+  color: #ef4444 !important;
+}
+.ddu-profile-dropdown__item--logout:hover {
+  background: #fef2f2 !important;
+  color: #dc2626 !important;
+}
+
+/* User identity sidebar link hover */
+a.ddu-sidebar__user:hover {
+  background: rgba(0, 0, 0, 0.03);
+}
 
 /* Alert strip */
 .ddu-alert-strip {

@@ -1,3 +1,4 @@
 .env
 .DS_Store
 _php_server.log
+wp-content/debug.log

@@ -53,6 +53,27 @@
         $overlay.removeClass('active');
     });
 
+    // ── Header Profile Dropdown ────────────────────────────
+    $(document).on('click', '#ddu-header-avatar-toggle', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var $dropdown = $(this).closest('.ddu-topbar__profile-menu').find('.ddu-profile-dropdown');
+        var isOpen = $dropdown.hasClass('active');
+        $('.ddu-profile-dropdown').removeClass('active');
+        $('.ddu-topbar__avatar-btn').attr('aria-expanded', 'false');
+        if (!isOpen) {
+            $dropdown.addClass('active');
+            $(this).attr('aria-expanded', 'true');
+        }
+    });
+
+    $(document).on('click', function (e) {
+        if (!$(e.target).closest('.ddu-topbar__profile-menu').length) {
+            $('.ddu-profile-dropdown').removeClass('active');
+            $('.ddu-topbar__avatar-btn').attr('aria-expanded', 'false');
+        }
+    });
+
     // ── Admin: Approve dog ──────────────────────────────────
     $(document).on('click', '.dd-approve-dog', function () {
         var $btn = $(this);

@@ -90,8 +90,8 @@ function dd_nav_icon($k) {
             </button>
         </div>
 
-        <!-- User identity -->
-        <div class="ddu-sidebar__user">
+        <!-- User identity (clickable to profile) -->
+        <a href="<?php echo esc_url(dd_dashboard_url('profile')); ?>" class="ddu-sidebar__user" title="<?php esc_attr_e('View My Profile', 'petslist'); ?>" style="text-decoration:none; color:inherit;">
             <div class="ddu-sidebar__user-avatar-wrap">
                 <?php echo get_avatar($uid, 36, '', '', ['class'=>'ddu-sidebar__user-avatar']); ?>
                 <span class="ddu-sidebar__user-dot <?php echo $sub ? 'ddu-sidebar__user-dot--active' : ''; ?>"></span>
@@ -100,7 +100,7 @@ function dd_nav_icon($k) {
                 <span class="ddu-sidebar__user-name"><?php echo esc_html($user->display_name); ?></span>
                 <span class="ddu-sidebar__user-email"><?php echo esc_html($user->user_email); ?></span>
             </div>
-        </div>
+        </a>
 
         <!-- Quick action -->
         <?php if ( $sub ) : ?>
@@ -218,8 +218,50 @@ function dd_nav_icon($k) {
                     ⚡ <?php _e('Upgrade','petslist'); ?>
                 </a>
                 <?php endif; ?>
-                <div class="ddu-topbar__avatar-btn">
-                    <?php echo get_avatar($uid, 32, '', '', ['class'=>'ddu-topbar__avatar']); ?>
+                <!-- Profile & Logout Dropdown -->
+                <div class="ddu-topbar__profile-menu">
+                    <button type="button" class="ddu-topbar__avatar-btn" id="ddu-header-avatar-toggle" aria-expanded="false" aria-label="<?php esc_attr_e('Account menu', 'petslist'); ?>">
+                        <?php echo get_avatar($uid, 32, '', '', ['class'=>'ddu-topbar__avatar']); ?>
+                        <i class="fa-solid fa-chevron-down ddu-topbar__avatar-chevron" style="font-size: 10px;"></i>
+                    </button>
+                    <div class="ddu-profile-dropdown" id="ddu-header-profile-dropdown">
+                        <div class="ddu-profile-dropdown__header">
+                            <div class="ddu-profile-dropdown__avatar">
+                                <?php echo get_avatar($uid, 38, '', '', ['class'=>'ddu-topbar__avatar']); ?>
+                            </div>
+                            <div class="ddu-profile-dropdown__info">
+                                <span class="ddu-profile-dropdown__name"><?php echo esc_html($user->display_name); ?></span>
+                                <span class="ddu-profile-dropdown__email"><?php echo esc_html($user->user_email); ?></span>
+                                <span class="ddu-profile-dropdown__badge"><?php echo $sub ? esc_html($sub->plan_name) . ' ' . __('Member', 'petslist') : __('Free Member', 'petslist'); ?></span>
+                            </div>
+                        </div>
+                        <div class="ddu-profile-dropdown__divider"></div>
+                        <div class="ddu-profile-dropdown__menu">
+                            <a href="<?php echo esc_url(dd_dashboard_url('profile')); ?>" class="ddu-profile-dropdown__item">
+                                <i class="fa-solid fa-user"></i>
+                                <span><?php _e('My Profile', 'petslist'); ?></span>
+                            </a>
+                            <a href="<?php echo esc_url(dd_dashboard_url('password')); ?>" class="ddu-profile-dropdown__item">
+                                <i class="fa-solid fa-lock"></i>
+                                <span><?php _e('Change Password', 'petslist'); ?></span>
+                            </a>
+                            <a href="<?php echo esc_url(dd_dashboard_url('billing')); ?>" class="ddu-profile-dropdown__item">
+                                <i class="fa-solid fa-credit-card"></i>
+                                <span><?php _e('Billing & Plan', 'petslist'); ?></span>
+                            </a>
+                            <a href="<?php echo esc_url(dd_dog_directory_url()); ?>" class="ddu-profile-dropdown__item" target="_blank">
+                                <i class="fa-solid fa-compass"></i>
+                                <span><?php _e('Browse Directory', 'petslist'); ?></span>
+                            </a>
+                        </div>
+                        <div class="ddu-profile-dropdown__divider"></div>
+                        <div class="ddu-profile-dropdown__footer">
+                            <a href="<?php echo esc_url(wp_logout_url(dd_login_url())); ?>" class="ddu-profile-dropdown__item ddu-profile-dropdown__item--logout">
+                                <i class="fa-solid fa-right-from-bracket"></i>
+                                <span><?php _e('Log Out', 'petslist'); ?></span>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </header>
