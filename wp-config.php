@@ -4,6 +4,39 @@
  * Auto-generated for local development with petslist theme.
  */
 
+// Load environment variables from .env file if present
+if ( file_exists( __DIR__ . '/.env' ) ) {
+    $env_lines = file( __DIR__ . '/.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES );
+    foreach ( $env_lines as $line ) {
+        $line = trim( $line );
+        if ( empty( $line ) || strpos( $line, '#' ) === 0 ) {
+            continue;
+        }
+        if ( strpos( $line, '=' ) !== false ) {
+            list( $env_name, $env_val ) = explode( '=', $line, 2 );
+            $env_name = trim( $env_name );
+            $env_val  = trim( $env_val, " \t\n\r\0\x0B\"'" );
+            putenv( "{$env_name}={$env_val}" );
+            $_ENV[ $env_name ]    = $env_val;
+            $_SERVER[ $env_name ] = $env_val;
+        }
+    }
+}
+
+// Stripe Environment Constants
+if ( ! defined( 'STRIPE_PUBLISHABLE_KEY' ) && getenv( 'STRIPE_PUBLISHABLE_KEY' ) ) {
+    define( 'STRIPE_PUBLISHABLE_KEY', getenv( 'STRIPE_PUBLISHABLE_KEY' ) );
+}
+if ( ! defined( 'STRIPE_SECRET_KEY' ) && getenv( 'STRIPE_SECRET_KEY' ) ) {
+    define( 'STRIPE_SECRET_KEY', getenv( 'STRIPE_SECRET_KEY' ) );
+}
+if ( ! defined( 'STRIPE_WEBHOOK_SECRET' ) && getenv( 'STRIPE_WEBHOOK_SECRET' ) ) {
+    define( 'STRIPE_WEBHOOK_SECRET', getenv( 'STRIPE_WEBHOOK_SECRET' ) );
+}
+if ( ! defined( 'STRIPE_MODE' ) && getenv( 'STRIPE_MODE' ) ) {
+    define( 'STRIPE_MODE', getenv( 'STRIPE_MODE' ) );
+}
+
 // ** Database settings ** //
 define( 'DB_NAME', 'petslist_db' );
 define( 'DB_USER', 'root' );

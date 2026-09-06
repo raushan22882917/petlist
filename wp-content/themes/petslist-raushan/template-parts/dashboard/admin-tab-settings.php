@@ -52,30 +52,36 @@ if ( isset($_POST['dd_admin_settings_nonce']) && wp_verify_nonce($_POST['dd_admi
 
         <!-- Stripe -->
         <div class="ddu-panel" style="margin-bottom:20px">
-            <div class="ddu-panel__head">
+            <div class="ddu-panel__head" style="display:flex; justify-content:space-between; align-items:center;">
                 <h3 class="ddu-panel__title">💳 <?php _e('Stripe Payment Settings','petslist'); ?></h3>
+                <?php if ( defined('STRIPE_PUBLISHABLE_KEY') || getenv('STRIPE_PUBLISHABLE_KEY') ) : ?>
+                    <span style="font-size:12px; background:#e0f2fe; color:#0369a1; padding:3px 10px; border-radius:12px; font-weight:600;">⚡ <?php _e('.env Active','petslist'); ?></span>
+                <?php endif; ?>
             </div>
             <div class="dda-settings-grid">
                 <div class="dd-form-group">
                     <label><?php _e('Mode','petslist'); ?></label>
                     <select name="dd_stripe_mode">
-                        <option value="test" <?php selected(get_option('dd_stripe_mode','test'),'test'); ?>>🧪 Test</option>
-                        <option value="live" <?php selected(get_option('dd_stripe_mode','test'),'live'); ?>>🟢 Live</option>
+                        <option value="test" <?php selected(dd_stripe_mode(),'test'); ?>>🧪 Test</option>
+                        <option value="live" <?php selected(dd_stripe_mode(),'live'); ?>>🟢 Live</option>
                     </select>
                 </div>
                 <div class="dd-form-group">
                     <label><?php _e('Publishable / API Key','petslist'); ?></label>
-                    <input type="text" name="dd_stripe_publishable_key" value="<?php echo esc_attr(get_option('dd_stripe_publishable_key')); ?>" placeholder="pk_test_...">
+                    <input type="text" name="dd_stripe_publishable_key" value="<?php echo esc_attr(dd_stripe_publishable_key()); ?>" placeholder="pk_test_...">
                 </div>
                 <div class="dd-form-group">
                     <label><?php _e('Secret Key','petslist'); ?></label>
-                    <input type="password" name="dd_stripe_secret_key" value="<?php echo esc_attr(get_option('dd_stripe_secret_key')); ?>" placeholder="sk_test_...">
+                    <input type="password" name="dd_stripe_secret_key" value="<?php echo esc_attr(dd_stripe_secret_key()); ?>" placeholder="sk_test_...">
                 </div>
                 <div class="dd-form-group">
                     <label><?php _e('Webhook Secret (Optional)','petslist'); ?></label>
-                    <input type="password" name="dd_stripe_webhook_secret" value="<?php echo esc_attr(get_option('dd_stripe_webhook_secret')); ?>" placeholder="whsec_...">
+                    <input type="password" name="dd_stripe_webhook_secret" value="<?php echo esc_attr(dd_stripe_webhook_secret()); ?>" placeholder="whsec_...">
                 </div>
             </div>
+            <p style="font-size:12px; color:#64748b; margin:12px 0 0; padding:0 15px 15px;">
+                💡 <?php _e('Keys can be configured here or in the root <code>.env</code> file (<code>STRIPE_MODE</code>, <code>STRIPE_PUBLISHABLE_KEY</code>, <code>STRIPE_SECRET_KEY</code>, <code>STRIPE_WEBHOOK_SECRET</code>). Environment variables take priority for seamless live key rotation in the future.', 'petslist'); ?>
+            </p>
         </div>
 
         <!-- PayPal -->

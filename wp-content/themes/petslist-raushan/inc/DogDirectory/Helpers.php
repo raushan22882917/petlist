@@ -747,18 +747,83 @@ function dd_require_subscription( $redirect = '' ) {
 // STRIPE HELPERS
 // -------------------------------------------------------
 
+function dd_get_env_var( $name, $default = '' ) {
+    if ( defined($name) && constant($name) !== '' ) {
+        return constant($name);
+    }
+    $val = getenv($name) ?: ($_ENV[$name] ?? ($_SERVER[$name] ?? ''));
+    if ( ! empty($val) ) {
+        return $val;
+    }
+    // Auto-read .env file from ABSPATH if exists and not yet loaded into getenv
+    static $env_cache = null;
+    if ( $env_cache === null ) {
+        $env_cache = [];
+        $env_file  = defined('ABSPATH') ? ABSPATH . '.env' : dirname(__DIR__, 4) . '/.env';
+        if ( file_exists($env_file) ) {
+            $lines = file($env_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+            if ( $lines ) {
+                foreach ($lines as $line) {
+                    $line = trim($line);
+                    if ( ! empty($line) && strpos($line, '#') !== 0 && strpos($line, '=') !== false ) {
+                        list($k, $v) = explode('=', $line, 2);
+                        $env_cache[trim($k)] = trim($v, " \t\n\r\0\x0B\"'");
+                    }
+                }
+            }
+        }
+    }
+    return $env_cache[$name] ?? $default;
+}
+
 function dd_stripe_publishable_key() {
+    // 1. Environment variable / .env file / Constant
+    $env = dd_get_env_var('STRIPE_PUBLISHABLE_KEY');
+    if ( ! empty($env) ) {
+        return $env;
+    }
+
+    // 2. Database Option
     $key = get_option('dd_stripe_publishable_key', '');
-    return ! empty($key) ? $key : base64_decode('cGtfdGVzdF81MVR5QldKUlM0bXZYSTF1b1NPdWdTQlF1TUJKYzFPREhhcHQwUExzNTlrNFB3Q09Bd2ZjZGw0T1NiSnVZbk5DUWcxQmpDSnZMRXB4bThGaExzNmZpa0RlWjAwT2JMc3FVOWY=');
+    if ( ! empty($key) ) {
+        return $key;
+    }
+
+    // 3. Default fallback
+    return base64_decode('cGtfdGVzdF81MVVCekxRR2Q1eVRtWHoxOHdMTXJJdXRNbXFKaEU5eThpN1haY2ttT3JYdk5jbGZaaE1KN01mQjNpN05tYWE5MGs2ejl4MzVvS0tWS3dtVTg0TFZyVFB1VjAwbFNCVEpGSzY=');
 }
 
 function dd_stripe_secret_key() {
+    // 1. Environment variable / .env file / Constant
+    $env = dd_get_env_var('STRIPE_SECRET_KEY');
+    if ( ! empty($env) ) {
+        return $env;
+    }
+
+    // 2. Database Option
     $key = get_option('dd_stripe_secret_key', '');
-    return ! empty($key) ? $key : base64_decode('c2tfdGVzdF81MVR5QldKUlM0bXZYSTF1b2Zubkc0QjdHUDJwWmdsM1NRdFdnaWJsZ2dZMmo0MWc1UGdvWnF1c0tuajJMN2ZDZjBPTFkzSm15VXVsQUVVVzNFZnc2aXN3bDAwbWZtZzM4dUc=');
+    if ( ! empty($key) ) {
+        return $key;
+    }
+
+    // 3. Default fallback
+    return base64_decode('c2tfdGVzdF81MVVCekxRR2Q1eVRtWHoxOGNPWGtLM2ZhWm4ybTVpSGc4QWVCNXBNSmdYM0M2eWdBTmpxdDBLcjh6YXhHczMyMU9FWm9ENTR4NE9FRUVYUTIxT2NwbkRJSDAwalNQOVJzTkw=');
 }
 
 function dd_stripe_webhook_secret() {
+    $env = dd_get_env_var('STRIPE_WEBHOOK_SECRET');
+    if ( ! empty($env) ) {
+        return $env;
+    }
     return get_option('dd_stripe_webhook_secret', '');
+}
+
+function dd_stripe_mode() {
+    $env = dd_get_env_var('STRIPE_MODE');
+    if ( ! empty($env) ) {
+        return $env;
+    }
+    return get_option('dd_stripe_mode', 'test');
 }
 
 // -------------------------------------------------------

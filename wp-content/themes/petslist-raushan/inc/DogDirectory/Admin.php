@@ -121,24 +121,25 @@ class Admin {
                                 <th><?php _e('Mode', 'petslist'); ?></th>
                                 <td>
                                     <select name="dd_stripe_mode">
-                                        <option value="test" <?php selected(get_option('dd_stripe_mode','test'),'test'); ?>>Test</option>
-                                        <option value="live" <?php selected(get_option('dd_stripe_mode','test'),'live'); ?>>Live</option>
+                                        <option value="test" <?php selected(dd_stripe_mode(),'test'); ?>>Test</option>
+                                        <option value="live" <?php selected(dd_stripe_mode(),'live'); ?>>Live</option>
                                     </select>
                                 </td>
                             </tr>
                             <tr>
                                 <th><?php _e('Publishable Key', 'petslist'); ?></th>
-                                <td><input type="text" name="dd_stripe_publishable_key" value="<?php echo esc_attr(get_option('dd_stripe_publishable_key')); ?>" class="regular-text"></td>
+                                <td><input type="text" name="dd_stripe_publishable_key" value="<?php echo esc_attr(dd_stripe_publishable_key()); ?>" class="regular-text"></td>
                             </tr>
                             <tr>
                                 <th><?php _e('Secret Key', 'petslist'); ?></th>
-                                <td><input type="password" name="dd_stripe_secret_key" value="<?php echo esc_attr(get_option('dd_stripe_secret_key')); ?>" class="regular-text"></td>
+                                <td><input type="password" name="dd_stripe_secret_key" value="<?php echo esc_attr(dd_stripe_secret_key()); ?>" class="regular-text"></td>
                             </tr>
                             <tr>
                                 <th><?php _e('Webhook Secret', 'petslist'); ?></th>
                                 <td>
-                                    <input type="password" name="dd_stripe_webhook_secret" value="<?php echo esc_attr(get_option('dd_stripe_webhook_secret')); ?>" class="regular-text">
+                                    <input type="password" name="dd_stripe_webhook_secret" value="<?php echo esc_attr(dd_stripe_webhook_secret()); ?>" class="regular-text">
                                     <p class="description"><?php printf(__('Webhook URL: %s', 'petslist'), '<code>' . admin_url('admin-ajax.php?action=dd_stripe_webhook') . '</code>'); ?></p>
+                                    <p class="description"><?php _e('Values can also be set via the root <code>.env</code> file (<code>STRIPE_MODE</code>, <code>STRIPE_PUBLISHABLE_KEY</code>, <code>STRIPE_SECRET_KEY</code>, <code>STRIPE_WEBHOOK_SECRET</code>).', 'petslist'); ?></p>
                                 </td>
                             </tr>
                         </table>
