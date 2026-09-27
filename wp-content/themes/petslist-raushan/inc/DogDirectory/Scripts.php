@@ -63,16 +63,18 @@ class Scripts {
         // Stripe.js & Checkout JS
         if ( dd_is_checkout_page() ) {
             $stripe_pub = dd_stripe_publishable_key();
+            $deps = ['jquery'];
             if ( ! empty( $stripe_pub ) ) {
                 wp_enqueue_script( 'stripe-js', 'https://js.stripe.com/v3/', [], null, false );
-                wp_enqueue_script( 'dd-checkout', $uri . '/assets/js/dd-checkout.js', ['jquery', 'stripe-js'], $v, true );
-                wp_localize_script( 'dd-checkout', 'ddCheckout', [
-                    'publishableKey' => $stripe_pub,
-                    'ajaxUrl'        => admin_url('admin-ajax.php'),
-                    'nonce'          => wp_create_nonce('dd_checkout_nonce'),
-                    'returnUrl'      => dd_dashboard_url(),
-                ] );
+                $deps[] = 'stripe-js';
             }
+            wp_enqueue_script( 'dd-checkout', $uri . '/assets/js/dd-checkout.js', $deps, $v, true );
+            wp_localize_script( 'dd-checkout', 'ddCheckout', [
+                'publishableKey' => $stripe_pub ?: '',
+                'ajaxUrl'        => admin_url('admin-ajax.php'),
+                'nonce'          => wp_create_nonce('dd_checkout_nonce'),
+                'returnUrl'      => dd_dashboard_url(),
+            ] );
         }
 
 
@@ -123,6 +125,7 @@ class Scripts {
                 'upload'    => wp_create_nonce('dd_upload_nonce'),
                 'subscribe' => wp_create_nonce('dd_subscribe_nonce'),
                 'cancel'    => wp_create_nonce('dd_cancel_sub_nonce'),
+                'checkout'  => wp_create_nonce('dd_checkout_nonce'),
             ],
             'isLoggedIn'   => is_user_logged_in(),
             'isSubscriber' => Subscription::can_access_directory(),

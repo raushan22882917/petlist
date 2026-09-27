@@ -90,6 +90,64 @@ class Subscription {
             KEY subscription_id (subscription_id)
         ) $charset;" );
 
+        // Table: dd_coupons (Promo codes for free monthly or custom subscription access)
+        $coupons_table     = $wpdb->prefix . 'dd_coupons';
+        $redemptions_table = $wpdb->prefix . 'dd_coupon_redemptions';
+
+        dbDelta( "CREATE TABLE IF NOT EXISTS $coupons_table (
+            id              BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            code            VARCHAR(50) NOT NULL,
+            name            VARCHAR(100) NOT NULL DEFAULT '',
+            discount_type   VARCHAR(20) NOT NULL DEFAULT 'free',
+            plan_slug       VARCHAR(100) NOT NULL DEFAULT 'all',
+            duration_days   INT(11) NOT NULL DEFAULT 30,
+            max_uses        INT(11) NOT NULL DEFAULT 0,
+            times_used      INT(11) NOT NULL DEFAULT 0,
+            expires_at      DATETIME NULL,
+            is_active       TINYINT(1) NOT NULL DEFAULT 1,
+            created_at      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            UNIQUE KEY code (code)
+        ) $charset;" );
+
+        dbDelta( "CREATE TABLE IF NOT EXISTS $redemptions_table (
+            id              BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            coupon_id       BIGINT(20) UNSIGNED NOT NULL,
+            user_id         BIGINT(20) UNSIGNED NOT NULL,
+            subscription_id BIGINT(20) UNSIGNED NOT NULL,
+            code            VARCHAR(50) NOT NULL,
+            redeemed_at     DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            KEY user_id (user_id),
+            KEY coupon_id (coupon_id),
+            UNIQUE KEY user_coupon (user_id, coupon_id)
+        ) $charset;" );
+
+        // Seed default promo codes if none exist
+        $coupon_count = $wpdb->get_var( "SELECT COUNT(*) FROM $coupons_table" );
+        if ( '0' === $coupon_count || ! $coupon_count ) {
+            $wpdb->insert( $coupons_table, [
+                'code'          => 'FREEMONTH',
+                'name'          => 'Free Monthly Access',
+                'discount_type' => 'free',
+                'plan_slug'     => 'all',
+                'duration_days' => 30,
+                'max_uses'      => 0,
+                'times_used'    => 0,
+                'is_active'     => 1,
+            ] );
+            $wpdb->insert( $coupons_table, [
+                'code'          => 'FREE30',
+                'name'          => '30 Days Complimentary Access',
+                'discount_type' => 'free',
+                'plan_slug'     => 'all',
+                'duration_days' => 30,
+                'max_uses'      => 0,
+                'times_used'    => 0,
+                'is_active'     => 1,
+            ] );
+        }
+
         // Seed default plans if empty
         $count = $wpdb->get_var( "SELECT COUNT(*) FROM $plan_table" );
         if ( '0' === $count ) {
@@ -264,8 +322,8 @@ class Subscription {
     /**
      * Create subscription record
      */
-    public static function create_subscription( $user_id, $plan_id, $stripe_sub_id = '' ) {
-        if ( self::has_reached_sales_limit() ) {
+    public static function create_subscription( $user_id, $plan_id, $stripe_sub_id = '', $duration_days = 0, $bypass_limit = false ) {
+        if ( ! $bypass_limit && self::has_reached_sales_limit() ) {
             return false;
         }
 
@@ -276,8 +334,9 @@ class Subscription {
         $plan = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $plans WHERE id = %d", $plan_id ) );
         if ( ! $plan ) return false;
 
-        $starts  = current_time( 'mysql' );
-        $expires = date( 'Y-m-d H:i:s', strtotime( "+{$plan->duration} days" ) );
+        $duration = (int) ( $duration_days > 0 ? $duration_days : $plan->duration );
+        $starts   = current_time( 'mysql' );
+        $expires  = date( 'Y-m-d H:i:s', strtotime( "+{$duration} days" ) );
 
         // Expire any existing active subs
         $wpdb->update( $subs,
@@ -301,6 +360,16 @@ class Subscription {
             // Add subscriber role
             $user = new \WP_User( $user_id );
             $user->add_role( 'dd_subscriber' );
+
+            // Sync with wp_dog_users table if it exists
+            $dog_users_table = $wpdb->prefix . 'dog_users';
+            if ( $wpdb->get_var( "SHOW TABLES LIKE '$dog_users_table'" ) === $dog_users_table ) {
+                $wpdb->query( $wpdb->prepare(
+                    "UPDATE $dog_users_table SET role = 'subscriber', subscription_id = 1 WHERE wp_user_id = %d",
+                    $user_id
+                ) );
+            }
+
             do_action( 'dd_subscription_activated', $user_id, $plan, $wpdb->insert_id );
             return $wpdb->insert_id;
         }
@@ -423,4 +492,488 @@ class Subscription {
         }
         return $actions;
     }
+
+    // =========================================================
+    // PROMO CODES / COUPONS SYSTEM
+    // =========================================================
+
+    /**
+     * Validate a promo code
+     */
+    public static function validate_coupon( $code, $plan_slug = '', $user_id = 0 ) {
+        if ( ! $user_id ) {
+            $user_id = get_current_user_id();
+        }
+        $code = strtoupper( trim( sanitize_text_field( $code ) ) );
+        if ( empty( $code ) ) {
+            return [ 'valid' => false, 'message' => __( 'Please enter a promo code.', 'petslist' ) ];
+        }
+
+        global $wpdb;
+        $coupons_table     = $wpdb->prefix . 'dd_coupons';
+        $redemptions_table = $wpdb->prefix . 'dd_coupon_redemptions';
+
+        // Check table exists
+        if ( $wpdb->get_var( "SHOW TABLES LIKE '$coupons_table'" ) !== $coupons_table ) {
+            self::instance()->create_subscription_tables();
+        }
+
+        $coupon = $wpdb->get_row( $wpdb->prepare(
+            "SELECT * FROM $coupons_table WHERE UPPER(code) = %s",
+            $code
+        ) );
+
+        if ( ! $coupon ) {
+            return [ 'valid' => false, 'message' => __( 'Invalid promo code. Please check and try again.', 'petslist' ) ];
+        }
+
+        if ( ! $coupon->is_active ) {
+            return [ 'valid' => false, 'message' => __( 'This promo code is currently inactive.', 'petslist' ) ];
+        }
+
+        if ( ! empty( $coupon->expires_at ) && strtotime( $coupon->expires_at ) < time() ) {
+            return [ 'valid' => false, 'message' => __( 'This promo code has expired.', 'petslist' ) ];
+        }
+
+        if ( $coupon->max_uses > 0 && $coupon->times_used >= $coupon->max_uses ) {
+            return [ 'valid' => false, 'message' => __( 'This promo code has reached its maximum usage limit.', 'petslist' ) ];
+        }
+
+        if ( ! empty( $plan_slug ) && $coupon->plan_slug !== 'all' && $coupon->plan_slug !== $plan_slug ) {
+            return [ 'valid' => false, 'message' => sprintf( __( 'This promo code is only valid for the %s plan.', 'petslist' ), esc_html( ucfirst( $coupon->plan_slug ) ) ) ];
+        }
+
+        if ( $user_id ) {
+            $already_used = (int) $wpdb->get_var( $wpdb->prepare(
+                "SELECT COUNT(*) FROM $redemptions_table WHERE user_id = %d AND coupon_id = %d",
+                $user_id,
+                $coupon->id
+            ) );
+            if ( $already_used > 0 ) {
+                return [ 'valid' => false, 'message' => __( 'You have already redeemed this promo code.', 'petslist' ) ];
+            }
+        }
+
+        return [
+            'valid'         => true,
+            'coupon'        => $coupon,
+            'discount_type' => $coupon->discount_type,
+            'duration_days' => (int) $coupon->duration_days,
+            'message'       => __( 'Promo code applied! 100% Free monthly subscription access granted.', 'petslist' ),
+        ];
+    }
+
+    /**
+     * Redeem a promo code for a user
+     */
+    public static function redeem_coupon( $code, $plan_slug = 'monthly', $user_id = 0 ) {
+        if ( ! $user_id ) {
+            $user_id = get_current_user_id();
+        }
+        if ( ! $user_id ) {
+            return [ 'success' => false, 'message' => __( 'Please log in to redeem a promo code.', 'petslist' ) ];
+        }
+
+        $check = self::validate_coupon( $code, $plan_slug, $user_id );
+        if ( ! $check['valid'] ) {
+            return [ 'success' => false, 'message' => $check['message'] ];
+        }
+
+        $coupon = $check['coupon'];
+        $plan   = self::get_plan( $plan_slug );
+        if ( ! $plan ) {
+            // Fallback to monthly / first active plan
+            $plans = self::get_plans();
+            $plan  = $plans[0] ?? null;
+        }
+
+        if ( ! $plan ) {
+            return [ 'success' => false, 'message' => __( 'No active plan found to apply promo code.', 'petslist' ) ];
+        }
+
+        $duration = (int) ( $coupon->duration_days > 0 ? $coupon->duration_days : $plan->duration );
+        // Bypass sales cap for valid promotional invitations
+        $sub_id = self::create_subscription( $user_id, $plan->id, 'promo_' . strtolower( $coupon->code ), $duration, true );
+
+        if ( ! $sub_id ) {
+            return [ 'success' => false, 'message' => __( 'Could not activate subscription. Please try again.', 'petslist' ) ];
+        }
+
+        global $wpdb;
+        $coupons_table     = $wpdb->prefix . 'dd_coupons';
+        $redemptions_table = $wpdb->prefix . 'dd_coupon_redemptions';
+
+        // Record $0.00 payment in transaction logs
+        $txn_id = 'promo_' . strtoupper( $coupon->code ) . '_' . strtoupper( wp_generate_password( 8, false ) );
+        self::record_payment( $user_id, $sub_id, 0.00, $txn_id, '', '', 'Promo Code: ' . $coupon->code );
+
+        // Track redemption to prevent abuse
+        $wpdb->insert( $redemptions_table, [
+            'coupon_id'       => $coupon->id,
+            'user_id'         => $user_id,
+            'subscription_id' => $sub_id,
+            'code'            => $coupon->code,
+            'redeemed_at'     => current_time( 'mysql' ),
+        ] );
+
+        // Increment times used
+        $wpdb->query( $wpdb->prepare(
+            "UPDATE $coupons_table SET times_used = times_used + 1 WHERE id = %d",
+            $coupon->id
+        ) );
+
+        do_action( 'dd_coupon_redeemed', $user_id, $coupon, $sub_id );
+
+        return [
+            'success'  => true,
+            'message'  => sprintf( __( 'Congratulations! Code "%s" successfully redeemed. Your free %d-day subscription is now active!', 'petslist' ), esc_html( $coupon->code ), $duration ),
+            'redirect' => add_query_arg( [ 'tab' => 'subscription', 'promo' => 'success' ], dd_dashboard_url() ),
+        ];
+    }
+
+    /**
+     * Get coupons list
+     */
+    public static function get_coupons( $include_inactive = true ) {
+        global $wpdb;
+        $table = $wpdb->prefix . 'dd_coupons';
+        if ( $wpdb->get_var( "SHOW TABLES LIKE '$table'" ) !== $table ) {
+            self::instance()->create_subscription_tables();
+        }
+        $where = $include_inactive ? '1=1' : 'is_active = 1';
+        return $wpdb->get_results( "SELECT * FROM $table WHERE $where ORDER BY created_at DESC" );
+    }
+
+    /**
+     * Get single coupon by ID or code
+     */
+    public static function get_coupon( $id_or_code ) {
+        global $wpdb;
+        $table = $wpdb->prefix . 'dd_coupons';
+        if ( $wpdb->get_var( "SHOW TABLES LIKE '$table'" ) !== $table ) {
+            self::instance()->create_subscription_tables();
+        }
+        if ( is_numeric( $id_or_code ) ) {
+            return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table WHERE id = %d", $id_or_code ) );
+        }
+        return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table WHERE UPPER(code) = %s", strtoupper( trim( $id_or_code ) ) ) );
+    }
+
+    /**
+     * Save coupon (insert or update)
+     */
+    public static function save_coupon( $data ) {
+        global $wpdb;
+        $table = $wpdb->prefix . 'dd_coupons';
+        if ( $wpdb->get_var( "SHOW TABLES LIKE '$table'" ) !== $table ) {
+            self::instance()->create_subscription_tables();
+        }
+        $code  = strtoupper( trim( sanitize_text_field( $data['code'] ?? '' ) ) );
+        if ( empty( $code ) ) {
+            return new \WP_Error( 'invalid_code', __( 'Coupon code is required.', 'petslist' ) );
+        }
+
+        $id = absint( $data['id'] ?? 0 );
+        $payload = [
+            'code'          => $code,
+            'name'          => sanitize_text_field( $data['name'] ?? '' ),
+            'discount_type' => sanitize_text_field( $data['discount_type'] ?? 'free' ),
+            'plan_slug'     => sanitize_text_field( $data['plan_slug'] ?? 'all' ),
+            'duration_days' => max( 1, absint( $data['duration_days'] ?? 30 ) ),
+            'max_uses'      => absint( $data['max_uses'] ?? 0 ),
+            'is_active'     => isset( $data['is_active'] ) ? absint( $data['is_active'] ) : 1,
+            'expires_at'    => ! empty( $data['expires_at'] ) ? date( 'Y-m-d 23:59:59', strtotime( $data['expires_at'] ) ) : null,
+        ];
+
+        if ( $id ) {
+            $wpdb->update( $table, $payload, [ 'id' => $id ] );
+            return $id;
+        } else {
+            // Check if code already exists
+            $exists = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM $table WHERE UPPER(code) = %s", $code ) );
+            if ( $exists ) {
+                return new \WP_Error( 'duplicate_code', __( 'A promo code with this code already exists.', 'petslist' ) );
+            }
+            $payload['created_at'] = current_time( 'mysql' );
+            $wpdb->insert( $table, $payload );
+            return $wpdb->insert_id;
+        }
+    }
+
+    /**
+     * Delete coupon
+     */
+    public static function delete_coupon( $id ) {
+        global $wpdb;
+        $table = $wpdb->prefix . 'dd_coupons';
+        return $wpdb->delete( $table, [ 'id' => absint( $id ) ] );
+    }
+
+    /**
+     * Get recent coupon redemptions
+     */
+    public static function get_coupon_redemptions( $limit = 50 ) {
+        global $wpdb;
+        $r_table = $wpdb->prefix . 'dd_coupon_redemptions';
+        $u_table = $wpdb->users;
+        if ( $wpdb->get_var( "SHOW TABLES LIKE '$r_table'" ) !== $r_table ) {
+            return [];
+        }
+        return $wpdb->get_results( $wpdb->prepare(
+            "SELECT r.*, u.user_login, u.user_email, u.display_name
+             FROM $r_table r
+             LEFT JOIN $u_table u ON r.user_id = u.ID
+             ORDER BY r.redeemed_at DESC LIMIT %d",
+            $limit
+        ) );
+    }
+
+    // =========================================================
+    // ADMIN SUBSCRIPTION MANAGEMENT CONTROLS
+    // =========================================================
+
+    /**
+     * Admin manually grants a subscription to any user
+     */
+    public static function admin_grant_subscription( $user_id, $plan_id, $duration_days = 30, $notes = '' ) {
+        $user_id = absint( $user_id );
+        $plan_id = absint( $plan_id );
+        $duration_days = max( 1, absint( $duration_days ?: 30 ) );
+
+        $user = get_userdata( $user_id );
+        if ( ! $user ) {
+            return new \WP_Error( 'invalid_user', __( 'User not found.', 'petslist' ) );
+        }
+
+        global $wpdb;
+        $plan = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}dd_plans WHERE id = %d", $plan_id ) );
+        if ( ! $plan ) {
+            return new \WP_Error( 'invalid_plan', __( 'Selected plan not found.', 'petslist' ) );
+        }
+
+        // Create subscription with bypass limit
+        $sub_id = self::create_subscription( $user_id, $plan_id, 'admin_grant', $duration_days, true );
+        if ( ! $sub_id ) {
+            return new \WP_Error( 'create_failed', __( 'Failed to create subscription record.', 'petslist' ) );
+        }
+
+        // Record zero-dollar administrative transaction in payments
+        $tx_id = 'ADMIN-' . strtoupper( wp_generate_password( 8, false ) );
+        self::record_payment( $user_id, $sub_id, 0.00, $tx_id, '', '', 'admin_grant' );
+
+        if ( ! empty( $notes ) ) {
+            update_user_meta( $user_id, 'dd_admin_sub_notes', sanitize_text_field( $notes ) );
+        }
+
+        self::admin_sync_user_status( $user_id );
+
+        return [
+            'success'         => true,
+            'subscription_id' => $sub_id,
+            'message'         => sprintf( __( 'Subscription "%s" (%d days) successfully granted to %s.', 'petslist' ), esc_html( $plan->name ), $duration_days, esc_html( $user->display_name ) ),
+        ];
+    }
+
+    /**
+     * Admin extends an existing subscription by N days
+     */
+    public static function admin_extend_subscription( $sub_id, $days = 30 ) {
+        global $wpdb;
+        $subs_table = $wpdb->prefix . 'dd_subscriptions';
+        $sub = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $subs_table WHERE id = %d", absint( $sub_id ) ) );
+        if ( ! $sub ) {
+            return new \WP_Error( 'not_found', __( 'Subscription not found.', 'petslist' ) );
+        }
+
+        $days = max( 1, absint( $days ?: 30 ) );
+        $now = current_time( 'mysql' );
+
+        // If subscription is active and in the future, add to current expires_at
+        if ( $sub->status === 'active' && strtotime( $sub->expires_at ) > strtotime( $now ) ) {
+            $base_time = strtotime( $sub->expires_at );
+            $new_expires = date( 'Y-m-d H:i:s', strtotime( "+{$days} days", $base_time ) );
+            $new_starts  = $sub->starts_at;
+        } else {
+            // If expired or cancelled, restart from now
+            $new_starts  = $now;
+            $new_expires = date( 'Y-m-d H:i:s', strtotime( "+{$days} days", strtotime( $now ) ) );
+        }
+
+        $wpdb->update(
+            $subs_table,
+            [
+                'status'     => 'active',
+                'starts_at'  => $new_starts,
+                'expires_at' => $new_expires,
+                'updated_at' => current_time( 'mysql' ),
+            ],
+            [ 'id' => $sub->id ]
+        );
+
+        self::admin_sync_user_status( $sub->user_id );
+
+        return [
+            'success'           => true,
+            'new_expires'       => $new_expires,
+            'formatted_expires' => date( 'M j, Y', strtotime( $new_expires ) ),
+            'message'           => sprintf( __( 'Subscription extended by %d days. New expiration: %s.', 'petslist' ), $days, date( 'M j, Y', strtotime( $new_expires ) ) ),
+        ];
+    }
+
+    /**
+     * Admin updates subscription details (plan, status, custom expiration)
+     */
+    public static function admin_update_subscription( $sub_id, $data ) {
+        global $wpdb;
+        $subs_table = $wpdb->prefix . 'dd_subscriptions';
+        $sub = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $subs_table WHERE id = %d", absint( $sub_id ) ) );
+        if ( ! $sub ) {
+            return new \WP_Error( 'not_found', __( 'Subscription not found.', 'petslist' ) );
+        }
+
+        $update = [];
+
+        if ( isset( $data['plan_id'] ) ) {
+            $plan_id = absint( $data['plan_id'] );
+            if ( $plan_id > 0 ) {
+                $update['plan_id'] = $plan_id;
+            }
+        }
+
+        if ( isset( $data['status'] ) ) {
+            $allowed = [ 'active', 'expired', 'cancelled', 'pending' ];
+            if ( in_array( $data['status'], $allowed, true ) ) {
+                $update['status'] = $data['status'];
+            }
+        }
+
+        if ( ! empty( $data['expires_at'] ) ) {
+            $time = strtotime( $data['expires_at'] );
+            if ( $time ) {
+                $update['expires_at'] = date( 'Y-m-d H:i:s', $time );
+            }
+        }
+
+        if ( empty( $update ) ) {
+            return new \WP_Error( 'no_data', __( 'No fields to update.', 'petslist' ) );
+        }
+
+        $update['updated_at'] = current_time( 'mysql' );
+        $wpdb->update( $subs_table, $update, [ 'id' => $sub->id ] );
+
+        self::admin_sync_user_status( $sub->user_id );
+
+        return [
+            'success' => true,
+            'message' => __( 'Subscription successfully updated.', 'petslist' ),
+        ];
+    }
+
+    /**
+     * Admin cancels a subscription
+     */
+    public static function admin_cancel_subscription( $sub_id ) {
+        global $wpdb;
+        $subs_table = $wpdb->prefix . 'dd_subscriptions';
+        $sub = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $subs_table WHERE id = %d", absint( $sub_id ) ) );
+        if ( ! $sub ) {
+            return new \WP_Error( 'not_found', __( 'Subscription not found.', 'petslist' ) );
+        }
+
+        $wpdb->update( $subs_table, [ 'status' => 'cancelled', 'updated_at' => current_time( 'mysql' ) ], [ 'id' => $sub->id ] );
+
+        self::admin_sync_user_status( $sub->user_id );
+
+        return [
+            'success' => true,
+            'message' => __( 'Subscription cancelled.', 'petslist' ),
+        ];
+    }
+
+    /**
+     * Admin permanently deletes a subscription record
+     */
+    public static function admin_delete_subscription( $sub_id ) {
+        global $wpdb;
+        $subs_table = $wpdb->prefix . 'dd_subscriptions';
+        $sub = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $subs_table WHERE id = %d", absint( $sub_id ) ) );
+        if ( ! $sub ) {
+            return new \WP_Error( 'not_found', __( 'Subscription not found.', 'petslist' ) );
+        }
+
+        $user_id = $sub->user_id;
+        $wpdb->delete( $subs_table, [ 'id' => $sub->id ] );
+
+        self::admin_sync_user_status( $user_id );
+
+        return [
+            'success' => true,
+            'message' => __( 'Subscription deleted successfully.', 'petslist' ),
+        ];
+    }
+
+    /**
+     * Sync user status, metadata, and roles based on their current active subscriptions
+     */
+    public static function admin_sync_user_status( $user_id ) {
+        $user_id = absint( $user_id );
+        if ( ! $user_id ) return;
+
+        global $wpdb;
+        $subs_table  = $wpdb->prefix . 'dd_subscriptions';
+        $plans_table = $wpdb->prefix . 'dd_plans';
+
+        $active_sub = $wpdb->get_row( $wpdb->prepare(
+            "SELECT s.*, p.slug as plan_slug
+             FROM $subs_table s
+             LEFT JOIN $plans_table p ON s.plan_id = p.id
+             WHERE s.user_id = %d AND s.status = 'active' AND s.expires_at > NOW()
+             ORDER BY s.expires_at DESC LIMIT 1",
+            $user_id
+        ) );
+
+        $user = new \WP_User( $user_id );
+
+        if ( $active_sub ) {
+            update_user_meta( $user_id, 'dd_subscription_status', 'active' );
+            update_user_meta( $user_id, 'dd_subscription_plan', $active_sub->plan_slug );
+            update_user_meta( $user_id, 'dd_subscription_expires', $active_sub->expires_at );
+            if ( ! in_array( 'dd_subscriber', (array) $user->roles, true ) ) {
+                $user->add_role( 'dd_subscriber' );
+            }
+
+            // Sync dog_users table
+            $dog_users_table = $wpdb->prefix . 'dog_users';
+            if ( $wpdb->get_var( "SHOW TABLES LIKE '$dog_users_table'" ) === $dog_users_table ) {
+                $wpdb->query( $wpdb->prepare(
+                    "UPDATE $dog_users_table SET role = 'subscriber', subscription_id = 1 WHERE wp_user_id = %d",
+                    $user_id
+                ) );
+            }
+        } else {
+            // Find latest subscription for history status
+            $latest_sub = $wpdb->get_row( $wpdb->prepare(
+                "SELECT * FROM $subs_table WHERE user_id = %d ORDER BY created_at DESC LIMIT 1",
+                $user_id
+            ) );
+
+            $status = $latest_sub ? $latest_sub->status : 'expired';
+            update_user_meta( $user_id, 'dd_subscription_status', $status );
+
+            // If user is not an administrator, remove dd_subscriber role
+            if ( ! in_array( 'administrator', (array) $user->roles, true ) ) {
+                $user->remove_role( 'dd_subscriber' );
+            }
+
+            // Sync dog_users table
+            $dog_users_table = $wpdb->prefix . 'dog_users';
+            if ( $wpdb->get_var( "SHOW TABLES LIKE '$dog_users_table'" ) === $dog_users_table ) {
+                $wpdb->query( $wpdb->prepare(
+                    "UPDATE $dog_users_table SET role = 'user' WHERE wp_user_id = %d AND role = 'subscriber'",
+                    $user_id
+                ) );
+            }
+        }
+    }
 }
+

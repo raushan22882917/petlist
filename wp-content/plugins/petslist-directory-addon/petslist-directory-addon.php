@@ -174,6 +174,10 @@ function petslist_is_subscribed($wp_user_id = 0) {
     if (user_can($wp_user_id, 'manage_options')) {
         return true;
     }
+
+    if ( class_exists('\RadiusTheme\Petslist\DogDirectory\Subscription') && \RadiusTheme\Petslist\DogDirectory\Subscription::user_has_subscription($wp_user_id) ) {
+        return true;
+    }
     
     $local_user = petslist_get_local_user($wp_user_id);
     if ($local_user && ($local_user->role === 'subscriber' || $local_user->role === 'admin')) {

@@ -72,7 +72,7 @@ $plans = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}dd_plans ORDER BY pric
         var feats = $card.find('[name=features]').val().split('\n').filter(Boolean);
         $.post(ddVars.ajaxUrl, {
             action:    'dd_admin_update_plan',
-            nonce:     ddVars.nonces.dog,
+            nonce:     (ddVars.nonces.admin || ddVars.nonces.dog),
             plan_id:   pid,
             name:      $card.find('[name=name]').val(),
             price:     $card.find('[name=price]').val(),

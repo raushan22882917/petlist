@@ -77,6 +77,9 @@ $total_pages = ceil($total_count / $per_pg);
                 <td><?php echo date('M j, Y', strtotime($u->user_registered)); ?></td>
                 <td>
                     <div style="display:flex;gap:6px;align-items:center">
+                        <a href="<?php echo esc_url(add_query_arg(['tab'=>'subscribers','sub_search'=>$u->user_email], dd_dashboard_url('subscribers'))); ?>" class="dda-action-btn" title="<?php esc_attr_e('Manage Subscription', 'petslist'); ?>" style="color:#02c5bd;">
+                            <i class="fa-solid fa-crown"></i>
+                        </a>
                         <a href="<?php echo esc_url(admin_url('user-edit.php?user_id='.$u->ID)); ?>" class="dda-action-btn dda-action-btn--edit" title="<?php esc_attr_e('Edit User', 'petslist'); ?>">
                             <i class="fa-solid fa-pencil"></i>
                         </a>

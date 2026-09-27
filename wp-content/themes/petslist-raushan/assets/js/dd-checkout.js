@@ -5,44 +5,169 @@
 (function ($) {
   'use strict';
 
-  if (typeof Stripe === 'undefined' || !ddCheckout.publishableKey) {
-    return;
-  }
+  // ── Promo / Coupon Code Handlers ────────────────────────────────
+  $(document).on('click', '#dd-apply-coupon-btn', function (e) {
+    e.preventDefault();
+    var code = $.trim($('#dd-coupon-input').val());
+    var plan = $('input[name=plan]').val() || '';
+    var $btn = $(this);
+    var $msg = $('#dd-coupon-msg');
 
-  // Mount Stripe elements ONLY if inline card inputs exist on DOM
-  if ($('#dd-card-number').length) {
-    var stripe   = Stripe(ddCheckout.publishableKey);
-    var elements = stripe.elements();
+    if (!code) {
+      $msg.css('color', '#dc2626').text('Please enter a coupon code.').show();
+      return;
+    }
 
-    var style = {
-      base: {
-        fontSize:       '15px',
-        color:          '#070C3E',
-        fontFamily:     '"Plus Jakarta Sans", system-ui, sans-serif',
-        '::placeholder': { color: '#adb5bd' },
-      },
-      invalid: { color: '#ef4444' },
-    };
+    $btn.prop('disabled', true);
+    $btn.find('span').first().hide();
+    $btn.find('.dd-btn__loader').show();
+    $msg.hide();
 
-    var cardNumber  = elements.create('cardNumber',  { style: style });
-    var cardExpiry  = elements.create('cardExpiry',  { style: style });
-    var cardCvc     = elements.create('cardCvc',     { style: style });
+    var nonce = (typeof ddCheckout !== 'undefined' && ddCheckout.nonce) ? ddCheckout.nonce : '';
+    var ajaxUrl = (typeof ddCheckout !== 'undefined' && ddCheckout.ajaxUrl) ? ddCheckout.ajaxUrl : '/wp-admin/admin-ajax.php';
 
-    cardNumber.mount('#dd-card-number');
-    cardExpiry.mount('#dd-card-expiry');
-    cardCvc.mount('#dd-card-cvc');
+    $.post(ajaxUrl, {
+      action: 'dd_apply_coupon',
+      code: code,
+      plan: plan,
+      nonce: nonce
+    }, function (res) {
+      $btn.prop('disabled', false);
+      $btn.find('span').first().show();
+      $btn.find('.dd-btn__loader').hide();
 
-    // Real-time error display
-    [cardNumber, cardExpiry, cardCvc].forEach(function (el) {
-      el.on('change', function (e) {
-        var $err = $('#dd-card-errors');
-        if (e.error) {
-          $err.text(e.error.message);
-        } else {
-          $err.text('');
+      if (res.success && res.data) {
+        $msg.css('color', '#16a34a').text('✅ ' + (res.data.message || 'Coupon applied successfully!')).show();
+        $('#dd-discount-row').show();
+        $('#dd-discount-code-badge').text(res.data.code);
+        $('#dd-discount-val').text('-$' + parseFloat(res.data.discount_amount || 0).toFixed(2));
+        $('#dd-checkout-total-val').text('$' + parseFloat(res.data.new_total || 0).toFixed(2));
+
+        if (res.data.is_free) {
+          $('#dd-paid-gateways-wrap').slideUp(200);
+          $('#dd-free-activation-card').slideDown(250);
+          $('#dd-claim-free-btn').data('code', res.data.code);
         }
-      });
+      } else {
+        $msg.css('color', '#dc2626').text('⚠️ ' + (res.data && res.data.message ? res.data.message : 'Invalid promo code.')).show();
+      }
+    }).fail(function () {
+      $btn.prop('disabled', false);
+      $btn.find('span').first().show();
+      $btn.find('.dd-btn__loader').hide();
+      $msg.css('color', '#dc2626').text('⚠️ Server error validating promo code.').show();
     });
+  });
+
+  // Allow Enter key to trigger apply coupon
+  $(document).on('keypress', '#dd-coupon-input', function (e) {
+    if (e.which === 13) {
+      e.preventDefault();
+      $('#dd-apply-coupon-btn').trigger('click');
+    }
+  });
+
+  // Remove applied coupon
+  $(document).on('click', '#dd-remove-coupon-link', function (e) {
+    e.preventDefault();
+    $('#dd-coupon-input').val('');
+    $('#dd-coupon-msg').hide().empty();
+    $('#dd-discount-row').hide();
+    $('#dd-discount-code-badge').text('');
+    $('#dd-free-activation-card').slideUp(200);
+    $('#dd-paid-gateways-wrap').slideDown(250);
+
+    var originalPrice = $('#dd-checkout-subtotal').text();
+    $('#dd-checkout-total-val').text(originalPrice);
+  });
+
+  // Activate 100% Free Subscription (No credit card needed)
+  $(document).on('click', '#dd-claim-free-btn', function (e) {
+    e.preventDefault();
+    var $btn = $(this);
+    var code = $btn.data('code') || $.trim($('#dd-coupon-input').val());
+    var plan = $('input[name=plan]').val() || '';
+    var $msg = $('#dd-checkout-message');
+
+    $btn.prop('disabled', true);
+    $btn.find('span').first().hide();
+    $btn.find('.dd-btn__loader').show();
+    $msg.hide();
+
+    var nonce = (typeof ddCheckout !== 'undefined' && ddCheckout.nonce) ? ddCheckout.nonce : '';
+    var ajaxUrl = (typeof ddCheckout !== 'undefined' && ddCheckout.ajaxUrl) ? ddCheckout.ajaxUrl : '/wp-admin/admin-ajax.php';
+    var returnUrl = (typeof ddCheckout !== 'undefined' && ddCheckout.returnUrl) ? ddCheckout.returnUrl : '/my-account/dashboard/?tab=subscription';
+
+    $.post(ajaxUrl, {
+      action: 'dd_redeem_free_subscription',
+      code: code,
+      plan: plan,
+      nonce: nonce
+    }, function (res) {
+      if (res.success) {
+        $msg.removeClass('error dd-notice--error').addClass('dd-notice dd-notice--success')
+            .html('<span>🎉</span> <span>' + (res.data.message || 'Free subscription activated! Redirecting...') + '</span>')
+            .show();
+        $('html,body').animate({ scrollTop: $msg.offset().top - 80 }, 300);
+        setTimeout(function () {
+          window.location.href = res.data.redirect || returnUrl;
+        }, 1200);
+      } else {
+        $btn.prop('disabled', false);
+        $btn.find('span').first().show();
+        $btn.find('.dd-btn__loader').hide();
+        $msg.removeClass('success dd-notice--success').addClass('dd-notice dd-notice--error')
+            .html('<span>⚠️</span> <span>' + (res.data && res.data.message ? res.data.message : 'Could not activate subscription.') + '</span>')
+            .show();
+        $('html,body').animate({ scrollTop: $msg.offset().top - 80 }, 300);
+      }
+    }).fail(function () {
+      $btn.prop('disabled', false);
+      $btn.find('span').first().show();
+      $btn.find('.dd-btn__loader').hide();
+      $msg.removeClass('success dd-notice--success').addClass('dd-notice dd-notice--error')
+          .html('<span>⚠️</span> <span>Server connection error. Please try again.</span>')
+          .show();
+    });
+  });
+
+  // ── Stripe Integration (Only if configured) ───────────────────────
+  if (typeof Stripe !== 'undefined' && typeof ddCheckout !== 'undefined' && ddCheckout.publishableKey) {
+    // Mount Stripe elements ONLY if inline card inputs exist on DOM
+    if ($('#dd-card-number').length) {
+      var stripe   = Stripe(ddCheckout.publishableKey);
+      var elements = stripe.elements();
+
+      var style = {
+        base: {
+          fontSize:       '15px',
+          color:          '#070C3E',
+          fontFamily:     '"Plus Jakarta Sans", system-ui, sans-serif',
+          '::placeholder': { color: '#adb5bd' },
+        },
+        invalid: { color: '#ef4444' },
+      };
+
+      var cardNumber  = elements.create('cardNumber',  { style: style });
+      var cardExpiry  = elements.create('cardExpiry',  { style: style });
+      var cardCvc     = elements.create('cardCvc',     { style: style });
+
+      cardNumber.mount('#dd-card-number');
+      cardExpiry.mount('#dd-card-expiry');
+      cardCvc.mount('#dd-card-cvc');
+
+      // Real-time error display
+      [cardNumber, cardExpiry, cardCvc].forEach(function (el) {
+        el.on('change', function (e) {
+          var $err = $('#dd-card-errors');
+          if (e.error) {
+            $err.text(e.error.message);
+          } else {
+            $err.text('');
+          }
+        });
+      });
+    }
   }
 
   // Handle Hosted Stripe Checkout redirect

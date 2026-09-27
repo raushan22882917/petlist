@@ -301,44 +301,234 @@ class Admin {
 
     public function render_subscribers_page() {
         global $wpdb;
+
+        // Process WP-Admin direct actions with nonce verification
+        $notice = '';
+        $notice_type = 'success';
+
+        if ( ! current_user_can('manage_options') ) {
+            wp_die( __('Access denied.', 'petslist') );
+        }
+
+        // Action: Grant Subscription
+        if ( isset($_POST['dd_action']) && $_POST['dd_action'] === 'grant_sub' ) {
+            check_admin_referer('dd_admin_sub_nonce');
+            $user_id  = absint($_POST['grant_user_id'] ?? 0);
+            $plan_id  = absint($_POST['grant_plan_id'] ?? 0);
+            $duration = max(1, absint($_POST['grant_duration'] ?? 30));
+            $notes    = sanitize_text_field($_POST['grant_notes'] ?? '');
+
+            $res = Subscription::admin_grant_subscription($user_id, $plan_id, $duration, $notes);
+            if ( is_wp_error($res) ) {
+                $notice = $res->get_error_message();
+                $notice_type = 'error';
+            } else {
+                $notice = $res['message'];
+            }
+        }
+
+        // Action: Extend Subscription
+        if ( isset($_GET['dd_action']) && $_GET['dd_action'] === 'extend' ) {
+            check_admin_referer('dd_sub_action_' . absint($_GET['sub_id'] ?? 0));
+            $sub_id = absint($_GET['sub_id'] ?? 0);
+            $days   = max(1, absint($_GET['days'] ?? 30));
+            $res = Subscription::admin_extend_subscription($sub_id, $days);
+            if ( is_wp_error($res) ) {
+                $notice = $res->get_error_message();
+                $notice_type = 'error';
+            } else {
+                $notice = $res['message'];
+            }
+        }
+
+        // Action: Cancel Subscription
+        if ( isset($_GET['dd_action']) && $_GET['dd_action'] === 'cancel' ) {
+            check_admin_referer('dd_sub_action_' . absint($_GET['sub_id'] ?? 0));
+            $sub_id = absint($_GET['sub_id'] ?? 0);
+            $res = Subscription::admin_cancel_subscription($sub_id);
+            if ( is_wp_error($res) ) {
+                $notice = $res->get_error_message();
+                $notice_type = 'error';
+            } else {
+                $notice = $res['message'];
+            }
+        }
+
+        // Action: Delete Subscription
+        if ( isset($_GET['dd_action']) && $_GET['dd_action'] === 'delete' ) {
+            check_admin_referer('dd_sub_action_' . absint($_GET['sub_id'] ?? 0));
+            $sub_id = absint($_GET['sub_id'] ?? 0);
+            $res = Subscription::admin_delete_subscription($sub_id);
+            if ( is_wp_error($res) ) {
+                $notice = $res->get_error_message();
+                $notice_type = 'error';
+            } else {
+                $notice = $res['message'];
+            }
+        }
+
+        $filter = sanitize_key($_GET['status'] ?? 'all');
+        $search = sanitize_text_field($_GET['s'] ?? '');
+
+        $where_clauses = ['1=1'];
+        if ( $filter !== 'all' ) {
+            $where_clauses[] = $wpdb->prepare("s.status = %s", $filter);
+        }
+        if ( ! empty($search) ) {
+            $like = '%' . $wpdb->esc_like($search) . '%';
+            $where_clauses[] = $wpdb->prepare("(u.display_name LIKE %s OR u.user_email LIKE %s OR u.user_login LIKE %s OR s.id = %d)", $like, $like, $like, absint($search));
+        }
+        $where = 'WHERE ' . implode(' AND ', $where_clauses);
+
         $subs = $wpdb->get_results(
-            "SELECT s.*, u.display_name, u.user_email, p.name as plan_name
+            "SELECT s.*, u.display_name, u.user_email, u.user_login, p.name as plan_name, p.price as plan_price
              FROM {$wpdb->prefix}dd_subscriptions s
              LEFT JOIN {$wpdb->prefix}users u ON s.user_id = u.ID
              LEFT JOIN {$wpdb->prefix}dd_plans p ON s.plan_id = p.id
-             ORDER BY s.created_at DESC LIMIT 100"
+             $where
+             ORDER BY s.created_at DESC LIMIT 150"
         );
+
+        $plans = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}dd_plans WHERE is_active = 1 ORDER BY price ASC");
+        $users = $wpdb->get_results("SELECT ID, display_name, user_email, user_login FROM {$wpdb->users} ORDER BY display_name ASC LIMIT 200");
+
+        $total_active = (int)$wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->prefix}dd_subscriptions WHERE status = 'active'");
+        $total_all    = (int)$wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->prefix}dd_subscriptions");
         ?>
         <div class="wrap dd-admin-wrap">
-            <h1>👥 <?php _e('Subscribers', 'petslist'); ?> <span class="dd-count">(<?php echo count($subs); ?>)</span></h1>
-            <table class="widefat striped dd-admin-table">
+            <h1 class="wp-heading-inline">👥 <?php _e('Subscription Management', 'petslist'); ?></h1>
+            <button type="button" class="page-title-action" onclick="document.getElementById('dd-grant-box').style.display = (document.getElementById('dd-grant-box').style.display === 'none' ? 'block' : 'none');">
+                + <?php _e('Grant Subscription', 'petslist'); ?>
+            </button>
+            <hr class="wp-header-end">
+
+            <?php if ( ! empty($notice) ) : ?>
+            <div class="notice notice-<?php echo esc_attr($notice_type); ?> is-dismissible" style="margin-top:15px;">
+                <p><strong><?php echo esc_html($notice); ?></strong></p>
+            </div>
+            <?php endif; ?>
+
+            <!-- Grant Subscription Form Box -->
+            <div id="dd-grant-box" style="display:none;background:#fff;border:1px solid #ccd0d4;border-left:4px solid #02c5bd;padding:20px;margin:15px 0;box-shadow:0 1px 3px rgba(0,0,0,0.05);border-radius:4px;">
+                <h3 style="margin-top:0;"><?php _e('Grant New Subscription (Manual Override)', 'petslist'); ?></h3>
+                <form method="post" action="<?php echo esc_url(admin_url('admin.php?page=dd-subscribers')); ?>">
+                    <?php wp_nonce_field('dd_admin_sub_nonce'); ?>
+                    <input type="hidden" name="dd_action" value="grant_sub">
+                    <table class="form-table" style="margin-bottom:10px;">
+                        <tr>
+                            <th scope="row"><label for="grant_user_id"><?php _e('User', 'petslist'); ?></label></th>
+                            <td>
+                                <select name="grant_user_id" id="grant_user_id" required style="max-width:350px;width:100%;">
+                                    <option value=""><?php _e('-- Select User --', 'petslist'); ?></option>
+                                    <?php foreach ($users as $u): ?>
+                                    <option value="<?php echo $u->ID; ?>"><?php echo esc_html($u->display_name ?: $u->user_login); ?> (<?php echo esc_html($u->user_email); ?>)</option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="grant_plan_id"><?php _e('Plan', 'petslist'); ?></label></th>
+                            <td>
+                                <select name="grant_plan_id" id="grant_plan_id" required style="max-width:350px;width:100%;">
+                                    <?php foreach ($plans as $p): ?>
+                                    <option value="<?php echo $p->id; ?>"><?php echo esc_html($p->name); ?> ($<?php echo number_format($p->price, 2); ?>)</option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="grant_duration"><?php _e('Duration (Days)', 'petslist'); ?></label></th>
+                            <td>
+                                <input type="number" name="grant_duration" id="grant_duration" value="30" min="1" max="3650" style="width:100px;">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="grant_notes"><?php _e('Admin Note', 'petslist'); ?></label></th>
+                            <td>
+                                <input type="text" name="grant_notes" id="grant_notes" placeholder="<?php esc_attr_e('e.g. VIP Member, Cash, Promo', 'petslist'); ?>" style="max-width:350px;width:100%;">
+                            </td>
+                        </tr>
+                    </table>
+                    <p class="submit" style="margin:0;">
+                        <input type="submit" class="button button-primary" value="<?php esc_attr_e('Grant & Activate Subscription', 'petslist'); ?>">
+                        <button type="button" class="button" onclick="document.getElementById('dd-grant-box').style.display='none';"><?php _e('Cancel', 'petslist'); ?></button>
+                    </p>
+                </form>
+            </div>
+
+            <!-- Filters -->
+            <ul class="subsubsub">
+                <li><a href="<?php echo esc_url(admin_url('admin.php?page=dd-subscribers')); ?>" class="<?php echo $filter==='all'?'current':''; ?>"><?php _e('All', 'petslist'); ?> <span class="count">(<?php echo $total_all; ?>)</span></a> |</li>
+                <li><a href="<?php echo esc_url(admin_url('admin.php?page=dd-subscribers&status=active')); ?>" class="<?php echo $filter==='active'?'current':''; ?>"><?php _e('Active', 'petslist'); ?> <span class="count">(<?php echo $total_active; ?>)</span></a> |</li>
+                <li><a href="<?php echo esc_url(admin_url('admin.php?page=dd-subscribers&status=expired')); ?>" class="<?php echo $filter==='expired'?'current':''; ?>"><?php _e('Expired', 'petslist'); ?></a> |</li>
+                <li><a href="<?php echo esc_url(admin_url('admin.php?page=dd-subscribers&status=cancelled')); ?>" class="<?php echo $filter==='cancelled'?'current':''; ?>"><?php _e('Cancelled', 'petslist'); ?></a></li>
+            </ul>
+
+            <form method="get" action="<?php echo esc_url(admin_url('admin.php')); ?>" style="float:right;margin-bottom:10px;">
+                <input type="hidden" name="page" value="dd-subscribers">
+                <?php if ($filter !== 'all'): ?><input type="hidden" name="status" value="<?php echo esc_attr($filter); ?>"><?php endif; ?>
+                <input type="search" name="s" value="<?php echo esc_attr($search); ?>" placeholder="<?php esc_attr_e('Search subscribers...', 'petslist'); ?>">
+                <input type="submit" class="button" value="<?php esc_attr_e('Search', 'petslist'); ?>">
+            </form>
+
+            <table class="widefat striped dd-admin-table" style="clear:both;">
                 <thead>
                     <tr>
-                        <th><?php _e('User', 'petslist'); ?></th>
+                        <th><?php _e('ID / User', 'petslist'); ?></th>
                         <th><?php _e('Email', 'petslist'); ?></th>
                         <th><?php _e('Plan', 'petslist'); ?></th>
                         <th><?php _e('Status', 'petslist'); ?></th>
                         <th><?php _e('Started', 'petslist'); ?></th>
                         <th><?php _e('Expires', 'petslist'); ?></th>
                         <th><?php _e('Dogs', 'petslist'); ?></th>
+                        <th style="text-align:right;"><?php _e('Actions', 'petslist'); ?></th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php foreach ( $subs as $sub ) :
                         $dogs = dd_get_user_dog_count($sub->user_id);
-                        $status_colors = ['active'=>'green','expired'=>'red','cancelled'=>'orange','pending'=>'blue'];
-                        $color = $status_colors[$sub->status] ?? 'gray';
+                        $status_colors = ['active'=>'#16a34a','expired'=>'#dc2626','cancelled'=>'#d97706','pending'=>'#2563eb'];
+                        $color = $status_colors[$sub->status] ?? '#64748b';
+                        $nonce = wp_create_nonce('dd_sub_action_' . $sub->id);
+                        $extend_url = wp_nonce_url(admin_url('admin.php?page=dd-subscribers&dd_action=extend&sub_id='.$sub->id.'&days=30'), 'dd_sub_action_'.$sub->id);
+                        $cancel_url = wp_nonce_url(admin_url('admin.php?page=dd-subscribers&dd_action=cancel&sub_id='.$sub->id), 'dd_sub_action_'.$sub->id);
+                        $delete_url = wp_nonce_url(admin_url('admin.php?page=dd-subscribers&dd_action=delete&sub_id='.$sub->id), 'dd_sub_action_'.$sub->id);
                     ?>
                     <tr>
-                        <td><?php echo esc_html($sub->display_name); ?></td>
+                        <td>
+                            <strong><?php echo esc_html($sub->display_name ?: $sub->user_login); ?></strong>
+                            <small style="color:#94a3b8;">(#<?php echo $sub->id; ?>)</small>
+                        </td>
                         <td><?php echo esc_html($sub->user_email); ?></td>
-                        <td><?php echo esc_html($sub->plan_name); ?></td>
-                        <td><span style="color:<?php echo $color; ?>;font-weight:600"><?php echo ucfirst($sub->status); ?></span></td>
+                        <td><?php echo esc_html($sub->plan_name ?: 'Custom'); ?></td>
+                        <td><span style="background:<?php echo $color; ?>15;color:<?php echo $color; ?>;padding:2px 8px;border-radius:4px;font-weight:700;font-size:11px;"><?php echo strtoupper($sub->status); ?></span></td>
                         <td><?php echo date('M j, Y', strtotime($sub->starts_at)); ?></td>
-                        <td><?php echo date('M j, Y', strtotime($sub->expires_at)); ?></td>
-                        <td><?php echo $dogs; ?></td>
+                        <td>
+                            <strong><?php echo date('M j, Y', strtotime($sub->expires_at)); ?></strong>
+                            <?php if ($sub->status === 'active' && strtotime($sub->expires_at) < time()): ?>
+                                <span style="color:#dc2626;font-size:10px;display:block;"><?php _e('Expired', 'petslist'); ?></span>
+                            <?php endif; ?>
+                        </td>
+                        <td>
+                            <a href="<?php echo esc_url(admin_url('edit.php?post_type=dd_dog&author='.$sub->user_id)); ?>">
+                                <?php echo $dogs; ?>
+                            </a>
+                        </td>
+                        <td style="text-align:right;">
+                            <a href="<?php echo esc_url($extend_url); ?>" class="button button-small" title="<?php esc_attr_e('Extend by 30 days', 'petslist'); ?>">+30d</a>
+                            <?php if ($sub->status === 'active'): ?>
+                                <a href="<?php echo esc_url($cancel_url); ?>" class="button button-small" onclick="return confirm('<?php echo esc_js(__('Cancel this subscription?', 'petslist')); ?>');"><?php _e('Cancel', 'petslist'); ?></a>
+                            <?php else: ?>
+                                <a href="<?php echo esc_url($extend_url); ?>" class="button button-small button-primary"><?php _e('Reactivate', 'petslist'); ?></a>
+                            <?php endif; ?>
+                            <a href="<?php echo esc_url($delete_url); ?>" class="button button-small" style="color:#dc2626;" onclick="return confirm('<?php echo esc_js(__('Delete this subscription record?', 'petslist')); ?>');">&times;</a>
+                            <a href="<?php echo esc_url(admin_url('user-edit.php?user_id='.$sub->user_id)); ?>" class="button button-small" title="<?php esc_attr_e('Edit User', 'petslist'); ?>">👤</a>
+                        </td>
                     </tr>
                     <?php endforeach; ?>
+                    <?php if ( empty($subs) ) : ?>
+                    <tr><td colspan="8" style="text-align:center;padding:30px;color:#94a3b8;"><?php _e('No subscriptions found.', 'petslist'); ?></td></tr>
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>

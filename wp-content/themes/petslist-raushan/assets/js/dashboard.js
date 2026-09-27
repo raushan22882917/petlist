@@ -316,6 +316,52 @@
         $(this).addClass('active');
     });
 
+    // ── Promo Code Redemption (User Dashboard) ───────────────
+    $(document).on('submit', '#dd-dashboard-redeem-form', function (e) {
+        e.preventDefault();
+        var $form = $(this);
+        var $btn = $('#dd-dash-redeem-btn');
+        var $msg = $('#dd-dash-coupon-msg');
+        var code = $.trim($('#dd-dash-coupon-code').val());
+
+        if (!code) {
+            $msg.css('color', '#dc2626').text('Please enter a promo code.').show();
+            return;
+        }
+
+        $btn.prop('disabled', true);
+        $btn.find('span').first().hide();
+        $btn.find('.dd-btn__loader').show();
+        $msg.hide();
+
+        var ajaxUrl = (typeof ddVars !== 'undefined' && ddVars.ajaxUrl) ? ddVars.ajaxUrl : '/wp-admin/admin-ajax.php';
+        var nonce = (typeof ddVars !== 'undefined' && ddVars.nonces) ? (ddVars.nonces.dashboard || ddVars.nonces.checkout || ddVars.nonces.auth || '') : '';
+
+        $.post(ajaxUrl, {
+            action: 'dd_redeem_free_subscription',
+            code: code,
+            nonce: nonce
+        }, function (res) {
+            $btn.prop('disabled', false);
+            $btn.find('span').first().show();
+            $btn.find('.dd-btn__loader').hide();
+
+            if (res.success) {
+                $msg.css('color', '#16a34a').html('🎉 ' + (res.data.message || 'Free subscription activated! Reloading...')).show();
+                setTimeout(function () {
+                    window.location.reload();
+                }, 1500);
+            } else {
+                $msg.css('color', '#dc2626').html('⚠️ ' + (res.data && res.data.message ? res.data.message : 'Invalid promo code.')).show();
+            }
+        }).fail(function () {
+            $btn.prop('disabled', false);
+            $btn.find('span').first().show();
+            $btn.find('.dd-btn__loader').hide();
+            $msg.css('color', '#dc2626').text('⚠️ Server error redeeming promo code.').show();
+        });
+    });
+
     // ── Helpers ──────────────────────────────────────────────
     function _flashMsg(selector, text, type) {
         $(selector).each(function () {

@@ -51,6 +51,22 @@ class Ajax {
         add_action( 'wp_ajax_dd_send_test_email', [ $this, 'send_test_email' ] );
         add_action( 'wp_ajax_dd_admin_toggle_sponsored', [ $this, 'admin_toggle_sponsored' ] );
         add_action( 'wp_ajax_dd_get_user_drawer', [ $this, 'get_user_drawer' ] );
+
+        // Promo Codes / Free Monthly Access
+        add_action( 'wp_ajax_dd_apply_coupon', [ $this, 'apply_coupon' ] );
+        add_action( 'wp_ajax_nopriv_dd_apply_coupon', [ $this, 'apply_coupon_guest' ] );
+        add_action( 'wp_ajax_dd_redeem_free_subscription', [ $this, 'redeem_free_subscription' ] );
+        add_action( 'wp_ajax_dd_admin_save_coupon', [ $this, 'admin_save_coupon' ] );
+        add_action( 'wp_ajax_dd_admin_delete_coupon', [ $this, 'admin_delete_coupon' ] );
+        add_action( 'wp_ajax_dd_admin_toggle_coupon', [ $this, 'admin_toggle_coupon' ] );
+
+        // Admin Subscription Management Controls
+        add_action( 'wp_ajax_dd_admin_grant_subscription', [ $this, 'admin_grant_subscription' ] );
+        add_action( 'wp_ajax_dd_admin_extend_subscription', [ $this, 'admin_extend_subscription' ] );
+        add_action( 'wp_ajax_dd_admin_update_subscription', [ $this, 'admin_update_subscription' ] );
+        add_action( 'wp_ajax_dd_admin_cancel_subscription', [ $this, 'admin_cancel_subscription' ] );
+        add_action( 'wp_ajax_dd_admin_delete_subscription', [ $this, 'admin_delete_subscription' ] );
+        add_action( 'wp_ajax_dd_admin_search_users', [ $this, 'admin_search_users' ] );
     }
 
     // =========================================================
@@ -1044,4 +1060,297 @@ class Ajax {
             'is_sponsored' => !$is_sponsored
         ]);
     }
+
+    // =========================================================
+    // PROMO CODES / FREE MONTHLY ACCESS
+    // =========================================================
+
+    public function apply_coupon() {
+        $nonce = $_POST['nonce'] ?? '';
+        if ( ! wp_verify_nonce($nonce, 'dd_checkout_nonce') && ! wp_verify_nonce($nonce, 'dd_dashboard_nonce') && ! wp_verify_nonce($nonce, 'dd_auth_nonce') ) {
+            wp_send_json_error( [ 'message' => __( 'Security verification failed. Please refresh the page.', 'petslist' ) ] );
+        }
+
+        $code      = sanitize_text_field( $_POST['code'] ?? '' );
+        $plan_slug = sanitize_text_field( $_POST['plan'] ?? 'monthly' );
+        $user_id   = get_current_user_id();
+
+        $validation = Subscription::validate_coupon( $code, $plan_slug, $user_id );
+
+        if ( ! $validation['valid'] ) {
+            wp_send_json_error( [ 'message' => $validation['message'] ] );
+        }
+
+        $coupon = $validation['coupon'];
+        $plan   = Subscription::get_plan( $plan_slug );
+        $original_price = $plan ? (float) $plan->price : 5.99;
+
+        // 100% Free access calculation
+        $discount_amount = $original_price;
+        $new_total = 0.00;
+
+        wp_send_json_success( [
+            'valid'           => true,
+            'code'            => $coupon->code,
+            'name'            => $coupon->name,
+            'duration_days'   => $validation['duration_days'],
+            'discount_type'   => $coupon->discount_type,
+            'discount_amount' => number_format( $discount_amount, 2 ),
+            'new_total'       => number_format( $new_total, 2 ),
+            'is_free'         => true,
+            'message'         => sprintf( __( 'Promo code "%s" applied! 100%% Free %d-day subscription access.', 'petslist' ), esc_html( $coupon->code ), $validation['duration_days'] ),
+        ] );
+    }
+
+    public function apply_coupon_guest() {
+        wp_send_json_error( [
+            'message'  => __( 'Please log in to apply promo codes and claim free access.', 'petslist' ),
+            'redirect' => dd_login_url(),
+        ] );
+    }
+
+    public function redeem_free_subscription() {
+        $nonce = $_POST['nonce'] ?? '';
+        if ( ! wp_verify_nonce($nonce, 'dd_checkout_nonce') && ! wp_verify_nonce($nonce, 'dd_dashboard_nonce') && ! wp_verify_nonce($nonce, 'dd_auth_nonce') ) {
+            wp_send_json_error( [ 'message' => __( 'Security verification failed. Please refresh the page.', 'petslist' ) ] );
+        }
+
+        if ( ! is_user_logged_in() ) {
+            wp_send_json_error( [ 'message' => __( 'Please log in first.', 'petslist' ), 'redirect' => dd_login_url() ] );
+        }
+
+        $code      = sanitize_text_field( $_POST['code'] ?? '' );
+        $plan_slug = sanitize_text_field( $_POST['plan'] ?? 'monthly' );
+        $user_id   = get_current_user_id();
+
+        $result = Subscription::redeem_coupon( $code, $plan_slug, $user_id );
+
+        if ( ! $result['success'] ) {
+            wp_send_json_error( [ 'message' => $result['message'] ] );
+        }
+
+        wp_send_json_success( [
+            'message'  => $result['message'],
+            'redirect' => $result['redirect'],
+        ] );
+    }
+
+    public function admin_save_coupon() {
+        check_ajax_referer( 'dd_admin_nonce', 'nonce' );
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json_error( [ 'message' => __( 'Access denied.', 'petslist' ) ] );
+        }
+
+        $data   = $_POST['coupon'] ?? [];
+        $result = Subscription::save_coupon( $data );
+
+        if ( is_wp_error( $result ) ) {
+            wp_send_json_error( [ 'message' => $result->get_error_message() ] );
+        }
+
+        wp_send_json_success( [ 'message' => __( 'Promo code saved successfully!', 'petslist' ) ] );
+    }
+
+    public function admin_delete_coupon() {
+        check_ajax_referer( 'dd_admin_nonce', 'nonce' );
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json_error( [ 'message' => __( 'Access denied.', 'petslist' ) ] );
+        }
+
+        $id = absint( $_POST['coupon_id'] ?? 0 );
+        if ( ! $id ) {
+            wp_send_json_error( [ 'message' => __( 'Invalid coupon ID.', 'petslist' ) ] );
+        }
+
+        Subscription::delete_coupon( $id );
+        wp_send_json_success( [ 'message' => __( 'Promo code deleted.', 'petslist' ) ] );
+    }
+
+    public function admin_toggle_coupon() {
+        check_ajax_referer( 'dd_admin_nonce', 'nonce' );
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json_error( [ 'message' => __( 'Access denied.', 'petslist' ) ] );
+        }
+
+        $id = absint( $_POST['coupon_id'] ?? 0 );
+        $coupon = Subscription::get_coupon( $id );
+        if ( ! $coupon ) {
+            wp_send_json_error( [ 'message' => __( 'Promo code not found.', 'petslist' ) ] );
+        }
+
+        global $wpdb;
+        $table      = $wpdb->prefix . 'dd_coupons';
+        $new_status = $coupon->is_active ? 0 : 1;
+        $wpdb->update( $table, [ 'is_active' => $new_status ], [ 'id' => $id ] );
+
+        wp_send_json_success( [
+            'message'   => $new_status ? __( 'Promo code activated.', 'petslist' ) : __( 'Promo code deactivated.', 'petslist' ),
+            'is_active' => $new_status,
+        ] );
+    }
+
+    // =========================================================
+    // ADMIN SUBSCRIPTION MANAGEMENT HANDLERS
+    // =========================================================
+
+    private function check_admin_permission() {
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json_error( [ 'message' => __( 'Access denied. Administrator privileges required.', 'petslist' ) ] );
+        }
+        $nonce = $_POST['nonce'] ?? '';
+        if ( ! wp_verify_nonce( $nonce, 'dd_admin_nonce' ) && ! wp_verify_nonce( $nonce, 'dd_dashboard_nonce' ) && ! wp_verify_nonce( $nonce, 'dd_dog_nonce' ) ) {
+            wp_send_json_error( [ 'message' => __( 'Security check failed. Please refresh the page and try again.', 'petslist' ) ] );
+        }
+    }
+
+    /**
+     * Admin grants subscription manually
+     */
+    public function admin_grant_subscription() {
+        $this->check_admin_permission();
+
+        $user_id       = absint( $_POST['user_id'] ?? 0 );
+        $plan_id       = absint( $_POST['plan_id'] ?? 0 );
+        $duration_days = max( 1, absint( $_POST['duration_days'] ?? 30 ) );
+        $notes         = sanitize_text_field( $_POST['notes'] ?? '' );
+
+        if ( ! $user_id ) {
+            wp_send_json_error( [ 'message' => __( 'Please select a valid user.', 'petslist' ) ] );
+        }
+        if ( ! $plan_id ) {
+            wp_send_json_error( [ 'message' => __( 'Please select a subscription plan.', 'petslist' ) ] );
+        }
+
+        $result = Subscription::admin_grant_subscription( $user_id, $plan_id, $duration_days, $notes );
+
+        if ( is_wp_error( $result ) ) {
+            wp_send_json_error( [ 'message' => $result->get_error_message() ] );
+        }
+
+        wp_send_json_success( $result );
+    }
+
+    /**
+     * Admin extends subscription by N days
+     */
+    public function admin_extend_subscription() {
+        $this->check_admin_permission();
+
+        $sub_id = absint( $_POST['sub_id'] ?? 0 );
+        $days   = max( 1, absint( $_POST['days'] ?? 30 ) );
+
+        if ( ! $sub_id ) {
+            wp_send_json_error( [ 'message' => __( 'Invalid subscription ID.', 'petslist' ) ] );
+        }
+
+        $result = Subscription::admin_extend_subscription( $sub_id, $days );
+
+        if ( is_wp_error( $result ) ) {
+            wp_send_json_error( [ 'message' => $result->get_error_message() ] );
+        }
+
+        wp_send_json_success( $result );
+    }
+
+    /**
+     * Admin updates subscription (plan, status, expiration)
+     */
+    public function admin_update_subscription() {
+        $this->check_admin_permission();
+
+        $sub_id = absint( $_POST['sub_id'] ?? 0 );
+        if ( ! $sub_id ) {
+            wp_send_json_error( [ 'message' => __( 'Invalid subscription ID.', 'petslist' ) ] );
+        }
+
+        $data = [];
+        if ( isset( $_POST['plan_id'] ) ) {
+            $data['plan_id'] = absint( $_POST['plan_id'] );
+        }
+        if ( isset( $_POST['status'] ) ) {
+            $data['status'] = sanitize_key( $_POST['status'] );
+        }
+        if ( ! empty( $_POST['expires_at'] ) ) {
+            $data['expires_at'] = sanitize_text_field( $_POST['expires_at'] );
+        }
+
+        $result = Subscription::admin_update_subscription( $sub_id, $data );
+
+        if ( is_wp_error( $result ) ) {
+            wp_send_json_error( [ 'message' => $result->get_error_message() ] );
+        }
+
+        wp_send_json_success( $result );
+    }
+
+    /**
+     * Admin cancels a subscription
+     */
+    public function admin_cancel_subscription() {
+        $this->check_admin_permission();
+
+        $sub_id = absint( $_POST['sub_id'] ?? 0 );
+        if ( ! $sub_id ) {
+            wp_send_json_error( [ 'message' => __( 'Invalid subscription ID.', 'petslist' ) ] );
+        }
+
+        $result = Subscription::admin_cancel_subscription( $sub_id );
+
+        if ( is_wp_error( $result ) ) {
+            wp_send_json_error( [ 'message' => $result->get_error_message() ] );
+        }
+
+        wp_send_json_success( $result );
+    }
+
+    /**
+     * Admin deletes a subscription record
+     */
+    public function admin_delete_subscription() {
+        $this->check_admin_permission();
+
+        $sub_id = absint( $_POST['sub_id'] ?? 0 );
+        if ( ! $sub_id ) {
+            wp_send_json_error( [ 'message' => __( 'Invalid subscription ID.', 'petslist' ) ] );
+        }
+
+        $result = Subscription::admin_delete_subscription( $sub_id );
+
+        if ( is_wp_error( $result ) ) {
+            wp_send_json_error( [ 'message' => $result->get_error_message() ] );
+        }
+
+        wp_send_json_success( $result );
+    }
+
+    /**
+     * Admin searches users for dropdown
+     */
+    public function admin_search_users() {
+        $this->check_admin_permission();
+
+        $q = sanitize_text_field( $_POST['q'] ?? '' );
+        global $wpdb;
+
+        $where = '';
+        if ( ! empty( $q ) ) {
+            $like  = '%' . $wpdb->esc_like( $q ) . '%';
+            $where = $wpdb->prepare( "WHERE display_name LIKE %s OR user_email LIKE %s OR user_login LIKE %s", $like, $like, $like );
+        }
+
+        $users = $wpdb->get_results( "SELECT ID, display_name, user_email, user_login FROM {$wpdb->users} $where ORDER BY display_name ASC LIMIT 50" );
+
+        $items = [];
+        foreach ( $users as $u ) {
+            $items[] = [
+                'id'           => (int) $u->ID,
+                'display_name' => $u->display_name ?: $u->user_login,
+                'user_email'   => $u->user_email,
+                'user_login'   => $u->user_login,
+            ];
+        }
+
+        wp_send_json_success( [ 'users' => $items ] );
+    }
 }
+

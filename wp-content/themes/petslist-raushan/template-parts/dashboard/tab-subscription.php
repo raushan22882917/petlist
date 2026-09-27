@@ -153,6 +153,28 @@ $plans   = Subscription::get_plans();
 
         <?php endif; ?>
 
+        <!-- Promo Code Card -->
+        <div class="dd-sub-promo-card" style="background:#ffffff; border:1px solid #e2e8f0; border-radius:16px; padding:24px; margin-top:24px; box-shadow:0 4px 16px rgba(0,0,0,0.03);">
+            <div style="display:flex; align-items:flex-start; gap:16px; flex-wrap:wrap;">
+                <div style="width:48px; height:48px; border-radius:12px; background:#fef3c7; color:#b45309; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0;">
+                    🎁
+                </div>
+                <div style="flex:1; min-width:240px;">
+                    <h4 style="font-size:17px; font-weight:800; color:#070c3e; margin:0 0 4px 0;"><?php _e('Have a Promo or Free Access Code?', 'petslist'); ?></h4>
+                    <p style="font-size:13px; color:#64748b; margin:0 0 14px 0;"><?php _e('Enter your promo code (e.g. <strong>FREEMONTH</strong>) below to activate 30 days of free monthly subscription access to all directory features.', 'petslist'); ?></p>
+                    
+                    <form id="dd-dashboard-redeem-form" style="display:flex; gap:10px; max-width:440px;">
+                        <input type="text" id="dd-dash-coupon-code" placeholder="<?php esc_attr_e('e.g. FREEMONTH', 'petslist'); ?>" required style="flex:1; border:1px solid #cbd5e1; border-radius:10px; padding:10px 14px; font-size:14px; text-transform:uppercase; font-weight:700; letter-spacing:0.5px;" />
+                        <button type="submit" id="dd-dash-redeem-btn" class="dd-btn dd-btn--primary" style="padding:10px 20px; font-weight:700; border-radius:10px; white-space:nowrap;">
+                            <span><?php _e('Redeem Access', 'petslist'); ?></span>
+                            <span class="dd-btn__loader" style="display:none;"><i class="fa-solid fa-spinner fa-spin"></i></span>
+                        </button>
+                    </form>
+                    <div id="dd-dash-coupon-msg" style="display:none; font-size:13px; margin-top:10px; font-weight:600;"></div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
 </div>
