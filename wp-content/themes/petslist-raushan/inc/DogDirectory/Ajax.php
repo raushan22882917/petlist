@@ -636,16 +636,16 @@ class Ajax {
             check_ajax_referer( 'dd_auth_nonce', 'nonce', false );
         }
 
-        $email    = sanitize_email( $_POST['email'] ?? '' );
+        $input = trim( sanitize_text_field( $_POST['email'] ?? '' ) );
         $password = $_POST['password'] ?? '';
         $remember = (bool) ( $_POST['remember'] ?? false );
 
-        if ( empty($email) || empty($password) ) {
-            wp_send_json_error(['message' => __('Email and password are required.', 'petslist')]);
+        if ( empty($input) || empty($password) ) {
+            wp_send_json_error(['message' => __('Email or username and password are required.', 'petslist')]);
         }
 
         $creds = [
-            'user_login'    => $email,
+            'user_login'    => $input,
             'user_password' => $password,
             'remember'      => $remember,
         ];
@@ -653,6 +653,11 @@ class Ajax {
         $user = wp_signon( $creds, is_ssl() );
         if ( is_wp_error($user) ) {
             wp_send_json_error(['message' => $user->get_error_message() ?: __('Invalid credentials. Please try again.', 'petslist')]);
+        }
+
+        // Self-heal admin capability if missing on login
+        if ( function_exists('dd_is_admin') && dd_is_admin($user) ) {
+            wp_set_current_user( $user->ID );
         }
 
         // Respect explicit redirect_to param (e.g. when gated page sent user to login)

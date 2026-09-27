@@ -95,20 +95,29 @@ class Subscription {
         $redemptions_table = $wpdb->prefix . 'dd_coupon_redemptions';
 
         dbDelta( "CREATE TABLE IF NOT EXISTS $coupons_table (
-            id              BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-            code            VARCHAR(50) NOT NULL,
-            name            VARCHAR(100) NOT NULL DEFAULT '',
-            discount_type   VARCHAR(20) NOT NULL DEFAULT 'free',
-            plan_slug       VARCHAR(100) NOT NULL DEFAULT 'all',
-            duration_days   INT(11) NOT NULL DEFAULT 30,
-            max_uses        INT(11) NOT NULL DEFAULT 0,
-            times_used      INT(11) NOT NULL DEFAULT 0,
-            expires_at      DATETIME NULL,
-            is_active       TINYINT(1) NOT NULL DEFAULT 1,
-            created_at      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            id                  BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            code                VARCHAR(50) NOT NULL,
+            name                VARCHAR(100) NOT NULL DEFAULT '',
+            discount_type       VARCHAR(20) NOT NULL DEFAULT 'free',
+            plan_slug           VARCHAR(100) NOT NULL DEFAULT 'all',
+            duration_days       INT(11) NOT NULL DEFAULT 30,
+            max_uses            INT(11) NOT NULL DEFAULT 0,
+            times_used          INT(11) NOT NULL DEFAULT 0,
+            assigned_user_id    BIGINT(20) UNSIGNED NOT NULL DEFAULT 0,
+            assigned_user_email VARCHAR(100) NOT NULL DEFAULT '',
+            expires_at          DATETIME NULL,
+            is_active           TINYINT(1) NOT NULL DEFAULT 1,
+            created_at          DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (id),
-            UNIQUE KEY code (code)
+            UNIQUE KEY code (code),
+            KEY assigned_user_id (assigned_user_id)
         ) $charset;" );
+
+        // Ensure new assigned columns exist if table was already created
+        $has_col = $wpdb->get_var( "SHOW COLUMNS FROM $coupons_table LIKE 'assigned_user_id'" );
+        if ( ! $has_col ) {
+            $wpdb->query( "ALTER TABLE $coupons_table ADD COLUMN assigned_user_id BIGINT(20) UNSIGNED NOT NULL DEFAULT 0 AFTER times_used, ADD COLUMN assigned_user_email VARCHAR(100) NOT NULL DEFAULT '' AFTER assigned_user_id" );
+        }
 
         dbDelta( "CREATE TABLE IF NOT EXISTS $redemptions_table (
             id              BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -123,30 +132,8 @@ class Subscription {
             UNIQUE KEY user_coupon (user_id, coupon_id)
         ) $charset;" );
 
-        // Seed default promo codes if none exist
-        $coupon_count = $wpdb->get_var( "SELECT COUNT(*) FROM $coupons_table" );
-        if ( '0' === $coupon_count || ! $coupon_count ) {
-            $wpdb->insert( $coupons_table, [
-                'code'          => 'FREEMONTH',
-                'name'          => 'Free Monthly Access',
-                'discount_type' => 'free',
-                'plan_slug'     => 'all',
-                'duration_days' => 30,
-                'max_uses'      => 0,
-                'times_used'    => 0,
-                'is_active'     => 1,
-            ] );
-            $wpdb->insert( $coupons_table, [
-                'code'          => 'FREE30',
-                'name'          => '30 Days Complimentary Access',
-                'discount_type' => 'free',
-                'plan_slug'     => 'all',
-                'duration_days' => 30,
-                'max_uses'      => 0,
-                'times_used'    => 0,
-                'is_active'     => 1,
-            ] );
-        }
+        // Remove legacy default FREEMONTH / FREE30 codes if present
+        $wpdb->query( "DELETE FROM $coupons_table WHERE code IN ('FREEMONTH', 'FREE30') AND times_used = 0" );
 
         // Seed default plans if empty
         $count = $wpdb->get_var( "SELECT COUNT(*) FROM $plan_table" );
@@ -305,7 +292,7 @@ class Subscription {
      */
     public static function can_access_directory() {
         if ( ! is_user_logged_in() ) return false;
-        if ( current_user_can( 'manage_options' ) ) return true;
+        if ( dd_is_admin() ) return true;
         return self::user_has_subscription();
     }
 
@@ -537,10 +524,34 @@ class Subscription {
 
         if ( $coupon->max_uses > 0 && $coupon->times_used >= $coupon->max_uses ) {
             return [ 'valid' => false, 'message' => __( 'This promo code has reached its maximum usage limit.', 'petslist' ) ];
+        }        if ( ! empty( $plan_slug ) && $coupon->plan_slug !== 'all' && $coupon->plan_slug !== $plan_slug ) {
+            return [ 'valid' => false, 'message' => sprintf( __( 'This promo code is only valid for the %s plan.', 'petslist' ), esc_html( ucfirst( $coupon->plan_slug ) ) ) ];
         }
 
-        if ( ! empty( $plan_slug ) && $coupon->plan_slug !== 'all' && $coupon->plan_slug !== $plan_slug ) {
-            return [ 'valid' => false, 'message' => sprintf( __( 'This promo code is only valid for the %s plan.', 'petslist' ), esc_html( ucfirst( $coupon->plan_slug ) ) ) ];
+        // Exclusive assigned user check (private promo code)
+        $assigned_uid   = ! empty( $coupon->assigned_user_id ) ? (int) $coupon->assigned_user_id : 0;
+        $assigned_email = ! empty( $coupon->assigned_user_email ) ? strtolower( trim( $coupon->assigned_user_email ) ) : '';
+
+        if ( $assigned_uid > 0 || ! empty( $assigned_email ) ) {
+            if ( ! $user_id ) {
+                return [
+                    'valid'   => false,
+                    'message' => __( 'Invalid promo code. Please check and try again.', 'petslist' ),
+                ];
+            }
+
+            $current_user  = get_userdata( $user_id );
+            $current_email = $current_user ? strtolower( trim( $current_user->user_email ) ) : '';
+
+            $matches_id    = ( $assigned_uid > 0 && (int) $user_id === $assigned_uid );
+            $matches_email = ( ! empty( $assigned_email ) && $current_email === $assigned_email );
+
+            if ( ! $matches_id && ! $matches_email ) {
+                return [
+                    'valid'   => false,
+                    'message' => __( 'Invalid promo code. Please check and try again.', 'petslist' ),
+                ];
+            }
         }
 
         if ( $user_id ) {
@@ -674,20 +685,39 @@ class Subscription {
         }
 
         $id = absint( $data['id'] ?? 0 );
+
+        // Resolve assigned user & email
+        $assigned_user_id    = absint( $data['assigned_user_id'] ?? 0 );
+        $assigned_user_email = sanitize_email( $data['assigned_user_email'] ?? '' );
+
+        if ( $assigned_user_id > 0 ) {
+            $assigned_user = get_userdata( $assigned_user_id );
+            if ( $assigned_user && empty( $assigned_user_email ) ) {
+                $assigned_user_email = $assigned_user->user_email;
+            }
+        } elseif ( ! empty( $assigned_user_email ) ) {
+            $user_by_email = get_user_by( 'email', $assigned_user_email );
+            if ( $user_by_email ) {
+                $assigned_user_id = $user_by_email->ID;
+            }
+        }
+
         $payload = [
-            'code'          => $code,
-            'name'          => sanitize_text_field( $data['name'] ?? '' ),
-            'discount_type' => sanitize_text_field( $data['discount_type'] ?? 'free' ),
-            'plan_slug'     => sanitize_text_field( $data['plan_slug'] ?? 'all' ),
-            'duration_days' => max( 1, absint( $data['duration_days'] ?? 30 ) ),
-            'max_uses'      => absint( $data['max_uses'] ?? 0 ),
-            'is_active'     => isset( $data['is_active'] ) ? absint( $data['is_active'] ) : 1,
-            'expires_at'    => ! empty( $data['expires_at'] ) ? date( 'Y-m-d 23:59:59', strtotime( $data['expires_at'] ) ) : null,
+            'code'                => $code,
+            'name'                => sanitize_text_field( $data['name'] ?? '' ),
+            'discount_type'       => sanitize_text_field( $data['discount_type'] ?? 'free' ),
+            'plan_slug'           => sanitize_text_field( $data['plan_slug'] ?? 'all' ),
+            'duration_days'       => max( 1, absint( $data['duration_days'] ?? 30 ) ),
+            'max_uses'            => absint( $data['max_uses'] ?? 0 ),
+            'assigned_user_id'    => $assigned_user_id,
+            'assigned_user_email' => $assigned_user_email,
+            'is_active'           => isset( $data['is_active'] ) ? absint( $data['is_active'] ) : 1,
+            'expires_at'          => ! empty( $data['expires_at'] ) ? date( 'Y-m-d 23:59:59', strtotime( $data['expires_at'] ) ) : null,
         ];
 
         if ( $id ) {
             $wpdb->update( $table, $payload, [ 'id' => $id ] );
-            return $id;
+            $coupon_id = $id;
         } else {
             // Check if code already exists
             $exists = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM $table WHERE UPPER(code) = %s", $code ) );
@@ -696,8 +726,105 @@ class Subscription {
             }
             $payload['created_at'] = current_time( 'mysql' );
             $wpdb->insert( $table, $payload );
-            return $wpdb->insert_id;
+            $coupon_id = $wpdb->insert_id;
         }
+
+        // Send email if requested
+        if ( ! empty( $data['send_email'] ) && ( $assigned_user_id > 0 || ! empty( $assigned_user_email ) ) ) {
+            self::send_coupon_email( $coupon_id );
+        }
+
+        return $coupon_id;
+    }
+
+    /**
+     * Send email with coupon details to assigned user
+     */
+    public static function send_coupon_email( $coupon_or_id, $override_email = '' ) {
+        $coupon = is_object( $coupon_or_id ) ? $coupon_or_id : self::get_coupon( $coupon_or_id );
+        if ( ! $coupon ) {
+            return new \WP_Error( 'coupon_not_found', __( 'Coupon not found.', 'petslist' ) );
+        }
+
+        $recipient_email = $override_email ?: $coupon->assigned_user_email;
+        $recipient_name  = 'Valued Member';
+
+        if ( ! empty( $coupon->assigned_user_id ) ) {
+            $user = get_userdata( $coupon->assigned_user_id );
+            if ( $user ) {
+                $recipient_name = $user->display_name ?: $user->user_login;
+                if ( empty( $recipient_email ) ) {
+                    $recipient_email = $user->user_email;
+                }
+            }
+        }
+
+        if ( empty( $recipient_email ) || ! is_email( $recipient_email ) ) {
+            return new \WP_Error( 'no_recipient_email', __( 'No valid recipient email found for this coupon.', 'petslist' ) );
+        }
+
+        $plan_label = 'All Directory Plans';
+        if ( ! empty( $coupon->plan_slug ) && $coupon->plan_slug !== 'all' ) {
+            $plan = self::get_plan( $coupon->plan_slug );
+            $plan_label = $plan ? $plan->name : ucfirst( $coupon->plan_slug );
+        }
+
+        $duration_days = (int) ( $coupon->duration_days ?: 30 );
+        $expiry_text   = ! empty( $coupon->expires_at ) ? date( 'F j, Y', strtotime( $coupon->expires_at ) ) : __( 'No expiration date', 'petslist' );
+
+        $site_name    = get_bloginfo( 'name' );
+        $checkout_url = dd_checkout_url( $coupon->plan_slug !== 'all' ? $coupon->plan_slug : 'monthly' );
+        $redeem_url   = add_query_arg( [ 'coupon' => $coupon->code ], $checkout_url );
+
+        $subject = sprintf( __( '🎟️ Exclusive Voucher: %s Complimentary Access (%s)', 'petslist' ), $site_name, $coupon->code );
+
+        $content = '
+        <div style="font-family:-apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, Helvetica, Arial, sans-serif; max-width:600px; margin:0 auto; color:#1e293b;">
+            <p style="font-size:16px; line-height:1.6; margin-bottom:16px;">Hello <strong>' . esc_html( $recipient_name ) . '</strong>,</p>
+            <p style="font-size:15px; line-height:1.6; color:#475569; margin-bottom:24px;">
+                You have been granted an exclusive promo voucher by the administrator on <strong>' . esc_html( $site_name ) . '</strong>. This voucher grants you <strong>100% complimentary free subscription access</strong>!
+            </p>
+
+            <div style="background:#f8fafc; border:2px dashed #02c5bd; border-radius:12px; padding:24px; text-align:center; margin:28px 0;">
+                <div style="font-size:12px; text-transform:uppercase; letter-spacing:1px; color:#64748b; font-weight:700; margin-bottom:8px;">Your Private Promo Voucher</div>
+                <div style="font-size:32px; font-weight:900; letter-spacing:3px; color:#0f172a; font-family:monospace; background:#ffffff; border:1px solid #e2e8f0; border-radius:8px; padding:12px 20px; display:inline-block; margin-bottom:12px;">' . esc_html( $coupon->code ) . '</div>
+                <div style="font-size:14px; color:#02c5bd; font-weight:700;">' . sprintf( __( '✓ %d Days 100%% Free Access (%s)', 'petslist' ), $duration_days, esc_html( $plan_label ) ) . '</div>
+                <div style="font-size:12px; color:#94a3b8; margin-top:6px;">' . sprintf( __( 'Valid until: %s', 'petslist' ), esc_html( $expiry_text ) ) . '</div>
+            </div>
+
+            <div style="text-align:center; margin:32px 0;">
+                <a href="' . esc_url( $redeem_url ) . '" style="background:#02c5bd; color:#ffffff; font-weight:700; font-size:16px; padding:14px 32px; border-radius:50px; text-decoration:none; display:inline-block; box-shadow:0 4px 14px rgba(2,197,189,0.35);">
+                    🚀 ' . __( 'Claim Your Free Access Now', 'petslist' ) . '
+                </a>
+            </div>
+
+            <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:8px; padding:16px; font-size:13px; color:#64748b; line-height:1.6;">
+                <strong>' . __( 'How to activate:', 'petslist' ) . '</strong><br>
+                1. Click the button above or visit <a href="' . esc_url( $checkout_url ) . '" style="color:#02c5bd;">' . esc_html( $checkout_url ) . '</a>.<br>
+                2. Log into your account (<strong>' . esc_html( $recipient_email ) . '</strong>).<br>
+                3. Enter your private code <strong>' . esc_html( $coupon->code ) . '</strong> at checkout.<br>
+                4. Your subscription activates immediately with $0.00 charge.
+            </div>
+
+            <p style="font-size:12px; color:#94a3b8; margin-top:24px; text-align:center;">
+                ' . __( 'Note: This promo code is strictly assigned to your email and cannot be used by other accounts.', 'petslist' ) . '
+            </p>
+        </div>';
+
+        $body = Notifications::instance()->wrap_email( __( 'Your Exclusive Promo Voucher', 'petslist' ), $content );
+
+        $headers = [ 'Content-Type: text/html; charset=UTF-8' ];
+        $sent = wp_mail( $recipient_email, $subject, $body, $headers );
+
+        if ( ! $sent ) {
+            return new \WP_Error( 'mail_failed', sprintf( __( 'Failed to send email to %s. Please check SMTP / mail settings.', 'petslist' ), $recipient_email ) );
+        }
+
+        return [
+            'success' => true,
+            'email'   => $recipient_email,
+            'message' => sprintf( __( 'Promo code email sent successfully to %s!', 'petslist' ), $recipient_email ),
+        ];
     }
 
     /**

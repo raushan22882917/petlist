@@ -42,7 +42,7 @@ class AccessControl {
      */
     public function gate_pages() {
         // Admin always passes
-        if ( current_user_can( 'manage_options' ) ) return;
+        if ( dd_is_admin() ) return;
 
         $current_id = get_the_ID();
 
@@ -99,7 +99,7 @@ class AccessControl {
      */
     public function filter_dog_content( $content ) {
         if ( ! is_singular( 'dd_dog' ) ) return $content;
-        if ( current_user_can( 'manage_options' ) ) return $content;
+        if ( dd_is_admin() ) return $content;
         // Content is already gated inside single-dog.php template
         // This filter is a safety net for excerpt / REST API use
         if ( ! Subscription::can_access_directory() ) {
@@ -218,7 +218,7 @@ class AccessControl {
      * Returns: 'admin' | 'subscriber' | 'user' | 'visitor'
      */
     public static function get_access_level() {
-        if ( current_user_can( 'manage_options' ) ) return 'admin';
+        if ( dd_is_admin() ) return 'admin';
         if ( ! is_user_logged_in() ) return 'visitor';
         if ( Subscription::can_access_directory() ) return 'subscriber';
         return 'user'; // logged in, no subscription

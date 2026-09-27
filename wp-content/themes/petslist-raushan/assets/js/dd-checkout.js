@@ -67,6 +67,16 @@
     }
   });
 
+  // Auto-apply promo voucher if provided via URL param / prefilled
+  $(function () {
+    var prefilledCode = $.trim($('#dd-coupon-input').val());
+    if (prefilledCode) {
+      setTimeout(function () {
+        $('#dd-apply-coupon-btn').trigger('click');
+      }, 350);
+    }
+  });
+
   // Remove applied coupon
   $(document).on('click', '#dd-remove-coupon-link', function (e) {
     e.preventDefault();

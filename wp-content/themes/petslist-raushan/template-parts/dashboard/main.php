@@ -55,7 +55,8 @@ $nav = [
 ];
 
 // SVG icon map
-function dd_nav_icon($k) {
+if ( ! function_exists( 'dd_nav_icon' ) ) {
+    function dd_nav_icon($k) {
     $icons = [
         'home'    => '<i class="fa-solid fa-house" style="font-size: 15px;"></i>',
         'dogs'    => '<i class="fa-solid fa-dog" style="font-size: 15px;"></i>',
@@ -69,6 +70,7 @@ function dd_nav_icon($k) {
         'dir'     => '<i class="fa-solid fa-compass" style="font-size: 15px;"></i>',
     ];
     return $icons[$k] ?? '';
+    }
 }
 ?>
 
@@ -146,8 +148,14 @@ function dd_nav_icon($k) {
                 <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 10px; margin-left: auto; opacity: 0.4;"></i>
             </a>
 
-            <?php if ( current_user_can( 'manage_options' ) ) : ?>
-            <!-- WP Admin link for administrators -->
+            <?php if ( dd_is_admin() ) : ?>
+            <!-- Admin links for administrators -->
+            <a href="<?php echo esc_url( add_query_arg('view', 'admin', dd_dashboard_url()) ); ?>"
+               class="ddu-sidebar__nav-item" style="color: #02c5bd; font-weight: 600;">
+                <span class="ddu-sidebar__nav-icon"><i class="fa-solid fa-shield-dog" style="font-size: 15px;"></i></span>
+                <span class="ddu-sidebar__nav-label"><?php _e('Dog Admin Panel','petslist'); ?></span>
+                <i class="fa-solid fa-arrow-right" style="font-size: 10px; margin-left: auto; opacity: 0.8;"></i>
+            </a>
             <a href="<?php echo esc_url( admin_url() ); ?>"
                class="ddu-sidebar__nav-item" style="color: #b45309; font-weight: 600;">
                 <span class="ddu-sidebar__nav-icon"><i class="fa-solid fa-gauge-high" style="font-size: 15px;"></i></span>

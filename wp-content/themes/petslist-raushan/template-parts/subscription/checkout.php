@@ -92,7 +92,7 @@ $paypal_client_id = dd_paypal_client_id();
                     <?php _e( 'Have a promo or coupon code?', 'petslist' ); ?>
                 </label>
                 <div style="display: flex; gap: 8px;">
-                    <input type="text" id="dd-coupon-input" placeholder="<?php esc_attr_e('e.g. FREEMONTH', 'petslist'); ?>" style="flex:1; border: 1px solid #cbd5e1; border-radius: 8px; padding: 9px 12px; font-size: 14px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;" autocomplete="off" />
+                    <input type="text" id="dd-coupon-input" value="<?php echo esc_attr( sanitize_text_field( $_GET['coupon'] ?? '' ) ); ?>" placeholder="<?php esc_attr_e('Enter promo code', 'petslist'); ?>" style="flex:1; border: 1px solid #cbd5e1; border-radius: 8px; padding: 9px 12px; font-size: 14px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;" autocomplete="off" />
                     <button type="button" id="dd-apply-coupon-btn" class="dd-btn dd-btn--primary" style="padding: 9px 16px; font-size: 13px; font-weight: 700; border-radius: 8px; white-space: nowrap;">
                         <span><?php _e( 'Apply', 'petslist' ); ?></span>
                         <span class="dd-btn__loader" style="display:none;"><i class="fa-solid fa-spinner fa-spin"></i></span>
@@ -304,7 +304,7 @@ $paypal_client_id = dd_paypal_client_id();
                 <!-- Neither configured -->
                 <div class="dd-notice dd-notice--warning" style="background:#fffbeb; border:1px solid #fde68a; color:#92400e; padding:16px; border-radius:10px;">
                     <i class="fa-solid fa-triangle-exclamation" style="margin-right:6px;"></i>
-                    <?php _e( 'Online credit card payment gateway is currently in maintenance. If you have a promo code (such as <strong>FREEMONTH</strong>), apply it on the left to activate your free access immediately!', 'petslist' ); ?>
+                    <?php _e( 'Online credit card payment gateway is currently in maintenance. If you have an exclusive promo voucher code, apply it on the left to activate your free access immediately!', 'petslist' ); ?>
                 </div>
                 <?php endif; ?>
             </div><!-- /#dd-paid-gateways-wrap -->

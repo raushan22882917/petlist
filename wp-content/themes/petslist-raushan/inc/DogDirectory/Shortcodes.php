@@ -73,8 +73,9 @@ class Shortcodes {
             return '<p class="dd-notice">' . sprintf(__('Please <a href="%s">log in</a> to access your dashboard.', 'petslist'), dd_login_url()) . '</p>';
         }
         ob_start();
-        // Route: admin gets admin dashboard, everyone else gets user dashboard
-        if ( current_user_can( 'manage_options' ) ) {
+        // Route: admin gets admin dashboard by default, user can toggle view=user
+        $view = sanitize_text_field( $_GET['view'] ?? '' );
+        if ( dd_is_admin() && $view !== 'user' ) {
             \RadiusTheme\Petslist\Helper::get_template_part('template-parts/dashboard/admin-main');
         } else {
             \RadiusTheme\Petslist\Helper::get_template_part('template-parts/dashboard/main');

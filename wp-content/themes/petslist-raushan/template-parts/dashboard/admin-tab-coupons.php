@@ -5,7 +5,7 @@
  */
 use RadiusTheme\Petslist\DogDirectory\Subscription;
 if ( ! defined('ABSPATH') ) exit;
-if ( ! current_user_can('manage_options') ) { wp_die(__('Access denied','petslist')); }
+if ( ! dd_is_admin() ) { wp_die(__('Access denied','petslist')); }
 
 $saved = false;
 $msg   = '';
@@ -25,7 +25,7 @@ if ( isset($_POST['dd_save_coupon_nonce']) && wp_verify_nonce($_POST['dd_save_co
     }
 }
 
-// Handle delete / toggle via GET action
+// Handle delete / toggle / send_email via GET action
 if ( isset($_GET['action']) && isset($_GET['coupon_id']) && check_admin_referer('dd_admin_coupon_action', 'dd_c_nonce') ) {
     $c_id = absint($_GET['coupon_id']);
     if ( $_GET['action'] === 'delete' ) {
@@ -42,6 +42,16 @@ if ( isset($_GET['action']) && isset($_GET['coupon_id']) && check_admin_referer(
             $msg = $c->is_active ? __('Promo code deactivated.', 'petslist') : __('Promo code activated.', 'petslist');
             $msg_type = 'success';
         }
+    } elseif ( $_GET['action'] === 'send_email' ) {
+        $res = Subscription::send_coupon_email($c_id);
+        $saved = true;
+        if ( is_wp_error($res) ) {
+            $msg = $res->get_error_message();
+            $msg_type = 'error';
+        } else {
+            $msg = $res['message'];
+            $msg_type = 'success';
+        }
     }
 }
 
@@ -49,9 +59,18 @@ $coupons     = Subscription::get_coupons(true);
 $redemptions = Subscription::get_coupon_redemptions(30);
 $plans       = Subscription::get_plans();
 
+// Fetch users for assignment dropdown
+$all_users   = get_users([
+    'number'  => 300,
+    'orderby' => 'display_name',
+    'order'   => 'ASC',
+    'fields'  => ['ID', 'user_login', 'user_email', 'display_name'],
+]);
+
 $total_codes       = count($coupons);
 $active_codes      = count(array_filter($coupons, fn($c) => (int)$c->is_active === 1));
 $total_redemptions = array_reduce($coupons, fn($acc, $c) => $acc + (int)$c->times_used, 0);
+$private_codes     = count(array_filter($coupons, fn($c) => (!empty($c->assigned_user_id) && (int)$c->assigned_user_id > 0) || !empty($c->assigned_user_email)));
 ?>
 
 <div class="dda-coupons">
@@ -89,8 +108,8 @@ $total_redemptions = array_reduce($coupons, fn($acc, $c) => $acc + (int)$c->time
             <div style="font-size:28px; font-weight:800; color:var(--dd-primary, #bd8c42);"><?php echo $total_redemptions; ?></div>
         </div>
         <div class="dda-stat-card" style="background:#fff; border:1px solid #e2e8f0; border-radius:14px; padding:20px;">
-            <div style="font-size:12px; font-weight:700; color:#64748b; text-transform:uppercase; margin-bottom:6px;"><?php _e('Default Free Code', 'petslist'); ?></div>
-            <div style="font-size:22px; font-weight:800; color:#4338ca; font-family:monospace;">FREEMONTH</div>
+            <div style="font-size:12px; font-weight:700; color:#64748b; text-transform:uppercase; margin-bottom:6px;"><?php _e('Private / Assigned', 'petslist'); ?></div>
+            <div style="font-size:28px; font-weight:800; color:#0284c7;"><?php echo $private_codes; ?></div>
         </div>
     </div>
 
@@ -108,13 +127,13 @@ $total_redemptions = array_reduce($coupons, fn($acc, $c) => $acc + (int)$c->time
                     <label style="display:block; font-size:13px; font-weight:700; color:#334155; margin-bottom:6px;">
                         <?php _e('Code String *', 'petslist'); ?>
                     </label>
-                    <input type="text" name="coupon[code]" placeholder="e.g. FREEMONTH or STUD2026" required style="width:100%; border:1px solid #cbd5e1; border-radius:8px; padding:10px 12px; font-size:14px; text-transform:uppercase; font-weight:700; letter-spacing:0.5px;" />
+                    <input type="text" name="coupon[code]" placeholder="e.g. VIP-JOHN or PROMO2026" required style="width:100%; border:1px solid #cbd5e1; border-radius:8px; padding:10px 12px; font-size:14px; text-transform:uppercase; font-weight:700; letter-spacing:0.5px;" />
                 </div>
                 <div class="dd-form-group">
                     <label style="display:block; font-size:13px; font-weight:700; color:#334155; margin-bottom:6px;">
                         <?php _e('Name / Description', 'petslist'); ?>
                     </label>
-                    <input type="text" name="coupon[name]" placeholder="e.g. Free 1 Month Access" style="width:100%; border:1px solid #cbd5e1; border-radius:8px; padding:10px 12px; font-size:14px;" />
+                    <input type="text" name="coupon[name]" placeholder="e.g. VIP Free 1 Month Invitation" style="width:100%; border:1px solid #cbd5e1; border-radius:8px; padding:10px 12px; font-size:14px;" />
                 </div>
                 <div class="dd-form-group">
                     <label style="display:block; font-size:13px; font-weight:700; color:#334155; margin-bottom:6px;">
@@ -135,15 +154,54 @@ $total_redemptions = array_reduce($coupons, fn($acc, $c) => $acc + (int)$c->time
                 </div>
                 <div class="dd-form-group">
                     <label style="display:block; font-size:13px; font-weight:700; color:#334155; margin-bottom:6px;">
-                        <?php _e('Max Redemptions', 'petslist'); ?> <small style="color:#94a3b8; font-weight:normal;">(0 = unlimited)</small>
+                        <?php _e('Max Redemptions', 'petslist'); ?> <small style="color:#94a3b8; font-weight:normal;">(0 = unlimited, 1 = single-use)</small>
                     </label>
-                    <input type="number" name="coupon[max_uses]" value="0" min="0" style="width:100%; border:1px solid #cbd5e1; border-radius:8px; padding:10px 12px; font-size:14px;" />
+                    <input type="number" name="coupon[max_uses]" value="1" min="0" style="width:100%; border:1px solid #cbd5e1; border-radius:8px; padding:10px 12px; font-size:14px;" />
                 </div>
                 <div class="dd-form-group">
                     <label style="display:block; font-size:13px; font-weight:700; color:#334155; margin-bottom:6px;">
                         <?php _e('Expiry Date (Optional)', 'petslist'); ?>
                     </label>
                     <input type="date" name="coupon[expires_at]" style="width:100%; border:1px solid #cbd5e1; border-radius:8px; padding:10px 12px; font-size:14px;" />
+                </div>
+            </div>
+
+            <!-- Specific User Assignment Section -->
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:18px; margin-bottom:20px;">
+                <div style="font-size:14px; font-weight:800; color:#0f172a; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+                    <span>👤</span>
+                    <span><?php _e('Assign To Specific User (Exclusive Private Voucher)', 'petslist'); ?></span>
+                </div>
+                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:14px; margin-bottom:12px;">
+                    <div>
+                        <label style="display:block; font-size:12px; font-weight:700; color:#475569; margin-bottom:5px;">
+                            <?php _e('Select Registered User', 'petslist'); ?>
+                        </label>
+                        <select name="coupon[assigned_user_id]" id="dd_coupon_user_select" style="width:100%; border:1px solid #cbd5e1; border-radius:8px; padding:9px 12px; font-size:13px; background:#fff;">
+                            <option value="0" data-email=""><?php _e('🌐 Public (Anyone can use)', 'petslist'); ?></option>
+                            <?php foreach ($all_users as $u) : ?>
+                            <option value="<?php echo esc_attr($u->ID); ?>" data-email="<?php echo esc_attr($u->user_email); ?>">
+                                <?php echo esc_html($u->display_name ?: $u->user_login); ?> (<?php echo esc_html($u->user_email); ?>)
+                            </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="display:block; font-size:12px; font-weight:700; color:#475569; margin-bottom:5px;">
+                            <?php _e('Assigned Email Address', 'petslist'); ?>
+                        </label>
+                        <input type="email" name="coupon[assigned_user_email]" id="dd_coupon_user_email" placeholder="e.g. member@example.com" style="width:100%; border:1px solid #cbd5e1; border-radius:8px; padding:9px 12px; font-size:13px; background:#fff;" />
+                    </div>
+                </div>
+
+                <div style="padding-top:8px; border-top:1px solid #edf2f7;">
+                    <label style="display:inline-flex; align-items:center; gap:8px; cursor:pointer; font-size:13px; font-weight:700; color:#0f172a;">
+                        <input type="checkbox" name="coupon[send_email]" id="dd_coupon_send_email" value="1" checked style="width:16px; height:16px; accent-color:#02c5bd;" />
+                        <span>✉️ <?php _e('Send notification email with promo voucher code & 1-click activation link to the assigned user', 'petslist'); ?></span>
+                    </label>
+                    <p style="margin:4px 0 0 24px; font-size:12px; color:#64748b;">
+                        <?php _e('When assigned, this voucher is locked to the selected account and cannot be redeemed by anyone else.', 'petslist'); ?>
+                    </p>
                 </div>
             </div>
 
@@ -159,7 +217,7 @@ $total_redemptions = array_reduce($coupons, fn($acc, $c) => $acc + (int)$c->time
     <div class="ddu-panel" style="background:#fff; border:1px solid #e2e8f0; border-radius:16px; padding:24px; margin-bottom:30px; box-shadow:0 4px 16px rgba(0,0,0,0.02);">
         <div style="margin-bottom:18px;">
             <h3 style="font-size:17px; font-weight:800; color:#070c3e; margin:0 0 4px 0;">📋 <?php _e('All Promo Codes', 'petslist'); ?></h3>
-            <p style="font-size:13px; color:#64748b; margin:0;"><?php _e('Share these codes with users to give them free monthly access.', 'petslist'); ?></p>
+            <p style="font-size:13px; color:#64748b; margin:0;"><?php _e('Manage codes, view assigned recipients, and resend voucher invitation emails.', 'petslist'); ?></p>
         </div>
 
         <?php if (!empty($coupons)) : ?>
@@ -169,6 +227,7 @@ $total_redemptions = array_reduce($coupons, fn($acc, $c) => $acc + (int)$c->time
                     <tr style="border-bottom:2px solid #e2e8f0; text-align:left; color:#64748b; font-size:12px; text-transform:uppercase;">
                         <th style="padding:12px 14px;"><?php _e('Code', 'petslist'); ?></th>
                         <th style="padding:12px 14px;"><?php _e('Name', 'petslist'); ?></th>
+                        <th style="padding:12px 14px;"><?php _e('Assigned To', 'petslist'); ?></th>
                         <th style="padding:12px 14px;"><?php _e('Plan', 'petslist'); ?></th>
                         <th style="padding:12px 14px;"><?php _e('Duration', 'petslist'); ?></th>
                         <th style="padding:12px 14px;"><?php _e('Redemptions', 'petslist'); ?></th>
@@ -182,6 +241,8 @@ $total_redemptions = array_reduce($coupons, fn($acc, $c) => $acc + (int)$c->time
                         $is_expired = !empty($c->expires_at) && strtotime($c->expires_at) < time();
                         $toggle_url = wp_nonce_url(add_query_arg(['tab'=>'coupons', 'action'=>'toggle', 'coupon_id'=>$c->id]), 'dd_admin_coupon_action', 'dd_c_nonce');
                         $delete_url = wp_nonce_url(add_query_arg(['tab'=>'coupons', 'action'=>'delete', 'coupon_id'=>$c->id]), 'dd_admin_coupon_action', 'dd_c_nonce');
+                        $email_url  = wp_nonce_url(add_query_arg(['tab'=>'coupons', 'action'=>'send_email', 'coupon_id'=>$c->id]), 'dd_admin_coupon_action', 'dd_c_nonce');
+                        $has_assignee = (!empty($c->assigned_user_id) && $c->assigned_user_id > 0) || !empty($c->assigned_user_email);
                     ?>
                     <tr style="border-bottom:1px solid #f1f5f9;">
                         <td style="padding:14px; font-weight:800; font-family:monospace; color:#070c3e; font-size:15px;">
@@ -191,6 +252,24 @@ $total_redemptions = array_reduce($coupons, fn($acc, $c) => $acc + (int)$c->time
                             </button>
                         </td>
                         <td style="padding:14px; color:#334155;"><?php echo esc_html($c->name ?: '—'); ?></td>
+                        <td style="padding:14px;">
+                            <?php if ($has_assignee) : 
+                                $assignee_user = !empty($c->assigned_user_id) ? get_userdata($c->assigned_user_id) : null;
+                                $display_name  = $assignee_user ? ($assignee_user->display_name ?: $assignee_user->user_login) : '';
+                                $display_email = $c->assigned_user_email ?: ($assignee_user ? $assignee_user->user_email : '');
+                            ?>
+                                <span style="background:#e0f2fe; color:#0369a1; padding:3px 8px; border-radius:6px; font-weight:700; font-size:11px; display:inline-block; margin-bottom:2px;">
+                                    🔒 <?php echo esc_html($display_name ?: __('Private User', 'petslist')); ?>
+                                </span>
+                                <?php if ($display_email) : ?>
+                                <div style="font-size:11px; color:#64748b;"><?php echo esc_html($display_email); ?></div>
+                                <?php endif; ?>
+                            <?php else : ?>
+                                <span style="background:#f1f5f9; color:#64748b; padding:3px 8px; border-radius:6px; font-size:11px; font-weight:600;">
+                                    🌐 <?php _e('Public', 'petslist'); ?>
+                                </span>
+                            <?php endif; ?>
+                        </td>
                         <td style="padding:14px; color:#64748b;"><?php echo esc_html(ucfirst($c->plan_slug)); ?></td>
                         <td style="padding:14px; color:#334155; font-weight:600;"><?php echo (int)$c->duration_days; ?> <?php _e('days', 'petslist'); ?></td>
                         <td style="padding:14px; color:#334155;">
@@ -219,10 +298,15 @@ $total_redemptions = array_reduce($coupons, fn($acc, $c) => $acc + (int)$c->time
                             <?php endif; ?>
                         </td>
                         <td style="padding:14px; text-align:right; white-space:nowrap;">
-                            <a href="<?php echo esc_url($toggle_url); ?>" class="dd-btn dd-btn--sm dd-btn--ghost" style="padding:4px 10px; font-size:12px; margin-right:6px;">
+                            <?php if ($has_assignee) : ?>
+                            <a href="<?php echo esc_url($email_url); ?>" class="dd-btn dd-btn--sm dd-btn--ghost" style="padding:4px 8px; font-size:12px; margin-right:4px; color:#0369a1;" title="<?php esc_attr_e('Send or resend notification email to assigned user', 'petslist'); ?>">
+                                <i class="fa-solid fa-paper-plane"></i> <?php _e('Email', 'petslist'); ?>
+                            </a>
+                            <?php endif; ?>
+                            <a href="<?php echo esc_url($toggle_url); ?>" class="dd-btn dd-btn--sm dd-btn--ghost" style="padding:4px 8px; font-size:12px; margin-right:4px;">
                                 <?php echo $c->is_active ? __('Deactivate', 'petslist') : __('Activate', 'petslist'); ?>
                             </a>
-                            <a href="<?php echo esc_url($delete_url); ?>" class="dd-btn dd-btn--sm dd-btn--danger dd-btn--ghost" onclick="return confirm('<?php esc_attr_e('Are you sure you want to delete this promo code?', 'petslist'); ?>');" style="padding:4px 10px; font-size:12px;">
+                            <a href="<?php echo esc_url($delete_url); ?>" class="dd-btn dd-btn--sm dd-btn--danger dd-btn--ghost" onclick="return confirm('<?php esc_attr_e('Are you sure you want to delete this promo code?', 'petslist'); ?>');" style="padding:4px 8px; font-size:12px;">
                                 <i class="fa-solid fa-trash"></i>
                             </a>
                         </td>
@@ -299,5 +383,25 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    // Auto sync user dropdown with email field
+    var userSelect = document.getElementById('dd_coupon_user_select');
+    var emailInput = document.getElementById('dd_coupon_user_email');
+    var sendEmailCheckbox = document.getElementById('dd_coupon_send_email');
+
+    if (userSelect && emailInput) {
+        userSelect.addEventListener('change', function() {
+            var selectedOpt = this.options[this.selectedIndex];
+            var email = selectedOpt.getAttribute('data-email') || '';
+            if (email) {
+                emailInput.value = email;
+                if (sendEmailCheckbox) {
+                    sendEmailCheckbox.checked = true;
+                }
+            } else if (this.value === '0') {
+                emailInput.value = '';
+            }
+        });
+    }
 });
 </script>

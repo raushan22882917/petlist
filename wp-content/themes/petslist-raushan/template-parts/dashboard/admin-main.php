@@ -5,7 +5,7 @@
  */
 use RadiusTheme\Petslist\DogDirectory\Subscription;
 if ( ! defined('ABSPATH') ) exit;
-if ( ! current_user_can('manage_options') ) { wp_die(__('Access denied','petslist')); }
+if ( ! dd_is_admin() ) { wp_die(__('Access denied','petslist')); }
 
 $uid  = get_current_user_id();
 $user = wp_get_current_user();
@@ -101,6 +101,11 @@ function dda_icon($k) {
 
         <!-- Shortcuts nav -->
         <nav class="ddu-sidebar__nav">
+            <a href="<?php echo esc_url(add_query_arg('view', 'user', dd_dashboard_url())); ?>" class="ddu-sidebar__nav-item">
+                <span class="ddu-sidebar__nav-icon"><i class="fa-solid fa-user" style="font-size:14px;"></i></span>
+                <span class="ddu-sidebar__nav-label"><?php _e('User View','petslist'); ?></span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11" style="margin-left:auto;opacity:.4"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
             <a href="<?php echo esc_url(dd_dog_directory_url()); ?>" class="ddu-sidebar__nav-item" target="_blank">
                 <span class="ddu-sidebar__nav-icon"><?php echo dda_icon('exit'); ?></span>
                 <span class="ddu-sidebar__nav-label"><?php _e('View Directory','petslist'); ?></span>

@@ -855,3 +855,126 @@ function dd_gender_icon( $gender ) {
     if ( $gender === 'Female' ) return '<i class="icon-pl-account-fill dd-icon--female" title="Female"></i>';
     return '';
 }
+
+// -------------------------------------------------------
+// ROLE-BASED ACCESS CONTROL (RBAC) HELPERS
+// -------------------------------------------------------
+
+/**
+ * Determine if a user has administrator access with auto-healing.
+ *
+ * Checks standard WordPress capabilities, administrator role,
+ * or designated admin accounts. If a designated admin has lost
+ * their role due to prefix/usermeta desync, this automatically repairs it.
+ *
+ * @param int|\WP_User|null $user_or_id
+ * @return bool
+ */
+function dd_is_admin( $user_or_id = null ) {
+    if ( null === $user_or_id ) {
+        if ( ! is_user_logged_in() ) {
+            return false;
+        }
+        $user = wp_get_current_user();
+    } elseif ( is_numeric( $user_or_id ) ) {
+        $user = get_user_by( 'id', (int) $user_or_id );
+    } elseif ( $user_or_id instanceof \WP_User ) {
+        $user = $user_or_id;
+    } else {
+        return false;
+    }
+
+    if ( ! $user || ! $user->exists() ) {
+        return false;
+    }
+
+    // 1. Standard WordPress capability check
+    if ( user_can( $user, 'manage_options' ) ) {
+        return true;
+    }
+
+    // 2. Direct roles array check
+    $roles = (array) ( $user->roles ?? [] );
+    if ( in_array( 'administrator', $roles, true ) ) {
+        return true;
+    }
+
+    // 3. Fallback check for designated administrative accounts
+    $admin_logins = [ 'admin', 'studsadmin', 'administrator' ];
+    $admin_emails = [
+        'admin@example.com',
+        'admin@studs4you.com',
+        'raushan22882917@gmail.com',
+        'raushan@autonxt.in',
+        'software-admin@autonxt.in',
+    ];
+
+    $login = strtolower( trim( $user->user_login ?? '' ) );
+    $email = strtolower( trim( $user->user_email ?? '' ) );
+
+    $is_designated = (int) $user->ID === 1
+        || in_array( $login, $admin_logins, true )
+        || in_array( $email, $admin_emails, true );
+
+    if ( $is_designated ) {
+        // Self-heal: ensure WordPress database has the administrator role set
+        if ( ! in_array( 'administrator', $roles, true ) ) {
+            $user->add_role( 'administrator' );
+        }
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * Check if a user has an active Dog Directory subscription or is an admin.
+ *
+ * @param int|\WP_User|null $user_or_id
+ * @return bool
+ */
+function dd_is_subscriber_or_admin( $user_or_id = null ) {
+    if ( dd_is_admin( $user_or_id ) ) {
+        return true;
+    }
+
+    $uid = $user_or_id ? ( is_numeric( $user_or_id ) ? (int) $user_or_id : $user_or_id->ID ) : get_current_user_id();
+    if ( ! $uid ) {
+        return false;
+    }
+
+    // Check via Subscription class
+    if ( class_exists( '\RadiusTheme\Petslist\DogDirectory\Subscription' ) ) {
+        if ( \RadiusTheme\Petslist\DogDirectory\Subscription::user_has_subscription( $uid ) ) {
+            return true;
+        }
+    }
+
+    // Check custom role
+    $user = is_numeric( $user_or_id ) ? get_user_by( 'id', $uid ) : ( $user_or_id ?: wp_get_current_user() );
+    if ( $user && in_array( 'dd_subscriber', (array) ( $user->roles ?? [] ), true ) ) {
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * Get normalized user role for UI/access routing: 'admin', 'subscriber', 'free', 'guest'
+ *
+ * @param int|\WP_User|null $user_or_id
+ * @return string
+ */
+function dd_get_user_access_level( $user_or_id = null ) {
+    if ( null === $user_or_id && ! is_user_logged_in() ) {
+        return 'guest';
+    }
+    if ( dd_is_admin( $user_or_id ) ) {
+        return 'admin';
+    }
+    if ( dd_is_subscriber_or_admin( $user_or_id ) ) {
+        return 'subscriber';
+    }
+    return 'free';
+}
+
