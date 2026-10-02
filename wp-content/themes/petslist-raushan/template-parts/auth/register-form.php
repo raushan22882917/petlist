@@ -45,19 +45,20 @@ $dd_auth_banner = function_exists( 'petslist_img_url' ) ? petslist_img_url( 'aut
                         <?php _e('Location', 'petslist'); ?>
                         <strong class="rtcl-required">*</strong>
                     </label>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
                         <div>
-                            <select id="dd-reg-state" name="state" class="rtcl-form-control select2 dd-searchable-select" required style="width: 100%;">
-                                <?php
-                                if ( function_exists( 'dd_render_location_options' ) ) {
-                                    dd_render_location_options( '', __( 'Select State', 'petslist' ) );
-                                }
-                                ?>
+                            <select id="dd-reg-country" name="country" class="rtcl-form-control select2 dd-searchable-select dd-country-select" data-state-target="dd-reg-state" required style="width: 100%;">
+                                <option value=""><?php _e('Select Country', 'petslist'); ?></option>
                             </select>
                         </div>
                         <div>
-                            <input type="text" id="dd-reg-city" name="city" class="rtcl-form-control" placeholder="<?php esc_attr_e('Enter City (e.g. Miami)', 'petslist'); ?>" style="height: 48px; border-radius: 8px; font-size: 14px;">
+                            <select id="dd-reg-state" name="state" class="rtcl-form-control select2 dd-searchable-select dd-state-select" required style="width: 100%;">
+                                <option value=""><?php _e('Select State / Province', 'petslist'); ?></option>
+                            </select>
                         </div>
+                    </div>
+                    <div style="margin-top: 12px;">
+                        <input type="text" id="dd-reg-city" name="city" class="rtcl-form-control" placeholder="<?php esc_attr_e('Enter City', 'petslist'); ?>" style="height: 48px; border-radius: 8px; font-size: 14px; width: 100%;">
                     </div>
                 </div>
 

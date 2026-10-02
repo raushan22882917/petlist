@@ -156,15 +156,23 @@ function dd_field( $meta, $key, $fallback = '' ) {
             <div class="dd-dog-form__grid">
 
                 <div class="dd-form-group">
-                    <label for="dd-country"><?php _e( 'State', 'petslist' ); ?> <span class="dd-required">*</span></label>
-                    <select id="dd-country" name="dog_data[country]" class="select2 dd-searchable-select" style="width:100%;" required>
-                        <?php dd_render_location_options( dd_field($dog_meta, 'country'), __( 'Select State', 'petslist' ) ); ?>
+                    <label for="dd-dog-country-select"><?php _e( 'Country', 'petslist' ); ?> <span class="dd-required">*</span></label>
+                    <select id="dd-dog-country-select" name="dog_data[dog_country]" class="select2 dd-searchable-select dd-country-select" data-state-target="dd-dog-state-select" style="width:100%;" required>
+                        <option value=""><?php _e( 'Select Country', 'petslist' ); ?></option>
+                    </select>
+                    <input type="hidden" name="dog_data[country]" id="dd-dog-country-hidden" value="<?php echo dd_field($dog_meta,'dog_country') ?: dd_field($dog_meta,'country'); ?>">
+                </div>
+
+                <div class="dd-form-group">
+                    <label for="dd-dog-state-select"><?php _e( 'State / Province', 'petslist' ); ?> <span class="dd-required">*</span></label>
+                    <select id="dd-dog-state-select" name="dog_data[state_province]" class="select2 dd-searchable-select dd-state-select" data-saved="<?php echo dd_field($dog_meta,'state_province') ?: dd_field($dog_meta,'country'); ?>" style="width:100%;" required>
+                        <option value=""><?php _e( 'Select State / Province', 'petslist' ); ?></option>
                     </select>
                 </div>
 
                 <div class="dd-form-group">
                     <label for="dd-city"><?php _e( 'City', 'petslist' ); ?> <span class="dd-required">*</span></label>
-                    <input type="text" id="dd-city" name="dog_data[city]" value="<?php echo dd_field($dog_meta,'city'); ?>" placeholder="<?php esc_attr_e( 'Enter City (e.g. Los Angeles, Miami)', 'petslist' ); ?>" required>
+                    <input type="text" id="dd-city" name="dog_data[city]" value="<?php echo dd_field($dog_meta,'city'); ?>" placeholder="<?php esc_attr_e( 'Enter City', 'petslist' ); ?>" required>
                 </div>
 
                 <div class="dd-form-group">

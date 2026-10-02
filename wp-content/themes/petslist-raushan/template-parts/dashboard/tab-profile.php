@@ -11,6 +11,7 @@ $phone            = get_user_meta( $user->ID, 'dd_phone', true );
 $location         = get_user_meta( $user->ID, 'dd_location', true );
 $user_state       = get_user_meta( $user->ID, 'dd_state', true );
 $user_city        = get_user_meta( $user->ID, 'dd_city', true );
+$user_country     = get_user_meta( $user->ID, 'dd_country', true );
 if ( empty( $user_state ) && ! empty( $location ) ) {
     $loc_parts = array_map( 'trim', explode( ',', $location ) );
     if ( count( $loc_parts ) >= 2 ) {
@@ -19,6 +20,10 @@ if ( empty( $user_state ) && ! empty( $location ) ) {
     } else {
         $user_state = $location;
     }
+}
+// Default country to United States if only state is saved (legacy data)
+if ( empty( $user_country ) && ! empty( $user_state ) ) {
+    $user_country = 'United States';
 }
 $fulltime_breeder = get_user_meta( $user->ID, 'dd_fulltime_breeder', true ) ?: 'no';
 $website          = $user->user_url;
@@ -77,13 +82,17 @@ $website          = $user->user_url;
                     </div>
 
                     <div class="dd-form-group">
-                        <label for="dd-profile-state"><?php _e( 'State / Location', 'petslist' ); ?></label>
-                        <select id="dd-profile-state" name="state" class="dd-form-control select2 dd-searchable-select" style="width: 100%;">
-                            <?php
-                            if ( function_exists( 'dd_render_location_options' ) ) {
-                                dd_render_location_options( $user_state, __( 'Select State', 'petslist' ) );
-                            }
-                            ?>
+                        <label for="dd-profile-country"><?php _e( 'Country', 'petslist' ); ?></label>
+                        <select id="dd-profile-country" name="country" class="dd-form-control select2 dd-searchable-select dd-country-select" data-state-target="dd-profile-state" style="width: 100%;">
+                            <option value=""><?php _e( 'Select Country', 'petslist' ); ?></option>
+                        </select>
+                        <input type="hidden" name="country_saved" id="dd-profile-country-hidden" value="<?php echo esc_attr( $user_country ); ?>">
+                    </div>
+
+                    <div class="dd-form-group">
+                        <label for="dd-profile-state"><?php _e( 'State / Province', 'petslist' ); ?></label>
+                        <select id="dd-profile-state" name="state" class="dd-form-control select2 dd-searchable-select dd-state-select" data-saved="<?php echo esc_attr( $user_state ); ?>" style="width: 100%;">
+                            <option value=""><?php _e( 'Select State / Province', 'petslist' ); ?></option>
                         </select>
                     </div>
 
