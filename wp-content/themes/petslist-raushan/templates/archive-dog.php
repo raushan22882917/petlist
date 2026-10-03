@@ -15,6 +15,7 @@ $paged          = max(1, get_query_var('paged'));
 $breed_filter   = sanitize_text_field( $_GET['breed'] ?? $_GET['q'] ?? '' );
 $gender_filter  = sanitize_text_field( $_GET['gender'] ?? $_GET['filters']['ad_type'] ?? '' );
 $country_filter = sanitize_text_field( $_GET['country'] ?? $_GET['rtcl_location'] ?? $_GET['geo_address'] ?? '' );
+$state_filter   = sanitize_text_field( $_GET['state'] ?? '' );
 $health_filter  = sanitize_text_field( $_GET['health_clearance'] ?? '' );
 $keyword        = sanitize_text_field( $_GET['s'] ?? '' );
 $orderby        = sanitize_text_field( $_GET['orderby'] ?? 'date' );
@@ -75,36 +76,43 @@ if ( $gender_filter ) {
     ];
 }
 if ( $country_filter ) {
+    $meta_queries[] = [
+        'key'     => '_dd_dog_meta',
+        'value'   => $country_filter,
+        'compare' => 'LIKE',
+    ];
+}
+if ( $state_filter ) {
     $states_map = function_exists('dd_get_us_states') ? dd_get_us_states() : [];
-    $state_name = $states_map[ strtoupper($country_filter) ] ?? '';
-    if ( ! $state_name && in_array( $country_filter, $states_map, true ) ) {
-        $state_code = array_search( $country_filter, $states_map, true );
-        $state_name = $country_filter;
+    $state_name = $states_map[ strtoupper($state_filter) ] ?? '';
+    if ( ! $state_name && in_array( $state_filter, $states_map, true ) ) {
+        $state_code = array_search( $state_filter, $states_map, true );
+        $state_name = $state_filter;
     } else {
-        $state_code = strtoupper($country_filter);
+        $state_code = strtoupper($state_filter);
     }
 
-    if ( $state_name && $state_code ) {
-        $meta_queries[] = [
-            'relation' => 'OR',
-            [
-                'key'     => '_dd_dog_meta',
-                'value'   => $state_code,
-                'compare' => 'LIKE',
-            ],
-            [
-                'key'     => '_dd_dog_meta',
-                'value'   => $state_name,
-                'compare' => 'LIKE',
-            ],
-        ];
-    } else {
-        $meta_queries[] = [
+    $state_clauses = [
+        [
             'key'     => '_dd_dog_meta',
-            'value'   => $country_filter,
+            'value'   => $state_filter,
+            'compare' => 'LIKE',
+        ]
+    ];
+    if ( $state_name && $state_code ) {
+        $state_clauses[] = [
+            'key'     => '_dd_dog_meta',
+            'value'   => $state_code,
+            'compare' => 'LIKE',
+        ];
+        $state_clauses[] = [
+            'key'     => '_dd_dog_meta',
+            'value'   => $state_name,
             'compare' => 'LIKE',
         ];
     }
+    $state_clauses['relation'] = 'OR';
+    $meta_queries[] = $state_clauses;
 }
 if ( $health_filter === 'yes' ) {
     $meta_queries[] = ['key' => '_dd_dog_health', 'compare' => 'EXISTS'];
@@ -171,11 +179,23 @@ $query = new WP_Query($args);
                         </select>
                     </div>
                     <div class="dd-search-form__field">
-                        <select name="country">
-                            <option value=""><?php _e('All Locations', 'petslist'); ?></option>
+                        <select name="country" class="dd-country-select" data-state-target="dd-archive-state" data-saved-country="<?php echo esc_attr( $country_filter ); ?>">
                             <?php
-                            if ( function_exists( 'dd_render_location_options' ) ) {
-                                dd_render_location_options( $country_filter, false );
+                            if ( function_exists( 'dd_render_country_options' ) ) {
+                                dd_render_country_options( $country_filter, __( 'All Countries', 'petslist' ) );
+                            } else {
+                                echo '<option value="">' . esc_html__( 'All Countries', 'petslist' ) . '</option>';
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="dd-search-form__field">
+                        <select name="state" id="dd-archive-state" class="dd-state-select" data-saved="<?php echo esc_attr( $state_filter ); ?>">
+                            <?php
+                            if ( function_exists( 'dd_render_state_options' ) ) {
+                                dd_render_state_options( $country_filter, $state_filter, __( 'All States', 'petslist' ) );
+                            } else {
+                                echo '<option value="">' . esc_html__( 'All States', 'petslist' ) . '</option>';
                             }
                             ?>
                         </select>
@@ -189,7 +209,7 @@ $query = new WP_Query($args);
                     <button type="submit" class="dd-btn dd-btn--primary dd-search-form__submit">
                         <i class="icon-pl-search"></i> <?php _e('Search', 'petslist'); ?>
                     </button>
-                    <?php if ( $breed_filter || $gender_filter || $keyword || $country_filter || $health_filter ) : ?>
+                    <?php if ( $breed_filter || $gender_filter || $keyword || $country_filter || $state_filter || $health_filter ) : ?>
                     <a href="<?php echo esc_url(dd_dog_directory_url()); ?>" class="dd-btn dd-btn--ghost"><?php _e('Clear', 'petslist'); ?></a>
                     <?php endif; ?>
                 </div>

@@ -808,6 +808,12 @@
     ];
 
     function ddPopulateCountries($sel, savedValue) {
+        if ($sel.find('option').length > 1) {
+            if (savedValue) {
+                $sel.val(savedValue);
+            }
+            return;
+        }
         $sel.find('option:not(:first)').remove();
         for (var i = 0; i < DD_COUNTRIES.length; i++) {
             var opt = document.createElement('option');
@@ -819,11 +825,23 @@
     }
 
     function ddPopulateStates($stateSel, countryName, savedState) {
-        $stateSel.find('option:not(:first)').remove();
+        var firstOpt = $stateSel.find('option:first');
+        var placeholderText = firstOpt.length ? firstOpt.text() : 'All States';
+        $stateSel.empty();
+        $stateSel.append($('<option>', { value: '', text: placeholderText }));
+
         var country = null;
-        for (var i = 0; i < DD_COUNTRIES.length; i++) {
-            if (DD_COUNTRIES[i].name === countryName) { country = DD_COUNTRIES[i]; break; }
+        if (countryName) {
+            for (var i = 0; i < DD_COUNTRIES.length; i++) {
+                if (DD_COUNTRIES[i].name === countryName) { country = DD_COUNTRIES[i]; break; }
+            }
+        } else {
+            // Default to United States states when no country is picked
+            for (var i = 0; i < DD_COUNTRIES.length; i++) {
+                if (DD_COUNTRIES[i].name === 'United States') { country = DD_COUNTRIES[i]; break; }
+            }
         }
+
         if (country && country.states && country.states.length) {
             for (var j = 0; j < country.states.length; j++) {
                 var opt = document.createElement('option');
@@ -834,7 +852,8 @@
             }
             $stateSel.prop('disabled', false);
         } else {
-            $stateSel.prop('disabled', true);
+            // If country has no states, keep enabled with only placeholder
+            $stateSel.prop('disabled', false);
         }
         if ($.fn.select2 && $stateSel.hasClass('select2-hidden-accessible')) {
             $stateSel.trigger('change.select2');
@@ -849,26 +868,28 @@
                 ? $('#' + targetId)
                 : $countrySel.closest('form, .dd-dog-form__grid, .dd-form').find('.dd-state-select').first();
 
-            var savedCountry = ($countrySel.data('saved-country') || '').toString().trim();
-            var savedState   = ($stateSel.data('saved') || '').toString().trim();
+            var savedCountry = ($countrySel.data('saved-country') || $countrySel.val() || '').toString().trim();
+            var savedState   = ($stateSel.data('saved') || $stateSel.val() || '').toString().trim();
 
             /* Populate countries */
             ddPopulateCountries($countrySel, savedCountry);
 
-            /* Init Select2 on country */
-            if ($.fn.select2) {
+            /* Init Select2 on country ONLY if specified by class */
+            var useSelect2 = $countrySel.hasClass('select2') || $countrySel.hasClass('dd-searchable-select');
+            if ($.fn.select2 && useSelect2) {
                 $countrySel.select2({ placeholder: 'Select Country', allowClear: true, width: '100%' });
             }
 
-            /* Pre-fill states if we have a saved country */
+            /* Pre-fill states if we have a saved country or if state options are missing */
             if (savedCountry) {
                 ddPopulateStates($stateSel, savedCountry, savedState);
-            } else {
-                $stateSel.prop('disabled', true);
+            } else if ($stateSel.find('option').length <= 1) {
+                ddPopulateStates($stateSel, '', savedState);
             }
 
-            /* Init Select2 on state */
-            if ($.fn.select2) {
+            /* Init Select2 on state ONLY if specified by class */
+            var useStateSelect2 = $stateSel.hasClass('select2') || $stateSel.hasClass('dd-searchable-select');
+            if ($.fn.select2 && useStateSelect2) {
                 $stateSel.select2({ placeholder: 'Select State / Province', allowClear: true, width: '100%' });
             }
 
@@ -876,7 +897,7 @@
             $countrySel.on('change', function () {
                 var selected = $(this).val() || '';
                 ddPopulateStates($stateSel, selected, '');
-                if ($.fn.select2) {
+                if ($.fn.select2 && useStateSelect2) {
                     $stateSel.trigger('change.select2');
                 }
             });
@@ -885,6 +906,22 @@
 
     $(document).ready(function () {
         ddInitCountrySelects();
+
+        // Delegate clicks on country/state wrappers to focus/open the select
+        $(document).on('click', '.rtin-country-space .form-group, .rtin-state-space .form-group', function (e) {
+            if (e.target.tagName !== 'SELECT') {
+                var $sel = $(this).find('select');
+                if ($sel.length) {
+                    $sel.focus();
+                    if (typeof $sel[0].showPicker === 'function') {
+                        try { $sel[0].showPicker(); } catch (err) {}
+                    }
+                }
+            }
+        });
     });
+
+    // Expose globally so dashboard.js can call it on tab changes
+    window.ddInitCountrySelects = ddInitCountrySelects;
 
 })(jQuery);

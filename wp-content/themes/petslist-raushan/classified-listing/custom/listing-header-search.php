@@ -44,21 +44,43 @@ $dog_search_url = get_post_type_archive_link('dd_dog') ?: home_url('/dog-directo
         <input type="hidden" name="post_type" value="dd_dog">
 		<?php if ( ! empty( Options::$options['header_search_location'] ) ): ?>
 			<?php if ( 'local' === Functions::location_type() ): ?>
-                <div class="<?php echo esc_attr( $loc_class ); ?>">
+                <?php
+                $rand_id          = wp_rand();
+                $selected_country = sanitize_text_field( $_GET['country'] ?? $_GET['rtcl_location'] ?? '' );
+                $selected_state   = sanitize_text_field( $_GET['state'] ?? '' );
+                $country_text     = esc_html__( 'All Countries', 'petslist' );
+                $state_text       = esc_html__( 'All States', 'petslist' );
+                ?>
+                <div class="<?php echo esc_attr( $loc_class ); ?> rtin-country-space">
                     <div class="form-group">
                         <i class="icon-pl-location"></i>
-                            <div class="rtcl-search-input-button petslist-search-style-2 rtin-location">
-                                <select name="country" id="rtcl-location-search-<?php echo wp_rand(); ?>" class="form-control rtcl-location-search">
-                                    <?php
-                                    $selected_loc = sanitize_text_field( $_GET['country'] ?? $_GET['rtcl_location'] ?? '' );
-                                    if ( function_exists( 'dd_render_location_options' ) ) {
-                                        dd_render_location_options( $selected_loc, $loc_text );
-                                    } else {
-                                        echo '<option value="">' . esc_html( $loc_text ) . '</option>';
-                                    }
-                                    ?>
-                                </select>
-                            </div>
+                        <div class="rtcl-search-input-button petslist-search-style-2 rtin-location">
+                            <select name="country" id="dd-header-country-<?php echo esc_attr( $rand_id ); ?>" class="form-control rtcl-location-search dd-country-select" data-state-target="dd-header-state-<?php echo esc_attr( $rand_id ); ?>" data-saved-country="<?php echo esc_attr( $selected_country ); ?>">
+                                <?php
+                                if ( function_exists( 'dd_render_country_options' ) ) {
+                                    dd_render_country_options( $selected_country, $country_text );
+                                } else {
+                                    echo '<option value="">' . esc_html( $country_text ) . '</option>';
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="<?php echo esc_attr( $loc_class ); ?> rtin-state-space">
+                    <div class="form-group">
+                        <i class="icon-pl-location"></i>
+                        <div class="rtcl-search-input-button petslist-search-style-2 rtin-location">
+                            <select name="state" id="dd-header-state-<?php echo esc_attr( $rand_id ); ?>" class="form-control rtcl-location-search dd-state-select" data-saved="<?php echo esc_attr( $selected_state ); ?>">
+                                <?php
+                                if ( function_exists( 'dd_render_state_options' ) ) {
+                                    dd_render_state_options( $selected_country, $selected_state, $state_text );
+                                } else {
+                                    echo '<option value="">' . esc_html( $state_text ) . '</option>';
+                                }
+                                ?>
+                            </select>
+                        </div>
                     </div>
                 </div>
 			<?php else: ?>

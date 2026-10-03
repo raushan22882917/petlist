@@ -166,19 +166,62 @@ footer.footer-style-3 .footer-bottom {
 	padding: 20px 0 !important;
 }
 footer.footer-style-3 .footer-bottom .copyright-area {
-	justify-content: center !important;
-	text-align: center !important;
+	display: flex !important;
+	align-items: center !important;
+	justify-content: space-between !important;
 	width: 100% !important;
+	gap: 16px !important;
 }
-footer.footer-style-3 .footer-bottom .copyright-text {
-	width: 100% !important;
-	text-align: center !important;
+footer.footer-style-3 .footer-bottom .copyright-left {
+	text-align: left !important;
+	flex: 1 1 auto !important;
 }
-footer.footer-style-3 .footer-bottom .footer-copyright {
-	text-align: center !important;
-	width: 100% !important;
+footer.footer-style-3 .footer-bottom .copyright-right {
+	text-align: right !important;
+	flex: 0 1 auto !important;
+}
+footer.footer-style-3 .footer-bottom .footer-copyright,
+footer.footer-style-3 .footer-bottom .footer-links {
 	color: #ffffff !important;
 	font-size: 15px !important;
+	margin: 0 !important;
+}
+footer.footer-style-3 .footer-bottom .copyright-left .footer-copyright {
+	text-align: left !important;
+}
+footer.footer-style-3 .footer-bottom .copyright-right .footer-links,
+footer.footer-style-3 .footer-bottom .copyright-right .footer-copyright {
+	text-align: right !important;
+}
+footer.footer-style-3 .footer-bottom .footer-links a,
+footer.footer-style-3 .footer-bottom .footer-copyright a {
+	color: #ffffff !important;
+	text-decoration: underline !important;
+	text-underline-offset: 3px !important;
+}
+footer.footer-style-3 .footer-bottom .footer-links a:hover,
+footer.footer-style-3 .footer-bottom .footer-copyright a:hover {
+	color: var(--petslist-primary-color, #bd8c42) !important;
+}
+footer.footer-style-3 .footer-bottom .footer-sep {
+	margin: 0 10px !important;
+	opacity: 0.45 !important;
+	display: inline-block !important;
+}
+@media (max-width: 767px) {
+	footer.footer-style-3 .footer-bottom .copyright-area {
+		flex-direction: column !important;
+		justify-content: center !important;
+		text-align: center !important;
+		gap: 8px !important;
+	}
+	footer.footer-style-3 .footer-bottom .copyright-left,
+	footer.footer-style-3 .footer-bottom .copyright-right,
+	footer.footer-style-3 .footer-bottom .copyright-left .footer-copyright,
+	footer.footer-style-3 .footer-bottom .copyright-right .footer-links {
+		text-align: center !important;
+		width: 100% !important;
+	}
 }
 
 /* Category Sidebar Text Overrides */

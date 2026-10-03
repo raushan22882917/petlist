@@ -551,8 +551,86 @@ function dd_get_us_states() {
 	);
 }
 
+// Load comprehensive country and state dataset
+if ( file_exists( __DIR__ . '/CountriesData.php' ) ) {
+	require_once __DIR__ . '/CountriesData.php';
+}
+
 /**
- * Render <option> HTML for US States location select with full state names.
+ * Render <option> HTML for Country select.
+ *
+ * @param string      $selected    Currently selected country name.
+ * @param string|bool $placeholder Placeholder text, or false to omit blank option.
+ */
+function dd_render_country_options( $selected = '', $placeholder = 'All Countries' ) {
+	if ( false !== $placeholder ) {
+		if ( true === $placeholder || '' === $placeholder ) {
+			$placeholder = __( 'All Countries', 'petslist' );
+		}
+		printf(
+			'<option value=""%s>%s</option>',
+			empty( $selected ) ? ' selected="selected"' : '',
+			esc_html( $placeholder )
+		);
+	}
+
+	$countries = function_exists( 'dd_get_all_countries' ) ? dd_get_all_countries() : [];
+	foreach ( array_keys( $countries ) as $country_name ) {
+		$is_selected = ( strcasecmp( $selected, $country_name ) === 0 );
+		printf(
+			'<option value="%s"%s>%s</option>',
+			esc_attr( $country_name ),
+			$is_selected ? ' selected="selected"' : '',
+			esc_html( $country_name )
+		);
+	}
+}
+
+/**
+ * Render <option> HTML for State / Province select based on selected country.
+ *
+ * @param string      $country     Country name to get states for.
+ * @param string      $selected    Currently selected state name.
+ * @param string|bool $placeholder Placeholder text, or false to omit blank option.
+ */
+function dd_render_state_options( $country = '', $selected = '', $placeholder = 'All States' ) {
+	if ( false !== $placeholder ) {
+		if ( true === $placeholder || '' === $placeholder ) {
+			$placeholder = __( 'All States', 'petslist' );
+		}
+		printf(
+			'<option value=""%s>%s</option>',
+			empty( $selected ) ? ' selected="selected"' : '',
+			esc_html( $placeholder )
+		);
+	}
+
+	$countries = function_exists( 'dd_get_all_countries' ) ? dd_get_all_countries() : [];
+	$states = [];
+	if ( ! empty( $country ) && isset( $countries[ $country ] ) ) {
+		$states = $countries[ $country ];
+	} elseif ( empty( $country ) ) {
+		// When no country is specified yet, show US states by default for immediate convenience
+		if ( isset( $countries['United States'] ) ) {
+			$states = $countries['United States'];
+		} else {
+			$states = array_values( dd_get_us_states() );
+		}
+	}
+
+	foreach ( $states as $state_name ) {
+		$is_selected = ( strcasecmp( $selected, $state_name ) === 0 );
+		printf(
+			'<option value="%s"%s>%s</option>',
+			esc_attr( $state_name ),
+			$is_selected ? ' selected="selected"' : '',
+			esc_html( $state_name )
+		);
+	}
+}
+
+/**
+ * Render <option> HTML for location select (backwards compatibility).
  *
  * @param string      $selected    Currently selected state code or full name.
  * @param string|bool $placeholder Placeholder text, or false to omit blank option.

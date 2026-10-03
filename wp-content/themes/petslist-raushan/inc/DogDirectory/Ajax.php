@@ -139,13 +139,19 @@ class Ajax {
             'breed', 'gender', 'dob', 'age', 'color', 'height', 'weight',
             'registration_no', 'stud_fee', 'semen_type', 'titles',
             'competition_class', 'pedigree', 'health_testing',
-            'country', 'city', 'contact_phone', 'contact_email', 'contact_website'
+            'country', 'dog_country', 'state_province', 'city', 'contact_phone', 'contact_email', 'contact_website'
         ];
         $meta = [];
         foreach ( $meta_fields as $field ) {
             $meta[$field] = isset($data[$field]) && (in_array($field, ['pedigree', 'health_testing']))
                 ? sanitize_textarea_field( $data[$field] )
                 : sanitize_text_field( $data[$field] ?? '' );
+        }
+        if ( empty( $meta['country'] ) && ! empty( $meta['dog_country'] ) ) {
+            $meta['country'] = $meta['dog_country'];
+        }
+        if ( empty( $meta['dog_country'] ) && ! empty( $meta['country'] ) ) {
+            $meta['dog_country'] = $meta['country'];
         }
         $meta['dog_name'] = $title;
         update_post_meta( $result, '_dd_dog_meta', $meta );

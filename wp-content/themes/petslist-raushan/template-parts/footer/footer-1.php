@@ -34,9 +34,12 @@ $terms_url   = home_url( '/terms-and-conditions/' );
     <?php } ?>
     <div class="footer-bottom">
         <div class="container">
-            <div class="copyright-area justify-content-center text-center">
-                <div class="copyright-text text-center w-100">
-                    <p class="footer-copyright mb-0 text-center">&copy; Copyright <?php echo esc_html( date( 'Y' ) ); ?> Studs 4 You &ndash; All Right Reserved<span class="footer-sep">|</span><a href="<?php echo esc_url( $privacy_url ); ?>"><?php esc_html_e( 'Privacy Policy', 'petslist' ); ?></a><span class="footer-sep">|</span><a href="<?php echo esc_url( $terms_url ); ?>"><?php esc_html_e( 'Terms and Conditions', 'petslist' ); ?></a></p>
+            <div class="copyright-area justify-content-between align-items-center">
+                <div class="copyright-left">
+                    <p class="footer-copyright mb-0">&copy; Copyright <?php echo esc_html( date( 'Y' ) ); ?> Studs 4 You &ndash; All Right Reserved</p>
+                </div>
+                <div class="copyright-right">
+                    <p class="footer-links footer-copyright mb-0"><a href="<?php echo esc_url( $privacy_url ); ?>"><?php esc_html_e( 'Privacy Policy', 'petslist' ); ?></a><span class="footer-sep">|</span><a href="<?php echo esc_url( $terms_url ); ?>"><?php esc_html_e( 'Terms and Conditions', 'petslist' ); ?></a></p>
                 </div>
             </div>
         </div>

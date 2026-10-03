@@ -1772,3 +1772,76 @@
 }
 
 
+/* ── HEADER SEARCH: Country + State dropdowns ─────────────── */
+/* Make country and state narrower so they don't blow out the search bar */
+.header-search-area .rtcl-widget-search-form .rtin-input-item.rtin-country-space,
+.header-search-area .rtcl-widget-search-form .rtin-input-item.rtin-state-space {
+  width: 180px;
+}
+.header-search-area .rtin-country-space .form-group,
+.header-search-area .rtin-state-space .form-group {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  cursor: pointer !important;
+}
+.header-search-area .rtin-country-space .icon-pl-location,
+.header-search-area .rtin-state-space .icon-pl-location {
+  position: static !important;
+  flex-shrink: 0 !important;
+  margin: 0 !important;
+  line-height: 1 !important;
+  pointer-events: none !important;
+}
+.header-search-area .rtin-country-space .rtcl-search-input-button,
+.header-search-area .rtin-state-space .rtcl-search-input-button {
+  flex: 0 1 auto !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: calc(100% - 24px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.header-search-area .rtin-country-space select,
+.header-search-area .rtin-state-space select {
+  width: auto !important;
+  max-width: 100% !important;
+  padding: 0 2px !important;
+  text-align: center !important;
+  text-align-last: center !important;
+  -webkit-text-align-last: center !important;
+  -moz-text-align-last: center !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  cursor: pointer !important;
+}
+.header-search-area .rtin-country-space select option,
+.header-search-area .rtin-state-space select option {
+  text-align: left !important;
+}
+@media screen and (max-width: 575px) {
+  .header-search-area .rtcl-widget-search-form .rtin-input-item.rtin-country-space,
+  .header-search-area .rtcl-widget-search-form .rtin-input-item.rtin-state-space {
+    width: 130px;
+  }
+}
+/* State select: slightly dimmed when showing placeholder to hint it's dependent */
+.header-search-area .rtin-state-space select option:first-child {
+  color: #9ca3af;
+}
+
+/* ── ARCHIVE FILTER BAR: Country + State ─────────────────── */
+/* Give country/state selects a consistent width in the filter bar */
+.dd-filters-bar .dd-search-form__field select[name="country"],
+.dd-filters-bar .dd-search-form__field select[name="state"] {
+  min-width: 140px;
+  max-width: 180px;
+}
+/* Visual separator between country and state in archive filter */
+.dd-filters-bar .dd-search-form__field select[name="state"] {
+  border-left: 2px solid var(--dd-primary);
+}
+
