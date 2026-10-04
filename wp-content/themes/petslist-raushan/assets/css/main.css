@@ -1639,13 +1639,13 @@ footer.footer-style-3 .footer-bottom .copyright-logo {
 .copyright-right .footer-links a,
 .copyright-right .footer-copyright a {
 	color: inherit;
-	text-decoration: underline;
-	text-underline-offset: 3px;
+	text-decoration: none;
 	transition: color 0.2s ease;
 }
 .copyright-right .footer-links a:hover,
 .copyright-right .footer-copyright a:hover {
 	color: var(--petslist-primary-color, #02c5bd) !important;
+	text-decoration: none;
 }
 .copyright-right .footer-sep {
 	margin: 0 10px;

@@ -196,12 +196,12 @@ footer.footer-style-3 .footer-bottom .copyright-right .footer-copyright {
 footer.footer-style-3 .footer-bottom .footer-links a,
 footer.footer-style-3 .footer-bottom .footer-copyright a {
 	color: #ffffff !important;
-	text-decoration: underline !important;
-	text-underline-offset: 3px !important;
+	text-decoration: none !important;
 }
 footer.footer-style-3 .footer-bottom .footer-links a:hover,
 footer.footer-style-3 .footer-bottom .footer-copyright a:hover {
 	color: var(--petslist-primary-color, #bd8c42) !important;
+	text-decoration: none !important;
 }
 footer.footer-style-3 .footer-bottom .footer-sep {
 	margin: 0 10px !important;
@@ -249,4 +249,175 @@ footer.footer-style-3 .footer-bottom .footer-sep {
 .petslist-home-hero .heading-title,
 .petslist-cta-band .heading-title {
 	color: #ffffff !important;
+}
+
+/* Search Dropdown Alignment: Text Left, Dropdown Icon Far Right */
+.petslist-listing-search-form .rtin-country-space .form-group,
+.petslist-listing-search-form .rtin-state-space .form-group,
+.petslist-home-search-standalone .rtin-country-space .form-group,
+.petslist-home-search-standalone .rtin-state-space .form-group,
+.petslist-home-hero__search .rtin-country-space .form-group,
+.petslist-home-hero__search .rtin-state-space .form-group,
+.header-search-area .rtin-country-space .form-group,
+.header-search-area .rtin-state-space .form-group {
+	justify-content: flex-start !important;
+	padding: 0 14px !important;
+	gap: 8px !important;
+}
+
+.petslist-listing-search-form .rtin-country-space .rtcl-search-input-button,
+.petslist-listing-search-form .rtin-state-space .rtcl-search-input-button,
+.petslist-home-search-standalone .rtin-country-space .rtcl-search-input-button,
+.petslist-home-search-standalone .rtin-state-space .rtcl-search-input-button,
+.petslist-home-hero__search .rtin-country-space .rtcl-search-input-button,
+.petslist-home-hero__search .rtin-state-space .rtcl-search-input-button,
+.header-search-area .rtin-country-space .rtcl-search-input-button,
+.header-search-area .rtin-state-space .rtcl-search-input-button {
+	flex: 1 1 0% !important;
+	width: 100% !important;
+	min-width: 0 !important;
+	max-width: 100% !important;
+	display: flex !important;
+	align-items: center !important;
+	justify-content: flex-start !important;
+	position: relative !important;
+}
+
+.petslist-listing-search-form .select2-container,
+.petslist-home-search-standalone .select2-container,
+.petslist-home-hero__search .select2-container,
+.header-search-area .select2-container {
+	flex: 1 1 auto !important;
+	width: 100% !important;
+	min-width: 0 !important;
+	max-width: 100% !important;
+	display: block !important;
+	position: relative !important;
+}
+
+.petslist-listing-search-form .select2-container .select2-selection--single,
+.petslist-home-search-standalone .select2-container .select2-selection--single,
+.petslist-home-hero__search .select2-container .select2-selection--single,
+.header-search-area .select2-container .select2-selection--single {
+	width: 100% !important;
+	height: 48px !important;
+	background: transparent !important;
+	border: none !important;
+	outline: none !important;
+	box-shadow: none !important;
+	position: relative !important;
+	display: flex !important;
+	align-items: center !important;
+	cursor: pointer !important;
+	padding: 0 !important;
+}
+
+.petslist-listing-search-form .select2-container .select2-selection--single .select2-selection__rendered,
+.petslist-home-search-standalone .select2-container .select2-selection--single .select2-selection__rendered,
+.petslist-home-hero__search .select2-container .select2-selection--single .select2-selection__rendered,
+.header-search-area .select2-container .select2-selection--single .select2-selection__rendered {
+	text-align: left !important;
+	padding-left: 0 !important;
+	padding-right: 28px !important;
+	width: 100% !important;
+	color: #4b5563 !important;
+	font-size: 15px !important;
+	font-weight: 500 !important;
+	line-height: 48px !important;
+	white-space: nowrap !important;
+	overflow: hidden !important;
+	text-overflow: ellipsis !important;
+	display: block !important;
+}
+
+.petslist-home-search-standalone .rtin-keyword .select2-container .select2-selection--single .select2-selection__rendered,
+.petslist-home-hero__search .rtin-keyword .select2-container .select2-selection--single .select2-selection__rendered {
+	padding-left: 4px !important;
+}
+
+.petslist-listing-search-form .select2-container .select2-selection--single .select2-selection__arrow,
+.petslist-home-search-standalone .select2-container .select2-selection--single .select2-selection__arrow,
+.petslist-home-hero__search .select2-container .select2-selection--single .select2-selection__arrow,
+.header-search-area .select2-container .select2-selection--single .select2-selection__arrow {
+	position: absolute !important;
+	right: 6px !important;
+	left: auto !important;
+	top: 50% !important;
+	transform: translateY(-50%) !important;
+	width: 18px !important;
+	height: 18px !important;
+	border: none !important;
+	background: transparent !important;
+	background-image: none !important;
+	display: flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	pointer-events: none !important;
+}
+
+.petslist-listing-search-form .select2-container .select2-selection--single .select2-selection__arrow b,
+.petslist-home-search-standalone .select2-container .select2-selection--single .select2-selection__arrow b,
+.petslist-home-hero__search .select2-container .select2-selection--single .select2-selection__arrow b,
+.header-search-area .select2-container .select2-selection--single .select2-selection__arrow b {
+	border: none !important;
+	border-width: 0 !important;
+	width: auto !important;
+	height: auto !important;
+	position: relative !important;
+	display: inline-flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	top: auto !important;
+	left: auto !important;
+	margin: 0 !important;
+}
+
+.petslist-listing-search-form .select2-container .select2-selection--single .select2-selection__arrow b::before,
+.petslist-home-search-standalone .select2-container .select2-selection--single .select2-selection__arrow b::before,
+.petslist-home-hero__search .select2-container .select2-selection--single .select2-selection__arrow b::before,
+.header-search-area .select2-container .select2-selection--single .select2-selection__arrow b::before {
+	content: none !important;
+	display: none !important;
+}
+
+.petslist-listing-search-form .select2-container .select2-selection--single .select2-selection__arrow b::after,
+.petslist-home-search-standalone .select2-container .select2-selection--single .select2-selection__arrow b::after,
+.petslist-home-hero__search .select2-container .select2-selection--single .select2-selection__arrow b::after,
+.header-search-area .select2-container .select2-selection--single .select2-selection__arrow b::after {
+	content: "\f078" !important;
+	font-family: "Font Awesome 5 Free", "Font Awesome 6 Free", "FontAwesome" !important;
+	font-weight: 900 !important;
+	font-size: 11px !important;
+	color: #8a8fa3 !important;
+	display: inline-block !important;
+	position: static !important;
+	line-height: 1 !important;
+	transition: transform 0.2s ease !important;
+}
+
+.petslist-listing-search-form .select2-container.select2-container--open .select2-selection--single .select2-selection__arrow b::after,
+.petslist-home-search-standalone .select2-container.select2-container--open .select2-selection--single .select2-selection__arrow b::after,
+.petslist-home-hero__search .select2-container.select2-container--open .select2-selection--single .select2-selection__arrow b::after,
+.header-search-area .select2-container.select2-container--open .select2-selection--single .select2-selection__arrow b::after {
+	transform: rotate(180deg) !important;
+	color: var(--petslist-primary-color, #bd8c42) !important;
+}
+
+.petslist-listing-search-form select.form-control,
+.petslist-home-search-standalone select.form-control,
+.petslist-home-hero__search select.form-control,
+.header-search-area select.form-control {
+	width: 100% !important;
+	text-align: left !important;
+	text-align-last: left !important;
+	-webkit-text-align-last: left !important;
+	-moz-text-align-last: left !important;
+	padding-left: 0 !important;
+	padding-right: 28px !important;
+	appearance: none !important;
+	-webkit-appearance: none !important;
+	-moz-appearance: none !important;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%238a8fa3' d='M0 0l5 5 5-5z'/%3E%3C/svg%3E") !important;
+	background-repeat: no-repeat !important;
+	background-position: right 8px center !important;
 }

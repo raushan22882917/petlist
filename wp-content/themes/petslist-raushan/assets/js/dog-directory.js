@@ -909,9 +909,17 @@
 
         // Delegate clicks on country/state wrappers to focus/open the select
         $(document).on('click', '.rtin-country-space .form-group, .rtin-state-space .form-group', function (e) {
-            if (e.target.tagName !== 'SELECT') {
-                var $sel = $(this).find('select');
-                if ($sel.length) {
+            // If Select2 container was clicked, let Select2 handle it naturally
+            if ($(e.target).closest('.select2-container').length) {
+                return;
+            }
+            var $sel = $(this).find('select');
+            if ($sel.length) {
+                if ($sel.hasClass('select2-hidden-accessible')) {
+                    $sel.select2('open');
+                    return;
+                }
+                if (e.target.tagName !== 'SELECT') {
                     $sel.focus();
                     if (typeof $sel[0].showPicker === 'function') {
                         try { $sel[0].showPicker(); } catch (err) {}
