@@ -162,10 +162,15 @@
 .petslist-faq-intro { margin-bottom: 38px; }
 
 /* ---------- Home: hero ---------- */
+.petslist-home-page.content-area,
+.petslist-home-page#primary,
+body.front-page .content-area,
+body.home .content-area {
+	padding-top: 0 !important;
+}
 .petslist-home-hero {
-	/* Pull hero under the fixed-header spacer so no white gap shows */
-	margin-top: -80px;
-	padding: 108px 0 0;
+	margin-top: 0;
+	padding: 0;
 	background-size: cover;
 	background-position: center right;
 	background-repeat: no-repeat;
