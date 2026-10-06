@@ -171,17 +171,23 @@ body.home .content-area {
 .petslist-home-hero {
 	margin-top: 0;
 	padding: 0;
-	background-size: cover;
-	background-position: center right;
-	background-repeat: no-repeat;
-	background-color: #02c5bd;
+	width: 100%;
+	line-height: 0;
+	font-size: 0;
+	background: transparent;
 	overflow: hidden;
+}
+.petslist-home-hero__img {
+	width: 100%;
+	height: auto;
+	display: block;
+	object-fit: contain;
 }
 .petslist-home-hero__grid {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	min-height: 340px;
+	min-height: 0;
 	text-align: center;
 }
 .petslist-home-hero__text {

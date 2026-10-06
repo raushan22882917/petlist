@@ -13,16 +13,8 @@ $hero_bg = petslist_img_url('hero_bg');
 <main id="primary" class="content-area petslist-custom-page petslist-home-page">
 
 	<!-- ============ HERO ============ -->
-	<section class="petslist-home-hero"
-		style="background-image:url('<?php echo esc_url($hero_bg); ?>');">
-		<div class="container">
-			<div class="petslist-home-hero__grid">
-				<div class="petslist-home-hero__text">
-					<div class="section-heading">
-					</div>
-				</div>
-			</div>
-		</div>
+	<section class="petslist-home-hero">
+		<img src="<?php echo esc_url($hero_bg); ?>" alt="<?php echo esc_attr(get_bloginfo('name')); ?>" class="petslist-home-hero__img" loading="eager" fetchpriority="high">
 	</section>
 
 	<!-- ============ ALL BREEDS WELCOME ============ -->
