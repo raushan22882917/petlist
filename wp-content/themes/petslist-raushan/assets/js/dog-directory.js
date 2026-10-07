@@ -303,7 +303,12 @@
 
           // Show/Hide Sections
           $('.dd-dog-form__section').hide();
-          $('.dd-dog-form__section[data-step="' + currentStep + '"]').fadeIn(300);
+          var $targetSection = $('.dd-dog-form__section[data-step="' + currentStep + '"]');
+          $targetSection.fadeIn(300, function () {
+            if (currentStep === 2 && typeof ddInitCountrySelects === 'function') {
+              ddInitCountrySelects();
+            }
+          });
 
           // Update Steps Indicator
           $('.dd-wizard-step').removeClass('dd-wizard-step--active dd-wizard-step--completed');
@@ -575,6 +580,7 @@
         if ($.fn.select2) {
           $('select.dd-searchable-select, #dd-reg-state, #dd-profile-state, #dd-country').each(function () {
             var $sel = $(this);
+            if ($sel.is(':hidden') && $sel.closest('.dd-dog-form__section').length) return;
             if (!$sel.hasClass('select2-hidden-accessible')) {
               var placeholderText = $sel.find('option:first').text() || 'Select State';
               $sel.select2({
@@ -894,9 +900,10 @@
             }
 
             /* On country change → repopulate states */
-            $countrySel.on('change', function () {
+            $countrySel.off('change.dd_country').on('change.dd_country', function () {
                 var selected = $(this).val() || '';
                 ddPopulateStates($stateSel, selected, '');
+                $countrySel.closest('form, .dd-dog-form__grid').find('#dd-dog-country-hidden, #dd-profile-country-hidden').val(selected);
                 if ($.fn.select2 && useStateSelect2) {
                     $stateSel.trigger('change.select2');
                 }

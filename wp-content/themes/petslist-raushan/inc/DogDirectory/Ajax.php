@@ -153,6 +153,9 @@ class Ajax {
         if ( empty( $meta['dog_country'] ) && ! empty( $meta['country'] ) ) {
             $meta['dog_country'] = $meta['country'];
         }
+        if ( empty( $meta['state_province'] ) && ! empty( $data['state'] ) ) {
+            $meta['state_province'] = sanitize_text_field( $data['state'] );
+        }
         $meta['dog_name'] = $title;
         update_post_meta( $result, '_dd_dog_meta', $meta );
 
@@ -578,12 +581,13 @@ class Ajax {
         }
 
         $name             = sanitize_text_field( $_POST['name'] ?? '' );
+        $country          = sanitize_text_field( $_POST['country'] ?? 'United States' );
         $state            = sanitize_text_field( $_POST['state'] ?? '' );
         $city             = sanitize_text_field( $_POST['city'] ?? '' );
         $location         = sanitize_text_field( $_POST['location'] ?? '' );
-        if ( empty( $location ) && ( ! empty( $state ) || ! empty( $city ) ) ) {
+        if ( empty( $location ) && ( ! empty( $state ) || ! empty( $city ) || ! empty( $country ) ) ) {
             $full_state = function_exists('dd_get_state_full_name') ? dd_get_state_full_name($state) : $state;
-            $location   = trim(implode(', ', array_filter([$city, $full_state])));
+            $location   = trim(implode(', ', array_filter([$city, $full_state, $country])));
         }
         $phone            = sanitize_text_field( $_POST['phone'] ?? '' );
         $email            = sanitize_email( $_POST['email'] ?? '' );
@@ -612,6 +616,7 @@ class Ajax {
         $u = new \WP_User( $user_id );
         $u->set_role( 'dd_subscriber' );
         update_user_meta( $user_id, 'dd_location', $location );
+        if ( ! empty( $country ) ) update_user_meta( $user_id, 'dd_country', $country );
         if ( ! empty( $state ) ) update_user_meta( $user_id, 'dd_state', $state );
         if ( ! empty( $city ) ) update_user_meta( $user_id, 'dd_city', $city );
         update_user_meta( $user_id, 'dd_phone', $phone );
@@ -688,12 +693,13 @@ class Ajax {
         $name             = sanitize_text_field( $_POST['display_name'] ?? '' );
         $bio              = sanitize_textarea_field( $_POST['bio'] ?? '' );
         $phone            = sanitize_text_field( $_POST['phone'] ?? '' );
+        $country          = sanitize_text_field( $_POST['country'] ?? 'United States' );
         $state            = sanitize_text_field( $_POST['state'] ?? '' );
         $city             = sanitize_text_field( $_POST['city'] ?? '' );
         $location         = sanitize_text_field( $_POST['location'] ?? '' );
-        if ( empty( $location ) && ( ! empty( $state ) || ! empty( $city ) ) ) {
+        if ( empty( $location ) && ( ! empty( $state ) || ! empty( $city ) || ! empty( $country ) ) ) {
             $full_state = function_exists('dd_get_state_full_name') ? dd_get_state_full_name($state) : $state;
-            $location   = trim(implode(', ', array_filter([$city, $full_state])));
+            $location   = trim(implode(', ', array_filter([$city, $full_state, $country])));
         }
         $fulltime_breeder = sanitize_text_field( $_POST['fulltime_breeder'] ?? 'no' );
         $website          = esc_url_raw( $_POST['website'] ?? '' );
@@ -711,6 +717,7 @@ class Ajax {
 
         update_user_meta($user_id, 'dd_phone', $phone);
         update_user_meta($user_id, 'dd_location', $location);
+        if ( ! empty( $country ) ) update_user_meta($user_id, 'dd_country', $country);
         if ( ! empty( $state ) ) update_user_meta($user_id, 'dd_state', $state);
         if ( ! empty( $city ) ) update_user_meta($user_id, 'dd_city', $city);
         update_user_meta($user_id, 'dd_fulltime_breeder', strtolower($fulltime_breeder) === 'yes' ? 'yes' : 'no');

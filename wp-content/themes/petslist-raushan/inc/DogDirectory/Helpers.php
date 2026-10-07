@@ -982,6 +982,7 @@ function dd_is_admin( $user_or_id = null ) {
     $admin_emails = [
         'admin@example.com',
         'admin@studs4you.com',
+        'studs4you242@gmail.com',
         'raushan22882917@gmail.com',
         'raushan@autonxt.in',
         'software-admin@autonxt.in',

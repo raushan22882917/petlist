@@ -128,7 +128,7 @@ class AccessControl {
      * Call this at the top of any template that needs protection.
      */
     public static function require_login_gate( $message = '', $redirect_after_login = '' ) {
-        if ( is_user_logged_in() ) return; // passes
+        if ( dd_is_admin() || is_user_logged_in() ) return; // passes
 
         if ( ! $redirect_after_login ) {
             $redirect_after_login = get_permalink() ?: dd_dashboard_url();
@@ -160,7 +160,7 @@ class AccessControl {
      * Call this in any template that requires an active subscription.
      */
     public static function require_subscription_gate( $message = '' ) {
-        if ( Subscription::can_access_directory() ) return; // passes
+        if ( dd_is_admin() || Subscription::can_access_directory() ) return; // passes
 
         if ( ! is_user_logged_in() ) {
             self::require_login_gate();

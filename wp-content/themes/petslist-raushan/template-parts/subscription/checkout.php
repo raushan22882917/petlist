@@ -27,7 +27,7 @@ if ( ! $plan ) {
 
 $active_sub = Subscription::get_user_subscription();
 
-if ( Subscription::has_reached_sales_limit() && ( ! $active_sub || $active_sub->plan_slug !== $plan->slug ) ) {
+if ( ! dd_is_admin() && Subscription::has_reached_sales_limit() && ( ! $active_sub || $active_sub->plan_slug !== $plan->slug ) ) {
     echo '<div class="dd-notice dd-notice--warning">' . __( 'All monthly packages are currently sold out. Please check back later.', 'petslist' ) . '</div>';
     return;
 }

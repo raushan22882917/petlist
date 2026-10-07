@@ -251,10 +251,15 @@ $query = new WP_Query($args);
                 $gender     = $meta['gender'] ?? '';
                 $color      = $meta['color']  ?? '';
                 $city       = $meta['city']   ?? '';
-                $country    = $meta['country']?? '';
-                $full_state = function_exists('dd_get_state_full_name') ? dd_get_state_full_name($country) : $country;
-                $reg_no     = $meta['registration_no'] ?? '';
-                $location   = trim(implode(', ', array_filter([$city, $full_state])));
+                $state_val  = $meta['state_province'] ?? ( $meta['state'] ?? '' );
+                $country    = $meta['country'] ?? ( $meta['dog_country'] ?? '' );
+                $all_countries_list = function_exists('dd_get_all_countries') ? array_keys(dd_get_all_countries()) : [];
+                if ( empty($state_val) && $country && ! in_array($country, $all_countries_list) ) {
+                    $state_val = $country;
+                    $country   = '';
+                }
+                $full_state = function_exists('dd_get_state_full_name') ? dd_get_state_full_name($state_val) : $state_val;
+                $location   = trim(implode(', ', array_filter([$city, $full_state, $country])));
                 $health_data = get_post_meta($pid, '_dd_dog_health', true);
                 $has_health  = !empty($health_data) && array_filter((array)$health_data);
                 $is_male     = strtolower($gender) === 'male';

@@ -119,4 +119,43 @@
         });
     });
 
+    // Dynamic Country and State dropdown sync in WP Admin Dog Profile
+    function syncAdminStateDropdown($countrySelect) {
+        var country = $countrySelect.val();
+        var targetId = $countrySelect.data('state-target');
+        var $state = targetId ? $('#' + targetId) : $('#dd_state_province');
+        if (!$state.length) {
+            $state = $countrySelect.closest('.dd-meta-grid, form').find('#dd_state_province, .dd-state-select').first();
+        }
+        if (!$state.length) return;
+
+        var countriesData = (typeof ddAdminVars !== 'undefined' && ddAdminVars.countries) ? ddAdminVars.countries : {};
+        var states = countriesData[country] || [];
+        var currentState = $state.val() || $state.data('saved') || '';
+
+        $state.empty();
+        $state.append($('<option>', { value: '', text: 'Select State / Province' }));
+        if (states && states.length) {
+            for (var i = 0; i < states.length; i++) {
+                var opt = document.createElement('option');
+                opt.value = states[i];
+                opt.textContent = states[i];
+                if (states[i] === currentState) opt.selected = true;
+                $state[0].appendChild(opt);
+            }
+        }
+    }
+
+    $(document).on('change', '#dd_country, .dd-country-select', function () {
+        syncAdminStateDropdown($(this));
+    });
+
+    $(function () {
+        var $country = $('#dd_country, .dd-country-select').first();
+        var $state = $('#dd_state_province, .dd-state-select').first();
+        if ($country.length && $state.length && $state.find('option').length <= 1) {
+            syncAdminStateDropdown($country);
+        }
+    });
+
 })(jQuery);

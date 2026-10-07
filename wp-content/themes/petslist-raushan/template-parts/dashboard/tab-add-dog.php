@@ -155,18 +155,24 @@ function dd_field( $meta, $key, $fallback = '' ) {
             <h3 class="dd-dog-form__section-title"><span>2</span> <?php _e( 'Location & Contact', 'petslist' ); ?></h3>
             <div class="dd-dog-form__grid">
 
+                <?php
+                $saved_country = dd_field($dog_meta, 'dog_country') ?: (dd_field($dog_meta, 'country') ?: 'United States');
+                $all_countries_list = function_exists('dd_get_all_countries') ? array_keys(dd_get_all_countries()) : [];
+                $raw_country = dd_field($dog_meta, 'country');
+                $saved_state = dd_field($dog_meta, 'state_province') ?: (dd_field($dog_meta, 'state') ?: ($raw_country && ! in_array($raw_country, $all_countries_list) ? $raw_country : ''));
+                ?>
                 <div class="dd-form-group">
                     <label for="dd-dog-country-select"><?php _e( 'Country', 'petslist' ); ?> <span class="dd-required">*</span></label>
-                    <select id="dd-dog-country-select" name="dog_data[dog_country]" class="select2 dd-searchable-select dd-country-select" data-state-target="dd-dog-state-select" style="width:100%;" required>
-                        <option value=""><?php _e( 'Select Country', 'petslist' ); ?></option>
+                    <select id="dd-dog-country-select" name="dog_data[country]" class="dd-country-select" data-state-target="dd-dog-state-select" data-saved-country="<?php echo esc_attr( $saved_country ); ?>" style="width:100%;" required>
+                        <?php dd_render_country_options( $saved_country, __( 'Select Country', 'petslist' ) ); ?>
                     </select>
-                    <input type="hidden" name="dog_data[country]" id="dd-dog-country-hidden" value="<?php echo dd_field($dog_meta,'dog_country') ?: dd_field($dog_meta,'country'); ?>">
+                    <input type="hidden" name="dog_data[dog_country]" id="dd-dog-country-hidden" value="<?php echo esc_attr( $saved_country ); ?>">
                 </div>
 
                 <div class="dd-form-group">
                     <label for="dd-dog-state-select"><?php _e( 'State / Province', 'petslist' ); ?> <span class="dd-required">*</span></label>
-                    <select id="dd-dog-state-select" name="dog_data[state_province]" class="select2 dd-searchable-select dd-state-select" data-saved="<?php echo dd_field($dog_meta,'state_province') ?: dd_field($dog_meta,'country'); ?>" style="width:100%;" required>
-                        <option value=""><?php _e( 'Select State / Province', 'petslist' ); ?></option>
+                    <select id="dd-dog-state-select" name="dog_data[state_province]" class="dd-state-select" data-saved="<?php echo esc_attr( $saved_state ); ?>" style="width:100%;" required>
+                        <?php dd_render_state_options( $saved_country, $saved_state, __( 'Select State / Province', 'petslist' ) ); ?>
                     </select>
                 </div>
 

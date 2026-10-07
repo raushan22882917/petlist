@@ -107,8 +107,9 @@ class Scripts {
                     $v, true
                 );
                 wp_localize_script('dd-admin', 'ddAdminVars', [
-                    'ajaxUrl' => admin_url('admin-ajax.php'),
-                    'nonce'   => wp_create_nonce('dd_admin_nonce'),
+                    'ajaxUrl'   => admin_url('admin-ajax.php'),
+                    'nonce'     => wp_create_nonce('dd_admin_nonce'),
+                    'countries' => function_exists('dd_get_all_countries') ? dd_get_all_countries() : [],
                 ]);
             }
             wp_enqueue_media();
@@ -146,14 +147,27 @@ class Scripts {
     }
 
     public function enqueue_admin( $hook ) {
-        global $post_type;
-        if ( $post_type === 'dd_dog' || strpos($hook, 'dd_') !== false ) {
+        global $post_type, $post;
+        $screen = function_exists('get_current_screen') ? get_current_screen() : null;
+        $current_pt = $post_type ?: ( $screen ? $screen->post_type : '' );
+        if ( ! $current_pt && isset( $_GET['post_type'] ) ) {
+            $current_pt = sanitize_key( $_GET['post_type'] );
+        }
+        if ( ! $current_pt && isset( $_GET['post'] ) ) {
+            $current_pt = get_post_type( (int) $_GET['post'] );
+        }
+        if ( ! $current_pt && ! empty( $post ) && isset( $post->post_type ) ) {
+            $current_pt = $post->post_type;
+        }
+
+        if ( $current_pt === 'dd_dog' || strpos( (string) $hook, 'dd_' ) !== false ) {
             $v = ( defined('WP_DEBUG') && WP_DEBUG ) ? time() : DD_VERSION;
             wp_enqueue_style('dd-admin', get_template_directory_uri() . '/assets/css/dog-directory-admin.css', [], $v);
             wp_enqueue_script('dd-admin', get_template_directory_uri() . '/assets/js/dog-directory-admin.js', ['jquery', 'wp-util'], $v, true);
             wp_localize_script('dd-admin', 'ddAdminVars', [
-                'ajaxUrl' => admin_url('admin-ajax.php'),
-                'nonce'   => wp_create_nonce('dd_admin_nonce'),
+                'ajaxUrl'   => admin_url('admin-ajax.php'),
+                'nonce'     => wp_create_nonce('dd_admin_nonce'),
+                'countries' => function_exists('dd_get_all_countries') ? dd_get_all_countries() : [],
             ]);
         }
     }

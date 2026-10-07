@@ -94,10 +94,16 @@ $gallery_ids   = get_post_meta($post_id, '_dd_gallery', true) ?: [];
                         <?php endif; ?>
                     </h1>
                     <?php
-                    $city_val   = $meta['city'] ?? '';
-                    $state_val  = $meta['country'] ?? '';
-                    $full_state = function_exists('dd_get_state_full_name') ? dd_get_state_full_name($state_val) : $state_val;
-                    $loc_display = trim(implode(', ', array_filter([$city_val, $full_state])));
+                    $city_val    = $meta['city'] ?? '';
+                    $state_val   = $meta['state_province'] ?? ( $meta['state'] ?? '' );
+                    $country_val = $meta['country'] ?? ( $meta['dog_country'] ?? '' );
+                    $all_countries_list = function_exists('dd_get_all_countries') ? array_keys(dd_get_all_countries()) : [];
+                    if ( empty($state_val) && $country_val && ! in_array($country_val, $all_countries_list) ) {
+                        $state_val = $country_val;
+                        $country_val = '';
+                    }
+                    $full_state  = function_exists('dd_get_state_full_name') ? dd_get_state_full_name($state_val) : $state_val;
+                    $loc_display = trim(implode(', ', array_filter([$city_val, $full_state, $country_val])));
                     ?>
                     <?php if ( $breed_name || $loc_display ) : ?>
                     <div class="dd-single-head__meta" style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 6px;">
@@ -149,7 +155,8 @@ $gallery_ids   = get_post_meta($post_id, '_dd_gallery', true) ?: [];
                     $subscriber_fields = [
                         'registration_no' => __('Registration No.', 'petslist'),
                         'city'            => __('City', 'petslist'),
-                        'country'         => __('State', 'petslist'),
+                        'state_province'  => __('State / Province', 'petslist'),
+                        'country'         => __('Country', 'petslist'),
                     ];
                     foreach ( $visible_fields as $key => $label ) :
                         $value = $key === 'breed' ? $breed_name : ($meta[$key] ?? '');
@@ -163,7 +170,13 @@ $gallery_ids   = get_post_meta($post_id, '_dd_gallery', true) ?: [];
                     <?php endforeach; ?>
                     <?php if ( $is_subscriber || $is_owner || $is_admin ) :
                         foreach ( $subscriber_fields as $key => $label ) :
-                            $value = $key === 'country' ? $full_state : ($meta[$key] ?? '');
+                            if ( $key === 'country' ) {
+                                $value = $country_val;
+                            } elseif ( $key === 'state_province' ) {
+                                $value = $full_state;
+                            } else {
+                                $value = $meta[$key] ?? '';
+                            }
                             if ( empty($value) ) continue;
                     ?>
                     <div class="dd-profile-item">

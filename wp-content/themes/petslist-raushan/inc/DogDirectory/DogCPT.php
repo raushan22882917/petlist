@@ -28,6 +28,14 @@ class DogCPT {
         add_action( 'manage_dd_dog_posts_custom_column', [ $this, 'dog_admin_column_content' ], 10, 2 );
         add_filter( 'template_include', [ $this, 'dog_single_template' ] );
         add_filter( 'template_include', [ $this, 'dog_archive_template' ] );
+        add_filter( 'use_block_editor_for_post_type', [ $this, 'disable_block_editor' ], 10, 2 );
+    }
+
+    public function disable_block_editor( $use_block_editor, $post_type ) {
+        if ( $post_type === 'dd_dog' ) {
+            return false;
+        }
+        return $use_block_editor;
     }
 
     public function register_dog_post_type() {
@@ -42,7 +50,7 @@ class DogCPT {
             'search_items'       => __( 'Search Dogs', 'petslist' ),
             'not_found'          => __( 'No dogs found', 'petslist' ),
             'not_found_in_trash' => __( 'No dogs in trash', 'petslist' ),
-            'menu_name'          => __( 'Dog Directory', 'petslist' ),
+            'menu_name'          => __( 'Dogs / Studs', 'petslist' ),
         ];
 
         register_post_type( 'dd_dog', [
@@ -144,12 +152,24 @@ class DogCPT {
             echo '<div class="dd-meta-field">';
             echo '<label for="dd_' . esc_attr($key) . '">' . esc_html($field['label']) . '</label>';
             if ( $field['type'] === 'select' ) {
-                echo '<select id="dd_' . esc_attr($key) . '" name="dd_dog_meta[' . esc_attr($key) . ']">';
+                $extra_attrs = '';
+                if ( $key === 'country' ) {
+                    $extra_attrs = ' class="dd-country-select" data-state-target="dd_state_province"';
+                } elseif ( $key === 'state_province' ) {
+                    $selected_state = ! empty( $value ) ? $value : '';
+                    $extra_attrs = ' class="dd-state-select" data-saved="' . esc_attr( $selected_state ) . '"';
+                }
+                echo '<select id="dd_' . esc_attr($key) . '" name="dd_dog_meta[' . esc_attr($key) . ']"' . $extra_attrs . '>';
                 if ( $key === 'breed' ) {
                     // Breed uses structured optgroup renderer
                     dd_render_breed_options( $value );
                 } elseif ( $key === 'country' ) {
-                    dd_render_location_options( $value, __( 'Select State', 'petslist' ) );
+                    $selected_country = ! empty( $value ) ? $value : ( $meta['dog_country'] ?? 'United States' );
+                    dd_render_country_options( $selected_country, __( 'Select Country', 'petslist' ) );
+                } elseif ( $key === 'state_province' ) {
+                    $selected_country = $meta['country'] ?? ( $meta['dog_country'] ?? 'United States' );
+                    $selected_state   = ! empty( $value ) ? $value : '';
+                    dd_render_state_options( $selected_country, $selected_state, __( 'Select State / Province', 'petslist' ) );
                 } else {
                     foreach ( $field['options'] as $val => $label ) {
                         $opt_val = is_numeric($val) && !is_string($val) ? $label : $val;
@@ -212,6 +232,11 @@ class DogCPT {
 
         if ( isset( $_POST['dd_dog_meta'] ) ) {
             $meta_data = array_map( 'sanitize_text_field', $_POST['dd_dog_meta'] );
+            if ( ! empty( $meta_data['country'] ) ) {
+                $meta_data['dog_country'] = $meta_data['country'];
+            } elseif ( ! empty( $meta_data['dog_country'] ) ) {
+                $meta_data['country'] = $meta_data['dog_country'];
+            }
             update_post_meta( $post_id, '_dd_dog_meta', $meta_data );
 
             // Sync the breed taxonomy term
@@ -257,7 +282,8 @@ class DogCPT {
             'pedigree'          => [ 'label' => __('Pedigree', 'petslist'), 'type' => 'textarea' ],
             'health_testing'    => [ 'label' => __('Health Testing (Optional)', 'petslist'), 'type' => 'textarea' ],
             'registration_no'   => [ 'label' => __('Registration Number', 'petslist'), 'type' => 'text' ],
-            'country'           => [ 'label' => __('State', 'petslist'), 'type' => 'select' ],
+            'country'           => [ 'label' => __('Country', 'petslist'), 'type' => 'select' ],
+            'state_province'    => [ 'label' => __('State / Province', 'petslist'), 'type' => 'select' ],
             'city'              => [ 'label' => __('City', 'petslist'), 'type' => 'text' ],
             'contact_phone'     => [ 'label' => __('Contact Phone', 'petslist'), 'type' => 'text' ],
             'contact_email'     => [ 'label' => __('Contact Email', 'petslist'), 'type' => 'text' ],

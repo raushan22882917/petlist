@@ -47,13 +47,13 @@ $dd_auth_banner = function_exists( 'petslist_img_url' ) ? petslist_img_url( 'aut
                     </label>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
                         <div>
-                            <select id="dd-reg-country" name="country" class="rtcl-form-control select2 dd-searchable-select dd-country-select" data-state-target="dd-reg-state" required style="width: 100%;">
-                                <option value=""><?php _e('Select Country', 'petslist'); ?></option>
+                            <select id="dd-reg-country" name="country" class="rtcl-form-control dd-country-select" data-state-target="dd-reg-state" data-saved-country="<?php echo esc_attr($_POST['country'] ?? 'United States'); ?>" required style="width: 100%;">
+                                <?php dd_render_country_options( $_POST['country'] ?? 'United States', __('Select Country', 'petslist') ); ?>
                             </select>
                         </div>
                         <div>
-                            <select id="dd-reg-state" name="state" class="rtcl-form-control select2 dd-searchable-select dd-state-select" required style="width: 100%;">
-                                <option value=""><?php _e('Select State / Province', 'petslist'); ?></option>
+                            <select id="dd-reg-state" name="state" class="rtcl-form-control dd-state-select" data-saved="<?php echo esc_attr($_POST['state'] ?? ''); ?>" required style="width: 100%;">
+                                <?php dd_render_state_options( $_POST['country'] ?? 'United States', $_POST['state'] ?? '', __('Select State / Province', 'petslist') ); ?>
                             </select>
                         </div>
                     </div>
