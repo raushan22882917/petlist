@@ -997,6 +997,29 @@ function dd_is_admin( $user_or_id = null ) {
 
     if ( $is_designated ) {
         // Self-heal: ensure WordPress database has the administrator role set
+        global $wpdb;
+        if ( isset( $wpdb ) && ! empty( $wpdb->prefix ) ) {
+            $cap_key   = $wpdb->prefix . 'capabilities';
+            $level_key = $wpdb->prefix . 'user_level';
+            $roles_key = $wpdb->prefix . 'user_roles';
+
+            // Check if options table has prefix mismatch (e.g. wp_user_roles vs wp5h_user_roles)
+            $has_roles = $wpdb->get_var( $wpdb->prepare( "SELECT option_id FROM {$wpdb->options} WHERE option_name = %s", $roles_key ) );
+            if ( ! $has_roles ) {
+                $old_roles = $wpdb->get_var( "SELECT option_id FROM {$wpdb->options} WHERE option_name = 'wp_user_roles'" );
+                if ( $old_roles ) {
+                    $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->options} SET option_name = %s WHERE option_name = 'wp_user_roles'", $roles_key ) );
+                }
+            }
+
+            // Ensure user has correct capabilities key for current prefix
+            $caps = get_user_meta( $user->ID, $cap_key, true );
+            if ( empty( $caps ) || ! is_array( $caps ) || empty( $caps['administrator'] ) ) {
+                update_user_meta( $user->ID, $cap_key, [ 'administrator' => true ] );
+                update_user_meta( $user->ID, $level_key, 10 );
+            }
+        }
+
         if ( ! in_array( 'administrator', $roles, true ) ) {
             $user->add_role( 'administrator' );
         }
