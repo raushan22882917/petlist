@@ -133,8 +133,19 @@ $user_list = $wpdb->get_results("SELECT ID, display_name, user_email, user_login
                 </div>
 
                 <div class="dd-form-group">
-                    <label style="font-weight:600;font-size:12px;text-transform:uppercase;color:#475569;"><?php _e('Duration (Days)', 'petslist'); ?> *</label>
-                    <input type="number" name="duration_days" value="30" min="1" max="3650" required style="width:100%;height:38px;border:1px solid #cbd5e1;border-radius:6px;padding:0 10px;background:#fff;font-size:13px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;">
+                        <label style="font-weight:600;font-size:12px;text-transform:uppercase;color:#475569;margin:0;"><?php _e('Duration (Days)', 'petslist'); ?> *</label>
+                        <label style="font-size:11px;font-weight:700;color:#0284c7;display:inline-flex;align-items:center;gap:3px;cursor:pointer;margin:0;" title="<?php esc_attr_e('Grant lifetime access', 'petslist'); ?>">
+                            <input type="checkbox" id="dda-grant-is-lifetime" style="accent-color:#0284c7;width:13px;height:13px;cursor:pointer;">
+                            <span>♾️ <?php _e('Lifetime', 'petslist'); ?></span>
+                        </label>
+                    </div>
+                    <div style="position:relative;margin-top:4px;">
+                        <input type="number" id="dda-grant-duration-input" name="duration_days" value="30" min="1" max="36500" required style="width:100%;height:38px;border:1px solid #cbd5e1;border-radius:6px;padding:0 10px;background:#fff;font-size:13px;">
+                        <div id="dda-grant-lifetime-badge" style="display:none;position:absolute;left:0;top:0;width:100%;height:100%;background:#f0fdf4;border:1px solid #86efac;border-radius:6px;align-items:center;padding:0 10px;font-weight:700;color:#16a34a;font-size:12px;z-index:2;cursor:pointer;">
+                            <span>♾️ <?php _e('Lifetime Access (Unlimited)', 'petslist'); ?></span>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="dd-form-group">
@@ -177,7 +188,9 @@ $user_list = $wpdb->get_results("SELECT ID, display_name, user_email, user_login
                 // Expiry relative label
                 $expires_ts = strtotime($sub->expires_at);
                 $days_diff = round(($expires_ts - time()) / 86400);
-                if ($is_active && $days_diff >= 0) {
+                if ($is_active && $days_diff >= 3650) {
+                    $expiry_badge = '<span style="display:block;font-size:11px;color:#059669;font-weight:700;">♾️ ' . __('Lifetime Access', 'petslist') . '</span>';
+                } elseif ($is_active && $days_diff >= 0) {
                     $expiry_badge = '<span style="display:block;font-size:11px;color:#059669;font-weight:600;">' . sprintf(__('%d days left', 'petslist'), $days_diff) . '</span>';
                 } elseif ($is_active && $days_diff < 0) {
                     $expiry_badge = '<span style="display:block;font-size:11px;color:#dc2626;font-weight:600;">' . __('Past expiration date', 'petslist') . '</span>';
@@ -390,6 +403,31 @@ $user_list = $wpdb->get_results("SELECT ID, display_name, user_email, user_login
     });
     $('#dda-close-grant-btn, #dda-cancel-grant-btn').on('click', function(){
         $('#dda-grant-panel').slideUp(200);
+    });
+
+    // Lifetime grant checkbox toggle
+    var $grantLifetimeCb = $('#dda-grant-is-lifetime');
+    var $grantDurationInput = $('#dda-grant-duration-input');
+    var $grantLifetimeBadge = $('#dda-grant-lifetime-badge');
+    var grantPrevDays = 30;
+
+    $grantLifetimeCb.on('change', function(){
+        if (this.checked) {
+            var cur = parseInt($grantDurationInput.val(), 10);
+            if (cur && cur < 3650) grantPrevDays = cur;
+            $grantDurationInput.val(36500);
+            $grantLifetimeBadge.css('display', 'flex');
+        } else {
+            $grantDurationInput.val(grantPrevDays || 30);
+            $grantLifetimeBadge.hide();
+        }
+    });
+
+    $grantLifetimeBadge.on('click', function(){
+        $grantLifetimeCb.prop('checked', false);
+        $grantDurationInput.val(grantPrevDays || 30);
+        $grantLifetimeBadge.hide();
+        $grantDurationInput.focus();
     });
 
     // Handle Grant Form Submit

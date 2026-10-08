@@ -914,6 +914,25 @@
     $(document).ready(function () {
         ddInitCountrySelects();
 
+        // Auto capitalize first letter only on City fields
+        $(document).on('input blur', '#dd-city, #dd-profile-city, #dd-reg-city, input[name="dog_data[city]"], input[name="city"]', function () {
+            var el = this;
+            var val = el.value;
+            if (val && val.length > 0) {
+                var formatted = val.replace(/(?:^|\s|-)([a-z])/g, function (match) {
+                    return match.toUpperCase();
+                });
+                if (formatted !== val) {
+                    var start = el.selectionStart;
+                    var end = el.selectionEnd;
+                    el.value = formatted;
+                    if (el.setSelectionRange && start !== null) {
+                        try { el.setSelectionRange(start, end); } catch (e) {}
+                    }
+                }
+            }
+        });
+
         // Delegate clicks on country/state wrappers to focus/open the select
         $(document).on('click', '.rtin-country-space .form-group, .rtin-state-space .form-group', function (e) {
             // If Select2 container was clicked, let Select2 handle it naturally

@@ -58,7 +58,7 @@ $dd_auth_banner = function_exists( 'petslist_img_url' ) ? petslist_img_url( 'aut
                         </div>
                     </div>
                     <div style="margin-top: 12px;">
-                        <input type="text" id="dd-reg-city" name="city" class="rtcl-form-control" placeholder="<?php esc_attr_e('Enter City', 'petslist'); ?>" style="height: 48px; border-radius: 8px; font-size: 14px; width: 100%;">
+                        <input type="text" id="dd-reg-city" name="city" class="rtcl-form-control" placeholder="<?php esc_attr_e('Enter City', 'petslist'); ?>" autocapitalize="words" style="height: 48px; border-radius: 8px; font-size: 14px; width: 100%; text-transform: capitalize;">
                     </div>
                 </div>
 

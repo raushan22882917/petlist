@@ -635,9 +635,13 @@ class Subscription {
 
         do_action( 'dd_coupon_redeemed', $user_id, $coupon, $sub_id );
 
+        $duration_msg = ( $duration >= 3650 )
+            ? __( 'Lifetime', 'petslist' )
+            : sprintf( __( '%d-day', 'petslist' ), $duration );
+
         return [
             'success'  => true,
-            'message'  => sprintf( __( 'Congratulations! Code "%s" successfully redeemed. Your free %d-day subscription is now active!', 'petslist' ), esc_html( $coupon->code ), $duration ),
+            'message'  => sprintf( __( 'Congratulations! Code "%s" successfully redeemed. Your free %s subscription is now active!', 'petslist' ), esc_html( $coupon->code ), $duration_msg ),
             'redirect' => add_query_arg( [ 'tab' => 'subscription', 'promo' => 'success' ], dd_dashboard_url() ),
         ];
     }
@@ -771,6 +775,9 @@ class Subscription {
 
         $duration_days = (int) ( $coupon->duration_days ?: 30 );
         $expiry_text   = ! empty( $coupon->expires_at ) ? date( 'F j, Y', strtotime( $coupon->expires_at ) ) : __( 'No expiration date', 'petslist' );
+        $duration_badge_text = ( $duration_days >= 3650 )
+            ? sprintf( __( '✓ Lifetime 100%% Free Access (%s)', 'petslist' ), esc_html( $plan_label ) )
+            : sprintf( __( '✓ %d Days 100%% Free Access (%s)', 'petslist' ), $duration_days, esc_html( $plan_label ) );
 
         $site_name    = get_bloginfo( 'name' );
         $checkout_url = dd_checkout_url( $coupon->plan_slug !== 'all' ? $coupon->plan_slug : 'monthly' );
@@ -788,7 +795,7 @@ class Subscription {
             <div style="background:#f8fafc; border:2px dashed #02c5bd; border-radius:12px; padding:24px; text-align:center; margin:28px 0;">
                 <div style="font-size:12px; text-transform:uppercase; letter-spacing:1px; color:#64748b; font-weight:700; margin-bottom:8px;">Your Private Promo Voucher</div>
                 <div style="font-size:32px; font-weight:900; letter-spacing:3px; color:#0f172a; font-family:monospace; background:#ffffff; border:1px solid #e2e8f0; border-radius:8px; padding:12px 20px; display:inline-block; margin-bottom:12px;">' . esc_html( $coupon->code ) . '</div>
-                <div style="font-size:14px; color:#02c5bd; font-weight:700;">' . sprintf( __( '✓ %d Days 100%% Free Access (%s)', 'petslist' ), $duration_days, esc_html( $plan_label ) ) . '</div>
+                <div style="font-size:14px; color:#02c5bd; font-weight:700;">' . $duration_badge_text . '</div>
                 <div style="font-size:12px; color:#94a3b8; margin-top:6px;">' . sprintf( __( 'Valid until: %s', 'petslist' ), esc_html( $expiry_text ) ) . '</div>
             </div>
 
@@ -894,10 +901,14 @@ class Subscription {
 
         self::admin_sync_user_status( $user_id );
 
+        $grant_duration_text = ( $duration_days >= 3650 )
+            ? __( 'Lifetime', 'petslist' )
+            : sprintf( __( '%d days', 'petslist' ), $duration_days );
+
         return [
             'success'         => true,
             'subscription_id' => $sub_id,
-            'message'         => sprintf( __( 'Subscription "%s" (%d days) successfully granted to %s.', 'petslist' ), esc_html( $plan->name ), $duration_days, esc_html( $user->display_name ) ),
+            'message'         => sprintf( __( 'Subscription "%s" (%s) successfully granted to %s.', 'petslist' ), esc_html( $plan->name ), $grant_duration_text, esc_html( $user->display_name ) ),
         ];
     }
 

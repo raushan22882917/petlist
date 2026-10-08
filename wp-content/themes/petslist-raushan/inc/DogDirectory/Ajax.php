@@ -156,6 +156,9 @@ class Ajax {
         if ( empty( $meta['state_province'] ) && ! empty( $data['state'] ) ) {
             $meta['state_province'] = sanitize_text_field( $data['state'] );
         }
+        if ( ! empty( $meta['city'] ) ) {
+            $meta['city'] = ucwords( strtolower( trim( $meta['city'] ) ) );
+        }
         $meta['dog_name'] = $title;
         update_post_meta( $result, '_dd_dog_meta', $meta );
 
@@ -584,6 +587,9 @@ class Ajax {
         $country          = sanitize_text_field( $_POST['country'] ?? 'United States' );
         $state            = sanitize_text_field( $_POST['state'] ?? '' );
         $city             = sanitize_text_field( $_POST['city'] ?? '' );
+        if ( ! empty( $city ) ) {
+            $city = ucwords( strtolower( trim( $city ) ) );
+        }
         $location         = sanitize_text_field( $_POST['location'] ?? '' );
         if ( empty( $location ) && ( ! empty( $state ) || ! empty( $city ) || ! empty( $country ) ) ) {
             $full_state = function_exists('dd_get_state_full_name') ? dd_get_state_full_name($state) : $state;
@@ -696,6 +702,9 @@ class Ajax {
         $country          = sanitize_text_field( $_POST['country'] ?? 'United States' );
         $state            = sanitize_text_field( $_POST['state'] ?? '' );
         $city             = sanitize_text_field( $_POST['city'] ?? '' );
+        if ( ! empty( $city ) ) {
+            $city = ucwords( strtolower( trim( $city ) ) );
+        }
         $location         = sanitize_text_field( $_POST['location'] ?? '' );
         if ( empty( $location ) && ( ! empty( $state ) || ! empty( $city ) || ! empty( $country ) ) ) {
             $full_state = function_exists('dd_get_state_full_name') ? dd_get_state_full_name($state) : $state;
@@ -1107,6 +1116,11 @@ class Ajax {
         $discount_amount = $original_price;
         $new_total = 0.00;
 
+        $duration_days = (int) $validation['duration_days'];
+        $duration_text = ( $duration_days >= 3650 )
+            ? __( 'Lifetime', 'petslist' )
+            : sprintf( __( '%d-day', 'petslist' ), $duration_days );
+
         wp_send_json_success( [
             'valid'           => true,
             'code'            => $coupon->code,
@@ -1116,7 +1130,7 @@ class Ajax {
             'discount_amount' => number_format( $discount_amount, 2 ),
             'new_total'       => number_format( $new_total, 2 ),
             'is_free'         => true,
-            'message'         => sprintf( __( 'Promo code "%s" applied! 100%% Free %d-day subscription access.', 'petslist' ), esc_html( $coupon->code ), $validation['duration_days'] ),
+            'message'         => sprintf( __( 'Promo code "%s" applied! 100%% Free %s subscription access.', 'petslist' ), esc_html( $coupon->code ), $duration_text ),
         ] );
     }
 

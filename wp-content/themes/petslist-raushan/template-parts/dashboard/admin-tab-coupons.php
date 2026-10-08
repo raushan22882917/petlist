@@ -147,10 +147,21 @@ $private_codes     = count(array_filter($coupons, fn($c) => (!empty($c->assigned
                     </select>
                 </div>
                 <div class="dd-form-group">
-                    <label style="display:block; font-size:13px; font-weight:700; color:#334155; margin-bottom:6px;">
-                        <?php _e('Free Duration (Days)', 'petslist'); ?>
-                    </label>
-                    <input type="number" name="coupon[duration_days]" value="30" min="1" max="365" style="width:100%; border:1px solid #cbd5e1; border-radius:8px; padding:10px 12px; font-size:14px;" />
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                        <label style="display:block; font-size:13px; font-weight:700; color:#334155; margin:0;">
+                            <?php _e('Free Duration (Days)', 'petslist'); ?>
+                        </label>
+                        <label style="font-size:12px; font-weight:700; color:#0284c7; display:inline-flex; align-items:center; gap:4px; cursor:pointer; margin:0;" title="<?php esc_attr_e('Grant unlimited lifetime access without expiration', 'petslist'); ?>">
+                            <input type="checkbox" id="dd_coupon_is_lifetime" style="accent-color:#0284c7; width:14px; height:14px; cursor:pointer;" />
+                            <span>♾️ <?php _e('Lifetime', 'petslist'); ?></span>
+                        </label>
+                    </div>
+                    <div style="position:relative;">
+                        <input type="number" id="dd_coupon_duration_input" name="coupon[duration_days]" value="30" min="1" max="36500" style="width:100%; border:1px solid #cbd5e1; border-radius:8px; padding:10px 12px; font-size:14px;" />
+                        <div id="dd_coupon_lifetime_badge" style="display:none; position:absolute; left:0; top:0; width:100%; height:100%; background:#f0fdf4; border:1px solid #86efac; border-radius:8px; align-items:center; padding:0 12px; font-weight:700; color:#16a34a; font-size:13px; z-index:2; cursor:pointer;">
+                            <span>♾️ <?php _e('Lifetime Access (Unlimited)', 'petslist'); ?></span>
+                        </div>
+                    </div>
                 </div>
                 <div class="dd-form-group">
                     <label style="display:block; font-size:13px; font-weight:700; color:#334155; margin-bottom:6px;">
@@ -243,6 +254,7 @@ $private_codes     = count(array_filter($coupons, fn($c) => (!empty($c->assigned
                         $delete_url = wp_nonce_url(add_query_arg(['tab'=>'coupons', 'action'=>'delete', 'coupon_id'=>$c->id]), 'dd_admin_coupon_action', 'dd_c_nonce');
                         $email_url  = wp_nonce_url(add_query_arg(['tab'=>'coupons', 'action'=>'send_email', 'coupon_id'=>$c->id]), 'dd_admin_coupon_action', 'dd_c_nonce');
                         $has_assignee = (!empty($c->assigned_user_id) && $c->assigned_user_id > 0) || !empty($c->assigned_user_email);
+                        $is_lifetime  = (int)$c->duration_days >= 3650;
                     ?>
                     <tr style="border-bottom:1px solid #f1f5f9;">
                         <td style="padding:14px; font-weight:800; font-family:monospace; color:#070c3e; font-size:15px;">
@@ -271,7 +283,13 @@ $private_codes     = count(array_filter($coupons, fn($c) => (!empty($c->assigned
                             <?php endif; ?>
                         </td>
                         <td style="padding:14px; color:#64748b;"><?php echo esc_html(ucfirst($c->plan_slug)); ?></td>
-                        <td style="padding:14px; color:#334155; font-weight:600;"><?php echo (int)$c->duration_days; ?> <?php _e('days', 'petslist'); ?></td>
+                        <td style="padding:14px; color:#334155; font-weight:600;">
+                            <?php if ($is_lifetime) : ?>
+                                <span style="background:#ecfdf5; color:#059669; font-weight:700; padding:3px 8px; border-radius:6px; font-size:12px;">♾️ <?php _e('Lifetime', 'petslist'); ?></span>
+                            <?php else : ?>
+                                <?php echo (int)$c->duration_days; ?> <?php _e('days', 'petslist'); ?>
+                            <?php endif; ?>
+                        </td>
                         <td style="padding:14px; color:#334155;">
                             <strong><?php echo (int)$c->times_used; ?></strong>
                             <span style="color:#94a3b8;">/ <?php echo $c->max_uses > 0 ? (int)$c->max_uses : '∞'; ?></span>
@@ -383,6 +401,43 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    // Lifetime duration checkbox handling
+    var lifetimeCb = document.getElementById('dd_coupon_is_lifetime');
+    var durationInput = document.getElementById('dd_coupon_duration_input');
+    var lifetimeBadge = document.getElementById('dd_coupon_lifetime_badge');
+    var previousDays = 30;
+
+    if (lifetimeCb && durationInput && lifetimeBadge) {
+        lifetimeCb.addEventListener('change', function() {
+            if (this.checked) {
+                var currentVal = parseInt(durationInput.value, 10);
+                if (currentVal && currentVal < 3650) {
+                    previousDays = currentVal;
+                }
+                durationInput.value = '36500';
+                lifetimeBadge.style.display = 'flex';
+            } else {
+                durationInput.value = previousDays || 30;
+                lifetimeBadge.style.display = 'none';
+            }
+        });
+
+        lifetimeBadge.addEventListener('click', function() {
+            lifetimeCb.checked = false;
+            durationInput.value = previousDays || 30;
+            lifetimeBadge.style.display = 'none';
+            durationInput.focus();
+        });
+
+        durationInput.addEventListener('input', function() {
+            var val = parseInt(this.value, 10);
+            if (val >= 3650) {
+                lifetimeCb.checked = true;
+                lifetimeBadge.style.display = 'flex';
+            }
+        });
+    }
 
     // Auto sync user dropdown with email field
     var userSelect = document.getElementById('dd_coupon_user_select');

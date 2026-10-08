@@ -178,7 +178,7 @@ function dd_field( $meta, $key, $fallback = '' ) {
 
                 <div class="dd-form-group">
                     <label for="dd-city"><?php _e( 'City', 'petslist' ); ?> <span class="dd-required">*</span></label>
-                    <input type="text" id="dd-city" name="dog_data[city]" value="<?php echo dd_field($dog_meta,'city'); ?>" placeholder="<?php esc_attr_e( 'Enter City', 'petslist' ); ?>" required>
+                    <input type="text" id="dd-city" name="dog_data[city]" value="<?php echo dd_field($dog_meta,'city'); ?>" placeholder="<?php esc_attr_e( 'Enter City', 'petslist' ); ?>" autocapitalize="words" style="text-transform: capitalize;" required>
                 </div>
 
                 <div class="dd-form-group">

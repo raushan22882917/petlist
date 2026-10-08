@@ -98,7 +98,7 @@ $website          = $user->user_url;
 
                     <div class="dd-form-group">
                         <label for="dd-profile-city"><?php _e( 'City', 'petslist' ); ?></label>
-                        <input type="text" id="dd-profile-city" name="city" value="<?php echo esc_attr( $user_city ); ?>" placeholder="<?php esc_attr_e( 'Enter City (e.g. Los Angeles, Miami)', 'petslist' ); ?>">
+                        <input type="text" id="dd-profile-city" name="city" value="<?php echo esc_attr( $user_city ); ?>" placeholder="<?php esc_attr_e( 'Enter City (e.g. Los Angeles, Miami)', 'petslist' ); ?>" autocapitalize="words" style="text-transform: capitalize;">
                     </div>
 
                     <div class="dd-form-group">

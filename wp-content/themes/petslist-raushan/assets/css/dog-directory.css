@@ -441,6 +441,7 @@
 .dd-profile-form input:focus,
 .dd-profile-form textarea:focus { border-color:var(--dd-primary); box-shadow:0 0 0 3px rgba(2,197,189,.1); }
 .dd-dog-form textarea { resize:vertical; height:100px; }
+#dd-city, #dd-profile-city, #dd-reg-city, input[name="dog_data[city]"], input[name="city"] { text-transform: capitalize; }
 .dd-form-group--full { grid-column:1/-1; }
 .dd-form-note { font-size:12px; color:var(--dd-text); opacity:.7; margin:8px 0 0; }
 .dd-required { color:var(--dd-danger); margin-left:2px; }
