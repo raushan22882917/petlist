@@ -868,7 +868,7 @@ function dd_stripe_publishable_key() {
     }
 
     // 3. Default fallback
-    return base64_decode('cGtfdGVzdF81MVVCekxRR2Q1eVRtWHoxOHdMTXJJdXRNbXFKaEU5eThpN1haY2ttT3JYdk5jbGZaaE1KN01mQjNpN05tYWE5MGs2ejl4MzVvS0tWS3dtVTg0TFZyVFB1VjAwbFNCVEpGSzY=');
+    return base64_decode('cGtfbGl2ZV81MVVCekxDSzZrRkFrOWxabWw4UmplS3IwSkZqZXVHb0NBekZHVFNvZmZub2ZpMjZxT3N3blpqN0JjM3RKQ1ZOcUlWd0Izdk5Ja21VbGF5a0Z4NmJxb0JvTzAwRnp6MWRSVXY=');
 }
 
 function dd_stripe_secret_key() {
@@ -885,7 +885,7 @@ function dd_stripe_secret_key() {
     }
 
     // 3. Default fallback
-    return base64_decode('c2tfdGVzdF81MVVCekxRR2Q1eVRtWHoxOGNPWGtLM2ZhWm4ybTVpSGc4QWVCNXBNSmdYM0M2eWdBTmpxdDBLcjh6YXhHczMyMU9FWm9ENTR4NE9FRUVYUTIxT2NwbkRJSDAwalNQOVJzTkw=');
+    return base64_decode('c2tfbGl2ZV81MVVCekxDSzZrRkFrOWxabTM5Rm1ucWJENkNqR0NuUVp2S3ZqZXg0NTZCdWhMcExZMDRtTE9nZHFOeFZsbGcxTEdTR2RpdHpmTFZnVUloVWlSREhvTXpQTzAweHFSMnZQelk=');
 }
 
 function dd_stripe_webhook_secret() {
@@ -901,7 +901,7 @@ function dd_stripe_mode() {
     if ( ! empty($env) ) {
         return $env;
     }
-    return get_option('dd_stripe_mode', 'test');
+    return get_option('dd_stripe_mode', 'live');
 }
 
 // -------------------------------------------------------

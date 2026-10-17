@@ -147,6 +147,9 @@ class Ajax {
                 ? sanitize_textarea_field( $data[$field] )
                 : sanitize_text_field( $data[$field] ?? '' );
         }
+        if ( empty( $meta['gender'] ) ) {
+            $meta['gender'] = 'Male';
+        }
         if ( empty( $meta['country'] ) && ! empty( $meta['dog_country'] ) ) {
             $meta['country'] = $meta['dog_country'];
         }

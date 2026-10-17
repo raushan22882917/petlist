@@ -52,13 +52,6 @@ $q = new WP_Query( $args );
                         </select>
                     </div>
                     <div class="dd-dir-filterform__select-wrap">
-                        <select name="gender">
-                            <option value=""><?php _e('Any Gender','petslist'); ?></option>
-                            <option value="Male"   <?php selected($gender_f,'Male');   ?>><?php _e('♂ Male','petslist'); ?></option>
-                            <option value="Female" <?php selected($gender_f,'Female'); ?>><?php _e('♀ Female','petslist'); ?></option>
-                        </select>
-                    </div>
-                    <div class="dd-dir-filterform__select-wrap">
                         <select name="orderby">
                             <option value="date"  <?php selected($orderby,'date');  ?>><?php _e('Newest First','petslist'); ?></option>
                             <option value="title" <?php selected($orderby,'title'); ?>><?php _e('Name A–Z','petslist'); ?></option>
@@ -69,7 +62,7 @@ $q = new WP_Query( $args );
                     <button type="submit" class="dd-dir-btn dd-dir-btn--primary">
                         <?php _e('Search','petslist'); ?>
                     </button>
-                    <?php if($breed_f||$gender_f||$kw): ?>
+                    <?php if($breed_f||$kw): ?>
                     <a href="?" class="dd-dir-btn dd-dir-btn--ghost"><?php _e('Clear','petslist'); ?></a>
                     <?php endif; ?>
                 </div>

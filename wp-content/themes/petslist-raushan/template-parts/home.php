@@ -51,13 +51,6 @@ $recent_dogs = new WP_Query([
                         <?php endforeach; ?>
                     </select>
                 </div>
-                <div class="dd-home-search__field">
-                    <select name="gender">
-                        <option value=""><?php _e('Any Gender', 'petslist'); ?></option>
-                        <option value="Male"><?php _e('Male ♂', 'petslist'); ?></option>
-                        <option value="Female"><?php _e('Female ♀', 'petslist'); ?></option>
-                    </select>
-                </div>
                 <button type="submit" class="dd-home-search__btn"><?php _e('Search Listings', 'petslist'); ?></button>
             </form>
         </div>

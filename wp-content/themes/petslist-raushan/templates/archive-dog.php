@@ -170,14 +170,6 @@ $query = new WP_Query($args);
                             <?php dd_render_breed_options( $breed_filter, true ); ?>
                         </select>
                     </div>
-
-                    <div class="dd-search-form__field">
-                        <select name="gender">
-                            <option value=""><?php _e('Any Gender', 'petslist'); ?></option>
-                            <option value="Male"   <?php selected($gender_filter, 'Male');   ?>><?php _e('Male ♂', 'petslist'); ?></option>
-                            <option value="Female" <?php selected($gender_filter, 'Female'); ?>><?php _e('Female ♀', 'petslist'); ?></option>
-                        </select>
-                    </div>
                     <div class="dd-search-form__field">
                         <select name="country" class="dd-country-select" data-state-target="dd-archive-state" data-saved-country="<?php echo esc_attr( $country_filter ); ?>">
                             <?php
@@ -209,7 +201,7 @@ $query = new WP_Query($args);
                     <button type="submit" class="dd-btn dd-btn--primary dd-search-form__submit">
                         <i class="icon-pl-search"></i> <?php _e('Search', 'petslist'); ?>
                     </button>
-                    <?php if ( $breed_filter || $gender_filter || $keyword || $country_filter || $state_filter || $health_filter ) : ?>
+                    <?php if ( $breed_filter || $keyword || $country_filter || $state_filter || $health_filter ) : ?>
                     <a href="<?php echo esc_url(dd_dog_directory_url()); ?>" class="dd-btn dd-btn--ghost"><?php _e('Clear', 'petslist'); ?></a>
                     <?php endif; ?>
                 </div>

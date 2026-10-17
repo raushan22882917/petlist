@@ -2,3 +2,6 @@
 .DS_Store
 _php_server.log
 wp-content/debug.log
+fix-admin.php
+convert_db.php
+studs4you_ready_for_import.sql

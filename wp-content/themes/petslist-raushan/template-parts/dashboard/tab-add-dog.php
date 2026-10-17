@@ -85,13 +85,7 @@ function dd_field( $meta, $key, $fallback = '' ) {
                     </select>
                 </div>
 
-                <div class="dd-form-group">
-                    <label for="dd-gender"><?php _e( 'Gender', 'petslist' ); ?> <span class="dd-required">*</span></label>
-                    <select id="dd-gender" name="dog_data[gender]" required>
-                        <option value="Male" <?php selected( $dog_meta['gender'] ?? 'Male', 'Male' ); ?>><?php _e( 'Male (Stud)', 'petslist' ); ?></option>
-                        <option value="Female" <?php selected( $dog_meta['gender'] ?? '', 'Female' ); ?>><?php _e( 'Female', 'petslist' ); ?></option>
-                    </select>
-                </div>
+                <input type="hidden" name="dog_data[gender]" value="<?php echo esc_attr( $dog_meta['gender'] ?? 'Male' ); ?>">
 
                 <div class="dd-form-group">
                     <label for="dd-age"><?php _e( 'Age', 'petslist' ); ?> <span class="dd-required">*</span></label>
