@@ -1,15 +1,9 @@
 <?php
 /**
  * PHP built-in server router for WordPress (local dev).
- *
- * The live site lives in the /dog subfolder, so locally we serve everything
- * under the same /dog prefix to keep routes identical. WordPress core files
- * physically live in this directory (the doc root), so we strip the /dog
- * prefix to find the real file, then:
- *   - execute it if it's a PHP file (wp-admin, wp-login.php, etc.)
- *   - stream it if it's a static asset (css/js/images/fonts)
- *   - otherwise hand the request to WordPress (index.php) for routing.
  */
+ini_set('max_execution_time', 60);
+ini_set('default_socket_timeout', 3);
 
 $base = '/dog';
 $uri  = urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));

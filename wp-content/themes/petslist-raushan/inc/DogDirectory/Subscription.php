@@ -174,6 +174,51 @@ class Subscription {
             $this->seed_default_plans();
             update_option( 'dd_plans_updated_v4', 1 );
         }
+
+        // Add 6 Months ($30) and 12 Months ($60) plans (v5)
+        if ( ! get_option( 'dd_plans_updated_v5' ) ) {
+            $exists_6 = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM $plan_table WHERE slug = %s", '6-months' ) );
+            if ( ! $exists_6 ) {
+                $wpdb->insert( $plan_table, [
+                    'name'      => '6 Months Listing',
+                    'slug'      => '6-months',
+                    'price'     => 30.00,
+                    'duration'  => 180,
+                    'features'  => json_encode([
+                        'List unlimited dogs',
+                        'Full directory access',
+                        'Pedigree & health clearance access',
+                        'Direct owner contact',
+                        '6 months continuous access',
+                    ]),
+                    'is_active' => 1,
+                ] );
+            } else {
+                $wpdb->update( $plan_table, [ 'name' => '6 Months Listing', 'price' => 30.00, 'duration' => 180, 'is_active' => 1 ], [ 'slug' => '6-months' ] );
+            }
+
+            $exists_12 = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM $plan_table WHERE slug = %s", '12-months' ) );
+            if ( ! $exists_12 ) {
+                $wpdb->insert( $plan_table, [
+                    'name'      => '12 Months Listing',
+                    'slug'      => '12-months',
+                    'price'     => 60.00,
+                    'duration'  => 365,
+                    'features'  => json_encode([
+                        'List unlimited dogs',
+                        'Full directory access',
+                        'Pedigree & health clearance access',
+                        'Direct owner contact',
+                        '12 months continuous access (Best Value)',
+                    ]),
+                    'is_active' => 1,
+                ] );
+            } else {
+                $wpdb->update( $plan_table, [ 'name' => '12 Months Listing', 'price' => 60.00, 'duration' => 365, 'is_active' => 1 ], [ 'slug' => '12-months' ] );
+            }
+
+            update_option( 'dd_plans_updated_v5', 1 );
+        }
     }
 
     private function seed_default_plans() {
@@ -190,6 +235,34 @@ class Subscription {
                     'Full directory access',
                     'Pedigree & health clearance access',
                     'Direct owner contact',
+                ]),
+                'is_active' => 1,
+            ],
+            [
+                'name'      => '6 Months Listing',
+                'slug'      => '6-months',
+                'price'     => 30.00,
+                'duration'  => 180,
+                'features'  => json_encode([
+                    'List unlimited dogs',
+                    'Full directory access',
+                    'Pedigree & health clearance access',
+                    'Direct owner contact',
+                    '6 months continuous access',
+                ]),
+                'is_active' => 1,
+            ],
+            [
+                'name'      => '12 Months Listing',
+                'slug'      => '12-months',
+                'price'     => 60.00,
+                'duration'  => 365,
+                'features'  => json_encode([
+                    'List unlimited dogs',
+                    'Full directory access',
+                    'Pedigree & health clearance access',
+                    'Direct owner contact',
+                    '12 months continuous access (Best Value)',
                 ]),
                 'is_active' => 1,
             ],

@@ -10,6 +10,9 @@ if ( ! dd_is_admin() ) { wp_die(__('Access denied','petslist')); }
 $uid  = get_current_user_id();
 $user = wp_get_current_user();
 $tab  = sanitize_key($_GET['tab'] ?? 'overview');
+if ( ! empty($_GET['edit']) && absint($_GET['edit']) > 0 && in_array($tab, ['dogs', 'overview', 'approvals', '']) ) {
+    $tab = 'add-dog';
+}
 
 $pending_ads_count = (int) (wp_count_posts('dd_dog')->pending ?? 0);
 

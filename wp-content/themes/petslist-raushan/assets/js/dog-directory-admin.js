@@ -23,43 +23,47 @@
         e.preventDefault();
         e.stopPropagation();
         var id = $(this).data('id');
-        var $tr = $(this).closest('tr');
         var $btn = $(this);
-        $btn.prop('disabled', true);
+        $btn.prop('disabled', true).css('opacity', '0.6');
         $.post(getAjaxUrl(), {
             action:  'dd_admin_approve_dog',
             nonce:   getAdminNonce(),
             post_id: id,
         }, function (res) {
             if (res.success) {
-                $tr.fadeOut(300, function () {
-                    $(this).remove();
-                });
+                location.reload();
             } else {
-                $btn.prop('disabled', false);
+                $btn.prop('disabled', false).css('opacity', '1');
+                alert(res.data && res.data.message ? res.data.message : 'Error approving stud.');
             }
+        }).fail(function () {
+            $btn.prop('disabled', false).css('opacity', '1');
+            alert('Server error. Please try again.');
         });
     });
 
-    // Reject / Unpublish dog (Simple remove from ads list without drawer)
+    // Reject / Unpublish dog (Move to draft)
     $(document).on('click', '.dd-reject-dog', function (e) {
         e.preventDefault();
         e.stopPropagation();
         var id = $(this).data('id');
-        var $tr = $(this).closest('tr');
-        $tr.css('opacity', '0.5');
+        var $btn = $(this);
+        if (!confirm('Are you sure you want to unpublish this stud and move it to draft?')) return;
+        $btn.prop('disabled', true).css('opacity', '0.6');
         $.post(getAjaxUrl(), {
             action:  'dd_admin_reject_dog',
             nonce:   getAdminNonce(),
             post_id: id,
         }, function (res) {
             if (res.success) {
-                $tr.fadeOut(300, function () {
-                    $(this).remove();
-                });
+                location.reload();
             } else {
-                $tr.css('opacity', '1');
+                $btn.prop('disabled', false).css('opacity', '1');
+                alert(res.data && res.data.message ? res.data.message : 'Error unpublishing stud.');
             }
+        }).fail(function () {
+            $btn.prop('disabled', false).css('opacity', '1');
+            alert('Server error. Please try again.');
         });
     });
 
@@ -68,18 +72,49 @@
         e.preventDefault();
         e.stopPropagation();
         var id = $(this).data('id');
-        var $tr = $(this).closest('tr');
+        var $btn = $(this);
         if (!confirm('Are you sure you want to mark this listing as expired?')) return;
+        $btn.prop('disabled', true).css('opacity', '0.6');
         $.post(getAjaxUrl(), {
             action:  'dd_admin_expire_dog',
             nonce:   getAdminNonce(),
             post_id: id,
         }, function (res) {
             if (res.success) {
-                $tr.fadeOut(300, function () {
-                    $(this).remove();
-                });
+                location.reload();
+            } else {
+                $btn.prop('disabled', false).css('opacity', '1');
+                alert(res.data && res.data.message ? res.data.message : 'Error expiring listing.');
             }
+        }).fail(function () {
+            $btn.prop('disabled', false).css('opacity', '1');
+            alert('Server error. Please try again.');
+        });
+    });
+
+    // Delete User
+    $(document).on('click', '.dd-admin-delete-user', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var id = $(this).data('id');
+        var name = $(this).data('name') || 'this user';
+        var $btn = $(this);
+        if (!confirm('Are you sure you want to permanently delete user "' + name + '"? This will remove their account and all associated studs/data.')) return;
+        $btn.prop('disabled', true).css('opacity', '0.6');
+        $.post(getAjaxUrl(), {
+            action:  'dd_admin_delete_user',
+            nonce:   getAdminNonce(),
+            user_id: id,
+        }, function (res) {
+            if (res.success) {
+                location.reload();
+            } else {
+                $btn.prop('disabled', false).css('opacity', '1');
+                alert(res.data && res.data.message ? res.data.message : 'Error deleting user.');
+            }
+        }).fail(function () {
+            $btn.prop('disabled', false).css('opacity', '1');
+            alert('Server error. Please try again.');
         });
     });
 

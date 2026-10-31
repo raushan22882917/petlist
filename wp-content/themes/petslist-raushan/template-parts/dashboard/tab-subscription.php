@@ -96,24 +96,28 @@ $plans   = Subscription::get_plans();
         <!-- Plans Comparison -->
         <div class="dd-sub-plans-mini">
             <?php
-            $listing_plans = array_filter( $plans, function( $p ) {
-                return $p->slug === 'monthly' || strpos( strtolower( $p->name ), 'listing' ) !== false;
+            $ad_slugs = [ 'studs', 'kennels', 'businesses-companies' ];
+            $listing_plans = array_filter( $plans, function( $p ) use ( $ad_slugs ) {
+                return ! in_array( $p->slug, $ad_slugs, true );
             } );
-            $ad_plans = array_filter( $plans, function( $p ) {
-                return $p->slug !== 'monthly' && strpos( strtolower( $p->name ), 'listing' ) === false;
+            $ad_plans = array_filter( $plans, function( $p ) use ( $ad_slugs ) {
+                return in_array( $p->slug, $ad_slugs, true );
             } );
+            $listing_count = count( $listing_plans );
+            $grid_cols     = min( max( $listing_count, 1 ), 3 );
+            $grid_max_w    = $listing_count > 1 ? ( $listing_count >= 3 ? '780px' : '540px' ) : '360px';
             ?>
 
             <?php if ( ! empty($listing_plans) ) : ?>
-            <h3><?php _e( 'Standard Listing Plan', 'petslist' ); ?></h3>
-            <div class="dd-sub-plans-mini__grid" style="grid-template-columns: 1fr; max-width: 360px; margin-bottom: 30px;">
+            <h3><?php _e( 'Directory Listing Plans', 'petslist' ); ?></h3>
+            <div class="dd-sub-plans-mini__grid" style="grid-template-columns: repeat(<?php echo $grid_cols; ?>, 1fr); max-width: <?php echo $grid_max_w; ?>; margin-bottom: 30px;">
                 <?php foreach ( $listing_plans as $plan ) :
-                    $period   = $plan->duration <= 31 ? '/mo' : ( $plan->duration <= 366 ? '/yr' : ' once' );
+                    $period   = dd_plan_period_label( $plan->duration, true );
                     $features = json_decode( $plan->features, true ) ?: [];
                 ?>
                 <div class="dd-sub-plan-mini">
                     <div class="dd-sub-plan-mini__name"><?php echo esc_html($plan->name); ?></div>
-                    <div class="dd-sub-plan-mini__price">$<?php echo number_format($plan->price,2); ?><small><?php echo $period; ?></small></div>
+                    <div class="dd-sub-plan-mini__price">$<?php echo number_format($plan->price,2); ?><small><?php echo esc_html($period); ?></small></div>
                     <ul>
                         <?php foreach ( array_slice($features,0,3) as $f ) : ?>
                         <li><i class="fa-solid fa-check" style="color: #02c5bd; margin-right: 6px; font-size: 11px;"></i><?php echo esc_html($f); ?></li>
@@ -131,12 +135,12 @@ $plans   = Subscription::get_plans();
             <h3><?php _e( 'Ad Packages', 'petslist' ); ?></h3>
             <div class="dd-sub-plans-mini__grid">
                 <?php foreach ( $ad_plans as $plan ) :
-                    $period   = $plan->duration <= 31 ? '/mo' : ( $plan->duration <= 366 ? '/yr' : ' once' );
+                    $period   = dd_plan_period_label( $plan->duration, true );
                     $features = json_decode( $plan->features, true ) ?: [];
                 ?>
                 <div class="dd-sub-plan-mini">
                     <div class="dd-sub-plan-mini__name"><?php echo esc_html($plan->name); ?></div>
-                    <div class="dd-sub-plan-mini__price">$<?php echo number_format($plan->price,2); ?><small><?php echo $period; ?></small></div>
+                    <div class="dd-sub-plan-mini__price">$<?php echo number_format($plan->price,2); ?><small><?php echo esc_html($period); ?></small></div>
                     <ul>
                         <?php foreach ( array_slice($features,0,3) as $f ) : ?>
                         <li><i class="fa-solid fa-check" style="color: #02c5bd; margin-right: 6px; font-size: 11px;"></i><?php echo esc_html($f); ?></li>

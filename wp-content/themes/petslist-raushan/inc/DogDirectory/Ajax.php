@@ -51,6 +51,7 @@ class Ajax {
         add_action( 'wp_ajax_dd_send_test_email', [ $this, 'send_test_email' ] );
         add_action( 'wp_ajax_dd_admin_toggle_sponsored', [ $this, 'admin_toggle_sponsored' ] );
         add_action( 'wp_ajax_dd_get_user_drawer', [ $this, 'get_user_drawer' ] );
+        add_action( 'wp_ajax_dd_admin_delete_user', [ $this, 'admin_delete_user' ] );
 
         // Promo Codes / Free Monthly Access
         add_action( 'wp_ajax_dd_apply_coupon', [ $this, 'apply_coupon' ] );
@@ -1030,8 +1031,9 @@ class Ajax {
         }
         if ( ! current_user_can('manage_options') ) wp_send_json_error(['message' => 'No permission.']);
         $post_id = absint($_POST['post_id'] ?? 0);
+        delete_post_meta($post_id, '_dd_is_expired');
         wp_update_post(['ID' => $post_id, 'post_status' => 'publish']);
-        wp_send_json_success(['message' => 'Dog approved.']);
+        wp_send_json_success(['message' => __('Stud approved and published live.', 'petslist')]);
     }
 
     public function admin_reject_dog() {
@@ -1042,7 +1044,7 @@ class Ajax {
         if ( ! current_user_can('manage_options') ) wp_send_json_error(['message' => 'No permission.']);
         $post_id = absint($_POST['post_id'] ?? 0);
         wp_update_post(['ID' => $post_id, 'post_status' => 'draft']);
-        wp_send_json_success(['message' => 'Dog rejected.']);
+        wp_send_json_success(['message' => __('Stud unpublished (moved to draft).', 'petslist')]);
     }
 
     public function admin_expire_dog() {
@@ -1054,7 +1056,62 @@ class Ajax {
         $post_id = absint($_POST['post_id'] ?? 0);
         update_post_meta($post_id, '_dd_is_expired', '1');
         wp_update_post(['ID' => $post_id, 'post_status' => 'draft']);
-        wp_send_json_success(['message' => 'Dog listing expired.']);
+        wp_send_json_success(['message' => __('Stud listing marked as expired.', 'petslist')]);
+    }
+
+    public function admin_delete_user() {
+        $nonce = $_POST['nonce'] ?? '';
+        if ( ! wp_verify_nonce($nonce, 'dd_admin_nonce') && ! wp_verify_nonce($nonce, 'dd_dog_nonce') ) {
+            wp_send_json_error(['message' => __('Invalid security token.', 'petslist')]);
+        }
+        if ( ! current_user_can('manage_options') ) {
+            wp_send_json_error(['message' => __('Permission denied.', 'petslist')]);
+        }
+
+        $user_id = absint($_POST['user_id'] ?? 0);
+        if ( ! $user_id ) {
+            wp_send_json_error(['message' => __('Invalid user ID.', 'petslist')]);
+        }
+
+        $current_user_id = get_current_user_id();
+        if ( $user_id === $current_user_id ) {
+            wp_send_json_error(['message' => __('You cannot delete your own admin account.', 'petslist')]);
+        }
+
+        $target_user = get_userdata($user_id);
+        if ( ! $target_user ) {
+            wp_send_json_error(['message' => __('User not found.', 'petslist')]);
+        }
+
+        global $wpdb;
+
+        // 1. Delete user's dog listings
+        $dogs = get_posts([
+            'post_type'      => 'dd_dog',
+            'post_status'    => 'any',
+            'author'         => $user_id,
+            'posts_per_page' => -1,
+            'fields'         => 'ids',
+        ]);
+        if ( ! empty($dogs) ) {
+            foreach ( $dogs as $dog_id ) {
+                wp_delete_post( $dog_id, true );
+            }
+        }
+
+        // 2. Delete user's subscriptions and payments
+        $wpdb->delete( "{$wpdb->prefix}dd_subscriptions", ['user_id' => $user_id] );
+        $wpdb->delete( "{$wpdb->prefix}dd_payments", ['user_id' => $user_id] );
+
+        // 3. Delete WordPress user
+        require_once ABSPATH . 'wp-admin/includes/user.php';
+        $deleted = wp_delete_user( $user_id );
+
+        if ( $deleted ) {
+            wp_send_json_success(['message' => sprintf( __('User "%s" and all associated data have been permanently deleted.', 'petslist'), $target_user->display_name )]);
+        } else {
+            wp_send_json_error(['message' => __('Failed to delete user. Please try again.', 'petslist')]);
+        }
     }
 
     public function admin_update_plan() {

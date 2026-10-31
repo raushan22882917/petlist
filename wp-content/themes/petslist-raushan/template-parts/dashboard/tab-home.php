@@ -123,7 +123,7 @@ $greet    = $hour < 12 ? __('Good morning','petslist') : ($hour < 17 ? __('Good 
                     <div class="ddu-dog-row__right">
                         <span class="ddu-pill ddu-pill--<?php echo $stc; ?>"><?php echo $stl; ?></span>
                         <div class="ddu-dog-row__btns">
-                            <a href="<?php echo esc_url(dd_dashboard_url('dogs').'&edit='.$d->ID); ?>" class="ddu-icon-btn" title="Edit">
+                            <a href="<?php echo esc_url(dd_dashboard_url('add-dog').'&edit='.$d->ID); ?>" class="ddu-icon-btn" title="Edit">
                                 <i class="fa-solid fa-pen-to-square" style="font-size: 13px;"></i>
                             </a>
                             <?php if ($st === 'publish') : ?>

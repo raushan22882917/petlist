@@ -726,6 +726,14 @@ a.ddu-sidebar__user:hover {
 .ddu-pill--draft::before {
   background: #64748b !important;
 }
+.ddu-pill--expired {
+  background: #fef2f2 !important;
+  color: #b91c1c !important;
+  border-color: #fecaca !important;
+}
+.ddu-pill--expired::before {
+  background: #ef4444 !important;
+}
 
 /* ── Action buttons ─────────────────────────────────────── */
 .dda-action-btn {
@@ -923,26 +931,26 @@ a.ddu-sidebar__user:hover {
 
 /* ── Responsive: mobile sidebar ─────────────────────────── */
 @media(max-width:900px) {
-  .ddu-sidebar {
-    position: fixed; left: 0; top: 0; height: 100vh; z-index: 200;
-    transform: translateX(-100%); transition: transform .2s ease;
-  }
-  .ddu-sidebar.open { transform: translateX(0); }
+  .ddu-sidebar,
   .dda-sidebar {
-    position: fixed; left: 0; top: 0; height: 100vh; z-index: 200;
-    transform: translateX(-100%); transition: transform .2s ease;
+    position: fixed; left: 0; top: 0; height: 100vh; z-index: 999999 !important;
+    transform: translateX(-100%); transition: transform .25s ease-in-out;
+    background: #ffffff !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    width: 280px !important;
   }
-  .dda-sidebar.open { transform: translateX(0); }
-  .ddu-topbar__menu-btn { display: flex; }
+  .ddu-sidebar.open,
+  .dda-sidebar.open { transform: translateX(0) !important; }
+  .ddu-topbar__menu-btn { display: flex !important; }
 }
 
 /* ── Overlay for mobile ─────────────────────────────────── */
 .dds-overlay {
   display: none;
   position: fixed; inset: 0; background: rgba(0,0,0,.6);
-  z-index: 150;
+  z-index: 999998 !important;
 }
-.dds-overlay.active { display: block; }
+.dds-overlay.active { display: block !important; }
 
 /* ── Premium Forms & Inputs Styling — Native Theme Look ── */
 .ddu-content .dd-dog-form input[type="text"],

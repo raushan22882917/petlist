@@ -74,12 +74,47 @@ if ( Options::$has_tr_header ) {
 				printf( '<div class="header-mobile-icons">%s</div>', $html );
 			}
 			?>
-			<span class="sidebarBtn"><span></span></span>
+			<span class="sidebarBtn" role="button" tabindex="0" aria-label="<?php esc_attr_e( 'Toggle Mobile Menu', 'petslist' ); ?>"><span></span></span>
 		</div>
     </div>
     <div class="rt-slide-nav">
         <div class="offscreen-navigation">
-			<?php wp_nav_menu( $nav_menu_args ); ?>
+			<?php 
+			$nav_html = '';
+			if ( has_nav_menu( 'primary' ) ) {
+				$nav_html = wp_nav_menu( array_merge( $nav_menu_args, ['echo' => false] ) );
+			}
+			if ( empty( trim( (string) $nav_html ) ) ) :
+				$current_path = strtok( $_SERVER['REQUEST_URI'] ?? '', '?' );
+				$nav_items = [
+					'/'                     => __( 'Home', 'petslist' ),
+					'/about/'                => __( 'About', 'petslist' ),
+					'/dog-directory/'       => __( 'Directory', 'petslist' ),
+					'/dog-directory-plans/' => __( 'Plan', 'petslist' ),
+					'/contact/'              => __( 'Contact', 'petslist' ),
+				];
+				if ( is_user_logged_in() ) {
+					$nav_items['/my-account/'] = __( 'Dashboard', 'petslist' );
+				} else {
+					$nav_items['/login/'] = __( 'Login / Register', 'petslist' );
+				}
+			?>
+				<nav class="offscreen-menu">
+					<ul class="menu">
+						<?php foreach ( $nav_items as $path => $label ) : 
+							$url = home_url( $path );
+							$is_active = ( $path === '/' ) 
+								? ( is_front_page() || $current_path === '/' || $current_path === '/dog/' )
+								: ( str_contains( $current_path, rtrim( $path, '/' ) ) );
+							$class = 'menu-item' . ( $is_active ? ' current-menu-item' : '' );
+						?>
+						<li class="<?php echo esc_attr( $class ); ?>"><a href="<?php echo esc_url( $url ); ?>"><?php echo esc_html( $label ); ?></a></li>
+						<?php endforeach; ?>
+					</ul>
+				</nav>
+			<?php else : 
+				echo $nav_html;
+			endif; ?>
         </div>
     </div>
 	<?php get_template_part( 'template-parts/header/header-search', 'mobile' ) ?>

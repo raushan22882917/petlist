@@ -31,16 +31,12 @@
                     });
                 }
 
-                $('.sidebarBtn').on('click', function (e) {
+                $(document).on('click keydown', '.sidebarBtn, .rt-mobile-menu .sidebarBtn', function (e) {
+                    if (e.type === 'keydown' && e.which !== 13 && e.which !== 32) return;
                     e.preventDefault();
-                    if ($('.rt-slide-nav').is(":visible")) {
-                        $('.rt-slide-nav').slideUp();
-                        $('body').removeClass('slidemenuon');
-                    } else {
-                        $('.rt-slide-nav').slideDown();
-                        $('body').addClass('slidemenuon');
-                    }
-
+                    e.stopPropagation();
+                    $('.rt-slide-nav').stop(true, true).slideToggle(200);
+                    $('body').toggleClass('slidemenuon');
                 });
             },
             PriceRange: function(){

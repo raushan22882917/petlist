@@ -74,6 +74,7 @@ define( 'WP_DEBUG_DISPLAY', false );
 define( 'WP_HOME', 'http://localhost:8888' );
 define( 'WP_SITEURL', 'http://localhost:8888' );
 define( 'DISABLE_WP_CRON', true );
+ini_set( 'default_socket_timeout', 3 );
 
 /* That's all, stop editing! Happy publishing. */
 

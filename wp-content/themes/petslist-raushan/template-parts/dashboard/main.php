@@ -14,6 +14,9 @@ $pub      = array_filter($dogs, fn($d) => $d->post_status === 'publish');
 $pend     = array_filter($dogs, fn($d) => $d->post_status === 'pending');
 $payments = Subscription::get_payment_history($uid, 3);
 $tab      = sanitize_text_field($_GET['tab'] ?? 'home');
+if ( ! empty($_GET['edit']) && absint($_GET['edit']) > 0 ) {
+    $tab = 'add-dog';
+}
 
 // Define tabs
 $nav = [

@@ -17,8 +17,14 @@ if ( ! is_user_logged_in() ) {
     return;
 }
 
-$plan_slug = sanitize_text_field( $_GET['plan'] ?? 'monthly' );
-$plan      = Subscription::get_plan( $plan_slug );
+$plan_slug = sanitize_text_field( $_GET['plan'] ?? '' );
+$plan      = $plan_slug ? Subscription::get_plan( $plan_slug ) : null;
+if ( ! $plan ) {
+    $plan = Subscription::get_plan( '6-months' ) ?: ( Subscription::get_plan( 'monthly' ) ?: ( Subscription::get_plans()[0] ?? null ) );
+    if ( $plan ) {
+        $plan_slug = $plan->slug;
+    }
+}
 
 if ( ! $plan ) {
     echo '<div class="dd-notice dd-notice--error">' . __( 'Invalid plan selected.', 'petslist' ) . '</div>';
@@ -28,12 +34,12 @@ if ( ! $plan ) {
 $active_sub = Subscription::get_user_subscription();
 
 if ( ! dd_is_admin() && Subscription::has_reached_sales_limit() && ( ! $active_sub || $active_sub->plan_slug !== $plan->slug ) ) {
-    echo '<div class="dd-notice dd-notice--warning">' . __( 'All monthly packages are currently sold out. Please check back later.', 'petslist' ) . '</div>';
+    echo '<div class="dd-notice dd-notice--warning">' . __( 'All packages are currently sold out. Please check back later.', 'petslist' ) . '</div>';
     return;
 }
 
 $user       = wp_get_current_user();
-$period     = __( '/month', 'petslist' );
+$period     = dd_plan_period_label( $plan->duration );
 $features   = json_decode( $plan->features, true ) ?: [];
 $stripe_pub_key   = dd_stripe_publishable_key();
 $paypal_client_id = dd_paypal_client_id();

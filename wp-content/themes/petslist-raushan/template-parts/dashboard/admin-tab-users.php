@@ -86,6 +86,11 @@ $total_pages = ceil($total_count / $per_pg);
                         <a href="<?php echo esc_url(add_query_arg(['tab'=>'dogs','dog_author'=>$u->ID], dd_dashboard_url('dogs'))); ?>" class="dda-action-btn dda-action-btn--dogs" title="<?php esc_attr_e('View User\'s Studs', 'petslist'); ?>">
                             <i class="fa-solid fa-dog"></i>
                         </a>
+                        <?php if ( (int)$u->ID !== (int)get_current_user_id() ) : ?>
+                        <button type="button" class="dda-action-btn dda-action-btn--delete dd-admin-delete-user" data-id="<?php echo $u->ID; ?>" data-name="<?php echo esc_attr($u->display_name ?: $u->user_email); ?>" title="<?php esc_attr_e('Delete User', 'petslist'); ?>" style="width: 32px; height: 32px; border-radius: 6px; background: #fff1f2; color: #e11d48; border: 1px solid #fecdd3; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s;" onmouseover="this.style.background='#ffe4e6'" onmouseout="this.style.background='#fff1f2'">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                        <?php endif; ?>
                     </div>
                 </td>
             </tr>

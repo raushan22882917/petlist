@@ -49,42 +49,47 @@ $limit_reached    = Subscription::has_reached_sales_limit();
     <?php endif; ?>
 
     <?php
-    $listing_plans = array_filter( $plans, function( $p ) {
-        return $p->slug === 'monthly' || strpos( strtolower( $p->name ), 'listing' ) !== false;
+    $ad_slugs = [ 'studs', 'kennels', 'businesses-companies' ];
+    $listing_plans = array_filter( $plans, function( $p ) use ( $ad_slugs ) {
+        return ! in_array( $p->slug, $ad_slugs, true );
     } );
-    $ad_plans = array_filter( $plans, function( $p ) {
-        return $p->slug !== 'monthly' && strpos( strtolower( $p->name ), 'listing' ) === false;
+    $ad_plans = array_filter( $plans, function( $p ) use ( $ad_slugs ) {
+        return in_array( $p->slug, $ad_slugs, true );
     } );
-    $popular_slug = 'kennels';
+    $popular_ad_slug = 'kennels';
+    $listing_count = count( $listing_plans );
+    $listing_grid_class = $listing_count >= 3 ? 'dd-plans-grid--3col' : ( $listing_count === 2 ? 'dd-plans-grid--2col' : 'dd-plans-grid--1col' );
     ?>
 
     <!-- Standard Listing Plan Section -->
     <?php if ( ! empty($listing_plans) ) : ?>
     <div class="dd-pricing-section" style="margin-bottom: 50px;">
         <div class="dd-pricing-section__header" style="text-align:center; margin-bottom: 24px;">
-            <h2 class="dd-pricing-section__title" style="font-size: 24px; font-weight: 700; color: #070c3e; margin-bottom: 6px;"><?php _e('Directory Listing Plan', 'petslist'); ?></h2>
+            <h2 class="dd-pricing-section__title" style="font-size: 24px; font-weight: 700; color: #070c3e; margin-bottom: 6px;"><?php _e('Directory Listing Plans', 'petslist'); ?></h2>
             <p style="color: #64748b; font-size: 14px; max-width: 600px; margin: 0 auto;"><?php _e('Standard membership plan for creating and managing your pedigree dog listings.', 'petslist'); ?></p>
         </div>
 
-        <div class="dd-plans-grid dd-plans-grid--1col">
+        <div class="dd-plans-grid <?php echo esc_attr( $listing_grid_class ); ?>">
             <?php foreach ( $listing_plans as $plan ) :
                 $features  = json_decode($plan->features, true) ?: [];
-                $is_popular = $plan->slug === $popular_slug;
+                $is_popular = ( $plan->slug === '12-months' );
                 $is_active  = $plan->slug === $active_plan_slug;
-                $period     = __('/month', 'petslist');
+                $period     = dd_plan_period_label( $plan->duration );
             ?>
             <div class="dd-plan-card <?php echo $is_popular ? 'dd-plan-card--popular' : ''; ?> <?php echo $is_active ? 'dd-plan-card--active' : ''; ?>">
                 <?php if ( $is_active ) : ?>
                 <div class="dd-plan-card__badge dd-plan-card__badge--active"><?php _e('Current Plan', 'petslist'); ?></div>
+                <?php elseif ( $is_popular ) : ?>
+                <div class="dd-plan-card__badge"><?php _e('Best Value', 'petslist'); ?></div>
                 <?php endif; ?>
 
                 <div class="dd-plan-card__header">
-                    <div class="dd-plan-card__icon">🐾</div>
+                    <div class="dd-plan-card__icon"><?php echo $plan->slug === '12-months' ? '👑' : ( $plan->slug === '6-months' ? '📅' : '🐾' ); ?></div>
                     <h2 class="dd-plan-card__name"><?php echo esc_html($plan->name); ?></h2>
                     <div class="dd-plan-card__price">
                         <span class="dd-plan-card__currency">$</span>
                         <span class="dd-plan-card__amount"><?php echo number_format($plan->price, 2); ?></span>
-                        <span class="dd-plan-card__period"><?php echo $period; ?></span>
+                        <span class="dd-plan-card__period"><?php echo esc_html($period); ?></span>
                     </div>
                 </div>
 
@@ -126,9 +131,9 @@ $limit_reached    = Subscription::has_reached_sales_limit();
         <div class="dd-plans-grid dd-plans-grid--3col">
             <?php foreach ( $ad_plans as $plan ) :
                 $features  = json_decode($plan->features, true) ?: [];
-                $is_popular = $plan->slug === $popular_slug;
+                $is_popular = $plan->slug === $popular_ad_slug;
                 $is_active  = $plan->slug === $active_plan_slug;
-                $period     = __('/month', 'petslist');
+                $period     = dd_plan_period_label( $plan->duration );
                 $icon       = $plan->slug === 'studs' ? '🐕' : ($plan->slug === 'kennels' ? '⭐' : '🏢');
             ?>
             <div class="dd-plan-card <?php echo $is_popular ? 'dd-plan-card--popular' : ''; ?> <?php echo $is_active ? 'dd-plan-card--active' : ''; ?>">

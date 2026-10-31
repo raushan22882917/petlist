@@ -77,8 +77,14 @@ $status_tabs = [
                 $meta  = dd_get_dog_meta($pid);
                 $thumb = get_the_post_thumbnail_url($pid,'thumbnail') ?: dd_placeholder_image();
                 $st    = get_post_status();
-                $st_map = ['publish'=>['Live','active'],'pending'=>['Pending','pending'],'draft'=>['Draft','draft']];
-                [$stl,$stc] = $st_map[$st] ?? [ucfirst($st),'draft'];
+                $is_expired = get_post_meta($pid, '_dd_is_expired', true);
+                if ( $is_expired ) {
+                    $stl = __('Expired', 'petslist');
+                    $stc = 'expired';
+                } else {
+                    $st_map = ['publish'=>['Live','active'],'pending'=>['Pending','pending'],'draft'=>['Draft','draft']];
+                    [$stl,$stc] = $st_map[$st] ?? [ucfirst($st),'draft'];
+                }
                 $author = get_the_author();
             ?>
             <tr data-post-id="<?php echo $pid; ?>">
@@ -99,14 +105,19 @@ $status_tabs = [
                             <i class="fa-solid fa-eye"></i>
                         </button>
 
+                        <!-- 1b. Edit Stud Profile Button -->
+                        <a href="<?php echo esc_url(dd_dashboard_url('add-dog') . '&edit=' . $pid); ?>" class="dda-action-btn dda-action-btn--edit" title="<?php esc_attr_e('Edit Stud Profile', 'petslist'); ?>" style="width: 32px; height: 32px; border-radius: 6px; background: #f8fafc; color: #0284c7; border: 1px solid #cbd5e1; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.2s;" onmouseover="this.style.background='#e0f2fe'" onmouseout="this.style.background='#f8fafc'">
+                            <i class="fa-solid fa-pencil"></i>
+                        </a>
+
                         <!-- 2. Subscription Info Button -->
                         <?php $author_email = get_the_author_meta('user_email'); ?>
                         <a href="<?php echo esc_url(dd_dashboard_url('subscribers') . '&search=' . urlencode($author_email)); ?>" title="<?php esc_attr_e('View Breeder Subscription', 'petslist'); ?>" target="_blank" style="width: 32px; height: 32px; border-radius: 6px; background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.2s;" onmouseover="this.style.background='#bae6fd'" onmouseout="this.style.background='#e0f2fe'">
                             <i class="fa-solid fa-id-card"></i>
                         </a>
 
-                        <?php if ($st === 'pending' || $st === 'draft') : ?>
-                        <!-- 3. Accept / Approve Ad -->
+                        <?php if ($st === 'pending' || $st === 'draft' || $is_expired) : ?>
+                        <!-- 3. Accept / Approve Ad (Publish Live) -->
                         <button class="dda-action-btn dda-action-btn--approve dd-approve-dog" data-id="<?php echo $pid; ?>" title="<?php esc_attr_e('Accept Ad (Approve Live)', 'petslist'); ?>" style="width: 32px; height: 32px; border-radius: 6px; background: #02c5bd; color: #ffffff; border: none; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(2, 197, 189, 0.3); transition: all 0.2s;" onmouseover="this.style.background='#02a8a2'" onmouseout="this.style.background='#02c5bd'">
                             <i class="fa-solid fa-check"></i>
                         </button>
@@ -117,12 +128,12 @@ $status_tabs = [
                         <button class="dda-action-btn dda-action-btn--reject dd-reject-dog" data-id="<?php echo $pid; ?>" title="<?php esc_attr_e('Unpublish Ad (Move to Draft)', 'petslist'); ?>" style="width: 32px; height: 32px; border-radius: 6px; background: #fff1f2; color: #e11d48; border: 1px solid #fecdd3; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s;" onmouseover="this.style.background='#ffe4e6'" onmouseout="this.style.background='#fff1f2'">
                             <i class="fa-solid fa-ban"></i>
                         </button>
-                        <?php endif; ?>
 
                         <!-- 5. Expire Listing Button -->
                         <button class="dda-action-btn dd-expire-dog" data-id="<?php echo $pid; ?>" title="<?php esc_attr_e('Mark Listing Expired', 'petslist'); ?>" style="width: 32px; height: 32px; border-radius: 6px; background: #fef3c7; color: #d97706; border: 1px solid #fde68a; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s;" onmouseover="this.style.background='#fde68a'" onmouseout="this.style.background='#fef3c7'">
                             <i class="fa-solid fa-clock-rotate-left"></i>
                         </button>
+                        <?php endif; ?>
 
                         <?php
                         $is_sponsored = isset($meta['is_sponsored']) && $meta['is_sponsored'] === 'Yes';

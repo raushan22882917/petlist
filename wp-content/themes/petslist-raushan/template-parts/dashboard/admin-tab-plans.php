@@ -23,7 +23,7 @@ $plans = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}dd_plans ORDER BY pric
             <div class="dda-plan-edit-card" data-plan-id="<?php echo $plan->id; ?>">
                 <div class="dda-plan-edit-card__header">
                     <span class="dda-plan-edit-card__icon">
-                        <?php echo $plan->slug==='monthly'?'🐾':($plan->slug==='studs'?'🐕':($plan->slug==='kennels'?'⭐':'🏢')); ?>
+                        <?php echo in_array($plan->slug, ['monthly', '6-months', '12-months'], true) ? ( $plan->slug === '12-months' ? '👑' : ($plan->slug === '6-months' ? '📅' : '🐾') ) : ($plan->slug==='studs'?'🐕':($plan->slug==='kennels'?'⭐':'🏢')); ?>
                     </span>
                     <strong><?php echo esc_html($plan->name); ?></strong>
                     <span class="ddu-pill ddu-pill--<?php echo $plan->is_active?'active':'draft'; ?>">

@@ -84,8 +84,12 @@ class AccessControl {
             wp_safe_redirect( dd_dashboard_url() );
             exit;
         }
-        /* ── Add Dog form (via dashboard tab): subscription required ── */
-        if ( dd_is_dashboard_page() && ( $_GET['tab'] ?? '' ) === 'add-dog' ) {
+        /* ── Add Dog form (via dashboard tab): subscription required (allow editing existing studs) ── */
+        if ( dd_is_dashboard_page() && ( ( $_GET['tab'] ?? '' ) === 'add-dog' || ! empty( $_GET['edit'] ) ) ) {
+            $edit_id = absint( $_GET['edit'] ?? 0 );
+            if ( dd_is_admin() || $edit_id > 0 ) {
+                return;
+            }
             if ( is_user_logged_in() && ! Subscription::can_access_directory() ) {
                 wp_safe_redirect( dd_pricing_url() );
                 exit;
@@ -189,7 +193,7 @@ class AccessControl {
                 ?>
                 <div class="dd-access-gate__plans">
                     <?php foreach ( $plans as $plan ) :
-                        $period = $plan->duration <= 31 ? '/mo' : ( $plan->duration <= 366 ? '/yr' : ' once' );
+                        $period = dd_plan_period_label( $plan->duration, true );
                     ?>
                     <div class="dd-access-gate__plan">
                         <span class="dd-access-gate__plan-name"><?php echo esc_html($plan->name); ?></span>

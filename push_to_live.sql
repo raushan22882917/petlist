@@ -393,7 +393,9 @@ INSERT INTO `wp_dd_plans` VALUES
 (1,'Standard Listing','monthly',5.99,30,'[\"List unlimited dogs\",\"Full directory access\",\"Pedigree & health clearance access\",\"Direct owner contact\"]',1,'2026-07-21 16:46:01'),
 (2,'Studs','studs',10.00,30,'[\"List your stud dogs\",\"Full directory access\",\"Photo uploads (front + side)\",\"Search & filter access\"]',1,'2026-07-21 16:46:01'),
 (3,'Kennels','kennels',20.00,30,'[\"Everything in Studs\",\"Featured badges\",\"Gallery uploads\",\"Priority listing\"]',1,'2026-07-21 16:46:01'),
-(4,'Businesses/Companies','businesses-companies',50.00,30,'[\"Everything in Kennels\",\"Premium homepage placement\",\"Unlimited listings\",\"Priority admin support\"]',1,'2026-07-21 16:46:01');
+(4,'Businesses/Companies','businesses-companies',50.00,30,'[\"Everything in Kennels\",\"Premium homepage placement\",\"Unlimited listings\",\"Priority admin support\"]',1,'2026-07-21 16:46:01'),
+(5,'6 Months Listing','6-months',30.00,180,'[\"List unlimited dogs\",\"Full directory access\",\"Pedigree & health clearance access\",\"Direct owner contact\",\"6 months continuous access\"]',1,'2026-10-30 14:30:00'),
+(6,'12 Months Listing','12-months',60.00,365,'[\"List unlimited dogs\",\"Full directory access\",\"Pedigree & health clearance access\",\"Direct owner contact\",\"12 months continuous access (Best Value)\"]',1,'2026-10-30 14:30:00');
 /*!40000 ALTER TABLE `wp_dd_plans` ENABLE KEYS */;
 UNLOCK TABLES;
 COMMIT;

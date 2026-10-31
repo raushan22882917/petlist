@@ -34,8 +34,24 @@ class Notifications {
         add_filter( 'wp_mail_from_name',  [ $this, 'mail_from_name' ] );
         add_filter( 'wp_mail_from',       [ $this, 'mail_from_email' ] );
         add_filter( 'wp_mail_content_type', [ $this, 'mail_content_type' ] );
+        add_filter( 'pre_wp_mail',        [ $this, 'bypass_mail_on_localhost' ], 10, 2 );
         add_action( 'phpmailer_init',     [ $this, 'configure_smtp' ] );
         add_filter( 'retrieve_password_notification_email', [ $this, 'format_retrieve_password_email' ], 10, 4 );
+    }
+
+    /**
+     * Completely bypass mail delivery on localhost to avoid SMTP / sendmail hanging
+     */
+    public function bypass_mail_on_localhost( $null, $atts ) {
+        $action = $_POST['action'] ?? '';
+        if ( 'dd_send_test_email' === $action ) {
+            return null; // allow test email from Admin Settings to test SMTP
+        }
+        $http_host = $_SERVER['HTTP_HOST'] ?? '';
+        if ( php_sapi_name() === 'cli' || strpos( $http_host, 'localhost' ) !== false || strpos( $http_host, '127.0.0.1' ) !== false ) {
+            return true; // fast 0ms return
+        }
+        return null;
     }
 
     /* ── Mail filters & SMTP ───────────────────────────────── */
@@ -67,10 +83,18 @@ class Notifications {
             return;
         }
 
+        // On local development, bypass remote external SMTP to prevent worker thread hanging
+        $http_host = $_SERVER['HTTP_HOST'] ?? '';
+        if ( strpos( $http_host, 'localhost' ) !== false || strpos( $http_host, '127.0.0.1' ) !== false ) {
+            return;
+        }
+
         $phpmailer->isSMTP();
         $phpmailer->Host       = $host;
         $phpmailer->Port       = (int) get_option( 'dd_smtp_port', 587 );
         $phpmailer->SMTPAuth   = (bool) get_option( 'dd_smtp_auth', 1 );
+        $phpmailer->Timeout    = 5;
+        $phpmailer->Timelimit  = 5;
 
         if ( $phpmailer->SMTPAuth ) {
             $phpmailer->Username = get_option( 'dd_smtp_username' );

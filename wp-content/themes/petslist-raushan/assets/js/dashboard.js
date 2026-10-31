@@ -5,52 +5,47 @@
     'use strict';
 
     // ── Sidebar collapse (user dashboard) ──────────────────
-    var $shell   = $('#ddu-shell');
-    var $sidebar = $('#ddu-sidebar');
-    var $toggle  = $('#ddu-sidebar-toggle');
-    var $mobileBtn = $('#ddu-mobile-menu');
+    var $sidebar = $('#ddu-sidebar, .ddu-sidebar');
 
     // Restore collapse state
     if (localStorage.getItem('ddu_collapsed') === '1') {
         $sidebar.addClass('collapsed');
     }
 
-    $toggle.on('click', function () {
-        $sidebar.toggleClass('collapsed');
-        var col = $sidebar.hasClass('collapsed') ? '1' : '0';
-        localStorage.setItem('ddu_collapsed', col);
-        // Rotate icon
-        $(this).find('svg').css('transform', col === '1' ? 'rotate(180deg)' : '');
+    $(document).on('click', '#ddu-sidebar-toggle', function () {
+        if ($(window).width() <= 900) {
+            $('#ddu-sidebar, .ddu-sidebar, .dda-sidebar').removeClass('open');
+            $('#dds-overlay').removeClass('active');
+        } else {
+            $sidebar.toggleClass('collapsed');
+            var col = $sidebar.hasClass('collapsed') ? '1' : '0';
+            localStorage.setItem('ddu_collapsed', col);
+            $(this).find('svg').css('transform', col === '1' ? 'rotate(180deg)' : '');
+        }
     });
 
-    // Mobile sidebar toggle (user)
-    var $overlay = $('<div class="dds-overlay" id="dds-overlay"></div>');
-    $('body').append($overlay);
-
-    $mobileBtn.on('click', function () {
-        $sidebar.toggleClass('open');
-        $overlay.toggleClass('active');
-    });
-
-    // Admin mobile toggle
-    var $adminSidebar = $('.dda-sidebar');
-    var $adminMenuBtn = $('<button class="ddu-topbar__menu-btn" id="dda-mobile-menu" aria-label="Menu" style="display:none">' +
-        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M3 12h18M3 6h18M3 18h18"/></svg>' +
-        '</button>');
-    $('.dda-topbar__title').before($adminMenuBtn);
-
-    if ($(window).width() <= 900) {
-        $adminMenuBtn.show();
+    // Mobile sidebar toggle (user + admin)
+    if (!$('#dds-overlay').length) {
+        $('body').append('<div class="dds-overlay" id="dds-overlay"></div>');
     }
-    $adminMenuBtn.on('click', function () {
-        $adminSidebar.toggleClass('open');
-        $overlay.toggleClass('active');
+
+    $(document).on('click', '#ddu-mobile-menu, #dda-mobile-menu, .ddu-topbar__menu-btn', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        $('#ddu-sidebar, .ddu-sidebar, .dda-sidebar').toggleClass('open');
+        $('#dds-overlay').toggleClass('active');
     });
 
-    $overlay.on('click', function () {
-        $sidebar.removeClass('open');
-        $adminSidebar.removeClass('open');
-        $overlay.removeClass('active');
+    $(document).on('click', '#dds-overlay, .ddu-sidebar__collapse', function () {
+        $('#ddu-sidebar, .ddu-sidebar, .dda-sidebar').removeClass('open');
+        $('#dds-overlay').removeClass('active');
+    });
+
+    $(document).on('click', '.ddu-sidebar__nav-item, .dda-sidebar__nav-item', function () {
+        if ($(window).width() <= 900) {
+            $('#ddu-sidebar, .ddu-sidebar, .dda-sidebar').removeClass('open');
+            $('#dds-overlay').removeClass('active');
+        }
     });
 
     // ── Header Profile Dropdown ────────────────────────────
@@ -72,44 +67,6 @@
             $('.ddu-profile-dropdown').removeClass('active');
             $('.ddu-topbar__avatar-btn').attr('aria-expanded', 'false');
         }
-    });
-
-    // ── Admin: Approve dog ──────────────────────────────────
-    $(document).on('click', '.dd-approve-dog', function () {
-        var $btn = $(this);
-        var id   = $btn.data('id');
-        $btn.text('…').prop('disabled', true);
-        $.post(ddVars.ajaxUrl, {
-            action:  'dd_admin_approve_dog',
-            nonce:   ddVars.nonces.dog,
-            post_id: id,
-        }, function (res) {
-            if (res.success) {
-                var $row = $btn.closest('tr, .ddu-dog-row');
-                $row.find('.ddu-pill, .dd-status-pill').attr('class','ddu-pill ddu-pill--active').text('Live');
-                $btn.closest('td, .ddu-dog-row__btns').html(
-                    '<a href="' + (ddVars.siteUrl || '/') + '" class="dda-action-btn" target="_blank">View</a>'
-                );
-                _flashMsg('#dd-admin-message', res.data.message, 'success');
-            }
-        });
-    });
-
-    // ── Admin: Reject dog ───────────────────────────────────
-    $(document).on('click', '.dd-reject-dog', function () {
-        var $btn = $(this);
-        var id   = $btn.data('id');
-        $btn.text('…').prop('disabled', true);
-        $.post(ddVars.ajaxUrl, {
-            action:  'dd_admin_reject_dog',
-            nonce:   ddVars.nonces.dog,
-            post_id: id,
-        }, function (res) {
-            if (res.success) {
-                $btn.closest('tr').fadeOut(400, function () { $(this).remove(); });
-                _flashMsg('#dd-admin-message', res.data.message, 'success');
-            }
-        });
     });
 
     // ── Admin: Toggle sponsored status ───────────────────────

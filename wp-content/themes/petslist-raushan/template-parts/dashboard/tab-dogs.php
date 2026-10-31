@@ -122,7 +122,7 @@ $dogs    = dd_get_user_dogs( $user_id, 'any', -1 );
                                 <a href="<?php echo esc_url($view_url); ?>" target="_blank" class="dd-action-btn dd-action-btn--view" title="<?php esc_attr_e('View Stud Profile', 'petslist'); ?>">
                                     <i class="fa-solid fa-eye"></i>
                                 </a>
-                                <a href="<?php echo esc_url(dd_dashboard_url('dogs') . '&edit=' . $dog->ID); ?>" class="dd-action-btn dd-action-btn--edit" title="<?php esc_attr_e('Edit', 'petslist'); ?>">
+                                <a href="<?php echo esc_url(dd_dashboard_url('add-dog') . '&edit=' . $dog->ID); ?>" class="dd-action-btn dd-action-btn--edit" title="<?php esc_attr_e('Edit Stud Profile', 'petslist'); ?>">
                                     <i class="fa-solid fa-pencil"></i>
                                 </a>
                                 <?php if ($dog->post_status === 'publish') : ?>

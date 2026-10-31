@@ -821,6 +821,32 @@ function dd_require_subscription( $redirect = '' ) {
     }
 }
 
+/**
+ * Format plan billing period label based on duration in days
+ *
+ * @param int|object|string $duration_or_plan Duration in days, plan object, or plan slug
+ * @param bool              $short            Whether to return abbreviated period (e.g. /mo, /6 mo, /12 mo)
+ * @return string
+ */
+function dd_plan_period_label( $duration_or_plan, $short = false ) {
+    $duration = is_object( $duration_or_plan ) ? (int) $duration_or_plan->duration : (int) $duration_or_plan;
+    if ( is_string( $duration_or_plan ) && ! is_numeric( $duration_or_plan ) ) {
+        $plan = \RadiusTheme\Petslist\DogDirectory\Subscription::get_plan( $duration_or_plan );
+        $duration = $plan ? (int) $plan->duration : 30;
+    }
+    if ( $duration <= 0 ) {
+        return $short ? ' once' : __( 'one-time', 'petslist' );
+    } elseif ( $duration <= 45 ) {
+        return $short ? '/mo' : __( '/month', 'petslist' );
+    } elseif ( $duration <= 210 ) {
+        return $short ? '/6 mo' : __( '/6 months', 'petslist' );
+    } elseif ( $duration <= 400 ) {
+        return $short ? '/12 mo' : __( '/12 months', 'petslist' );
+    } else {
+        return $short ? ' once' : __( 'lifetime', 'petslist' );
+    }
+}
+
 // -------------------------------------------------------
 // STRIPE HELPERS
 // -------------------------------------------------------

@@ -141,28 +141,36 @@ $recent_dogs = new WP_Query([
         </div>
         
         <?php
-        $listing_plans = array_filter( $plans, function( $p ) {
-            return $p->slug === 'monthly' || strpos( strtolower( $p->name ), 'listing' ) !== false;
+        $ad_slugs = [ 'studs', 'kennels', 'businesses-companies' ];
+        $listing_plans = array_filter( $plans, function( $p ) use ( $ad_slugs ) {
+            return ! in_array( $p->slug, $ad_slugs, true );
         } );
-        $ad_plans = array_filter( $plans, function( $p ) {
-            return $p->slug !== 'monthly' && strpos( strtolower( $p->name ), 'listing' ) === false;
+        $ad_plans = array_filter( $plans, function( $p ) use ( $ad_slugs ) {
+            return in_array( $p->slug, $ad_slugs, true );
         } );
+        $listing_count = count( $listing_plans );
+        $listing_grid_class = $listing_count >= 3 ? 'dd-home-plans-grid--3col' : ( $listing_count === 2 ? 'dd-home-plans-grid--2col' : 'dd-home-plans-grid--1col' );
         ?>
 
         <?php if ( ! empty($listing_plans) ) : ?>
         <div style="text-align: center; margin-bottom: 20px;">
-            <h3 style="font-size: 20px; font-weight: 700; color: #070c3e; margin-bottom: 4px;"><?php _e('Directory Listing Plan', 'petslist'); ?></h3>
+            <h3 style="font-size: 20px; font-weight: 700; color: #070c3e; margin-bottom: 4px;"><?php _e('Directory Listing Plans', 'petslist'); ?></h3>
         </div>
-        <div class="dd-home-plans-grid" style="grid-template-columns: 1fr; max-width: 420px; margin: 0 auto 50px;">
+        <div class="dd-home-plans-grid <?php echo esc_attr( $listing_grid_class ); ?>">
             <?php foreach ( $listing_plans as $plan ) :
                 $features = json_decode($plan->features, true) ?: [];
+                $is_popular = ( $plan->slug === '12-months' );
+                $period = dd_plan_period_label( $plan->duration );
             ?>
-            <div class="dd-home-plan-card">
+            <div class="dd-home-plan-card <?php echo $is_popular ? 'dd-home-plan-card--popular' : ''; ?>">
+                <?php if ( $is_popular ) : ?>
+                <div class="dd-home-plan-card__badge"><?php _e('Best Value', 'petslist'); ?></div>
+                <?php endif; ?>
                 <h3 class="dd-home-plan-card__name"><?php echo esc_html($plan->name); ?></h3>
                 <div class="dd-home-plan-card__price">
                     <span class="currency">$</span>
                     <span class="value"><?php echo number_format($plan->price, 2); ?></span>
-                    <span class="period">/ <?php _e('month', 'petslist'); ?></span>
+                    <span class="period"><?php echo esc_html($period); ?></span>
                 </div>
                 <ul class="dd-home-plan-card__features">
                     <?php foreach ( $features as $feat ) : ?>
@@ -184,6 +192,7 @@ $recent_dogs = new WP_Query([
             <?php foreach ( $ad_plans as $plan ) :
                 $features = json_decode($plan->features, true) ?: [];
                 $is_popular = ($plan->slug === 'kennels');
+                $period = dd_plan_period_label( $plan->duration );
             ?>
             <div class="dd-home-plan-card <?php echo $is_popular ? 'dd-home-plan-card--popular' : ''; ?>">
                 <?php if ( $is_popular ) : ?>
@@ -193,7 +202,7 @@ $recent_dogs = new WP_Query([
                 <div class="dd-home-plan-card__price">
                     <span class="currency">$</span>
                     <span class="value"><?php echo number_format($plan->price, 2); ?></span>
-                    <span class="period">/ <?php _e('month', 'petslist'); ?></span>
+                    <span class="period"><?php echo esc_html($period); ?></span>
                 </div>
                 <ul class="dd-home-plan-card__features">
                     <?php foreach ( $features as $feat ) : ?>
@@ -536,8 +545,26 @@ $recent_dogs = new WP_Query([
     margin: 0 auto;
     align-items: stretch;
 }
+.dd-home-plans-grid--3col {
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 1100px;
+    margin: 0 auto 50px;
+}
+.dd-home-plans-grid--2col {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 780px;
+    margin: 0 auto 50px;
+}
+.dd-home-plans-grid--1col {
+    grid-template-columns: 1fr;
+    max-width: 420px;
+    margin: 0 auto 50px;
+}
 @media (max-width: 900px) {
-    .dd-home-plans-grid {
+    .dd-home-plans-grid,
+    .dd-home-plans-grid--3col,
+    .dd-home-plans-grid--2col,
+    .dd-home-plans-grid--1col {
         grid-template-columns: 1fr;
         max-width: 450px;
     }
