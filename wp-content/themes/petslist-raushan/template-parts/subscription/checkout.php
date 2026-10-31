@@ -161,15 +161,9 @@ $paypal_client_id = dd_paypal_client_id();
                     <input type="hidden" name="nonce" value="<?php echo wp_create_nonce('dd_checkout_nonce'); ?>">
 
                     <button type="submit" id="dd-stripe-checkout-btn" class="dd-btn dd-btn--primary dd-btn--full dd-btn--lg" style="width:100%; height:52px; border-radius:8px; font-weight:700; font-size:17px; cursor:pointer; background:#635bff; color:#fff; border:none; display:flex; align-items:center; justify-content:center; gap:10px;">
-                        <span>💳 <?php printf(__('Pay $%s with Stripe', 'petslist'), number_format($plan->price, 2)); ?></span>
-                        <span class="dd-btn__loader" style="display:none;"><i class="fa-solid fa-spinner fa-spin"></i> <?php _e('Redirecting to Stripe...', 'petslist'); ?></span>
+                        <span>💳 <?php printf(__('Pay $%s', 'petslist'), number_format($plan->price, 2)); ?></span>
+                        <span class="dd-btn__loader" style="display:none;"><i class="fa-solid fa-spinner fa-spin"></i> <?php _e('Redirecting to checkout...', 'petslist'); ?></span>
                     </button>
-
-                    <div class="dd-payment-badges" style="margin-top:16px; display:flex; justify-content:center; gap:15px; font-size:12px; color:#64748b;">
-                        <span class="dd-payment-badge">🔒 256-bit SSL</span>
-                        <span class="dd-payment-badge">💳 Credit / Debit Card & Apple Pay</span>
-                        <span class="dd-payment-badge">🛡️ Official Stripe Checkout</span>
-                    </div>
                 </form>
 
                 <?php if ( ! empty( $paypal_client_id ) ) : ?>

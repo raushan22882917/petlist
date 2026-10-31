@@ -96,9 +96,13 @@
     $(document).on('click', '.dd-admin-delete-user', function (e) {
         e.preventDefault();
         e.stopPropagation();
-        var id = $(this).data('id');
-        var name = $(this).data('name') || 'this user';
         var $btn = $(this);
+        var id = $btn.data('id') || $btn.attr('data-id');
+        var name = $btn.data('name') || $btn.attr('data-name') || 'this user';
+        if (!id) {
+            alert('User ID missing.');
+            return;
+        }
         if (!confirm('Are you sure you want to permanently delete user "' + name + '"? This will remove their account and all associated studs/data.')) return;
         $btn.prop('disabled', true).css('opacity', '0.6');
         $.post(getAjaxUrl(), {
@@ -107,10 +111,56 @@
             user_id: id,
         }, function (res) {
             if (res.success) {
-                location.reload();
+                var $row = $btn.closest('tr');
+                if ($row.length) {
+                    $row.fadeOut(300, function () { $(this).remove(); });
+                }
+                if ($('#dd-dog-drawer').hasClass('dd-drawer--open')) {
+                    $('#dd-dog-drawer').removeClass('dd-drawer--open');
+                    $('body').removeClass('dd-drawer-active');
+                }
+                setTimeout(function () { location.reload(); }, 400);
             } else {
                 $btn.prop('disabled', false).css('opacity', '1');
                 alert(res.data && res.data.message ? res.data.message : 'Error deleting user.');
+            }
+        }).fail(function () {
+            $btn.prop('disabled', false).css('opacity', '1');
+            alert('Server error. Please try again.');
+        });
+    });
+
+    // Delete Stud Listing (Admin)
+    $(document).on('click', '.dd-admin-delete-dog', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var $btn = $(this);
+        var id = $btn.data('id') || $btn.attr('data-id');
+        var name = $btn.data('name') || $btn.attr('data-name') || 'this stud listing';
+        if (!id) {
+            alert('Stud ID missing.');
+            return;
+        }
+        if (!confirm('Are you sure you want to permanently delete stud listing "' + name + '"? This action cannot be undone.')) return;
+        $btn.prop('disabled', true).css('opacity', '0.6');
+        $.post(getAjaxUrl(), {
+            action:  'dd_delete_dog',
+            nonce:   getAdminNonce(),
+            post_id: id,
+        }, function (res) {
+            if (res.success) {
+                var $row = $btn.closest('tr');
+                if ($row.length) {
+                    $row.fadeOut(300, function () { $(this).remove(); });
+                }
+                if ($('#dd-dog-drawer').hasClass('dd-drawer--open')) {
+                    $('#dd-dog-drawer').removeClass('dd-drawer--open');
+                    $('body').removeClass('dd-drawer-active');
+                }
+                setTimeout(function () { location.reload(); }, 400);
+            } else {
+                $btn.prop('disabled', false).css('opacity', '1');
+                alert(res.data && res.data.message ? res.data.message : 'Error deleting stud listing.');
             }
         }).fail(function () {
             $btn.prop('disabled', false).css('opacity', '1');

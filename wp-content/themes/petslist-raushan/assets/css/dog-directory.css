@@ -1456,10 +1456,16 @@
 }
 
 /* ── CTA Footer ── */
+.dd-dir-card {
+  cursor: pointer;
+  position: relative;
+}
 .dd-dir-card__footer {
   padding-top: 14px;
   border-top: 1px solid #f1f5f5;
   margin-top: auto;
+  position: relative;
+  z-index: 10;
 }
 .dd-dir-card__cta {
   display: inline-flex;
@@ -1471,6 +1477,9 @@
   text-decoration: none;
   transition: gap .2s ease, color .2s;
   font-family: 'Baloo Bhaijaan 2', sans-serif;
+  position: relative;
+  z-index: 10;
+  cursor: pointer;
 }
 .dd-dir-card__cta:hover { color: #01a89f; }
 .dd-dir-card__cta-arrow {

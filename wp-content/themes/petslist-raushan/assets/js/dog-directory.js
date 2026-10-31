@@ -530,6 +530,27 @@
     Directory: {
       init: function () {
         this.viewToggle();
+        this.cardNavigation();
+      },
+
+      cardNavigation: function () {
+        // Direct click on View Profile button or card link
+        $(document).on('click', '.dd-dir-card__cta, .dd-dir-card__name a, .dd-dir-card__image-link', function (e) {
+          var href = $(this).attr('href');
+          if (href && href !== '#' && href.indexOf('javascript') === -1) {
+            // Allow default or force navigation if prevented
+            window.location.href = href;
+          }
+        });
+
+        // Click anywhere on directory card
+        $(document).on('click', '.dd-dir-card', function (e) {
+          if ($(e.target).closest('a, button, input, select, textarea').length) return;
+          var href = $(this).attr('data-url') || $(this).find('.dd-dir-card__cta').attr('href') || $(this).find('.dd-dir-card__name a').attr('href') || $(this).find('.dd-dir-card__image-link').attr('href');
+          if (href && href !== '#' && href.indexOf('javascript') === -1) {
+            window.location.href = href;
+          }
+        });
       },
 
       viewToggle: function () {

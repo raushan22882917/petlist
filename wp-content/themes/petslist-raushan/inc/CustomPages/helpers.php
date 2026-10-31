@@ -529,7 +529,7 @@ function petslist_render_dog_cards($limit = 6)
 		$is_sponsored = isset($meta['is_sponsored']) && $meta['is_sponsored'] === 'Yes';
 		$sponsored_class = $is_sponsored ? ' dd-dir-card--sponsored' : '';
 		?>
-		<article class="dd-dir-card<?php echo esc_attr($sponsored_class); ?>">
+		<article class="dd-dir-card<?php echo esc_attr($sponsored_class); ?>" data-url="<?php echo esc_url(get_permalink($pid)); ?>">
 			<div class="dd-dir-card__image">
 				<a href="<?php echo esc_url(get_permalink($pid)); ?>" class="dd-dir-card__image-link">
 					<img src="<?php echo esc_url($thumb); ?>" alt="<?php echo esc_attr(get_the_title($pid)); ?>"

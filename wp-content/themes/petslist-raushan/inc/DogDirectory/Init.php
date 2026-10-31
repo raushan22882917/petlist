@@ -8,7 +8,7 @@ namespace RadiusTheme\Petslist\DogDirectory;
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'DD_VERSION', '1.0.0' );
+define( 'DD_VERSION', '1.0.4' );
 
 class Init {
 
@@ -32,6 +32,15 @@ class Init {
         } elseif ( has_action( 'litespeed_purge_all' ) ) {
             do_action( 'litespeed_purge_all' );
         }
+
+        // Auto-flush rewrite rules on version change so /dog-directory/{slug}/ never 404s
+        if ( get_option( 'dd_flushed_version' ) !== DD_VERSION ) {
+            add_action( 'init', function () {
+                flush_rewrite_rules( false );
+                update_option( 'dd_flushed_version', DD_VERSION );
+            }, 99 );
+        }
+
         $this->boot_classes();
         $this->register_shortcodes();
         add_action( 'after_switch_theme', [ $this, 'on_activation' ] );

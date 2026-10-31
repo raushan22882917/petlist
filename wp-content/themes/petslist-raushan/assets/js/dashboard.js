@@ -338,4 +338,90 @@
         }
     });
 
+    // ── Admin Delete Handlers (Fail-safe) ──────────────────────
+    $(document).on('click', '.dd-admin-delete-user', function (e) {
+        // If already handled by dd-admin, avoid double firing
+        if ($(this).data('handled-del-user')) return;
+        $(this).data('handled-del-user', true);
+
+        e.preventDefault();
+        e.stopPropagation();
+        var $btn = $(this);
+        var id = $btn.data('id') || $btn.attr('data-id');
+        var name = $btn.data('name') || $btn.attr('data-name') || 'this user';
+        if (!id) return;
+        if (!confirm('Are you sure you want to permanently delete user "' + name + '"? This will remove their account and all associated studs/data.')) {
+            $btn.data('handled-del-user', false);
+            return;
+        }
+        $btn.prop('disabled', true).css('opacity', '0.6');
+        var ajaxUrl = (typeof ddAdminVars !== 'undefined' && ddAdminVars.ajaxUrl) ? ddAdminVars.ajaxUrl : ((typeof ddVars !== 'undefined' && ddVars.ajaxUrl) ? ddVars.ajaxUrl : '/wp-admin/admin-ajax.php');
+        var nonce = (typeof ddAdminVars !== 'undefined' && ddAdminVars.nonce) ? ddAdminVars.nonce : ((typeof ddVars !== 'undefined' && ddVars.nonces) ? (ddVars.nonces.admin || ddVars.nonces.dog || ddVars.nonces.dashboard || '') : '');
+        $.post(ajaxUrl, {
+            action:  'dd_admin_delete_user',
+            nonce:   nonce,
+            user_id: id,
+        }, function (res) {
+            if (res.success) {
+                var $row = $btn.closest('tr');
+                if ($row.length) {
+                    $row.fadeOut(300, function () { $(this).remove(); });
+                }
+                if ($('#dd-dog-drawer').hasClass('dd-drawer--open')) {
+                    $('#dd-dog-drawer').removeClass('dd-drawer--open');
+                    $('body').removeClass('dd-drawer-active');
+                }
+                setTimeout(function () { location.reload(); }, 400);
+            } else {
+                $btn.prop('disabled', false).css('opacity', '1').data('handled-del-user', false);
+                alert(res.data && res.data.message ? res.data.message : 'Error deleting user.');
+            }
+        }).fail(function () {
+            $btn.prop('disabled', false).css('opacity', '1').data('handled-del-user', false);
+            alert('Server error. Please try again.');
+        });
+    });
+
+    $(document).on('click', '.dd-admin-delete-dog', function (e) {
+        if ($(this).data('handled-del-dog')) return;
+        $(this).data('handled-del-dog', true);
+
+        e.preventDefault();
+        e.stopPropagation();
+        var $btn = $(this);
+        var id = $btn.data('id') || $btn.attr('data-id');
+        var name = $btn.data('name') || $btn.attr('data-name') || 'this stud listing';
+        if (!id) return;
+        if (!confirm('Are you sure you want to permanently delete stud listing "' + name + '"? This action cannot be undone.')) {
+            $btn.data('handled-del-dog', false);
+            return;
+        }
+        $btn.prop('disabled', true).css('opacity', '0.6');
+        var ajaxUrl = (typeof ddAdminVars !== 'undefined' && ddAdminVars.ajaxUrl) ? ddAdminVars.ajaxUrl : ((typeof ddVars !== 'undefined' && ddVars.ajaxUrl) ? ddVars.ajaxUrl : '/wp-admin/admin-ajax.php');
+        var nonce = (typeof ddAdminVars !== 'undefined' && ddAdminVars.nonce) ? ddAdminVars.nonce : ((typeof ddVars !== 'undefined' && ddVars.nonces) ? (ddVars.nonces.dog || ddVars.nonces.admin || ddVars.nonces.dashboard || '') : '');
+        $.post(ajaxUrl, {
+            action:  'dd_delete_dog',
+            nonce:   nonce,
+            post_id: id,
+        }, function (res) {
+            if (res.success) {
+                var $row = $btn.closest('tr');
+                if ($row.length) {
+                    $row.fadeOut(300, function () { $(this).remove(); });
+                }
+                if ($('#dd-dog-drawer').hasClass('dd-drawer--open')) {
+                    $('#dd-dog-drawer').removeClass('dd-drawer--open');
+                    $('body').removeClass('dd-drawer-active');
+                }
+                setTimeout(function () { location.reload(); }, 400);
+            } else {
+                $btn.prop('disabled', false).css('opacity', '1').data('handled-del-dog', false);
+                alert(res.data && res.data.message ? res.data.message : 'Error deleting stud listing.');
+            }
+        }).fail(function () {
+            $btn.prop('disabled', false).css('opacity', '1').data('handled-del-dog', false);
+            alert('Server error. Please try again.');
+        });
+    });
+
 })(jQuery);

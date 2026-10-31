@@ -23,6 +23,7 @@ class Ajax {
         // Dog CRUD
         add_action( 'wp_ajax_dd_save_dog', [ $this, 'save_dog' ] );
         add_action( 'wp_ajax_dd_delete_dog', [ $this, 'delete_dog' ] );
+        add_action( 'wp_ajax_dd_admin_delete_dog', [ $this, 'delete_dog' ] );
         add_action( 'wp_ajax_dd_unpublish_dog', [ $this, 'unpublish_dog' ] );
         add_action( 'wp_ajax_dd_get_dog', [ $this, 'get_dog' ] );
         add_action( 'wp_ajax_dd_get_dog_drawer', [ $this, 'get_dog_drawer' ] );
@@ -225,7 +226,10 @@ class Ajax {
     }
 
     public function delete_dog() {
-        check_ajax_referer( 'dd_dog_nonce', 'nonce' );
+        $nonce = $_POST['nonce'] ?? '';
+        if ( ! wp_verify_nonce($nonce, 'dd_dog_nonce') && ! wp_verify_nonce($nonce, 'dd_admin_nonce') && ! wp_verify_nonce($nonce, 'dd_dashboard_nonce') ) {
+            wp_send_json_error(['message' => __('Invalid security token.', 'petslist')]);
+        }
         if ( ! is_user_logged_in() ) wp_send_json_error(['message' => __('Not logged in.', 'petslist')]);
 
         $post_id = absint( $_POST['post_id'] ?? 0 );
@@ -454,6 +458,18 @@ class Ajax {
                 </div>
             </div>
             <?php endif; ?>
+
+            <?php if ( current_user_can('manage_options') || (int)$post->post_author === (int)get_current_user_id() ) : ?>
+            <!-- Dog Actions Footer -->
+            <div class="dd-drawer-profile__actions" style="padding: 16px 20px; background: #f8fafc; border-top: 1px solid #edf2f7; display: flex; gap: 8px; justify-content: flex-end; align-items: center; flex-wrap: wrap;">
+                <a href="<?php echo esc_url(dd_dashboard_url('add-dog') . '&edit=' . $post_id); ?>" class="dda-action-btn" style="padding: 6px 12px; font-size: 12px; text-decoration: none; color: #0284c7; background: #e0f2fe; border: 1px solid #bae6fd;">
+                    <i class="fa-solid fa-pencil" style="margin-right: 5px;"></i> <?php _e('Edit Stud Profile', 'petslist'); ?>
+                </a>
+                <button type="button" class="dda-action-btn dda-action-btn--delete dd-admin-delete-dog" data-id="<?php echo $post_id; ?>" data-name="<?php echo esc_attr($post->post_title); ?>" style="width: auto; height: auto; padding: 6px 12px; border-radius: 6px; background: #fff1f2; color: #e11d48; border: 1px solid #fecdd3; font-size: 12px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+                    <i class="fa-solid fa-trash"></i> <?php _e('Delete Listing', 'petslist'); ?>
+                </button>
+            </div>
+            <?php endif; ?>
         </div>
         <?php
         $html = ob_get_clean();
@@ -572,6 +588,23 @@ class Ajax {
                 <div style="text-align:center; padding:20px; color:#94a3b8; font-size:13px;"><?php _e('No dogs submitted yet.', 'petslist'); ?></div>
                 <?php endif; ?>
             </div>
+
+            <?php if ( current_user_can('manage_options') ) : ?>
+            <!-- Admin Actions Footer -->
+            <div class="dd-drawer-profile__actions" style="padding: 16px 20px; background: #f8fafc; border-top: 1px solid #edf2f7; display: flex; gap: 8px; justify-content: flex-end; align-items: center; flex-wrap: wrap;">
+                <a href="<?php echo esc_url(admin_url('user-edit.php?user_id=' . $user_id)); ?>" target="_blank" class="dda-action-btn" style="padding: 6px 12px; font-size: 12px; text-decoration: none; color: #334155; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px;">
+                    <i class="fa-solid fa-pencil" style="margin-right: 5px;"></i> <?php _e('Edit in WP Admin', 'petslist'); ?>
+                </a>
+                <a href="<?php echo esc_url(add_query_arg(['tab' => 'dogs', 'dog_author' => $user_id], dd_dashboard_url('dogs'))); ?>" class="dda-action-btn" style="padding: 6px 12px; font-size: 12px; text-decoration: none; color: #0284c7; background: #e0f2fe; border: 1px solid #bae6fd; border-radius: 6px;">
+                    <i class="fa-solid fa-dog" style="margin-right: 5px;"></i> <?php _e('View Studs', 'petslist'); ?>
+                </a>
+                <?php if ( (int)$user_id !== (int)get_current_user_id() ) : ?>
+                <button type="button" class="dda-action-btn dda-action-btn--delete dd-admin-delete-user" data-id="<?php echo $user_id; ?>" data-name="<?php echo esc_attr($user->display_name ?: $user->user_email); ?>" style="width: auto; height: auto; padding: 6px 12px; border-radius: 6px; background: #fff1f2; color: #e11d48; border: 1px solid #fecdd3; font-size: 12px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+                    <i class="fa-solid fa-trash"></i> <?php _e('Delete User Permanently', 'petslist'); ?>
+                </button>
+                <?php endif; ?>
+            </div>
+            <?php endif; ?>
         </div>
         <?php
         $html = ob_get_clean();
@@ -1061,7 +1094,7 @@ class Ajax {
 
     public function admin_delete_user() {
         $nonce = $_POST['nonce'] ?? '';
-        if ( ! wp_verify_nonce($nonce, 'dd_admin_nonce') && ! wp_verify_nonce($nonce, 'dd_dog_nonce') ) {
+        if ( ! wp_verify_nonce($nonce, 'dd_admin_nonce') && ! wp_verify_nonce($nonce, 'dd_dog_nonce') && ! wp_verify_nonce($nonce, 'dd_dashboard_nonce') ) {
             wp_send_json_error(['message' => __('Invalid security token.', 'petslist')]);
         }
         if ( ! current_user_can('manage_options') ) {

@@ -105,11 +105,11 @@ $q = new WP_Query( $args );
             $location = trim( implode(', ', array_filter([$city, $country])) );
             $is_male  = strtolower($gender) === 'male';
         ?>
-        <article class="dd-dir-card">
+        <article class="dd-dir-card" data-url="<?php echo esc_url( get_permalink() ); ?>">
 
             <!-- Image -->
             <div class="dd-dir-card__image">
-                <a href="<?php the_permalink(); ?>" class="dd-dir-card__image-link">
+                <a href="<?php echo esc_url( get_permalink() ); ?>" class="dd-dir-card__image-link">
                     <img src="<?php echo esc_url($thumb); ?>"
                          alt="<?php the_title_attribute(); ?>"
                          loading="lazy">
@@ -168,7 +168,7 @@ $q = new WP_Query( $args );
                 <?php endif; ?>
 
                 <div class="dd-dir-card__footer">
-                    <a href="<?php the_permalink(); ?>" class="dd-dir-card__cta">
+                    <a href="<?php echo esc_url( get_permalink() ); ?>" class="dd-dir-card__cta">
                         <?php _e('View Profile','petslist'); ?>
                         <span class="dd-dir-card__cta-arrow">→</span>
                     </a>

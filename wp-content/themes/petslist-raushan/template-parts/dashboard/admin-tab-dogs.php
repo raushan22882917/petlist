@@ -144,6 +144,11 @@ $status_tabs = [
                         <button class="dda-action-btn dd-toggle-sponsored" data-id="<?php echo $pid; ?>" title="<?php echo $title; ?>" style="width: 32px; height: 32px; border-radius: 6px; background: #fef9c3; color: #ca8a04; border: 1px solid #fef08a; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s;">
                             <i class="<?php echo $star_icon; ?>"></i>
                         </button>
+
+                        <!-- 7. Delete Listing Button -->
+                        <button type="button" class="dda-action-btn dda-action-btn--delete dd-admin-delete-dog" data-id="<?php echo $pid; ?>" data-name="<?php echo esc_attr(get_the_title($pid)); ?>" title="<?php esc_attr_e('Delete Listing Permanently', 'petslist'); ?>" style="width: 32px; height: 32px; border-radius: 6px; background: #fff1f2; color: #e11d48; border: 1px solid #fecdd3; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s;" onmouseover="this.style.background='#ffe4e6'" onmouseout="this.style.background='#fff1f2'">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
                     </div>
                 </td>
             </tr>

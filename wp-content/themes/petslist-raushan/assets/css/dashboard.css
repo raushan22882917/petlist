@@ -779,12 +779,23 @@ a.ddu-sidebar__user:hover {
 }
 .dda-action-btn--edit,
 .dda-action-btn--view,
-.dda-action-btn--dogs {
+.dda-action-btn--dogs,
+.dda-action-btn--delete {
   width: 32px !important;
   height: 32px !important;
   padding: 0 !important;
   font-size: 13px !important;
   border-radius: 8px !important;
+}
+.dda-action-btn--delete {
+  background: #fff1f2 !important;
+  color: #e11d48 !important;
+  border: 1px solid #fecdd3 !important;
+}
+.dda-action-btn--delete:hover {
+  background: #ffe4e6 !important;
+  color: #be123c !important;
+  border-color: #fda4af !important;
 }
 .dda-action-btn--view:hover {
   background: #ecfdf5 !important;
