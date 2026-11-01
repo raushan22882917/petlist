@@ -104,12 +104,16 @@ $q = new WP_Query( $args );
             $reg    = $meta['registration_no'] ?? '';
             $location = trim( implode(', ', array_filter([$city, $country])) );
             $is_male  = strtolower($gender) === 'male';
+            $dog_url  = get_permalink($pid);
+            if ( empty($dog_url) || is_wp_error($dog_url) ) {
+                $dog_url = home_url( '/dog-directory/' . get_post_field( 'post_name', $pid ) . '/' );
+            }
         ?>
-        <article class="dd-dir-card" data-url="<?php echo esc_url( get_permalink() ); ?>">
+        <article class="dd-dir-card" data-url="<?php echo esc_url( $dog_url ); ?>" onclick="if(!event.target.closest('a,button')){ window.location.href='<?php echo esc_url( $dog_url ); ?>'; }">
 
             <!-- Image -->
             <div class="dd-dir-card__image">
-                <a href="<?php echo esc_url( get_permalink() ); ?>" class="dd-dir-card__image-link">
+                <a href="<?php echo esc_url( $dog_url ); ?>" class="dd-dir-card__image-link">
                     <img src="<?php echo esc_url($thumb); ?>"
                          alt="<?php the_title_attribute(); ?>"
                          loading="lazy">
@@ -168,7 +172,7 @@ $q = new WP_Query( $args );
                 <?php endif; ?>
 
                 <div class="dd-dir-card__footer">
-                    <a href="<?php echo esc_url( get_permalink() ); ?>" class="dd-dir-card__cta">
+                    <a href="<?php echo esc_url( $dog_url ); ?>" class="dd-dir-card__cta" onclick="event.stopPropagation(); window.location.href='<?php echo esc_url( $dog_url ); ?>';">
                         <?php _e('View Profile','petslist'); ?>
                         <span class="dd-dir-card__cta-arrow">→</span>
                     </a>

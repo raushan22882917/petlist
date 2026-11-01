@@ -528,10 +528,14 @@ function petslist_render_dog_cards($limit = 6)
 		$is_male = strtolower($gender) === 'male';
 		$is_sponsored = isset($meta['is_sponsored']) && $meta['is_sponsored'] === 'Yes';
 		$sponsored_class = $is_sponsored ? ' dd-dir-card--sponsored' : '';
+		$dog_url = get_permalink($pid);
+		if ( empty($dog_url) || is_wp_error($dog_url) ) {
+			$dog_url = home_url( '/dog-directory/' . get_post_field( 'post_name', $pid ) . '/' );
+		}
 		?>
-		<article class="dd-dir-card<?php echo esc_attr($sponsored_class); ?>" data-url="<?php echo esc_url(get_permalink($pid)); ?>">
+		<article class="dd-dir-card<?php echo esc_attr($sponsored_class); ?>" data-url="<?php echo esc_url($dog_url); ?>" onclick="if(!event.target.closest('a,button')){ window.location.href='<?php echo esc_url($dog_url); ?>'; }">
 			<div class="dd-dir-card__image">
-				<a href="<?php echo esc_url(get_permalink($pid)); ?>" class="dd-dir-card__image-link">
+				<a href="<?php echo esc_url($dog_url); ?>" class="dd-dir-card__image-link">
 					<img src="<?php echo esc_url($thumb); ?>" alt="<?php echo esc_attr(get_the_title($pid)); ?>"
 						loading="lazy">
 					<div class="dd-dir-card__image-overlay"></div>
@@ -571,7 +575,7 @@ function petslist_render_dog_cards($limit = 6)
 					<?php endif; ?>
 				</div>
 				<div class="dd-dir-card__footer">
-					<a href="<?php echo esc_url(get_permalink($pid)); ?>" class="dd-dir-card__cta">
+					<a href="<?php echo esc_url($dog_url); ?>" class="dd-dir-card__cta" onclick="event.stopPropagation(); window.location.href='<?php echo esc_url($dog_url); ?>';">
 						<?php esc_html_e('View Profile', 'petslist'); ?>
 						<span class="dd-dir-card__cta-arrow">&rarr;</span>
 					</a>

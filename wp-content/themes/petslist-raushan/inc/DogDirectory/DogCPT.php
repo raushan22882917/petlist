@@ -28,6 +28,9 @@ class DogCPT {
         add_action( 'manage_dd_dog_posts_custom_column', [ $this, 'dog_admin_column_content' ], 10, 2 );
         add_filter( 'template_include', [ $this, 'dog_single_template' ] );
         add_filter( 'template_include', [ $this, 'dog_archive_template' ] );
+        add_action( 'template_redirect', [ $this, 'intercept_dog_single_url' ], 1 );
+        add_action( 'pre_get_posts', [ $this, 'fix_dog_directory_query' ] );
+        add_filter( 'post_type_link', [ $this, 'filter_dog_permalink' ], 10, 2 );
         add_filter( 'use_block_editor_for_post_type', [ $this, 'disable_block_editor' ], 10, 2 );
     }
 
@@ -69,6 +72,9 @@ class DogCPT {
             'supports'            => [ 'title', 'editor', 'thumbnail', 'author' ],
             'show_in_rest'        => true,
         ] );
+
+        // Ensure top rewrite rule is explicitly registered
+        add_rewrite_rule( '^dog-directory/([^/]+)/?$', 'index.php?dd_dog=$matches[1]', 'top' );
     }
 
     public function register_dog_taxonomies() {
@@ -337,6 +343,112 @@ class DogCPT {
             if ( file_exists( $theme_template ) ) return $theme_template;
         }
         return $template;
+    }
+
+    public function filter_dog_permalink( $post_link, $post ) {
+        if ( is_object( $post ) && $post->post_type === 'dd_dog' ) {
+            return home_url( '/dog-directory/' . $post->post_name . '/' );
+        }
+        return $post_link;
+    }
+
+    public function fix_dog_directory_query( $query ) {
+        if ( ! is_admin() && $query->is_main_query() ) {
+            $uri = $_SERVER['REQUEST_URI'] ?? '';
+            $path = trim( parse_url( $uri, PHP_URL_PATH ), '/' );
+            $parts = explode( '/', $path );
+            $dir_index = array_search( 'dog-directory', $parts );
+            if ( $dir_index !== false && isset( $parts[$dir_index + 1] ) ) {
+                $raw_slug = $parts[$dir_index + 1];
+                $slug = sanitize_title( $raw_slug );
+                if ( $slug && ! in_array( $slug, [ 'page', 'feed', 'category', 'tag', 'edit' ] ) ) {
+                    $query->set( 'post_type', 'dd_dog' );
+                    $query->set( 'name', $slug );
+                    $query->is_single   = true;
+                    $query->is_singular = true;
+                    $query->is_page     = false;
+                    $query->is_archive  = false;
+                    $query->is_404      = false;
+                }
+            }
+        }
+    }
+
+    public function intercept_dog_single_url() {
+        $found_post = null;
+        global $wpdb;
+
+        // Check 1: Explicit query parameter ?dog_id=123
+        if ( ! empty( $_GET['dog_id'] ) ) {
+            $found_post = get_post( (int) $_GET['dog_id'] );
+        } elseif ( ! empty( $_GET['dd_dog'] ) || ! empty( $_GET['dog'] ) ) {
+            $slug = sanitize_title( $_GET['dd_dog'] ?? $_GET['dog'] );
+            $found_post = $wpdb->get_row( $wpdb->prepare(
+                "SELECT * FROM {$wpdb->posts} WHERE post_name = %s AND post_type = 'dd_dog' LIMIT 1",
+                $slug
+            ) );
+        }
+
+        // Check 2: Pretty URL path /dog-directory/{slug}/
+        if ( ! $found_post ) {
+            $uri = $_SERVER['REQUEST_URI'] ?? '';
+            $path = trim( parse_url( $uri, PHP_URL_PATH ), '/' );
+            $parts = explode( '/', $path );
+
+            $dir_index = array_search( 'dog-directory', $parts );
+            if ( $dir_index !== false && isset( $parts[$dir_index + 1] ) ) {
+                $raw_slug = $parts[$dir_index + 1];
+                $slug = sanitize_title( $raw_slug );
+                if ( $slug && ! in_array( $slug, ['page', 'feed', 'category', 'tag'] ) ) {
+                    // 1. Direct DB lookup by post_name
+                    $found_post = $wpdb->get_row( $wpdb->prepare(
+                        "SELECT * FROM {$wpdb->posts} WHERE post_name = %s AND post_type = 'dd_dog' LIMIT 1",
+                        $slug
+                    ) );
+                    // 2. Lookup by decoded slug or title
+                    if ( ! $found_post ) {
+                        $found_post = $wpdb->get_row( $wpdb->prepare(
+                            "SELECT * FROM {$wpdb->posts} WHERE (post_name = %s OR post_title = %s) AND post_type = 'dd_dog' LIMIT 1",
+                            urldecode( $raw_slug ),
+                            str_replace( '-', ' ', $raw_slug )
+                        ) );
+                    }
+                    // 3. Fallback to get_posts
+                    if ( ! $found_post ) {
+                        $posts = get_posts([
+                            'name'        => $slug,
+                            'post_type'   => 'dd_dog',
+                            'post_status' => 'any',
+                            'numberposts' => 1
+                        ]);
+                        if ( ! empty($posts) ) $found_post = $posts[0];
+                    }
+                }
+            }
+        }
+
+        if ( $found_post && is_object( $found_post ) ) {
+            global $wp_query, $post;
+            $post = $found_post;
+            setup_postdata( $post );
+            $wp_query->is_404 = false;
+            $wp_query->is_single = true;
+            $wp_query->is_singular = true;
+            $wp_query->is_archive = false;
+            $wp_query->is_home = false;
+            $wp_query->is_page = false;
+            $wp_query->queried_object = $found_post;
+            $wp_query->queried_object_id = $found_post->ID;
+            $wp_query->post = $found_post;
+            $wp_query->posts = [ $found_post ];
+            $wp_query->post_count = 1;
+            status_header( 200 );
+            $template = get_template_directory() . '/templates/single-dog.php';
+            if ( file_exists( $template ) ) {
+                include $template;
+                exit;
+            }
+        }
     }
 
     public function dog_archive_template( $template ) {

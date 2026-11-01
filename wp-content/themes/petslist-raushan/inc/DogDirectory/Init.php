@@ -8,7 +8,7 @@ namespace RadiusTheme\Petslist\DogDirectory;
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'DD_VERSION', '1.0.4' );
+define( 'DD_VERSION', '1.0.6' );
 
 class Init {
 
@@ -39,6 +39,17 @@ class Init {
                 flush_rewrite_rules( false );
                 update_option( 'dd_flushed_version', DD_VERSION );
             }, 99 );
+        }
+
+        // On-demand zip builder endpoint: ?create_theme_zip=1
+        if ( isset( $_GET['create_theme_zip'] ) && $_GET['create_theme_zip'] === '1' ) {
+            add_action( 'init', function () {
+                $packager = ABSPATH . 'package-zip.php';
+                if ( file_exists( $packager ) ) {
+                    require_once $packager;
+                    exit;
+                }
+            }, 1 );
         }
 
         $this->boot_classes();

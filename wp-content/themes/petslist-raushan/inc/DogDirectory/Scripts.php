@@ -32,6 +32,7 @@ class Scripts {
         $load_dd_css = is_singular('dd_dog')
             || is_post_type_archive('dd_dog')
             || is_tax(['dd_breed','dd_kennel','dd_location'])
+            || is_page(['dog-directory', 'directory', 'dogs', 'studs'])
             || dd_is_pricing_page()
             || dd_is_checkout_page()
             || dd_is_dashboard_page()
