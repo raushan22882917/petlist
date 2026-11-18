@@ -2260,3 +2260,11 @@
   #dd-register-form .dd-reg-location-grid { grid-template-columns: 1fr !important; }
   #dd-register-form .dd-reg-location-grid .select2-container { width: 100% !important; }
 }
+
+/* Mobile: single dog page – let grid children shrink, wrap long text */
+@media (max-width: 991px) {
+  .dd-single-layout { grid-template-columns: minmax(0, 1fr); }
+  .dd-single-layout > * { min-width: 0; }
+  .dd-single-main, .dd-single-main * { overflow-wrap: anywhere; }
+  .dd-single-main img { max-width: 100%; height: auto; }
+}
