@@ -528,14 +528,21 @@ function petslist_render_dog_cards($limit = 6)
 		$is_male = strtolower($gender) === 'male';
 		$is_sponsored = isset($meta['is_sponsored']) && $meta['is_sponsored'] === 'Yes';
 		$sponsored_class = $is_sponsored ? ' dd-dir-card--sponsored' : '';
-		$dog_url = get_permalink($pid);
-		if ( empty($dog_url) || is_wp_error($dog_url) ) {
-			$dog_url = home_url( '/dog-directory/' . get_post_field( 'post_name', $pid ) . '/' );
+		$slug = get_post_field( 'post_name', $pid );
+		if ( empty( $slug ) ) {
+			$slug = sanitize_title( get_the_title( $pid ) );
 		}
+		if ( ! empty( $slug ) ) {
+			$dog_url = home_url( '/dog-directory/' . $slug . '/' );
+		} else {
+			$dog_url = home_url( '/?post_type=dd_dog&p=' . $pid );
+		}
+		$can_view_card = \RadiusTheme\Petslist\DogDirectory\Subscription::can_access_directory() || current_user_can('manage_options') || ( is_user_logged_in() && (int) get_post_field('post_author', $pid) === get_current_user_id() );
+		$card_url      = $can_view_card ? $dog_url : dd_pricing_url();
 		?>
-		<article class="dd-dir-card<?php echo esc_attr($sponsored_class); ?>" data-url="<?php echo esc_url($dog_url); ?>" onclick="if(!event.target.closest('a,button')){ window.location.href='<?php echo esc_url($dog_url); ?>'; }">
+		<article class="dd-dir-card<?php echo esc_attr($sponsored_class); ?>" data-url="<?php echo esc_url($card_url); ?>" onclick="if(!event.target.closest('a,button')){ window.location.href='<?php echo esc_url($card_url); ?>'; }">
 			<div class="dd-dir-card__image">
-				<a href="<?php echo esc_url($dog_url); ?>" class="dd-dir-card__image-link">
+				<a href="<?php echo esc_url($card_url); ?>" class="dd-dir-card__image-link">
 					<img src="<?php echo esc_url($thumb); ?>" alt="<?php echo esc_attr(get_the_title($pid)); ?>"
 						loading="lazy">
 					<div class="dd-dir-card__image-overlay"></div>
@@ -558,7 +565,7 @@ function petslist_render_dog_cards($limit = 6)
 				<?php endif; ?>
 				<h3 class="dd-dir-card__name">
 					<a
-						href="<?php echo esc_url(get_permalink($pid)); ?>"><?php echo esc_html(get_the_title($pid)); ?></a>
+						href="<?php echo esc_url($card_url); ?>"><?php echo esc_html(get_the_title($pid)); ?></a>
 				</h3>
 				<div class="dd-dir-card__meta">
 					<?php if ($loc): ?>
@@ -574,12 +581,19 @@ function petslist_render_dog_cards($limit = 6)
 						</span>
 					<?php endif; ?>
 				</div>
+				<?php if (!$can_view_card): ?>
+				<div class="dd-dir-card__locked" style="font-size: 12px; color: #b45309; background: #fef9c3; padding: 7px 12px; border-radius: 8px; margin-bottom: 14px; font-weight: 500;">
+					🔒 <a href="<?php echo esc_url(dd_pricing_url()); ?>" onclick="event.stopPropagation(); window.location.href='<?php echo esc_url(dd_pricing_url()); ?>';" style="color: #b45309; font-weight: 700; text-decoration: underline;"><?php _e('Subscribe To View Profile','petslist'); ?></a>
+				</div>
+				<?php endif; ?>
+				<?php if ($can_view_card): ?>
 				<div class="dd-dir-card__footer">
 					<a href="<?php echo esc_url($dog_url); ?>" class="dd-dir-card__cta" onclick="event.stopPropagation(); window.location.href='<?php echo esc_url($dog_url); ?>';">
 						<?php esc_html_e('View Profile', 'petslist'); ?>
 						<span class="dd-dir-card__cta-arrow">&rarr;</span>
 					</a>
 				</div>
+				<?php endif; ?>
 			</div>
 		</article>
 		<?php

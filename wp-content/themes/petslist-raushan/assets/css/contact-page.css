@@ -751,3 +751,8 @@
     transition: box-shadow .25s ease;
   }
 }
+
+/* Mobile: avoid stacked 80px theme offset + section padding above the form */
+@media (max-width: 640px) {
+  .petslist-contact-page { padding-top: 0; }
+}

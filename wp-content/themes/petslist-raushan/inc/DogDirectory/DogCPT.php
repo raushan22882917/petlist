@@ -22,6 +22,7 @@ class DogCPT {
     public function __construct() {
         add_action( 'init', [ $this, 'register_dog_post_type' ] );
         add_action( 'init', [ $this, 'register_dog_taxonomies' ] );
+        add_action( 'init', [ $this, 'auto_heal_empty_dog_slugs' ], 20 );
         add_action( 'add_meta_boxes', [ $this, 'add_dog_meta_boxes' ] );
         add_action( 'save_post_dd_dog', [ $this, 'save_dog_meta' ] );
         add_filter( 'manage_dd_dog_posts_columns', [ $this, 'dog_admin_columns' ] );
@@ -32,6 +33,21 @@ class DogCPT {
         add_action( 'pre_get_posts', [ $this, 'fix_dog_directory_query' ] );
         add_filter( 'post_type_link', [ $this, 'filter_dog_permalink' ], 10, 2 );
         add_filter( 'use_block_editor_for_post_type', [ $this, 'disable_block_editor' ], 10, 2 );
+    }
+
+    public function auto_heal_empty_dog_slugs() {
+        global $wpdb;
+        $empty_dogs = $wpdb->get_results( "SELECT ID, post_title FROM {$wpdb->posts} WHERE post_type = 'dd_dog' AND (post_name = '' OR post_name IS NULL)" );
+        if ( ! empty( $empty_dogs ) ) {
+            foreach ( $empty_dogs as $dog ) {
+                $slug = sanitize_title( $dog->post_title );
+                if ( empty( $slug ) ) {
+                    $slug = 'dog-' . $dog->ID;
+                }
+                $wpdb->update( $wpdb->posts, [ 'post_name' => $slug ], [ 'ID' => $dog->ID ] );
+                clean_post_cache( $dog->ID );
+            }
+        }
     }
 
     public function disable_block_editor( $use_block_editor, $post_type ) {
@@ -221,12 +237,15 @@ class DogCPT {
     }
 
     public function render_dog_photos_meta_box( $post ) {
-        $front_photo = get_post_meta( $post->ID, '_dd_front_photo', true );
-        $side_photo  = get_post_meta( $post->ID, '_dd_side_photo', true );
+        $front_photo    = get_post_meta( $post->ID, '_dd_front_photo', true );
+        $side_photo     = get_post_meta( $post->ID, '_dd_side_photo', true );
+        $pedigree_photo = get_post_meta( $post->ID, '_dd_pedigree_photo', true );
         echo '<p><strong>' . __('Front Photo ID', 'petslist') . '</strong></p>';
         echo '<input type="text" name="dd_front_photo" value="' . esc_attr($front_photo) . '" class="widefat">';
         echo '<p><strong>' . __('Side Photo ID', 'petslist') . '</strong></p>';
         echo '<input type="text" name="dd_side_photo" value="' . esc_attr($side_photo) . '" class="widefat">';
+        echo '<p><strong>' . __('Pedigree Photo ID', 'petslist') . '</strong></p>';
+        echo '<input type="text" name="dd_pedigree_photo" value="' . esc_attr($pedigree_photo) . '" class="widefat">';
         echo '<p class="description">' . __('Enter WordPress media attachment IDs.', 'petslist') . '</p>';
     }
 
@@ -266,6 +285,9 @@ class DogCPT {
         if ( isset( $_POST['dd_side_photo'] ) ) {
             update_post_meta( $post_id, '_dd_side_photo', absint( $_POST['dd_side_photo'] ) );
         }
+        if ( isset( $_POST['dd_pedigree_photo'] ) ) {
+            update_post_meta( $post_id, '_dd_pedigree_photo', absint( $_POST['dd_pedigree_photo'] ) );
+        }
     }
 
     public function get_dog_profile_fields() {
@@ -285,8 +307,8 @@ class DogCPT {
             'semen_type'        => [ 'label' => __('Fresh or Frozen Semen', 'petslist'), 'type' => 'select', 'options' => ['Fresh', 'Frozen', 'Both (Fresh & Frozen)'] ],
             'titles'            => [ 'label' => __('Titles', 'petslist'), 'type' => 'text' ],
             'competition_class' => [ 'label' => __('Class', 'petslist'), 'type' => 'text' ],
-            'pedigree'          => [ 'label' => __('Pedigree', 'petslist'), 'type' => 'textarea' ],
-            'health_testing'    => [ 'label' => __('Health Testing (Optional)', 'petslist'), 'type' => 'textarea' ],
+            'pedigree'          => [ 'label' => __('Pedigree (Legacy Text)', 'petslist'), 'type' => 'textarea' ],
+            'health_testing'    => [ 'label' => __('Health Testing (Post Link)', 'petslist'), 'type' => 'text' ],
             'registration_no'   => [ 'label' => __('Registration Number', 'petslist'), 'type' => 'text' ],
             'country'           => [ 'label' => __('Country', 'petslist'), 'type' => 'select' ],
             'state_province'    => [ 'label' => __('State / Province', 'petslist'), 'type' => 'select' ],
@@ -347,7 +369,11 @@ class DogCPT {
 
     public function filter_dog_permalink( $post_link, $post ) {
         if ( is_object( $post ) && $post->post_type === 'dd_dog' ) {
-            return home_url( '/dog-directory/' . $post->post_name . '/' );
+            $slug = ! empty( $post->post_name ) ? $post->post_name : sanitize_title( $post->post_title );
+            if ( ! empty( $slug ) ) {
+                return home_url( '/dog-directory/' . $slug . '/' );
+            }
+            return home_url( '/?post_type=dd_dog&p=' . $post->ID );
         }
         return $post_link;
     }
@@ -428,6 +454,16 @@ class DogCPT {
         }
 
         if ( $found_post && is_object( $found_post ) ) {
+            // Auto-heal post_name if empty in database
+            if ( empty( $found_post->post_name ) ) {
+                $new_slug = ! empty( $slug ) ? $slug : sanitize_title( $found_post->post_title );
+                if ( ! empty( $new_slug ) ) {
+                    $wpdb->update( $wpdb->posts, [ 'post_name' => $new_slug ], [ 'ID' => $found_post->ID ] );
+                    $found_post->post_name = $new_slug;
+                    clean_post_cache( $found_post->ID );
+                }
+            }
+
             global $wp_query, $post;
             $post = $found_post;
             setup_postdata( $post );

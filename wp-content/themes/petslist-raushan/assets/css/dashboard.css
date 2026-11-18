@@ -1141,18 +1141,112 @@ a.ddu-sidebar__user:hover {
   justify-content: center !important;
 }
 
+.ddu-content .dd-dog-form__photos-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 20px !important;
+}
+@media (max-width: 600px) {
+  .ddu-content .dd-dog-form__photos-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+.ddu-content .dd-photo-upload-box {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 12px !important;
+  padding: 16px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  transition: border-color .2s ease, box-shadow .2s ease !important;
+}
+.ddu-content .dd-photo-upload-box:hover {
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05) !important;
+}
+
 .ddu-content .dd-photo-upload-area {
-  border: 2px dashed var(--dds-panel-border) !important;
+  aspect-ratio: auto !important;
+  height: 210px !important;
+  min-height: 210px !important;
+  border: 2px dashed #cbd5e1 !important;
   background: #f8fafc !important;
   border-radius: 10px !important;
-  padding: 32px 20px !important;
+  padding: 0 !important;
+  margin-bottom: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+  position: relative !important;
+  cursor: pointer !important;
   transition: all .2s ease !important;
 }
-.ddu-content .dd-photo-upload-area:hover {
-  background: rgba(2,197,189,.03) !important;
-  border-color: var(--dds-primary) !important;
+.ddu-content .dd-photo-upload-box--pedigree .dd-photo-upload-area {
+  height: 160px !important;
+  min-height: 160px !important;
 }
-.ddu-content .dd-photo-upload-placeholder { color: var(--dds-text-muted) !important; }
+.ddu-content .dd-photo-upload-area:hover,
+.ddu-content .dd-photo-upload-area.is-dragover {
+  background: #f0fdfa !important;
+  border-color: #02c5bd !important;
+}
+.ddu-content .dd-photo-upload-area.dd-input-error {
+  border-color: #ef4444 !important;
+  background: #fef2f2 !important;
+}
+.ddu-content .dd-photo-upload-area img {
+  width: 100% !important;
+  height: 100% !important;
+  max-height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+  border-radius: 8px !important;
+}
+.ddu-content .dd-photo-upload-box--pedigree .dd-photo-upload-area img {
+  object-fit: contain !important;
+  background: #ffffff !important;
+  padding: 6px !important;
+}
+.ddu-content .dd-photo-upload-placeholder {
+  opacity: 1 !important;
+  color: #475569 !important;
+  padding: 20px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  text-align: center !important;
+}
+.ddu-content .dd-photo-upload-placeholder i {
+  font-size: 30px !important;
+  color: #02c5bd !important;
+  margin: 0 !important;
+}
+.ddu-content .dd-photo-upload-placeholder span {
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: #475569 !important;
+}
+.ddu-content .dd-photo-upload-box .dd-upload-photo {
+  width: 100% !important;
+  justify-content: center !important;
+  background: #f0fdfa !important;
+  color: #0f766e !important;
+  border: 1px solid #99f6e4 !important;
+  font-weight: 600 !important;
+  padding: 10px 16px !important;
+  border-radius: 8px !important;
+  transition: all .2s ease !important;
+}
+.ddu-content .dd-photo-upload-box .dd-upload-photo:hover {
+  background: #02c5bd !important;
+  border-color: #02c5bd !important;
+  color: #ffffff !important;
+}
 
 /* Table styling */
 .ddu-content .dd-dogs-table { background: #fff !important; border-radius: var(--dds-radius) !important; overflow: hidden !important; border: 1px solid var(--dds-panel-border) !important; }

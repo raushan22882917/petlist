@@ -44,12 +44,23 @@ class Roles {
             $admin->add_cap('dd_manage_subscriptions');
             $admin->add_cap('dd_view_reports');
         }
+
+        // Ensure standard subscriber role has upload_files capability for photo uploads
+        $subscriber = get_role('subscriber');
+        if ( $subscriber && ! $subscriber->has_cap('upload_files') ) {
+            $subscriber->add_cap('upload_files');
+        }
     }
 
     /**
-     * Dynamic cap check: subscribers can edit their own dogs
+     * Dynamic cap check: subscribers can edit their own dogs and upload files
      */
     public function dd_subscriber_caps( $allcaps, $caps, $args, $user ) {
+        // Any logged-in user can upload photos for their dogs and profile
+        if ( ! empty( $user->ID ) ) {
+            $allcaps['upload_files'] = true;
+        }
+
         if ( in_array('edit_post', $caps) || in_array('delete_post', $caps) ) {
             $post_id = $args[2] ?? 0;
             if ( $post_id && get_post_type($post_id) === 'dd_dog' ) {

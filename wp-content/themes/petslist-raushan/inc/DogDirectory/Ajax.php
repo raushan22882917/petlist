@@ -140,14 +140,27 @@ class Ajax {
         $meta_fields = [
             'breed', 'gender', 'dob', 'age', 'color', 'height', 'weight',
             'registration_no', 'stud_fee', 'semen_type', 'titles',
-            'competition_class', 'pedigree', 'health_testing',
+            'competition_class', 'pedigree', 'pedigree_photo', 'health_testing',
             'country', 'dog_country', 'state_province', 'city', 'contact_phone', 'contact_email', 'contact_website'
         ];
         $meta = [];
         foreach ( $meta_fields as $field ) {
-            $meta[$field] = isset($data[$field]) && (in_array($field, ['pedigree', 'health_testing']))
-                ? sanitize_textarea_field( $data[$field] )
-                : sanitize_text_field( $data[$field] ?? '' );
+            if ( $field === 'pedigree_photo' ) {
+                $meta[$field] = absint( $data[$field] ?? 0 );
+            } elseif ( $field === 'health_testing' ) {
+                $raw_health = trim( sanitize_text_field( $data[$field] ?? '' ) );
+                if ( $raw_health && ! preg_match( '#^https?://#i', $raw_health ) && preg_match( '#^[a-z0-9.-]+\.[a-z]{2,}#i', $raw_health ) ) {
+                    $raw_health = 'https://' . $raw_health;
+                }
+                $meta[$field] = $raw_health;
+            } elseif ( $field === 'pedigree' ) {
+                $meta[$field] = isset($data[$field]) ? sanitize_textarea_field( $data[$field] ) : '';
+            } elseif ( $field === 'contact_phone' ) {
+                $raw_phone = sanitize_text_field( $data[$field] ?? '' );
+                $meta[$field] = function_exists('dd_format_phone') ? dd_format_phone($raw_phone) : $raw_phone;
+            } else {
+                $meta[$field] = sanitize_text_field( $data[$field] ?? '' );
+            }
         }
         if ( empty( $meta['gender'] ) ) {
             $meta['gender'] = 'Male';
@@ -178,20 +191,28 @@ class Ajax {
         if ( ! empty( $data['pedigree'] ) ) {
             $health['pedigree'] = sanitize_textarea_field( $data['pedigree'] );
         }
-        if ( ! empty( $data['health_testing'] ) ) {
-            $health['health_clearances'] = sanitize_textarea_field( $data['health_testing'] );
+        if ( array_key_exists( 'health_testing', $data ) ) {
+            $health['health_clearances'] = $meta['health_testing'];
         }
-        if ( ! empty( $health ) ) {
+        if ( ! empty( $health ) || array_key_exists( 'health_testing', $data ) ) {
             update_post_meta( $result, '_dd_dog_health', $health );
         }
 
-        // Front/side photos
+        // Front/side/pedigree photos
         $front_photo_id = ! empty( $data['front_photo'] ) ? absint($data['front_photo']) : 0;
         if ( $front_photo_id ) {
             update_post_meta( $result, '_dd_front_photo', $front_photo_id );
         }
         if ( ! empty( $data['side_photo'] ) ) {
             update_post_meta( $result, '_dd_side_photo', absint($data['side_photo']) );
+        }
+        if ( array_key_exists( 'pedigree_photo', $data ) ) {
+            $ped_id = absint( $data['pedigree_photo'] );
+            if ( $ped_id ) {
+                update_post_meta( $result, '_dd_pedigree_photo', $ped_id );
+            } else {
+                delete_post_meta( $result, '_dd_pedigree_photo' );
+            }
         }
         $thumb_id = ! empty( $data['thumbnail_id'] ) ? absint($data['thumbnail_id']) : $front_photo_id;
         if ( $thumb_id ) {
@@ -421,14 +442,24 @@ class Ajax {
             <?php endif; ?>
 
             <!-- Health & Pedigree -->
-            <?php if ( array_filter($health) ) : ?>
+            <?php
+            $pedigree_photo_id = get_post_meta( $post_id, '_dd_pedigree_photo', true ) ?: ( $meta['pedigree_photo'] ?? 0 );
+            if ( array_filter($health) || $pedigree_photo_id ) :
+            ?>
             <div class="dd-drawer-profile__section">
                 <h4><?php _e('Health & Pedigree', 'petslist'); ?></h4>
                 <div class="dd-drawer-health">
                     <?php if ( ! empty($health['health_clearances']) ) : ?>
                     <div class="dd-drawer-health-item">
                         <strong>🩺 <?php _e('Health Clearances', 'petslist'); ?></strong>
-                        <p><?php echo nl2br(esc_html($health['health_clearances'])); ?></p>
+                        <?php
+                        $hc_val = trim($health['health_clearances']);
+                        if ( preg_match('#^https?://#i', $hc_val) ) :
+                        ?>
+                        <p><a href="<?php echo esc_url($hc_val); ?>" target="_blank" rel="noopener noreferrer" style="color:#02c5bd; font-weight:600; word-break:break-all;"><?php echo esc_html($hc_val); ?> <i class="fa-solid fa-up-right-from-square" style="font-size:11px;"></i></a></p>
+                        <?php else : ?>
+                        <p><?php echo nl2br(make_clickable(esc_html($hc_val))); ?></p>
+                        <?php endif; ?>
                     </div>
                     <?php endif; ?>
                     <?php if ( ! empty($health['vaccinations']) ) : ?>
@@ -437,7 +468,16 @@ class Ajax {
                         <p><?php echo nl2br(esc_html($health['vaccinations'])); ?></p>
                     </div>
                     <?php endif; ?>
-                    <?php if ( ! empty($health['pedigree']) ) : ?>
+                    <?php if ( ! empty($pedigree_photo_id) ) :
+                        $ped_full = wp_get_attachment_image_url($pedigree_photo_id, 'large') ?: wp_get_attachment_url($pedigree_photo_id);
+                    ?>
+                    <div class="dd-drawer-health-item">
+                        <strong>📜 <?php _e('Pedigree', 'petslist'); ?></strong>
+                        <a href="<?php echo esc_url($ped_full); ?>" target="_blank" rel="noopener noreferrer" style="display:inline-block; margin-top:6px;">
+                            <img src="<?php echo esc_url($ped_full); ?>" alt="Pedigree" style="max-width:100%; max-height:240px; border-radius:8px; border:1px solid #e2e8f0;">
+                        </a>
+                    </div>
+                    <?php elseif ( ! empty($health['pedigree']) ) : ?>
                     <div class="dd-drawer-health-item">
                         <strong>📜 <?php _e('Pedigree', 'petslist'); ?></strong>
                         <p><?php echo nl2br(esc_html($health['pedigree'])); ?></p>
@@ -537,7 +577,7 @@ class Ajax {
                     </div>
                     <div class="dd-drawer-item">
                         <span class="dd-drawer-label" style="display:block; font-size:11px; color:#64748b; text-transform:uppercase; margin-bottom:2px;"><?php _e('Phone', 'petslist'); ?></span>
-                        <span class="dd-drawer-value" style="font-size:13px; font-weight:600; color:#334155;"><?php echo esc_html($u_phone ?: '—'); ?></span>
+                        <span class="dd-drawer-value" style="font-size:13px; font-weight:600; color:#334155;"><?php echo esc_html($u_phone ? (function_exists('dd_format_phone') ? dd_format_phone($u_phone) : $u_phone) : '—'); ?></span>
                     </div>
                     <div class="dd-drawer-item">
                         <span class="dd-drawer-label" style="display:block; font-size:11px; color:#64748b; text-transform:uppercase; margin-bottom:2px;"><?php _e('Fulltime Breeder', 'petslist'); ?></span>
@@ -662,7 +702,7 @@ class Ajax {
         if ( ! empty( $country ) ) update_user_meta( $user_id, 'dd_country', $country );
         if ( ! empty( $state ) ) update_user_meta( $user_id, 'dd_state', $state );
         if ( ! empty( $city ) ) update_user_meta( $user_id, 'dd_city', $city );
-        update_user_meta( $user_id, 'dd_phone', $phone );
+        update_user_meta( $user_id, 'dd_phone', function_exists('dd_format_phone') ? dd_format_phone($phone) : $phone );
         update_user_meta( $user_id, 'dd_fulltime_breeder', strtolower($fulltime_breeder) === 'yes' ? 'yes' : 'no' );
         update_user_meta( $user_id, 'dd_member_since', current_time('mysql') );
 
@@ -761,7 +801,7 @@ class Ajax {
             wp_send_json_error(['message' => $result->get_error_message()]);
         }
 
-        update_user_meta($user_id, 'dd_phone', $phone);
+        update_user_meta($user_id, 'dd_phone', function_exists('dd_format_phone') ? dd_format_phone($phone) : $phone);
         update_user_meta($user_id, 'dd_location', $location);
         if ( ! empty( $country ) ) update_user_meta($user_id, 'dd_country', $country);
         if ( ! empty( $state ) ) update_user_meta($user_id, 'dd_state', $state);
@@ -1009,7 +1049,7 @@ class Ajax {
                 'dob'         => $meta['dob'] ?? '',
                 'weight'      => $meta['weight'] ?? '',
                 'reg_no'      => $is_subscriber ? ($meta['registration_no'] ?? '') : '',
-                'contact'     => $is_subscriber ? ['phone' => $meta['contact_phone'] ?? '', 'email' => $meta['contact_email'] ?? ''] : null,
+                'contact'     => $is_subscriber ? ['phone' => function_exists('dd_format_phone') ? dd_format_phone($meta['contact_phone'] ?? '') : ($meta['contact_phone'] ?? ''), 'email' => $meta['contact_email'] ?? ''] : null,
                 'owner'       => get_the_author(),
                 'date'        => get_the_date(),
             ];
@@ -1032,10 +1072,19 @@ class Ajax {
 
     public function upload_image() {
         check_ajax_referer( 'dd_upload_nonce', 'nonce' );
-        if ( ! is_user_logged_in() ) wp_send_json_error(['message' => __('Not logged in.', 'petslist')]);
-        if ( ! Subscription::can_access_directory() ) wp_send_json_error(['message' => __('Subscription required.', 'petslist')]);
+        if ( ! is_user_logged_in() ) {
+            wp_send_json_error(['message' => __('Not logged in.', 'petslist')]);
+        }
 
-        if ( empty($_FILES['file']) ) wp_send_json_error(['message' => __('No file uploaded.', 'petslist')]);
+        if ( empty($_FILES['file']) ) {
+            wp_send_json_error(['message' => __('No file uploaded.', 'petslist')]);
+        }
+
+        $file_type = wp_check_filetype( $_FILES['file']['name'] ?? '' );
+        $allowed_mimes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
+        if ( empty( $file_type['type'] ) || ! in_array( strtolower( $file_type['type'] ), $allowed_mimes, true ) ) {
+            wp_send_json_error(['message' => __('Please upload a valid image file (JPG, PNG, WebP, or GIF).', 'petslist')]);
+        }
 
         require_once ABSPATH . 'wp-admin/includes/image.php';
         require_once ABSPATH . 'wp-admin/includes/file.php';
@@ -1046,10 +1095,13 @@ class Ajax {
             wp_send_json_error(['message' => $attachment_id->get_error_message()]);
         }
 
+        update_post_meta( $attachment_id, '_dd_dog_photo', 1 );
+
         wp_send_json_success([
             'attachment_id' => $attachment_id,
             'url'           => wp_get_attachment_url($attachment_id),
-            'thumbnail'     => wp_get_attachment_image_url($attachment_id, 'thumbnail'),
+            'medium'        => wp_get_attachment_image_url($attachment_id, 'medium') ?: wp_get_attachment_url($attachment_id),
+            'thumbnail'     => wp_get_attachment_image_url($attachment_id, 'thumbnail') ?: wp_get_attachment_url($attachment_id),
         ]);
     }
 

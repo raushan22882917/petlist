@@ -1259,3 +1259,9 @@ body.home .content-area {
 }
 
 
+
+/* Mobile: theme .content-area adds 80px top/bottom on top of each section's own padding */
+@media (max-width: 991px) {
+	.petslist-custom-page.content-area { padding-top: 0; padding-bottom: 0; }
+	.petslist-about-hero { padding: 32px 0 40px; }
+}

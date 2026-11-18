@@ -762,21 +762,22 @@
 }
 .dd-dog-form__grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
 @media(max-width:600px){ .dd-dog-form__grid { grid-template-columns:1fr; } }
-.dd-dog-form__photos-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.dd-dog-form__photos-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:20px; }
 @media(max-width:600px){ .dd-dog-form__photos-grid { grid-template-columns:1fr; } }
-.dd-photo-upload-box { display:flex; flex-direction:column; gap:8px; }
+.dd-photo-upload-box { display:flex; flex-direction:column; gap:10px; }
 .dd-photo-upload-box__label { font-size:13px; font-weight:600; color:var(--dd-heading); }
 .dd-photo-upload-area {
-  aspect-ratio:1; border:2px dashed var(--dd-border);
+  height:210px; border:2px dashed var(--dd-border);
   border-radius:var(--dd-radius-sm); overflow:hidden; cursor:pointer;
   display:flex; align-items:center; justify-content:center;
   transition:var(--dd-transition);
 }
+.dd-photo-upload-box--pedigree .dd-photo-upload-area { height:160px; }
 .dd-photo-upload-area:hover { border-color:var(--dd-primary); background:var(--dd-primary-lt); }
 .dd-photo-upload-area img { width:100%; height:100%; object-fit:cover; }
-.dd-photo-upload-placeholder { text-align:center; padding:20px; color:var(--dd-text); opacity:.5; }
-.dd-photo-upload-placeholder i { font-size:32px; display:block; margin-bottom:6px; }
-.dd-photo-upload-placeholder span { font-size:12px; }
+.dd-photo-upload-placeholder { text-align:center; padding:20px; color:#475569; }
+.dd-photo-upload-placeholder i { font-size:30px; display:block; margin-bottom:6px; color:#02c5bd; }
+.dd-photo-upload-placeholder span { font-size:13px; font-weight:600; }
 .dd-dog-form__submit { display:flex; gap:12px; align-items:center; padding-top:8px; }
 
 /* Subscription tab */
@@ -1441,18 +1442,24 @@
 .dd-dir-card__meta-icon { font-size: 12px; }
 
 .dd-dir-card__locked {
-  font-size: 12px;
+  font-size: 13px;
   color: #b45309;
   background: #fef9c3;
-  padding: 7px 12px;
+  padding: 8px 12px;
   border-radius: 8px;
-  margin-bottom: 14px;
-  font-weight: 500;
+  margin-top: auto;
+  margin-bottom: 0;
+  font-weight: 600;
+  display: block;
+  text-align: center;
 }
 .dd-dir-card__locked a {
   color: #b45309;
   font-weight: 700;
   text-decoration: underline;
+}
+.dd-dir-card__locked a:hover {
+  color: #92400e;
 }
 
 /* ── CTA Footer ── */
@@ -1482,6 +1489,12 @@
   cursor: pointer;
 }
 .dd-dir-card__cta:hover { color: #01a89f; }
+.dd-dir-card__cta--locked {
+  color: #b45309;
+}
+.dd-dir-card__cta--locked:hover {
+  color: #92400e;
+}
 .dd-dir-card__cta-arrow {
   transition: transform .2s ease;
 }
@@ -1856,3 +1869,394 @@
   border-left: 2px solid var(--dd-primary);
 }
 
+/* ==========================================================================
+   FRONTEND MEDIA UPLOAD MODAL & DIRECT UPLOADER ENHANCEMENTS
+   ========================================================================== */
+
+/* 1. Modal Reset & Box Shadow */
+.media-modal {
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.3) !important;
+  font-family: inherit !important;
+}
+
+.media-modal-backdrop {
+  background: rgba(15, 23, 42, 0.65) !important;
+  backdrop-filter: blur(4px) !important;
+}
+
+/* 2. Reset Theme Button & Form Rules Leaking into Media Frame */
+.media-modal button,
+.media-frame button {
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  box-shadow: none !important;
+}
+
+/* 3. Modal Header */
+.media-frame-title {
+  height: 56px !important;
+  background: #ffffff !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  padding: 0 20px !important;
+}
+.media-frame-title h1 {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  line-height: 56px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* 4. Sleek Circular Close Button */
+.media-modal-close {
+  top: 12px !important;
+  right: 16px !important;
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  background: #f1f5f9 !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #64748b !important;
+  cursor: pointer !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.2s ease !important;
+  z-index: 1000 !important;
+}
+.media-modal-close:hover {
+  background: #fee2e2 !important;
+  border-color: #fecaca !important;
+  color: #ef4444 !important;
+  transform: rotate(90deg) !important;
+}
+.media-modal-close .media-modal-icon {
+  margin: 0 !important;
+  width: auto !important;
+  height: auto !important;
+}
+.media-modal-close .media-modal-icon:before {
+  content: "\f335" !important;
+  font-size: 16px !important;
+  line-height: 1 !important;
+  color: inherit !important;
+}
+
+/* 5. Navigation Tabs (Router) */
+.media-frame-router {
+  top: 56px !important;
+  height: 46px !important;
+  background: #f8fafc !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  padding: 0 20px !important;
+}
+.media-router {
+  display: flex !important;
+  align-items: flex-end !important;
+  gap: 6px !important;
+  height: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.media-router .media-menu-item {
+  float: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  height: 38px !important;
+  padding: 0 16px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: #64748b !important;
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  border-bottom: none !important;
+  border-radius: 6px 6px 0 0 !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  transition: all 0.15s ease !important;
+  line-height: normal !important;
+}
+.media-router .media-menu-item:hover {
+  color: #0f172a !important;
+  background: #e2e8f0 !important;
+}
+.media-router .media-menu-item.active {
+  background: #ffffff !important;
+  color: #02c5bd !important;
+  font-weight: 700 !important;
+  border: 1px solid #e2e8f0 !important;
+  border-top: 3px solid #02c5bd !important;
+  border-bottom: 1px solid #ffffff !important;
+  margin-bottom: -1px !important;
+}
+
+/* 6. Content Area */
+.media-frame-content {
+  top: 102px !important;
+  bottom: 60px !important;
+  background: #ffffff !important;
+}
+
+/* 7. Upload Files Tab (Dropzone) */
+.media-frame .uploader-inline {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  margin: 40px auto !important;
+  max-width: 540px !important;
+  padding: 40px 24px !important;
+  background: #f8fafc !important;
+  border: 2px dashed #02c5bd !important;
+  border-radius: 14px !important;
+  text-align: center !important;
+  overflow: visible !important;
+}
+.uploader-inline-content {
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+}
+.uploader-inline-content .upload-ui {
+  margin: 0 0 16px 0 !important;
+}
+.uploader-inline-content .post-upload-ui {
+  margin: 0 !important;
+}
+.uploader-inline.dragover {
+  background: #f0fdfa !important;
+  border-color: #0d9488 !important;
+}
+.uploader-inline h2 {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  margin: 0 0 8px 0 !important;
+}
+.uploader-inline .has-upload-message {
+  color: #64748b !important;
+  font-size: 13px !important;
+  margin-bottom: 20px !important;
+}
+.uploader-inline .browser {
+  background: #02c5bd !important;
+  color: #ffffff !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  padding: 10px 26px !important;
+  border-radius: 8px !important;
+  border: none !important;
+  display: inline-block !important;
+  cursor: pointer !important;
+  box-shadow: 0 2px 6px rgba(2, 197, 189, 0.3) !important;
+  transition: all 0.2s ease !important;
+}
+.uploader-inline .browser:hover {
+  background: #00a8a1 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 10px rgba(2, 197, 189, 0.4) !important;
+}
+.uploader-inline .upload-limit {
+  color: #94a3b8 !important;
+  font-size: 12px !important;
+  margin-top: 14px !important;
+}
+
+/* 8. Media Library Tab Toolbar */
+.attachments-browser .media-toolbar {
+  top: 0 !important;
+  height: 50px !important;
+  padding: 8px 16px !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+  background: #ffffff !important;
+}
+.attachments-browser .media-toolbar-secondary {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+.attachments-browser .media-toolbar select,
+.attachments-browser .media-toolbar input[type="search"] {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 6px !important;
+  color: #0f172a !important;
+  font-size: 13px !important;
+  height: 34px !important;
+  padding: 4px 10px !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+.attachments-browser .media-toolbar input[type="search"]:focus,
+.attachments-browser .media-toolbar select:focus {
+  border-color: #02c5bd !important;
+  box-shadow: 0 0 0 2px rgba(2, 197, 189, 0.2) !important;
+}
+
+/* 9. Attachments Grid */
+.attachments-browser .attachments {
+  top: 50px !important;
+  padding: 12px 16px !important;
+}
+.attachment-preview {
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06) !important;
+  transition: all 0.15s ease !important;
+}
+.attachment:hover .attachment-preview {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.12) !important;
+}
+.attachment.selected .attachment-preview {
+  box-shadow: 0 0 0 3px #02c5bd !important;
+}
+
+/* 10. Bottom Footer Bar */
+.media-frame-toolbar {
+  height: 60px !important;
+  background: #ffffff !important;
+  border-top: 1px solid #e2e8f0 !important;
+  padding: 0 20px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+.media-frame-toolbar .media-toolbar-primary {
+  float: right !important;
+}
+.media-button-select {
+  background: #02c5bd !important;
+  border-color: #02c5bd !important;
+  color: #ffffff !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  padding: 8px 22px !important;
+  height: auto !important;
+  line-height: normal !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  box-shadow: 0 2px 6px rgba(2, 197, 189, 0.3) !important;
+  transition: all 0.2s ease !important;
+}
+.media-button-select:hover:not(:disabled) {
+  background: #00a8a1 !important;
+  border-color: #00a8a1 !important;
+  color: #ffffff !important;
+}
+.media-button-select:disabled {
+  background: #e2e8f0 !important;
+  border-color: #e2e8f0 !important;
+  color: #94a3b8 !important;
+  box-shadow: none !important;
+  cursor: not-allowed !important;
+}
+
+/* 11. Frontend Form Direct Photo Upload Box Enhancements */
+.dd-photo-upload-box {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.dd-photo-upload-box:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+}
+.dd-photo-upload-area {
+  height: 210px;
+  min-height: 210px;
+  background: #f8fafc;
+  border: 2px dashed #cbd5e1;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  transition: all 0.2s ease;
+  margin-bottom: 0;
+}
+.dd-photo-upload-box--pedigree .dd-photo-upload-area {
+  height: 160px;
+  min-height: 160px;
+}
+.dd-photo-upload-area:hover,
+.dd-photo-upload-area.is-dragover {
+  border-color: #02c5bd;
+  background: #f0fdfa;
+}
+.dd-photo-upload-area.dd-input-error {
+  border-color: #ef4444 !important;
+  background: #fef2f2 !important;
+}
+.dd-photo-upload-area img {
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.dd-photo-upload-box--pedigree .dd-photo-upload-area img {
+  object-fit: contain;
+  background: #ffffff;
+  padding: 6px;
+}
+.dd-photo-upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: #475569;
+  opacity: 1;
+  padding: 20px;
+}
+.dd-photo-upload-placeholder i {
+  font-size: 30px;
+  color: #02c5bd;
+}
+.dd-photo-upload-placeholder span {
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+}
+.dd-photo-upload-progress {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #02c5bd;
+  font-weight: 600;
+  font-size: 13px;
+  z-index: 10;
+}
+
+
+
+/* ── Mobile fixes: archive filter bar + register location ───────────── */
+@media (max-width: 768px) {
+  .dd-filters-bar .dd-search-form__field,
+  .dd-filters-bar .dd-search-form__field--grow { flex: 0 0 auto; width: 100%; }
+  .dd-filters-bar .dd-search-form__field input,
+  .dd-filters-bar .dd-search-form__field select,
+  .dd-filters-bar .dd-search-form__field select[name="country"],
+  .dd-filters-bar .dd-search-form__field select[name="state"] { width: 100%; min-width: 0; max-width: none; }
+  .dd-filters-bar .dd-search-form__field select[name="state"] { border-left-width: 1px; }
+  .dd-filters-bar .dd-search-form__submit,
+  .dd-filters-bar .dd-btn--ghost { width: 100%; justify-content: center; }
+  #dd-register-form .dd-reg-location-grid { grid-template-columns: 1fr !important; }
+  #dd-register-form .dd-reg-location-grid .select2-container { width: 100% !important; }
+}

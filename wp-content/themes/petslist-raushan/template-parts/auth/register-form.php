@@ -45,7 +45,7 @@ $dd_auth_banner = function_exists( 'petslist_img_url' ) ? petslist_img_url( 'aut
                         <?php _e('Location', 'petslist'); ?>
                         <strong class="rtcl-required">*</strong>
                     </label>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                    <div class="dd-reg-location-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
                         <div>
                             <select id="dd-reg-country" name="country" class="rtcl-form-control dd-country-select" data-state-target="dd-reg-state" data-saved-country="<?php echo esc_attr($_POST['country'] ?? 'United States'); ?>" required style="width: 100%;">
                                 <?php dd_render_country_options( $_POST['country'] ?? 'United States', __('Select Country', 'petslist') ); ?>
@@ -67,7 +67,7 @@ $dd_auth_banner = function_exists( 'petslist_img_url' ) ? petslist_img_url( 'aut
                         <?php _e('Phone', 'petslist'); ?>
                         <strong class="rtcl-required">*</strong>
                     </label>
-                    <input type="tel" id="dd-reg-phone" name="phone" class="rtcl-form-control" placeholder="<?php esc_attr_e('+1 (555) 000-0000', 'petslist'); ?>" required autocomplete="tel">
+                    <input type="tel" id="dd-reg-phone" name="phone" class="rtcl-form-control" placeholder="<?php esc_attr_e('(555)-000-0000', 'petslist'); ?>" maxlength="18" required autocomplete="tel">
                 </div>
 
                 <div class="rtcl-form-group">

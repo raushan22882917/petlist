@@ -15,6 +15,7 @@ $health        = dd_get_dog_health($post_id);
 $is_subscriber = Subscription::can_access_directory();
 $is_owner      = is_user_logged_in() && (int) get_post_field('post_author', $post_id) === get_current_user_id();
 $is_admin      = current_user_can('manage_options');
+$can_view      = $is_subscriber || $is_owner || $is_admin;
 
 $front_url     = dd_get_front_photo_url($post_id, 'large');
 $side_url      = dd_get_side_photo_url($post_id, 'large');
@@ -29,6 +30,7 @@ $owner         = get_userdata($owner_id);
 $health_clearances = $health['health_clearances'] ?? ($meta['health_testing'] ?? '');
 $vaccinations      = $health['vaccinations'] ?? '';
 $pedigree          = $health['pedigree'] ?? ($meta['pedigree'] ?? '');
+$pedigree_photo    = get_post_meta( $post_id, '_dd_pedigree_photo', true ) ?: ( $meta['pedigree_photo'] ?? '' );
 $awards            = $health['awards'] ?? '';
 $microchip         = $health['microchip'] ?? '';
 
@@ -47,7 +49,7 @@ $loc_display = trim(implode(', ', array_filter([$city_val, $full_state, $country
 // Gallery IDs
 $gallery_ids   = get_post_meta($post_id, '_dd_gallery', true) ?: [];
 $is_sponsored  = isset( $meta['is_sponsored'] ) && $meta['is_sponsored'] === 'Yes';
-$has_health    = ! empty($health_clearances) || ! empty($vaccinations) || ! empty($pedigree);
+$has_health    = ! empty($health_clearances) || ! empty($vaccinations) || ! empty($pedigree) || ! empty($pedigree_photo);
 ?>
 
 <div class="dd-single-page content-area">
@@ -73,6 +75,7 @@ $has_health    = ! empty($health_clearances) || ! empty($vaccinations) || ! empt
                     <img src="<?php echo esc_url($front_url ?: $thumb_url); ?>" alt="<?php printf(__('%s - Front View', 'petslist'), get_the_title()); ?>" id="dd-main-photo" class="dd-gallery-main__img">
                     <div class="dd-gallery-view-label" id="dd-photo-label"><?php _e('Front View', 'petslist'); ?></div>
                 </div>
+                <?php if ( $can_view ) : ?>
                 <div class="dd-gallery-thumbs">
                     <div class="dd-gallery-thumb dd-gallery-thumb--active" data-src="<?php echo esc_url($front_url ?: $thumb_url); ?>" data-label="<?php esc_attr_e('Front View', 'petslist'); ?>">
                         <img src="<?php echo esc_url($front_url ?: $thumb_url); ?>" alt="Front">
@@ -95,6 +98,11 @@ $has_health    = ! empty($health_clearances) || ! empty($vaccinations) || ! empt
                     </div>
                     <?php endforeach; ?>
                 </div>
+                <?php else : ?>
+                <div class="dd-gallery-locked" style="margin-top: 10px; background: #fef9c3; border: 1px solid #fef08a; border-radius: 8px; padding: 10px 14px; text-align: center; font-size: 13px; color: #854d0e; font-weight: 600;">
+                    🔒 <a href="<?php echo esc_url(dd_pricing_url()); ?>" style="color: #854d0e; text-decoration: underline;"><?php _e('Subscribe', 'petslist'); ?></a> <?php _e('to view full photo gallery.', 'petslist'); ?>
+                </div>
+                <?php endif; ?>
             </div>
 
             <!-- Dog Title & Quick Badges -->
@@ -112,11 +120,6 @@ $has_health    = ! empty($health_clearances) || ! empty($vaccinations) || ! empt
                         <?php if ( $is_sponsored ) : ?>
                         <span style="background: #fef9c3; color: #854d0e; border: 1px solid #fef08a; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
                             <i class="fa-solid fa-star" style="color: #eab308;"></i> <?php _e('Sponsored Stud', 'petslist'); ?>
-                        </span>
-                        <?php endif; ?>
-                        <?php if ( $has_health ) : ?>
-                        <span style="background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
-                            <i class="fa-solid fa-circle-check"></i> <?php _e('Health Verified', 'petslist'); ?>
                         </span>
                         <?php endif; ?>
                     </div>
@@ -146,7 +149,8 @@ $has_health    = ! empty($health_clearances) || ! empty($vaccinations) || ! empt
                 </div>
             </div>
 
-            <!-- Profile Details Grid (Always shown - Full details matching Admin Dashboard) -->
+            <?php if ( $can_view ) : ?>
+            <!-- Profile Details Grid (Full details matching Admin Dashboard - Subscribers Only) -->
             <div class="dd-single-card dd-profile-details">
                 <h2 class="dd-single-card__title" style="display: flex; align-items: center; gap: 8px; font-size: 18px; font-weight: 700; margin-bottom: 16px; color: #070c3e;">
                     <i class="fa-solid fa-id-card" style="color: #02c5bd;"></i> <?php _e('Dog Profile Details', 'petslist'); ?>
@@ -195,7 +199,7 @@ $has_health    = ! empty($health_clearances) || ! empty($vaccinations) || ! empt
             <?php endif; ?>
 
             <!-- Health & Pedigree (Full Details) -->
-            <?php if ( ! empty($health_clearances) || ! empty($vaccinations) || ! empty($pedigree) || ! empty($awards) || ! empty($microchip) ) : ?>
+            <?php if ( ! empty($health_clearances) || ! empty($vaccinations) || ! empty($pedigree) || ! empty($pedigree_photo) || ! empty($awards) || ! empty($microchip) ) : ?>
             <div class="dd-single-card" style="margin-top: 24px;">
                 <h2 class="dd-single-card__title" style="display: flex; align-items: center; gap: 8px; font-size: 18px; font-weight: 700; margin-bottom: 16px; color: #070c3e;">
                     <i class="fa-solid fa-file-waveform" style="color: #02c5bd;"></i> <?php _e('Health & Pedigree', 'petslist'); ?>
@@ -206,7 +210,24 @@ $has_health    = ! empty($health_clearances) || ! empty($vaccinations) || ! empt
                         <div class="dd-health-item__icon">🩺</div>
                         <div class="dd-health-item__content">
                             <strong><?php _e('Health Clearances / Testing', 'petslist'); ?></strong>
-                            <p><?php echo nl2br(esc_html($health_clearances)); ?></p>
+                            <?php
+                            $hc_trimmed = trim( $health_clearances );
+                            $hc_url     = '';
+                            if ( preg_match( '#^https?://#i', $hc_trimmed ) ) {
+                                $hc_url = $hc_trimmed;
+                            } elseif ( preg_match( '#^[a-z0-9.-]+\.[a-z]{2,}(/.*)?$#i', $hc_trimmed ) ) {
+                                $hc_url = 'https://' . $hc_trimmed;
+                            }
+                            if ( $hc_url ) :
+                            ?>
+                            <p style="margin-top: 4px;">
+                                <a href="<?php echo esc_url( $hc_url ); ?>" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; gap:6px; color:#02c5bd; font-weight:600; text-decoration:underline; word-break:break-all;">
+                                    <?php echo esc_html( $hc_trimmed ); ?> <i class="fa-solid fa-up-right-from-square" style="font-size:12px;"></i>
+                                </a>
+                            </p>
+                            <?php else : ?>
+                            <p><?php echo nl2br( make_clickable( esc_html( $health_clearances ) ) ); ?></p>
+                            <?php endif; ?>
                         </div>
                     </div>
                     <?php endif; ?>
@@ -221,7 +242,29 @@ $has_health    = ! empty($health_clearances) || ! empty($vaccinations) || ! empt
                     </div>
                     <?php endif; ?>
 
-                    <?php if ( ! empty($pedigree) ) : ?>
+                    <?php if ( ! empty($pedigree_photo) ) :
+                        $ped_img_medium = wp_get_attachment_image_url( $pedigree_photo, 'large' ) ?: wp_get_attachment_url( $pedigree_photo );
+                        $ped_img_full   = wp_get_attachment_url( $pedigree_photo ) ?: $ped_img_medium;
+                    ?>
+                    <div class="dd-health-item dd-health-item--pedigree-photo">
+                        <div class="dd-health-item__icon">📜</div>
+                        <div class="dd-health-item__content" style="width:100%;">
+                            <strong><?php _e('Pedigree & Lineage', 'petslist'); ?></strong>
+                            <?php if ( $ped_img_medium ) : ?>
+                            <div style="margin-top: 8px;">
+                                <a href="<?php echo esc_url( $ped_img_full ); ?>" target="_blank" rel="noopener noreferrer" style="display:inline-block; border:1px solid #e2e8f0; border-radius:10px; overflow:hidden; background:#f8fafc; max-width:100%;">
+                                    <img src="<?php echo esc_url( $ped_img_medium ); ?>" alt="<?php echo esc_attr( get_the_title() . ' Pedigree' ); ?>" style="display:block; max-width:100%; max-height:420px; width:auto; height:auto; object-fit:contain;">
+                                </a>
+                                <div style="margin-top: 6px; font-size: 12px; color: #64748b;">
+                                    <a href="<?php echo esc_url( $ped_img_full ); ?>" target="_blank" rel="noopener noreferrer" style="color:#02c5bd; font-weight:600; text-decoration:none;">
+                                        <i class="fa-solid fa-magnifying-glass-plus"></i> <?php _e('View Full Size Pedigree', 'petslist'); ?>
+                                    </a>
+                                </div>
+                            </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <?php elseif ( ! empty($pedigree) ) : ?>
                     <div class="dd-health-item">
                         <div class="dd-health-item__icon">📜</div>
                         <div class="dd-health-item__content">
@@ -251,6 +294,15 @@ $has_health    = ! empty($health_clearances) || ! empty($vaccinations) || ! empt
                     </div>
                     <?php endif; ?>
                 </div>
+            </div>
+            <?php endif; ?>
+
+            <?php else : ?>
+            <!-- Gated: Subscription Required to View Entire Profile -->
+            <div class="dd-single-card dd-single-card--gate" style="margin-top: 24px; padding: 32px 24px; text-align: center;">
+                <?php \RadiusTheme\Petslist\DogDirectory\AccessControl::require_subscription_gate(
+                    __('You must be an active subscriber to view this stud\'s entire profile. Choose a plan to get full access to pedigrees, health records, stud fees, registrations, and direct breeder contact details.', 'petslist')
+                ); ?>
             </div>
             <?php endif; ?>
 
@@ -284,6 +336,7 @@ $has_health    = ! empty($health_clearances) || ! empty($vaccinations) || ! empt
                 </div>
 
                 <!-- Breeder Contacts -->
+                <?php if ( $can_view ) : ?>
                 <div class="dd-owner-card__contact" style="margin-top: 16px; display: flex; flex-direction: column; gap: 8px;">
                     <?php 
                     $c_phone = !empty($meta['contact_phone']) ? $meta['contact_phone'] : get_user_meta($owner_id, 'dd_phone', true);
@@ -291,10 +344,13 @@ $has_health    = ! empty($health_clearances) || ! empty($vaccinations) || ! empt
                     $c_web   = !empty($meta['contact_website']) ? $meta['contact_website'] : get_user_meta($owner_id, 'user_url', true);
                     ?>
 
-                    <?php if ( $c_phone ) : ?>
-                    <a href="tel:<?php echo esc_attr($c_phone); ?>" class="dd-contact-btn dd-contact-btn--phone" style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 600;">
+                    <?php if ( $c_phone ) :
+                        $c_phone_formatted = function_exists('dd_format_phone') ? dd_format_phone($c_phone) : $c_phone;
+                        $c_phone_href      = preg_replace('/[^0-9+]/', '', $c_phone);
+                    ?>
+                    <a href="tel:<?php echo esc_attr($c_phone_href ?: $c_phone); ?>" class="dd-contact-btn dd-contact-btn--phone" style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 600;">
                         <i class="fa-solid fa-phone"></i>
-                        <span><?php echo esc_html($c_phone); ?></span>
+                        <span><?php echo esc_html($c_phone_formatted); ?></span>
                     </a>
                     <?php endif; ?>
 
@@ -312,6 +368,13 @@ $has_health    = ! empty($health_clearances) || ! empty($vaccinations) || ! empt
                     </a>
                     <?php endif; ?>
                 </div>
+                <?php else : ?>
+                <div class="dd-owner-card__locked" style="margin-top: 16px;">
+                    <a href="<?php echo esc_url(dd_pricing_url()); ?>" class="dd-btn dd-btn--primary dd-btn--full" style="display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 16px; border-radius: 8px; font-weight: 700; text-decoration: none; background: #02c5bd; color: #fff;">
+                        <i class="fa-solid fa-lock"></i> <?php _e('Subscribe to Contact Breeder', 'petslist'); ?>
+                    </a>
+                </div>
+                <?php endif; ?>
             </div>
 
             <!-- Quick Stats -->
@@ -351,7 +414,11 @@ $has_health    = ! empty($health_clearances) || ! empty($vaccinations) || ! empt
                     <?php if ( ! empty($meta['stud_fee']) ) : ?>
                     <li style="display: flex; justify-content: space-between; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px;">
                         <span><i class="fa-solid fa-tag" style="color: #059669; margin-right: 6px;"></i> <?php _e('Stud Fee:', 'petslist'); ?></span>
+                        <?php if ( $can_view ) : ?>
                         <strong style="color: #059669;"><?php echo esc_html($meta['stud_fee']); ?></strong>
+                        <?php else : ?>
+                        <a href="<?php echo esc_url(dd_pricing_url()); ?>" style="color: #b45309; font-size: 12px; font-weight: 700; text-decoration: none;">🔒 <?php _e('Subscribers Only', 'petslist'); ?></a>
+                        <?php endif; ?>
                     </li>
                     <?php endif; ?>
 

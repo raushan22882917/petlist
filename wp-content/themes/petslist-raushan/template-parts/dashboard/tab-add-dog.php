@@ -18,9 +18,10 @@ if ( $is_edit ) {
         $dog_title   = $post->post_title;
         $dog_meta    = get_post_meta( $edit_id, '_dd_dog_meta', true ) ?: [];
         $dog_health  = get_post_meta( $edit_id, '_dd_dog_health', true ) ?: [];
-        $front_photo = get_post_meta( $edit_id, '_dd_front_photo', true );
-        $side_photo  = get_post_meta( $edit_id, '_dd_side_photo', true );
-        $thumb_id    = get_post_thumbnail_id( $edit_id ) ?: $front_photo;
+        $front_photo    = get_post_meta( $edit_id, '_dd_front_photo', true );
+        $side_photo     = get_post_meta( $edit_id, '_dd_side_photo', true );
+        $pedigree_photo = get_post_meta( $edit_id, '_dd_pedigree_photo', true ) ?: ( $dog_meta['pedigree_photo'] ?? '' );
+        $thumb_id       = get_post_thumbnail_id( $edit_id ) ?: $front_photo;
     }
 }
 
@@ -131,14 +132,50 @@ function dd_field( $meta, $key, $fallback = '' ) {
                     <input type="text" id="dd-registration" name="dog_data[registration_no]" value="<?php echo dd_field($dog_meta,'registration_no'); ?>" placeholder="<?php esc_attr_e( 'AKC-123456', 'petslist' ); ?>" required>
                 </div>
 
+                <?php
+                $pedigree_photo = $pedigree_photo ?? '';
+                $legacy_pedigree_text = $dog_meta['pedigree'] ?? ($dog_health['pedigree'] ?? '');
+                $health_testing_val = $dog_meta['health_testing'] ?? ($dog_health['health_clearances'] ?? '');
+                if ( strtolower( trim( $health_testing_val ) ) === 'none' ) {
+                    $health_testing_val = '';
+                }
+                ?>
                 <div class="dd-form-group dd-form-group--full">
-                    <label for="dd-pedigree"><?php _e( 'Pedigree', 'petslist' ); ?> <span class="dd-required">*</span></label>
-                    <textarea id="dd-pedigree" name="dog_data[pedigree]" rows="3" placeholder="<?php esc_attr_e( 'Sire, Dam, and lineage information...', 'petslist' ); ?>" required><?php echo esc_textarea($dog_meta['pedigree'] ?? ($dog_health['pedigree'] ?? '')); ?></textarea>
+                    <label><?php _e( 'Pedigree (Optional)', 'petslist' ); ?></label>
+                    <div class="dd-photo-upload-box dd-photo-upload-box--pedigree">
+                        <div class="dd-photo-upload-area" id="dd-pedigree-preview">
+                            <?php if ( ! empty($pedigree_photo) ) : ?>
+                            <img src="<?php echo esc_url(wp_get_attachment_image_url($pedigree_photo, 'medium') ?: wp_get_attachment_url($pedigree_photo)); ?>" alt="<?php esc_attr_e('Pedigree Photo', 'petslist'); ?>">
+                            <?php else : ?>
+                            <div class="dd-photo-upload-placeholder">
+                                <i class="icon-pl-img"></i>
+                                <span><?php _e( 'Click or drag & drop pedigree photo', 'petslist' ); ?></span>
+                            </div>
+                            <?php endif; ?>
+                        </div>
+                        <input type="hidden" id="dd-pedigree-id" name="dog_data[pedigree_photo]" value="<?php echo esc_attr($pedigree_photo); ?>">
+                        <div style="display:flex; gap:8px;">
+                            <button type="button" class="dd-btn dd-btn--ghost dd-btn--sm dd-upload-photo" data-target="dd-pedigree-id" data-preview="dd-pedigree-preview">
+                                <i class="icon-pl-img"></i> <?php _e( 'Upload Pedigree Photo', 'petslist' ); ?>
+                            </button>
+                            <button type="button" class="dd-btn dd-btn--ghost dd-btn--sm dd-remove-photo" data-target="dd-pedigree-id" data-preview="dd-pedigree-preview" data-placeholder="<?php esc_attr_e( 'Click or drag & drop pedigree photo', 'petslist' ); ?>" style="<?php echo empty($pedigree_photo) ? 'display:none;' : ''; ?>color:#ef4444; border-color:#fecaca;">
+                                <i class="fa-solid fa-trash"></i> <?php _e( 'Remove', 'petslist' ); ?>
+                            </button>
+                        </div>
+                    </div>
+                    <?php if ( empty($pedigree_photo) && ! empty($legacy_pedigree_text) ) : ?>
+                    <small style="display:block; margin-top:6px; color:#64748b; font-size:12px;">
+                        <?php echo esc_html( sprintf( __( 'Previous text entry: %s', 'petslist' ), wp_trim_words( $legacy_pedigree_text, 20 ) ) ); ?>
+                    </small>
+                    <?php endif; ?>
                 </div>
 
                 <div class="dd-form-group dd-form-group--full">
-                    <label for="dd-health-testing"><?php _e( 'Health Testing', 'petslist' ); ?> <span class="dd-required">*</span></label>
-                    <textarea id="dd-health-testing" name="dog_data[health_testing]" rows="3" placeholder="<?php esc_attr_e( 'OFA Hips, Elbows, Eyes, Genetic clearances...', 'petslist' ); ?>" required><?php echo esc_textarea($dog_meta['health_testing'] ?? ($dog_health['health_clearances'] ?? '')); ?></textarea>
+                    <label for="dd-health-testing"><?php _e( 'Health Testing (Post Link, Optional)', 'petslist' ); ?></label>
+                    <input type="url" id="dd-health-testing" name="dog_data[health_testing]" value="<?php echo esc_attr($health_testing_val); ?>" placeholder="<?php esc_attr_e( 'https://ofa.org/... (Optional link to health testing / clearances)', 'petslist' ); ?>">
+                    <small style="display:block; margin-top:6px; color:#64748b; font-size:12px;">
+                        <?php _e( 'Optional: Paste a URL link to your dog\'s health testing or clearances (e.g. OFA, Embark, PennHIP, or online report).', 'petslist' ); ?>
+                    </small>
                 </div>
 
             </div>
@@ -177,7 +214,8 @@ function dd_field( $meta, $key, $fallback = '' ) {
 
                 <div class="dd-form-group">
                     <label for="dd-phone"><?php _e( 'Contact Phone', 'petslist' ); ?> <span class="dd-required">*</span></label>
-                    <input type="tel" id="dd-phone" name="dog_data[contact_phone]" value="<?php echo dd_field($dog_meta,'contact_phone'); ?>" placeholder="+1 555 000 0000" required>
+                    <?php $phone_val = function_exists('dd_format_phone') ? dd_format_phone($dog_meta['contact_phone'] ?? '') : ($dog_meta['contact_phone'] ?? ''); ?>
+                    <input type="tel" id="dd-phone" name="dog_data[contact_phone]" value="<?php echo esc_attr($phone_val); ?>" placeholder="(555)-000-0000" maxlength="18" required>
                 </div>
 
                 <div class="dd-form-group">
@@ -211,7 +249,7 @@ function dd_field( $meta, $key, $fallback = '' ) {
                     </div>
                     <input type="hidden" id="dd-front-id" name="dog_data[front_photo]" value="<?php echo esc_attr($front_photo ?? ''); ?>">
                     <button type="button" class="dd-btn dd-btn--ghost dd-btn--sm dd-upload-photo" data-target="dd-front-id" data-preview="dd-front-preview">
-                        <i class="icon-pl-img"></i> <?php _e( 'Choose Front Photo', 'petslist' ); ?>
+                        <i class="icon-pl-img"></i> <?php _e( 'Upload Front Photo', 'petslist' ); ?>
                     </button>
                 </div>
 
@@ -224,13 +262,13 @@ function dd_field( $meta, $key, $fallback = '' ) {
                         <?php else : ?>
                         <div class="dd-photo-upload-placeholder">
                             <i class="icon-pl-img"></i>
-                            <span><?php _e( 'Side view photo', 'petslist' ); ?></span>
+                            <span><?php _e( 'Click or drag & drop side view photo', 'petslist' ); ?></span>
                         </div>
                         <?php endif; ?>
                     </div>
                     <input type="hidden" id="dd-side-id" name="dog_data[side_photo]" value="<?php echo esc_attr($side_photo ?? ''); ?>">
                     <button type="button" class="dd-btn dd-btn--ghost dd-btn--sm dd-upload-photo" data-target="dd-side-id" data-preview="dd-side-preview">
-                        <i class="icon-pl-img"></i> <?php _e( 'Choose Side Photo', 'petslist' ); ?>
+                        <i class="icon-pl-img"></i> <?php _e( 'Upload Side Photo', 'petslist' ); ?>
                     </button>
                 </div>
 

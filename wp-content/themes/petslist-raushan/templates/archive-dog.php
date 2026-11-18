@@ -255,16 +255,23 @@ $query = new WP_Query($args);
                 $health_data = get_post_meta($pid, '_dd_dog_health', true);
                 $has_health  = !empty($health_data) && array_filter((array)$health_data);
                 $is_male     = strtolower($gender) === 'male';
-                $dog_url     = get_permalink($pid);
-                if ( empty($dog_url) || is_wp_error($dog_url) ) {
-                    $dog_url = home_url( '/dog-directory/' . get_post_field( 'post_name', $pid ) . '/' );
+                $slug        = get_post_field( 'post_name', $pid );
+                if ( empty( $slug ) ) {
+                    $slug = sanitize_title( get_the_title( $pid ) );
                 }
+                if ( ! empty( $slug ) ) {
+                    $dog_url = home_url( '/dog-directory/' . $slug . '/' );
+                } else {
+                    $dog_url = home_url( '/?post_type=dd_dog&p=' . $pid );
+                }
+                $can_view_card = $is_subscriber || current_user_can('manage_options') || ( is_user_logged_in() && (int) get_post_field('post_author', $pid) === get_current_user_id() );
+                $card_url      = $can_view_card ? $dog_url : dd_pricing_url();
             ?>
-            <article class="dd-dir-card" data-url="<?php echo esc_url( $dog_url ); ?>" onclick="if(!event.target.closest('a,button')){ window.location.href='<?php echo esc_url( $dog_url ); ?>'; }">
+            <article class="dd-dir-card" data-url="<?php echo esc_url( $card_url ); ?>" onclick="if(!event.target.closest('a,button')){ window.location.href='<?php echo esc_url( $card_url ); ?>'; }">
 
                 <!-- Card Image -->
                 <div class="dd-dir-card__image">
-                    <a href="<?php echo esc_url( $dog_url ); ?>" class="dd-dir-card__image-link">
+                    <a href="<?php echo esc_url( $card_url ); ?>" class="dd-dir-card__image-link">
                         <img src="<?php echo esc_url($thumb); ?>"
                              alt="<?php the_title_attribute(); ?>"
                              loading="lazy">
@@ -282,11 +289,6 @@ $query = new WP_Query($args);
                     <?php if($age): ?>
                     <span class="dd-dir-card__age-pill"><?php echo esc_html($age); ?></span>
                     <?php endif; ?>
-
-                    <!-- Health verified badge -->
-                    <?php if($is_subscriber && $has_health): ?>
-                    <span class="dd-dir-card__health-badge">✓ Health Verified</span>
-                    <?php endif; ?>
                 </div>
 
                 <!-- Card Body -->
@@ -297,7 +299,7 @@ $query = new WP_Query($args);
                     <?php endif; ?>
 
                     <h3 class="dd-dir-card__name">
-                        <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+                        <a href="<?php echo esc_url( $card_url ); ?>"><?php the_title(); ?></a>
                     </h3>
 
                     <div class="dd-dir-card__meta">
@@ -323,16 +325,18 @@ $query = new WP_Query($args);
 
                     <?php if(!$is_subscriber): ?>
                     <div class="dd-dir-card__locked">
-                        🔒 <a href="<?php echo esc_url(dd_pricing_url()); ?>"><?php _e('Subscribe for full details','petslist'); ?></a>
+                        🔒 <a href="<?php echo esc_url(dd_pricing_url()); ?>" onclick="event.stopPropagation(); window.location.href='<?php echo esc_url(dd_pricing_url()); ?>';"><?php _e('Subscribe To View Profile','petslist'); ?></a>
                     </div>
                     <?php endif; ?>
 
+                    <?php if ( $can_view_card ) : ?>
                     <div class="dd-dir-card__footer">
                         <a href="<?php echo esc_url( $dog_url ); ?>" class="dd-dir-card__cta" onclick="event.stopPropagation(); window.location.href='<?php echo esc_url( $dog_url ); ?>';">
                             <?php _e('View Profile','petslist'); ?>
                             <span class="dd-dir-card__cta-arrow">→</span>
                         </a>
                     </div>
+                    <?php endif; ?>
                 </div>
             </article>
             <?php endwhile; wp_reset_postdata(); ?>

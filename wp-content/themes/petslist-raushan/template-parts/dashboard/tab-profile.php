@@ -103,7 +103,8 @@ $website          = $user->user_url;
 
                     <div class="dd-form-group">
                         <label for="dd-profile-phone"><?php _e( 'Phone Number', 'petslist' ); ?></label>
-                        <input type="tel" id="dd-profile-phone" name="phone" value="<?php echo esc_attr( $phone ); ?>" placeholder="+1 555 000 0000">
+                        <?php $phone_formatted = function_exists('dd_format_phone') ? dd_format_phone($phone) : $phone; ?>
+                        <input type="tel" id="dd-profile-phone" name="phone" value="<?php echo esc_attr( $phone_formatted ); ?>" placeholder="(555)-000-0000" maxlength="18">
                     </div>
 
                     <div class="dd-form-group">

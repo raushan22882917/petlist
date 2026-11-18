@@ -112,8 +112,8 @@ class Scripts {
                     'nonce'     => wp_create_nonce('dd_admin_nonce'),
                     'countries' => function_exists('dd_get_all_countries') ? dd_get_all_countries() : [],
                 ]);
+                wp_enqueue_media();
             }
-            wp_enqueue_media();
         }
 
         // Localise
@@ -130,6 +130,8 @@ class Scripts {
                 'checkout'  => wp_create_nonce('dd_checkout_nonce'),
             ],
             'isLoggedIn'   => is_user_logged_in(),
+            'userId'       => get_current_user_id(),
+            'isAdmin'      => current_user_can('manage_options'),
             'isSubscriber' => Subscription::can_access_directory(),
             'loginUrl'     => dd_login_url(),
             'registerUrl'  => dd_register_url(),

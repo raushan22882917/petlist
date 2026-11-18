@@ -93,7 +93,14 @@ $recent_dogs = new WP_Query([
                         <span>📍 <?php echo esc_html(trim(($meta['city'] ?? '') . ', ' . ($meta['country'] ?? ''), ', ')); ?></span>
                         <?php endif; ?>
                     </div>
+                    <?php
+                    $can_view_card = \RadiusTheme\Petslist\DogDirectory\Subscription::can_access_directory() || current_user_can('manage_options') || ( is_user_logged_in() && (int) get_post_field('post_author', get_the_ID()) === get_current_user_id() );
+                    if ( $can_view_card ) :
+                    ?>
                     <a href="<?php the_permalink(); ?>" class="dd-home-dog-card__btn"><?php _e('View Profile', 'petslist'); ?></a>
+                    <?php else : ?>
+                    <a href="<?php echo esc_url(dd_pricing_url()); ?>" class="dd-home-dog-card__btn dd-home-dog-card__btn--locked" style="background: #02c5bd; color: #fff;">🔒 <?php _e('Subscribe To View Profile', 'petslist'); ?></a>
+                    <?php endif; ?>
                 </div>
             </div>
             <?php endwhile; wp_reset_postdata(); ?>

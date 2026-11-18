@@ -1106,3 +1106,74 @@ function dd_get_user_access_level( $user_or_id = null ) {
     return 'free';
 }
 
+/**
+ * Get IDs of demo/theme attachments to exclude from frontend photo pickers
+ *
+ * @return array
+ */
+function dd_get_demo_attachment_ids() {
+    $cached = wp_cache_get( 'dd_demo_attachment_ids', 'petslist' );
+    if ( false !== $cached && is_array( $cached ) ) {
+        return $cached;
+    }
+
+    global $wpdb;
+    $ids = $wpdb->get_col( "
+        SELECT ID FROM {$wpdb->posts} 
+        WHERE post_type = 'attachment' 
+        AND (
+            post_name LIKE '%404%' 
+            OR post_name LIKE '%pre-loader%' 
+            OR post_name LIKE '%circle%' 
+            OR post_name LIKE '%team-bg%' 
+            OR post_name LIKE '%counter-bg%' 
+            OR post_name LIKE '%ic-categories%' 
+            OR post_name LIKE '%banner-bg%' 
+            OR post_name LIKE '%hero-banner%' 
+            OR post_name LIKE '%category-bg%' 
+            OR post_name LIKE '%check%'
+            OR post_name LIKE '%petslist_logo%'
+            OR post_name LIKE '%app-store%'
+            OR post_name LIKE '%play-store%'
+            OR post_name LIKE '%user-1%'
+            OR post_name LIKE '%blog-%'
+            OR post_name LIKE '%state-img%'
+            OR post_name LIKE '%arrow-right%'
+        )
+    " );
+
+    $ids = array_map( 'intval', (array) $ids );
+    wp_cache_set( 'dd_demo_attachment_ids', $ids, 'petslist', 3600 );
+    return $ids;
+}
+
+/**
+ * Format phone number automatically as (xxx)-xxx-xxxx
+ *
+ * @param string $phone
+ * @return string
+ */
+function dd_format_phone( $phone ) {
+    $phone = trim( (string) $phone );
+    if ( '' === $phone ) {
+        return '';
+    }
+
+    $digits = preg_replace( '/\D+/', '', $phone );
+    if ( strlen( $digits ) === 11 && substr( $digits, 0, 1 ) === '1' ) {
+        $digits = substr( $digits, 1 );
+    }
+
+    if ( strlen( $digits ) === 10 ) {
+        return sprintf(
+            '(%s)-%s-%s',
+            substr( $digits, 0, 3 ),
+            substr( $digits, 3, 3 ),
+            substr( $digits, 6, 4 )
+        );
+    }
+
+    return $phone;
+}
+
+

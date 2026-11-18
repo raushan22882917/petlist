@@ -8,7 +8,7 @@ namespace RadiusTheme\Petslist\DogDirectory;
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'DD_VERSION', '1.0.6' );
+define( 'DD_VERSION', '1.0.15' );
 
 class Init {
 

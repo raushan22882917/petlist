@@ -257,12 +257,40 @@
         $(document).on('click', '#dd-wizard-next', function () {
           // Validate current step
           var isValid = true;
+          var customMsg = '';
           var $currentSection = $('.dd-dog-form__section[data-step="' + currentStep + '"]');
-          
+
+          // Auto-prepend https:// if user entered a domain link without protocol
+          var $healthInput = $currentSection.find('#dd-health-testing');
+          if ($healthInput.length) {
+            var hVal = $.trim($healthInput.val());
+            if (hVal && !/^https?:\/\//i.test(hVal) && /^[a-z0-9.-]+\.[a-z]{2,}/i.test(hVal)) {
+              $healthInput.val('https://' + hVal);
+            }
+            if ($healthInput.val().trim() !== '' && typeof $healthInput[0].checkValidity === 'function' && !$healthInput[0].checkValidity()) {
+              isValid = false;
+              customMsg = 'Please enter a valid link URL (e.g. https://ofa.org/...) for Health Testing, or leave it blank.';
+              $healthInput.addClass('dd-input-error');
+              if ($currentSection.find('.dd-input-error').length === 1) {
+                $healthInput[0].focus();
+              }
+            } else {
+              $healthInput.removeClass('dd-input-error');
+            }
+          }
+
           // Basic validation for required fields in current step
           $currentSection.find('input[required], select[required], textarea[required]').each(function() {
-            if (!this.value.trim()) {
+            var val = this.value.trim();
+            if (!val) {
               isValid = false;
+              $(this).addClass('dd-input-error');
+              if ($currentSection.find('.dd-input-error').length === 1) {
+                this.focus();
+              }
+            } else if (this.type === 'url' && typeof this.checkValidity === 'function' && !this.checkValidity()) {
+              isValid = false;
+              customMsg = 'Please enter a valid link URL (e.g. https://ofa.org/...) for Health Clearances / Testing.';
               $(this).addClass('dd-input-error');
               if ($currentSection.find('.dd-input-error').length === 1) {
                 this.focus();
@@ -272,8 +300,23 @@
             }
           });
 
+          // Validate required photo upload boxes in current step (e.g. Pedigree photo)
+          $currentSection.find('.dd-photo-upload-box[data-required-photo="1"]').each(function() {
+            var $box = $(this);
+            var $hidden = $box.find('input[type="hidden"]');
+            if (!$hidden.val() || !$hidden.val().trim()) {
+              isValid = false;
+              $box.find('.dd-photo-upload-area').addClass('dd-input-error');
+              if (!customMsg) {
+                customMsg = 'Please upload the required Pedigree photo and fill out all required fields.';
+              }
+            } else {
+              $box.find('.dd-photo-upload-area').removeClass('dd-input-error');
+            }
+          });
+
           if (!isValid) {
-            DD.msg('dd-dog-form-message', 'Please fill out all required fields to proceed.', 'error');
+            DD.msg('dd-dog-form-message', customMsg || 'Please fill out all required fields to proceed.', 'error');
             return;
           }
 
@@ -383,44 +426,165 @@
       },
 
       mediaUpload: function () {
-        $(document).on('click', '.dd-upload-photo, .dd-photo-upload-area', function (e) {
-          e.preventDefault();
-          var $el       = $(this);
-          var targetId  = $el.data('target');
-          var previewId = $el.data('preview');
-
-          if (!targetId || !previewId) {
-            var $box = $el.closest('.dd-photo-upload-box');
-            targetId  = $box.find('.dd-upload-photo').data('target');
-            previewId = $box.find('.dd-upload-photo').data('preview');
-          }
-
-          if (typeof wp === 'undefined' || !wp.media) {
+        // Shared direct file upload helper (uploads straight to WP without exposing Media Library)
+        function ddUploadPhotoFile(file, onStart, onSuccess, onError) {
+          if (!file || !file.type || !file.type.match(/^image\//)) {
+            alert('Please select a valid image file (JPG, PNG, WebP, or GIF).');
             return;
           }
 
-          var frame = wp.media({
-            title:    'Select Photo',
-            button:   { text: 'Use This Photo' },
-            multiple: false,
-            library:  { type: 'image' },
-          });
+          if (typeof onStart === 'function') {
+            onStart(URL.createObjectURL(file));
+          }
 
-          frame.on('select', function () {
-            var att = frame.state().get('selection').first().toJSON();
-            var imgUrl = (att.sizes && att.sizes.medium) ? att.sizes.medium.url : (att.sizes && att.sizes.large ? att.sizes.large.url : (att.sizes && att.sizes.full ? att.sizes.full.url : att.url));
+          var formData = new FormData();
+          formData.append('action', 'dd_upload_image');
+          formData.append('nonce', ddVars.nonces.upload);
+          formData.append('file', file);
 
-            $('#' + targetId).val(att.id);
-            var $preview = $('#' + previewId);
-            $preview.html('<img src="' + imgUrl + '" alt="Selected Dog Photo" style="width:100%;height:100%;object-fit:cover;border-radius:8px;display:block;">');
-
-            if (targetId === 'dd-front-id') {
-              $('#dd-thumb-id').val(att.id);
+          $.ajax({
+            url: ddVars.ajaxUrl,
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (res) {
+              if (res.success && res.data && res.data.attachment_id) {
+                if (typeof onSuccess === 'function') {
+                  onSuccess(res.data);
+                }
+              } else {
+                var msg = (res.data && res.data.message) ? res.data.message : 'Upload failed. Please try again.';
+                if (typeof onError === 'function') onError(msg);
+              }
+            },
+            error: function () {
+              if (typeof onError === 'function') onError('Network error while uploading photo. Please try again.');
             }
           });
+        }
 
-          frame.open();
+        function handleBoxUpload(file, $box) {
+          var $area     = $box.find('.dd-photo-upload-area');
+          var targetId  = $box.find('.dd-upload-photo').data('target') || $box.find('input[type="hidden"]').attr('id');
+          var prevHtml  = $area.html();
+
+          ddUploadPhotoFile(
+            file,
+            function (objectUrl) {
+              $area.html('<div class="dd-photo-upload-progress"><i class="fa-solid fa-spinner fa-spin fa-2x"></i><span>Uploading photo...</span></div><img src="' + objectUrl + '" alt="Uploading" style="width:100%;height:100%;object-fit:cover;opacity:0.4;">');
+            },
+            function (data) {
+              var attId  = data.attachment_id;
+              var imgUrl = data.medium || data.url;
+              $('#' + targetId).val(attId);
+              $area.removeClass('dd-input-error').html('<img src="' + imgUrl + '" alt="Uploaded Photo" style="width:100%;height:100%;display:block;">');
+              $box.find('.dd-remove-photo').show();
+              if (targetId === 'dd-front-id') {
+                $('#dd-thumb-id').val(attId);
+              }
+            },
+            function (msg) {
+              alert(msg);
+              $area.html(prevHtml);
+            }
+          );
+        }
+
+        // Direct Drag & Drop image file upload onto photo upload area
+        $(document).on('dragover dragenter', '.dd-photo-upload-area', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          $(this).addClass('is-dragover');
         });
+
+        $(document).on('dragleave dragend drop', '.dd-photo-upload-area', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          $(this).removeClass('is-dragover');
+        });
+
+        $(document).on('drop', '.dd-photo-upload-area', function (e) {
+          var files = e.originalEvent.dataTransfer ? e.originalEvent.dataTransfer.files : null;
+          if (!files || !files.length) return;
+          handleBoxUpload(files[0], $(this).closest('.dd-photo-upload-box'));
+        });
+
+        // Click on upload box/button:
+        // - Regular user role: ONLY direct native file upload (never Media Gallery)
+        // - Admin role: polished WP media uploader modal (opens on Upload Files tab)
+        $(document).on('click', '.dd-upload-photo, .dd-photo-upload-area', function (e) {
+          e.preventDefault();
+          var $el  = $(this);
+          var $box = $el.closest('.dd-photo-upload-box');
+          var isAdmin = (typeof ddVars !== 'undefined' && ddVars.isAdmin);
+
+          if (isAdmin && typeof wp !== 'undefined' && wp.media) {
+            var targetId   = $el.data('target') || $box.find('.dd-upload-photo').data('target') || $box.find('input[type="hidden"]').attr('id');
+            var previewId  = $el.data('preview') || $box.find('.dd-upload-photo').data('preview') || $box.find('.dd-photo-upload-area').attr('id');
+            var modalTitle = $el.data('title') || $box.find('.dd-upload-photo').data('title') || 'Upload Photo';
+
+            var frame = wp.media({
+              title:    modalTitle,
+              button:   { text: 'Use This Photo' },
+              multiple: false,
+              library:  { type: 'image', author: ddVars.userId || undefined },
+            });
+
+            frame.on('open', function () {
+              if (frame.content && typeof frame.content.mode === 'function') {
+                frame.content.mode('upload');
+              }
+              if (frame.router && typeof frame.router.get === 'function' && frame.router.get()) {
+                var r = frame.router.get();
+                if (typeof r.select === 'function') {
+                  r.select('upload');
+                }
+              }
+            });
+
+            frame.on('select', function () {
+              var att = frame.state().get('selection').first().toJSON();
+              var imgUrl = (att.sizes && att.sizes.medium) ? att.sizes.medium.url : (att.sizes && att.sizes.large ? att.sizes.large.url : (att.sizes && att.sizes.full ? att.sizes.full.url : att.url));
+              $('#' + targetId).val(att.id);
+              $('#' + previewId).removeClass('dd-input-error').html('<img src="' + imgUrl + '" alt="Uploaded Photo" style="width:100%;height:100%;display:block;">');
+              $box.find('.dd-remove-photo').show();
+              if (targetId === 'dd-front-id') {
+                $('#dd-thumb-id').val(att.id);
+              }
+            });
+
+            frame.open();
+            return;
+          }
+
+          var $input = $('<input type="file" accept="image/jpeg,image/png,image/webp,image/gif" style="display:none;">');
+          $input.on('change', function () {
+            if (this.files && this.files.length) {
+              handleBoxUpload(this.files[0], $box);
+            }
+            $input.remove();
+          });
+          $('body').append($input);
+          $input.trigger('click');
+        });
+
+        // Remove optional photo button
+        $(document).on('click', '.dd-remove-photo', function (e) {
+          e.preventDefault();
+          var $btn = $(this);
+          var $box = $btn.closest('.dd-photo-upload-box');
+          var targetId = $btn.data('target');
+          var placeholder = $btn.data('placeholder') || 'Click or drag & drop photo';
+          $('#' + targetId).val('');
+          $box.find('.dd-photo-upload-area').removeClass('dd-input-error').html(
+            '<div class="dd-photo-upload-placeholder"><i class="icon-pl-img"></i><span>' + placeholder + '</span></div>'
+          );
+          $btn.hide();
+        });
+
+        // Expose direct uploader for Dashboard avatar
+        DD._uploadPhotoFile = ddUploadPhotoFile;
       },
     },
 
@@ -435,23 +599,33 @@
       },
 
       profileForm: function () {
-        // Avatar upload trigger
+        // Avatar upload trigger -> native OS file picker only (NO Media Gallery)
         $(document).on('click', '#dd-profile-avatar-upload-trigger', function (e) {
           e.preventDefault();
-          var frame = wp.media({
-            title:    'Select Profile Photo',
-            button:   { text: 'Use As Profile Photo' },
-            multiple: false,
-            library:  { type: 'image' },
+          var $input = $('<input type="file" accept="image/jpeg,image/png,image/webp,image/gif" style="display:none;">');
+          $input.on('change', function () {
+            if (this.files && this.files.length && typeof DD._uploadPhotoFile === 'function') {
+              var $preview = $('#dd-profile-avatar-preview');
+              var prevSrc  = $preview.attr('src');
+              DD._uploadPhotoFile(
+                this.files[0],
+                function (objectUrl) {
+                  $preview.attr('src', objectUrl).css('opacity', '0.5');
+                },
+                function (data) {
+                  $('#dd-profile-avatar-id').val(data.attachment_id);
+                  $preview.attr('src', data.thumbnail || data.url).css('opacity', '1');
+                },
+                function (msg) {
+                  alert(msg);
+                  $preview.attr('src', prevSrc).css('opacity', '1');
+                }
+              );
+            }
+            $input.remove();
           });
-
-          frame.on('select', function () {
-            var att = frame.state().get('selection').first().toJSON();
-            $('#dd-profile-avatar-id').val(att.id);
-            $('#dd-profile-avatar-preview').attr('src', att.url);
-          });
-
-          frame.open();
+          $('body').append($input);
+          $input.trigger('click');
         });
 
         $(document).on('submit', '#dd-profile-form', function (e) {
@@ -534,11 +708,29 @@
       },
 
       cardNavigation: function () {
+        function resolveCardUrl($el) {
+          var href = $el.attr('href') || $el.attr('data-url');
+          if (!href || href === '#' || href.indexOf('javascript') !== -1) {
+            var $card = $el.closest('.dd-dir-card');
+            href = $card.attr('data-url') || $card.find('.dd-dir-card__cta').attr('href') || $card.find('.dd-dir-card__name a').attr('href');
+          }
+          if (href && (href.slice(-16) === '/dog-directory//' || href.slice(-15) === '/dog-directory/')) {
+            var $card = $el.closest('.dd-dir-card');
+            var rawTitle = $card.find('.dd-dir-card__name').text().trim().toLowerCase();
+            var slug = rawTitle.replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+            if (slug) {
+              href = window.location.origin + '/dog-directory/' + slug + '/';
+            }
+          }
+          return href;
+        }
+
         // Direct click on View Profile button or card link
         $(document).on('click', '.dd-dir-card__cta, .dd-dir-card__name a, .dd-dir-card__image-link', function (e) {
-          var href = $(this).attr('href');
+          var href = resolveCardUrl($(this));
           if (href && href !== '#' && href.indexOf('javascript') === -1) {
-            // Allow default or force navigation if prevented
+            e.preventDefault();
+            e.stopPropagation();
             window.location.href = href;
           }
         });
@@ -546,7 +738,7 @@
         // Click anywhere on directory card
         $(document).on('click', '.dd-dir-card', function (e) {
           if ($(e.target).closest('a, button, input, select, textarea').length) return;
-          var href = $(this).attr('data-url') || $(this).find('.dd-dir-card__cta').attr('href') || $(this).find('.dd-dir-card__name a').attr('href') || $(this).find('.dd-dir-card__image-link').attr('href');
+          var href = resolveCardUrl($(this));
           if (href && href !== '#' && href.indexOf('javascript') === -1) {
             window.location.href = href;
           }
@@ -934,6 +1126,34 @@
 
     $(document).ready(function () {
         ddInitCountrySelects();
+
+        // Format phone numbers automatically as (xxx)-xxx-xxxx
+        function ddFormatPhoneInput(raw) {
+            var digits = String(raw || '').replace(/\D/g, '');
+            if (digits.length >= 11 && digits.charAt(0) === '1') {
+                digits = digits.slice(1, 11);
+            } else {
+                digits = digits.slice(0, 10);
+            }
+
+            if (digits.length === 0) return '';
+            if (digits.length <= 3) return '(' + digits;
+            if (digits.length <= 6) return '(' + digits.slice(0, 3) + ')-' + digits.slice(3);
+            return '(' + digits.slice(0, 3) + ')-' + digits.slice(3, 6) + '-' + digits.slice(6);
+        }
+
+        $(document).on('input blur change', 'input[type="tel"], #dd-phone, #dd-profile-phone, #dd-reg-phone, #cf_phone', function () {
+            var formatted = ddFormatPhoneInput(this.value);
+            if (this.value !== formatted) {
+                this.value = formatted;
+            }
+        });
+
+        $('input[type="tel"], #dd-phone, #dd-profile-phone, #dd-reg-phone, #cf_phone').each(function () {
+            if (this.value) {
+                this.value = ddFormatPhoneInput(this.value);
+            }
+        });
 
         // Auto capitalize first letter only on City fields
         $(document).on('input blur', '#dd-city, #dd-profile-city, #dd-reg-city, input[name="dog_data[city]"], input[name="city"]', function () {

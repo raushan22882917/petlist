@@ -35,6 +35,11 @@ class AccessControl {
 
         // Add access gate to single dog profiles when not subscribed
         add_action( 'wp_head', [ $this, 'add_access_meta' ] );
+
+        // Restrict media library: users only see their own uploaded photos
+        add_filter( 'ajax_query_attachments_args', [ $this, 'restrict_media_library_to_own_uploads' ], 99 );
+        add_action( 'pre_get_posts', [ $this, 'restrict_media_library_list' ] );
+        add_filter( 'views_upload', [ $this, 'filter_upload_views' ] );
     }
 
     /**
@@ -154,6 +159,11 @@ class AccessControl {
                         <?php _e( 'Create Account', 'petslist' ); ?>
                     </a>
                 </div>
+                <div style="margin-top: 18px; font-size: 13px;">
+                    <a href="<?php echo esc_url( dd_pricing_url() ); ?>" style="color: #02c5bd; font-weight: 600; text-decoration: none;">
+                        <i class="icon-pl-flash"></i> <?php _e( 'View Subscription Plans & Pricing', 'petslist' ); ?> &rarr;
+                    </a>
+                </div>
             </div>
         </div>
         <?php
@@ -167,7 +177,7 @@ class AccessControl {
         if ( dd_is_admin() || Subscription::can_access_directory() ) return; // passes
 
         if ( ! is_user_logged_in() ) {
-            self::require_login_gate();
+            self::require_login_gate( $message );
             return;
         }
         ?>
@@ -240,5 +250,68 @@ class AccessControl {
      */
     public static function subscriber_dog_fields() {
         return [ 'registration_no', 'contact_phone', 'contact_email', 'contact_website' ];
+    }
+
+    /**
+     * Restrict media modal query so users ONLY see their own uploaded photos
+     * and demo/theme assets (404-img, pre-loader, icons) are completely excluded
+     */
+    public function restrict_media_library_to_own_uploads( $query ) {
+        $user_id = get_current_user_id();
+        if ( ! $user_id ) {
+            $query['author'] = -1;
+            return $query;
+        }
+
+        // Always exclude theme demo assets from media queries
+        if ( function_exists( 'dd_get_demo_attachment_ids' ) ) {
+            $demo_ids = dd_get_demo_attachment_ids();
+            if ( ! empty( $demo_ids ) ) {
+                $existing_not_in = isset( $query['post__not_in'] ) ? (array) $query['post__not_in'] : [];
+                $query['post__not_in'] = array_unique( array_merge( $existing_not_in, $demo_ids ) );
+            }
+        }
+
+        // Non-administrators MUST NOT see Media Gallery at all (only upload allowed)
+        if ( ! current_user_can( 'manage_options' ) ) {
+            $query['author']   = -1;
+            $query['post__in'] = [ 0 ];
+            return $query;
+        }
+
+        // For administrators: if request originates from frontend or specifies an author, restrict to own uploads
+        $referer = wp_get_referer() ?: ( $_SERVER['HTTP_REFERER'] ?? '' );
+        $is_frontend = ( ! empty( $referer ) && strpos( $referer, 'wp-admin' ) === false ) || ! empty( $_REQUEST['query']['author'] );
+        if ( $is_frontend ) {
+            $query['author'] = $user_id;
+        }
+
+        return $query;
+    }
+
+    /**
+     * Block media library list in admin (upload.php) for non-admins
+     */
+    public function restrict_media_library_list( $query ) {
+        if ( ! is_admin() || ! $query->is_main_query() ) {
+            return;
+        }
+
+        if ( $query->get( 'post_type' ) === 'attachment' ) {
+            if ( ! current_user_can( 'manage_options' ) ) {
+                $query->set( 'author', -1 );
+                $query->set( 'post__in', [ 0 ] );
+            }
+        }
+    }
+
+    /**
+     * Remove "All" tab in upload.php for non-admins
+     */
+    public function filter_upload_views( $views ) {
+        if ( ! current_user_can( 'manage_options' ) ) {
+            unset( $views['all'] );
+        }
+        return $views;
     }
 }
